@@ -1,0 +1,237 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+
+{% block main-content %}
+<style>
+    /* Responsive adjustments only - no content changes */
+    @media (max-width: 767px) {
+        /* Mobile styles */
+        .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        #carrierTable {
+            min-width: 600px; /* Allows horizontal scrolling on small devices */
+        }
+        
+        .dataTables_info,
+        .dataTables_paginate {
+            width: 100%;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .modal-dialog {
+            margin: 10px auto;
+            width: 95%;
+        }
+    }
+    
+    @media (min-width: 768px) and (max-width: 991px) {
+        /* Tablet styles */
+        .modal-dialog {
+            width: 80%;
+        }
+    }
+</style>
+
+<div class="page-header" style="display: flex; align-items: center; justify-content: space-between;">
+    <h1 class="title">Search Carriers</h1>
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <button type="button" class="btn btn-rounded btn-primary" data-toggle="modal" data-target="#newCarrierModal">
+            New Carrier
+        </button>
+    </div>
+</div>
+
+<div class="alert alert-warning alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>Manage product offerings, attach documents such as benefit summaries ...</strong><br>
+    Select "<strong>Carrier</strong>" from the "<strong>New</strong>" dropdown in the header to get started.
+</div>
+
+<div class="card p-3">
+    <h4>Carriers</h4>
+    <div class="mb-2">
+        <input type="text" id="carrierSearch" class="form-control" placeholder="Type to filter (Carrier Name)">
+    </div>
+    
+    <div class="table-responsive">
+        <table id="carrierTable" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th class="sortable" data-sort="name">Carrier Name <i class="fa fa-sort"></i></th>
+                    <th class="sortable" data-sort="states">State of Operation <i class="fa fa-sort"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><i class="fa fa-square color-purple"></i> <a href="#">Wellcare</a></td>
+                    <td>Ohio,Pennsylvania,West Virginia</td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-square color-purple"></i> <a href="#">UPMC</a></td>
+                    <td>Pennsylvania</td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-square color-purple"></i> <a href="#">United Healthcare</a></td>
+                    <td>Ohio,Pennsylvania,West Virginia</td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-square color-purple"></i> <a href="#">Pack</a></td>
+                    <td>West Virginia</td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-square color-purple"></i> <a href="#">Medico</a></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-square color-purple"></i> <a href="#">Mid Mutual PDP</a></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-square color-purple"></i> <a href="#">Humana</a></td>
+                    <td>Florida,Ohio,Pennsylvania,West Virginia</td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-square color-purple"></i> <a href="#">Highmark</a></td>
+                    <td>Pennsylvania,West Virginia</td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-square color-purple"></i> <a href="#">Gross</a></td>
+                    <td>Ohio,Pennsylvania,West Virginia</td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-square color-purple"></i> <a href="#">Anthem</a></td>
+                    <td>Ohio</td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-square color-purple"></i> <a href="#">Astas</a></td>
+                    <td>Ohio,Pennsylvania,West Virginia</td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-square color-purple"></i> <a href="#">AABP</a></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-square color-purple"></i> <a href="#">AABP</a></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-square color-purple"></i> <a href="#">AABP</a></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-square color-purple"></i> <a href="#">AABP</a></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-12 col-md-5">
+            <div class="dataTables_info" id="carrierTable_info" role="status" aria-live="polite">
+                Showing 1 to 12 of 12 entries
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-7">
+            <div class="dataTables_paginate paging_simple_numbers" id="carrierTable_paginate">
+                <ul class="pagination">
+                    <li class="paginate_button page-item previous disabled" id="carrierTable_previous">
+                        <a href="#" aria-controls="carrierTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                    </li>
+                    <li class="paginate_button page-item active">
+                        <a href="#" aria-controls="carrierTable" data-dt-idx="1" tabindex="0" class="page-link">1</a>
+                    </li>
+                    <li class="paginate_button page-item next disabled" id="carrierTable_next">
+                        <a href="#" aria-controls="carrierTable" data-dt-idx="2" tabindex="0" class="page-link">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New Carrier Modal - Matching Your Image Design -->
+<div class="modal fade" id="newCarrierModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">New Carrier</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="carrierName">Carrier Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="carrierName" placeholder="Enter carrier name" required>
+                        <small class="text-muted">Fields marked with * are required.</small>
+                    </div>
+                    
+                    <!-- Button Group - Left Aligned -->
+                    <div class="form-group" style="text-align: left; margin-top: 20px;">
+                        <button type="button" class="btn btn-rounded btn-success" style="margin-right: 10px; min-width: 80px;">Save</button>
+                        <button type="submit" class="btn btn-rounded btn-primary" style="min-width: 80px;">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Search functionality
+        $("#carrierSearch").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#carrierTable tbody tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    
+        // Sort functionality
+        $(".sortable").click(function() {
+            var table = $(this).parents('table').eq(0);
+            var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()));
+            this.asc = !this.asc;
+            if (!this.asc) { rows = rows.reverse(); }
+            for (var i = 0; i < rows.length; i++) { table.append(rows[i]); }
+            
+            // Update sort icons
+            $(".sortable i").removeClass("fa-sort-up fa-sort-down").addClass("fa-sort");
+            $(this).find("i").removeClass("fa-sort").addClass(this.asc ? "fa-sort-up" : "fa-sort-down");
+        });
+        
+        function comparer(index) {
+            return function(a, b) {
+                var valA = getCellValue(a, index), valB = getCellValue(b, index);
+                return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB);
+            }
+        }
+        
+        function getCellValue(row, index) {
+            return $(row).children('td').eq(index).text();
+        }
+        
+        // Fade out alerts when dismissed
+        $(document).on('click', '[data-dismiss="alert"]', function() {
+            $(this).closest('.alert').fadeOut(function() {
+                $(this).remove();
+            });
+        });
+    });
+</script>
+
+{% endblock %}
