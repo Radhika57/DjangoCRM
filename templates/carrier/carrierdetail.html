@@ -396,19 +396,163 @@
                         </div>
                         
                         <!-- Contact Info -->
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
+                        <div class="container">
+                            <div class="panel panel-default">
+                              <div class="panel-heading">
                                 <h3 class="panel-title">Contact Info</h3>
-                            </div>
-                            <div class="panel-body text-center">
-                                <div class="alert alert-info">
-                                    There aren't any custom fields yet<br>
-                                    <small>Use custom fields to track and report on data unique to your agency.</small><br>
-                                    <a href="#">How do I use custom fields?</a>
+                                <div class="pull-right">
+                                  <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editPhoneModal">
+                                    <i class="glyphicon glyphicon-edit"></i> Edit Phone
+                                  </button>
+                                  <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#newAddressModal">
+                                    <i class="glyphicon glyphicon-plus"></i> New Address
+                                  </button>
                                 </div>
-                                <button type="button" class="btn btn-default">Add/Edit</button>
+                                <div class="clearfix"></div>
+                              </div>
+                              <div class="panel-body text-center">
+                                <div class="alert alert-info">
+                                  There aren't any custom fields yet<br>
+                                  <small>Use custom fields to track and report on data unique to your agency.</small><br>
+                                  <a href="#">How do I use custom fields?</a>
+                                </div>
+                                
+                              </div>
                             </div>
-                        </div>
+                          </div>
+                          
+                          <!-- Edit Phone Modal -->
+                          <div class="modal fade" id="editPhoneModal" tabindex="-1" role="dialog" aria-labelledby="editPhoneModalLabel">
+                            <div class="modal-dialog modal-lg" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                  <h4 class="modal-title">Edit Phone</h4>
+                                </div>
+                                <div class="modal-body">
+                                  <form>
+                                    <div class="form-group row">
+                                      <div class="col-sm-4">
+                                        <label>Business Phone</label>
+                                        <input type="text" class="form-control" placeholder="(xxx) xxx-xxxx">
+                                      </div>
+                                      <div class="col-sm-2">
+                                        <label>Ext.</label>
+                                        <input type="text" class="form-control">
+                                      </div>
+                                      <div class="col-sm-4">
+                                        <label>Home Phone</label>
+                                        <input type="text" class="form-control" placeholder="(xxx) xxx-xxxx">
+                                      </div>
+                                      <div class="col-sm-2">
+                                        <label>Ext.</label>
+                                        <input type="text" class="form-control">
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <div class="col-sm-4">
+                                        <label>Cell Phone</label>
+                                        <input type="text" class="form-control" placeholder="(xxx) xxx-xxxx">
+                                      </div>
+                                      <div class="col-sm-2">
+                                        <label>Ext.</label>
+                                        <input type="text" class="form-control">
+                                      </div>
+                                      <div class="col-sm-4">
+                                        <label>Fax</label>
+                                        <input type="text" class="form-control" placeholder="(xxx) xxx-xxxx">
+                                      </div>
+                                      <div class="col-sm-2">
+                                        <label>Ext.</label>
+                                        <input type="text" class="form-control">
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-success">Save</button>
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <!-- New Address Modal -->
+                          <div class="modal fade" id="newAddressModal" tabindex="-1" role="dialog" aria-labelledby="newAddressModalLabel">
+                            <div class="modal-dialog modal-lg" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                  <h4 class="modal-title">New Address</h4>
+                                </div>
+                                <div class="modal-body">
+                                  <form>
+                                    <div class="form-group">
+                                      <label>Address Type</label>
+                                      <select class="form-control">
+                                        <option>Business</option>
+                                        <option>Home</option>
+                                        <option>Other</option>
+                                      </select>
+                                    </div>
+                                    <div class="checkbox">
+                                      <label><input type="checkbox"> Primary Address</label>
+                                    </div>
+                          
+                                    <div class="form-group row">
+                                      <div class="col-sm-6">
+                                        <label>Address 1</label>
+                                        <input type="text" class="form-control">
+                                      </div>
+                                      <div class="col-sm-6">
+                                        <label>Address 2</label>
+                                        <input type="text" class="form-control">
+                                      </div>
+                                    </div>
+                          
+                                    <div class="form-group row">
+                                      <div class="col-sm-4">
+                                        <label>Zip Code</label>
+                                        <input type="text" class="form-control">
+                                      </div>
+                                      <div class="col-sm-4">
+                                        <label>City</label>
+                                        <input type="text" class="form-control">
+                                      </div>
+                                      <div class="col-sm-4">
+                                        <label>State <span style="color:red">*</span></label>
+                                        <select class="form-control">
+                                          <option>- select -</option>
+                                          <option>CA</option>
+                                          <option>NY</option>
+                                          <option>TX</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                          
+                                    <div class="form-group">
+                                      <label>County</label>
+                                      <select class="form-control">
+                                        <option>-- Select County --</option>
+                                      </select>
+                                    </div>
+                          
+                                    <div class="form-group">
+                                      <label>Description</label>
+                                      <textarea class="form-control" rows="4"></textarea>
+                                    </div>
+                          
+                                    <p><small>Fields marked with <span style="color:red">*</span> are required.</small></p>
+                                  </form>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-success">Save</button>
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
                         
                         <!-- Custom Fields -->
                         <div class="panel panel-default">
@@ -420,8 +564,11 @@
                                     There aren't any custom fields yet<br>
                                     <small>Use custom fields to track and report on data unique to your agency.</small><br>
                                     <a href="#">How do I use custom fields?</a>
+                                    
                                 </div>
-                                <button type="button" class="btn btn-default">Add/Edit</button>
+                                <a href="{% url 'custom_fields' %}" target="_blank" class="btn btn-default">Add/Edit</a>
+
+                               
                             </div>
                         </div>
                         
