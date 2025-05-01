@@ -1,73 +1,421 @@
-<div id="top" class="clearfix">
-
-    <!-- Start App Logo -->
-    <div class="applogo">
-      <a href="index.html" class="logo">CRM</a>
-    </div>
-    <!-- End App Logo -->
-
-    <!-- Start Sidebar Show Hide Button -->
-    <a href="#" class="sidebar-open-button"><i class="fa fa-bars"></i></a>
-    <a href="#" class="sidebar-open-button-mobile"><i class="fa fa-bars"></i></a>
-    <!-- End Sidebar Show Hide Button -->
-
-    <!-- Start Searchbox -->
-    <form class="searchform">
-      <input type="text" class="searchbox" id="searchbox" placeholder="Search">
-      <span class="searchbutton"><i class="fa fa-search"></i></span>
-    </form>
-    <!-- End Searchbox -->
-
-    <!-- Start Top Menu -->
-    <ul class="topmenu">
-      <li><a href="#">Files</a></li>
-      <li><a href="#">Authors</a></li>
-      <li class="dropdown">
-        <a href="#" data-toggle="dropdown" class="dropdown-toggle">My Files <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li><a href="#">Videos</a></li>
-          <li><a href="#">Pictures</a></li>
-          <li><a href="#">Blog Posts</a></li>
-        </ul>
-      </li>
-    </ul>
-    <!-- End Top Menu -->
-
-    <!-- Start Sidepanel Show-Hide Button -->
-    <a href="#sidepanel" class="sidepanel-open-button"><i class="fa fa-outdent"></i></a>
-    <!-- End Sidepanel Show-Hide Button -->
-
-    <!-- Start Top Right -->
-    <ul class="top-right">
-
-    <li class="dropdown link">
-      <a href="#" data-toggle="dropdown" class="dropdown-toggle hdbutton">Create New <span class="caret"></span></a>
-        <ul class="dropdown-menu dropdown-menu-list">
-          <li><a href="#"><i class="fa falist fa-paper-plane-o"></i>Product or Item</a></li>
-          <li><a href="#"><i class="fa falist fa-font"></i>Blog Post</a></li>
-          <li><a href="#"><i class="fa falist fa-file-image-o"></i>Image Gallery</a></li>
-          <li><a href="#"><i class="fa falist fa-file-video-o"></i>Video Gallery</a></li>
-        </ul>
-    </li>
-
-    <li class="link">
-      <a href="#" class="notifications">6</a>
-    </li>
-
-    <li class="dropdown link">
-      <a href="#" data-toggle="dropdown" class="dropdown-toggle profilebox"><img src="img/profileimg.png" alt="img"><b>Jonathan Doe</b><span class="caret"></span></a>
-        <ul class="dropdown-menu dropdown-menu-list dropdown-menu-right">
-          <li role="presentation" class="dropdown-header">Profile</li>
-          <li><a href="#"><i class="fa falist fa-inbox"></i>Inbox<span class="badge label-danger">4</span></a></li>
-          <li><a href="#"><i class="fa falist fa-file-o"></i>Files</a></li>
-          <li><a href="#"><i class="fa falist fa-wrench"></i>Settings</a></li>
-          <li class="divider"></li>
-          <li><a href="#"><i class="fa falist fa-lock"></i> Lockscreen</a></li>
-          <li><a href="#"><i class="fa falist fa-power-off"></i> Logout</a></li>
-        </ul>
-    </li>
-
-    </ul>
-    <!-- End Top Right -->
-
+<!-- Top Bar -->
+<div class="topbar">
+  <!-- Logo -->
+  <div class="applogo">
+    <a href="index.html" class="logo">CRM</a>
   </div>
+  
+  <!-- Search Bar -->
+  <div class="search-container">
+    <i class="fa fa-search search-icon"></i>
+    <input type="text" placeholder="Search all records" />
+  </div>
+
+  <!-- New Button -->
+  <div class="dropdown">
+    <button class="icon-btn dropdown-toggle">
+      <i class="fa fa-plus"></i> New <i class="fa fa-caret-down dropdown-icon"></i>
+    </button>
+    <div class="dropdown-content">
+      <a href="#"><i class="fa fa-user"></i> New Contact</a>
+      <a href="#"><i class="fa fa-building"></i> New Company</a>
+      <a href="#"><i class="fa fa-file-text"></i> New Document</a>
+    </div>
+  </div>
+
+  <!-- Action Buttons Dropdowns -->
+  <div class="action-icons">
+    <div class="dropdown action-dropdown" title="Message">
+      <button class="icon-btn big dropdown-toggle"><i class="fa fa-comment"></i><i class="fa fa-caret-down dropdown-icon"></i></button>
+      <div class="dropdown-content">
+        <a href="#"><i class="fa fa-inbox"></i> Inbox</a>
+        <a href="#"><i class="fa fa-send"></i> Sent</a>
+        <a href="#"><i class="fa fa-trash"></i> Trash</a>
+      </div>
+    </div>
+    
+    <div class="dropdown action-dropdown" title="Phone">
+      <button class="icon-btn big dropdown-toggle"><i class="fa fa-phone"></i><i class="fa fa-caret-down dropdown-icon"></i></button>
+      <div class="dropdown-content">
+        <a href="#"><i class="fa fa-phone"></i> Call History</a>
+        <a href="#"><i class="fa fa-microphone"></i> Recordings</a>
+        <a href="#"><i class="fa fa-phone-square"></i> Dial Pad</a>
+      </div>
+    </div>
+    
+    <div class="dropdown action-dropdown" title="Email">
+      <button class="icon-btn big dropdown-toggle"><i class="fa fa-envelope"></i><i class="fa fa-caret-down dropdown-icon"></i></button>
+      <div class="dropdown-content">
+        <a href="#"><i class="fa fa-envelope"></i> Compose</a>
+        <a href="#"><i class="fa fa-inbox"></i> Inbox</a>
+        <a href="#"><i class="fa fa-paper-plane"></i> Sent</a>
+      </div>
+    </div>
+    
+    <div class="dropdown action-dropdown" title="Checklist">
+      <button class="icon-btn big dropdown-toggle"><i class="fa fa-list-alt"></i><i class="fa fa-caret-down dropdown-icon"></i></button>
+      <div class="dropdown-content">
+        <a href="#"><i class="fa fa-list"></i> Tasks</a>
+        <a href="#"><i class="fa fa-check-square"></i> Checklists</a>
+        <a href="#"><i class="fa fa-flag"></i> Priorities</a>
+      </div>
+    </div>
+    
+    <div class="dropdown action-dropdown" title="Calendar">
+      <button class="icon-btn big dropdown-toggle"><i class="fa fa-calendar"></i><i class="fa fa-caret-down dropdown-icon"></i></button>
+      <div class="dropdown-content">
+        <a href="#"><i class="fa fa-calendar"></i> View Calendar</a>
+        <a href="#"><i class="fa fa-plus-circle"></i> New Event</a>
+        <a href="#"><i class="fa fa-clock-o"></i> Schedule</a>
+      </div>
+    </div>
+    
+    <div class="dropdown action-dropdown" title="Help">
+      <button class="icon-btn big dropdown-toggle"><i class="fa fa-question-circle"></i><i class="fa fa-caret-down dropdown-icon"></i></button>
+      <div class="dropdown-content">
+        <a href="#"><i class="fa fa-question-circle"></i> Help Center</a>
+        <a href="#"><i class="fa fa-book"></i> Documentation</a>
+        <a href="#"><i class="fa fa-life-ring"></i> Support</a>
+      </div>
+    </div>
+    
+    <div class="dropdown action-dropdown" title="Profile">
+      <button class="icon-btn big dropdown-toggle"><i class="fa fa-user"></i><i class="fa fa-caret-down dropdown-icon"></i></button>
+      <div class="dropdown-content profile-dropdown">
+        <div class="profile-header">
+          <div class="profile-name">Rohan Dhillon</div>
+          <div class="profile-email">rohan@example.com</div>
+        </div>
+        
+        <div class="dropdown-divider"></div>
+        
+        <a href="#" class="dropdown-item"><i class="fa fa-account"></i> My Account</a>
+        
+        <a href="#" class="dropdown-item prominent"><i class="fa fa-building"></i> My Agency</a>
+        
+        <div class="dropdown-divider"></div>
+        
+        <a href="#" class="dropdown-item"><i class="fa fa-cog"></i> Settings</a>
+        <a href="#" class="dropdown-item"><i class="fa fa-credit-card"></i> Subscription</a>
+        <a href="#" class="dropdown-item"><i class="fa fa-map-signs"></i> AgencyBloc Roadmap</a>
+        
+        <div class="dropdown-divider"></div>
+        
+        <a href="#" class="dropdown-item"><i class="fa fa-user-plus"></i> Refer a Friend</a>
+        <a href="#" class="dropdown-item"><i class="fa fa-gift"></i> Earn Rewards!</a>
+        
+        <div class="dropdown-divider"></div>
+        
+        <a href="#" class="dropdown-item logout"><i class="fa fa-sign-out"></i> Logout</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.topbar {
+  display: flex;
+  align-items: center;
+  background-color: #0f0f0f;
+  color: white;
+  padding: 10px 20px;
+  position: relative;
+  z-index: 1000;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.applogo {
+  margin-right: 10px;
+}
+
+.applogo .logo {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  background-color: #1e1e1e;
+  border-radius: 6px;
+  padding: 8px 12px;
+  flex: 1;
+  min-width: 150px;
+  max-width: 600px;
+}
+
+.search-container input {
+  background: transparent;
+  border: none;
+  color: white;
+  margin-left: 8px;
+  width: 100%;
+  outline: none;
+}
+
+.search-container input::placeholder {
+  color: #aaa;
+}
+
+.search-icon {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: #1e1e1e;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.icon-btn:hover {
+  background-color: #2e2e2e;
+}
+
+.icon-btn.big {
+  padding: 8px 10px;
+}
+
+.icon-btn.big i {
+  font-size: 18px;
+}
+
+.action-icons {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #2e2e2e;
+  min-width: 200px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1001;
+  margin-top: 5px;
+}
+
+.dropdown:first-child .dropdown-content {
+  right: auto;
+  left: 0;
+}
+
+.dropdown-content a {
+  color: #ddd;
+  padding: 10px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.dropdown-content a:hover {
+  background-color: #3e3e3e;
+  color: white;
+}
+
+.dropdown-content a i {
+  margin-right: 10px;
+  width: 18px;
+  text-align: center;
+}
+
+.dropdown-icon {
+  margin-left: 5px;
+  font-size: 12px;
+  transition: transform 0.2s;
+}
+
+.dropdown.active .dropdown-content {
+  display: block;
+}
+
+.dropdown.active .dropdown-icon {
+  transform: rotate(180deg);
+}
+
+/* Profile dropdown specific styles */
+.profile-dropdown {
+  width: 280px;
+  padding: 0;
+  right: 0;
+}
+
+.profile-header {
+  padding: 16px;
+  background-color: rgba(255,255,255,0.05);
+}
+
+.profile-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  line-height: 1.3;
+}
+
+.profile-email {
+  font-size: 13px;
+  color: #aaa;
+  margin-top: 3px;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: rgba(255,255,255,0.1);
+  margin: 5px 0;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  color: #ddd;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.dropdown-item.prominent {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.dropdown-item.logout {
+  color: #ff6b6b;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(255,255,255,0.05);
+  color: white;
+}
+
+.dropdown-item.logout:hover {
+  color: #ff8787;
+}
+
+/* Tooltip styles */
+.action-dropdown[title] {
+  position: relative;
+}
+
+.action-dropdown[title]::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.action-dropdown:hover::after {
+  opacity: 1;
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  .search-container {
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    padding: 10px;
+  }
+  
+  .search-container {
+    order: 1;
+    width: 100%;
+    max-width: 100%;
+    margin: 10px 0;
+  }
+  
+  .applogo {
+    margin-right: auto;
+  }
+  
+  .action-icons {
+    margin-left: 0;
+  }
+  
+  .dropdown:first-child {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .action-icons {
+    gap: 5px;
+  }
+  
+  .icon-btn.big {
+    padding: 8px;
+  }
+  
+  .profile-dropdown {
+    width: 260px;
+    right: -10px;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Dropdown toggle functionality
+  document.querySelectorAll('.dropdown-toggle').forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const dropdown = this.closest('.dropdown');
+      const isActive = dropdown.classList.contains('active');
+      
+      // Close all other dropdowns
+      document.querySelectorAll('.dropdown').forEach(d => {
+        if (d !== dropdown) d.classList.remove('active');
+      });
+      
+      // Toggle current dropdown
+      dropdown.classList.toggle('active', !isActive);
+    });
+  });
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', function() {
+    document.querySelectorAll('.dropdown').forEach(dropdown => {
+      dropdown.classList.remove('active');
+    });
+  });
+
+  // Prevent dropdown from closing when clicking inside
+  document.querySelectorAll('.dropdown-content').forEach(content => {
+    content.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+  });
+});
+</script>
