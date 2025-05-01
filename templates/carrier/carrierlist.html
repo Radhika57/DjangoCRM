@@ -87,7 +87,7 @@
                 <tbody>
                     {% for i in carriers  %}
                     <tr>
-                        <td><a href="{% url "carrier_detail" i.pk %}">{{i.name}}</a></td>
+                        <td><a href="{% url "carrier_detail" i.id %}">{{i.name}}</a></td>
                         <td>System Architect</td>
                     </tr>
                     {% endfor %}

@@ -1,0 +1,139 @@
+<div id="forms" class="tab-pane fade">
+    <div class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3 class="panel-title">Forms for {{carrier.name}}</h3>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        <button type="button" class="btn btn-primary" id="showFormCreate">
+                            <i class="fa fa-plus"></i> Create New
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!-- Form creation section (hidden by default) -->
+                <div id="formCreateSection" style="display: none;">
+                    <div class="well">
+                        <h4>Upload New Form</h4>
+                        
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <!-- Form Name -->
+                            <div class="form-group">
+                                <label><strong>Form Name *</strong></label>
+                                <input type="text" class="form-control" placeholder="Enter form name" name="form_name">
+                            </div>
+                            
+                            <!-- Year -->
+                            <div class="form-group">
+                                <label><strong>Year</strong></label>
+                                <input type="text" class="form-control" placeholder="Enter year" name="year">
+                            </div>
+                            
+                            <!-- Form Number -->
+                            <div class="form-group">
+                                <label><strong>Form #</strong></label>
+                                <input type="text" class="form-control" placeholder="Enter form number" name="form_number">
+                            </div>
+                            
+                            <!-- Coverage Type -->
+                            <div class="form-group">
+                                <label><strong>Coverage Type</strong></label>
+                                <select class="form-control" name="coverage_type">
+                                    <option value="">Select coverage type</option>
+                                    <option value="Medical">Medical</option>
+                                    <option value="Dental">Dental</option>
+                                    <option value="Vision">Vision</option>
+                                    <option value="Life">Life</option>
+                                    <option value="Disability">Disability</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <!-- File Upload -->
+                            <div class="form-group">
+                                <label><strong>Form File *</strong></label>
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <span class="btn btn-default btn-file">
+                                            Browse... <input type="file" id="formFileUpload" name="form_file">
+                                        </span>
+                                    </span>
+                                    <input type="text" class="form-control" readonly>
+                                </div>
+                                <small class="help-block">No file chosen</small>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="button" class="btn btn-default" id="cancelFormCreate">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                {% comment %} Table {% endcomment %}
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                        
+                        <div class="panel-body table-responsive">
+                
+                            <table id="example0" class="table display">
+                                <thead>
+                                    <tr>
+                                        <th>FORM NAME</th>
+                                        <th>FORM FILE</th>
+                                        <th>YEAR</th>
+                                        <th>FORM NUMBER</th>
+                                        <th>COVERAGE TYPE</th>
+                                    </tr>
+                                </thead>
+                            
+                                <tfoot>
+                                    <tr>
+                                        <th>FORM NAME</th>
+                                        <th>FORM FILE</th>
+                                        <th>YEAR</th>
+                                        <th>FORM NUMBER</th>
+                                        <th>COVERAGE TYPE</th>
+                                    </tr>
+                                </tfoot>
+                            
+                                <tbody>
+                                    {% for form in carrier_forms %}
+                                        <tr>
+                                            <td>{{ form.form_name }}</td>
+                                            <td>{% if form.form_file.url %}
+                                                <a href="{{ form.form_file.url }}" download>
+                                                    <img src="{{ form.form_file.url }}" alt="Form Image" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                                </a>
+                                            {% else %}
+                                                No File
+                                            {% endif %}</td>
+                                            <td>{{ form.year }}</td>
+                                            <td>{{ form.form_number }}</td>
+                                            <td>{{ form.coverage_type }}</td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr><td colspan="5">No forms uploaded.</td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                
+                
+                        </div>
+                
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

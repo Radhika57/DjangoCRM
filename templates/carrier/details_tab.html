@@ -1,0 +1,273 @@
+<div id="detail" class="tab-pane active">
+    <form action="" method="POST">
+        {% csrf_token %}
+        <!-- Carrier Info -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Carrier Info</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6">
+                        <div class="form-group">
+                            <label>Carrier Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" value="{{carrier.name}}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <div class="form-group">
+                            <label>Abbreviation</label>
+                            <input type="text" class="form-control" name="abbreviation" value="{{ carrier_details.abbreviation|default_if_none:'' }}">
+
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="form-group mb-1">
+                          <label class="mb-0">Carrier Security Groups</label>
+                          <div style="border:1px solid #ced4da;border-radius:.25rem;max-height:120px;overflow-y:auto;padding:1px 5px;">
+                            <div style="padding:0;margin:0">
+                                <input type="checkbox" id="security_admin" name="security_groups[]" value="administrator" style="margin:0 5px 0 0;vertical-align:middle"
+                                {% if carrier_details and 'administrator' in carrier_details.security_groups %}checked{% endif %}>
+                                <label for="security_admin" style="margin:0;display:inline">Administrator</label>
+                            </div>
+                            <div style="padding:0;margin:0">
+                              <input type="checkbox" id="security_gem" name="security_groups[]" value="agent_gem" 
+                                     style="margin:0 5px 0 0;vertical-align:middle"
+                                     {% if carrier_details and 'agent_gem' in carrier_details.security_groups %}checked{% endif %}>
+                              <label for="security_gem" style="margin:0;display:inline">Agent GEM</label>
+                            </div>
+                            <div style="padding:0;margin:0">
+                              <input type="checkbox" id="security_statements" name="security_groups[]" value="agent_statements" 
+                                     style="margin:0 5px 0 0;vertical-align:middle"
+                                     {% if carrier_details and 'agent_statements' in carrier_details.security_groups %}checked{% endif %}>
+                              <label for="security_statements" style="margin:0;display:inline">Agent Statements</label>
+                            </div>
+                            <div style="padding:0;margin:0">
+                              <input type="checkbox" id="security_staff" name="security_groups[]" value="commission_staff" 
+                                     style="margin:0 5px 0 0;vertical-align:middle"
+                                     {% if carrier_details and 'commission_staff' in carrier_details.security_groups %}checked{% endif %}>
+                              <label for="security_staff" style="margin:0;display:inline">Commission Staff</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <div class="col-md-2 col-sm-6">
+                        <div class="form-group">
+                            <label>Carrier Status <span class="text-danger">*</span></label>
+                            <select class="form-control" name="carrier_status">
+                                <option value="">-- Select Status --</option>
+                                <option value="active" {% if carrier_details and carrier_details.carrier_status == 'active' %}selected{% endif %}>Active</option>
+                                <option value="inactive" {% if carrier_details and carrier_details.carrier_status == 'inactive' %}selected{% endif %}>Inactive</option>
+                              </select>
+                              
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contact Info -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+            <h3 class="panel-title">Contact Info</h3>
+            <div class="pull-right">
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editPhoneModal">
+                <i class="glyphicon glyphicon-edit"></i> Edit Phone
+                </button>
+                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#newAddressModal">
+                <i class="glyphicon glyphicon-plus"></i> New Address
+                </button>
+            </div>
+            <div class="clearfix"></div>
+            </div>
+            <div class="panel-body text-center">
+            <div class="alert alert-info">
+                This record has no addresses or phone numbers yet<br>
+                <small>Add and track this contact information here..</small><br>
+                
+            </div>
+            
+            </div>
+        </div>
+
+          
+          <!-- Edit Phone Modal -->
+        <div class="modal fade" id="editPhoneModal" tabindex="-1" role="dialog" aria-labelledby="editPhoneModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit Phone</h4>
+            </div>
+            <div class="modal-body">
+                
+                <div class="form-group row">
+                    <div class="col-sm-4">
+                    <label>Business Phone</label>
+                    <input type="text" class="form-control" name="business_phone" placeholder="(xxx) xxx-xxxx"
+                    value="{{ phone_dict.business.number|default:'' }}">
+                    </div>
+                    <div class="col-sm-2">
+                    <label>Ext.</label>
+                    <input type="text" name="business_ext" class="form-control"
+                    value="{{ phone_dict.business.extension|default:'' }}">
+                    </div>
+                    <div class="col-sm-4">
+                    <label>Home Phone</label>
+                    <input type="text" class="form-control" name="home_phone" placeholder="(xxx) xxx-xxxx"
+                    value="{{ phone_dict.home.number|default:'' }}">
+                    </div>
+                    <div class="col-sm-2">
+                    <label>Ext.</label>
+                    <input type="text" class="form-control" name="home_ext"
+                    value="{{ phone_dict.home.extension|default:'' }}">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-4">
+                    <label>Cell Phone</label>
+                    <input type="text" class="form-control" name="cell_phone" placeholder="(xxx) xxx-xxxx"
+                    value="{{ phone_dict.cell.number|default:'' }}">
+                    </div>
+                    <div class="col-sm-2">
+                    <label>Ext.</label>
+                    <input type="text" class="form-control" name="cell_ext"
+                    value="{{ phone_dict.cell.extension|default:'' }}">
+                    </div>
+                    <div class="col-sm-4">
+                    <label>Fax</label>
+                    <input type="text" class="form-control" name="fax_phone" placeholder="(xxx) xxx-xxxx"
+                    value="{{ phone_dict.fax.number|default:'' }}">
+                    </div>
+                    <div class="col-sm-2">
+                    <label>Ext.</label>
+                    <input type="text" class="form-control" name="fax_ext"
+                    value="{{ phone_dict.fax.extension|default:'' }}">
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+            </div>
+        </div>
+        </div>
+          
+          <!-- New Address Modal -->
+        <div class="modal fade" id="newAddressModal" tabindex="-1" role="dialog" aria-labelledby="newAddressModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">New Address</h4>
+            </div>
+            <div class="modal-body">
+                
+                <div class="form-group">
+                    <label>Address Type</label>
+                    <select class="form-control" name="address_type">
+                        <option value="Business" {% if primary_address.address_type == "Business" %}selected{% endif %}>Business</option>
+                        <option value="Home" {% if primary_address.address_type == "Home" %}selected{% endif %}>Home</option>
+                        <option value="Other" {% if primary_address.address_type == "Other" %}selected{% endif %}>Other</option>
+                    
+                    </select>
+                </div>
+                <div class="checkbox checkbox-primary">
+                    <input id="checkbox102" type="checkbox" name="primary_address"  {% if primary_address.primary %}checked{% endif %}>
+                    <label for="checkbox102">
+                        Primary Address
+                    </label>
+                </div>
+                   
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                    <label>Address 1</label>
+                    <input type="text" name="address1" class="form-control" value="{{ primary_address.address1|default:'' }}">
+                    </div>
+                    <div class="col-sm-6">
+                    <label>Address 2</label>
+                    <input type="text" name="address2" class="form-control" value="{{ primary_address.address2|default:'' }}">
+                    </div>
+                </div>
+        
+                <div class="form-group row">
+                    <div class="col-sm-4">
+                    <label>Zip Code</label>
+                    <input type="text" name="zip_code" class="form-control" value="{{ primary_address.zip_code|default:'' }}">
+                    </div>
+                    <div class="col-sm-4">
+                    <label>City</label>
+                    <input type="text" name="city" class="form-control" value="{{ primary_address.city|default:'' }}">
+                    </div>
+                    <div class="col-sm-4">
+                    <label>State <span style="color:red">*</span></label>
+                    <select class="form-control" name="state">
+                        <option>- select -</option>
+                        <option value="CA" {% if primary_address.state == "CA" %}selected{% endif %}>CA</option>
+                    <option value="NY" {% if primary_address.state == "NY" %}selected{% endif %}>NY</option>
+                    <option value="TX" {% if primary_address.state == "TX" %}selected{% endif %}>TX</option>
+                    </select>
+                    </div>
+                </div>
+        
+                <div class="form-group">
+                    <label>County</label>
+                    <select class="form-control" name="county">
+                    <option>-- Select County --</option>
+                    <option value="India" {% if primary_address.county == "India" %}selected{% endif %}>India</option>
+    <option value="USA" {% if primary_address.county == "USA" %}selected{% endif %}>USA</option>
+    <option value="Canada" {% if primary_address.county == "Canada" %}selected{% endif %}>Canada</option>
+                    </select>
+                </div>
+        
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="form-control" name="description">{{ primary_address.description|default:'' }}</textarea>
+                </div>
+        
+                <p><small>Fields marked with <span style="color:red">*</span> are required.</small></p>
+               
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+            </div>
+        </div>
+        </div>
+          
+        
+        <!-- Custom Fields -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Custom Fields</h3>
+            </div>
+            <div class="panel-body text-center">
+                <div class="alert alert-info">
+                    There aren't any custom fields yet<br>
+                    <small>Use custom fields to track and report on data unique to your agency.</small><br>
+                    <a href="#">How do I use custom fields?</a>
+                    
+                </div>
+                <a href="{% url 'custom_fields' %}" target="_blank" class="btn btn-default">Add/Edit</a>
+
+               
+            </div>
+        </div>
+        
+        <!-- Footer Buttons -->
+        <div class="well">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-danger">Delete</button>
+                </div>
+                <div class="col-xs-12 col-sm-6 text-right text-muted">
+                    <small>Updated by Alyson Gross on 2/17/2024 at 12:39 PM Eastern Standard Time</small>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
