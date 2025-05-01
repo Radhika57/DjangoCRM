@@ -119,12 +119,18 @@
   background-color: #0f0f0f;
   color: white;
   padding: 10px 20px;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   z-index: 1000;
   flex-wrap: wrap;
   gap: 10px;
 }
 
+body {
+  padding-top: 60px; /* Add padding to body to prevent content from hiding behind the fixed topbar */
+}
 .applogo {
   margin-right: 10px;
 }
