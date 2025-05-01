@@ -30,3 +30,5 @@ def individuals_view(request):
     return render(request, 'carrierindividuals.html')
 
 
+def custom_fields(request):
+    return render(request, 'carrier/customfields.html')

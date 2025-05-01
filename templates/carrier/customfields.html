@@ -1,0 +1,197 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block main-content %}
+
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- Sidebar -->
+    <div class="col-md-3 col-sm-4 sidebar-wrapper"
+         style="height: 100vh; overflow-y: scroll; position: sticky; top: 0; border-right: 1px solid #ddd; background-color: #fff; scrollbar-width: thin;">
+      <div class="sidebar-content" style="padding: 10px;">
+        <h4><strong>Agency Settings</strong></h4>
+        <ul class="nav nav-pills nav-stacked">
+            <li><a href="#">Sales Records</a></li>
+            <li><a href="#">Lead Temperatures</a></li>
+            <li><a href="#">Lead Routing Rules</a></li>
+            <li><a href="#">Lead Tags</a></li>
+            <li><a href="#">Analytics Tables - Sales</a></li>
+          
+            <li class="divider">Servicing & Agency Data</li>
+            <li class="active"><a href="#">Custom Fields</a></li>
+            <li><a href="#">Column Settings</a></li>
+            <li><a href="#">Data Utilities</a></li>
+          
+            <li class="divider">Add-Ons & Integrations</li>
+            <li><a href="#">Quote+</a></li>
+            <li><a href="#">Commissions+</a></li>
+            <li><a href="#">Third Party Integrations</a></li>
+          
+            <li class="divider">Users & Teams</li>
+            <li><a href="#">Users</a></li>
+            <li><a href="#">Security Groups</a></li>
+            <li><a href="#">Teams</a></li>
+            <li><a href="#">Team Notifications</a></li>
+          
+            <li class="divider">Tasks & Communications</li>
+            <li><a href="#">Phone Dialer & Call Queues</a></li>
+            <li><a href="#">Optional Features</a></li>
+            <li><a href="#">Sales Dashboard Settings</a></li>
+            <li><a href="#">Appointment Scheduling</a></li>
+            <li><a href="#">Appointment Reminders</a></li>
+            <li><a href="#">Rx Collect</a></li>
+          
+            <li class="divider">Marketing & Workflow</li>
+            <li><a href="#">Marketing Templates</a></li>
+            <li><a href="#">Landing Pages</a></li>
+            <li><a href="#">Contact Information</a></li>
+            <li><a href="#">Email Branding</a></li>
+            <li><a href="#">Lead Forms</a></li>
+          </ul>
+          
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main Panel -->
+    <div class="col-md-9 col-sm-8">
+
+      <!-- Header -->
+      <div style="background-color: #f8f9fa; padding: 20px 30px; border-bottom: 1px solid #dee2e6;">
+        <h3 style="margin: 0;">Custom Fields</h3>
+      </div>
+
+    
+      <div id="list-view" style="background-color: #fff; padding: 20px 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <h4 style="margin: 0;"><strong>Custom Fields</strong></h4>
+          <button class="btn btn-default btn-sm" onclick="showForm()">Create New</button>
+        </div>
+
+        <hr style="margin-top: 10px; margin-bottom: 20px;">
+
+        <div class="form-inline">
+          <label for="admin-area" style="margin-right: 10px;">Select an area to administer:</label>
+          <select class="form-control" id="admin-area">
+            <option>Group</option>
+            <option>Individual</option>
+            <option>Policy</option>
+            <option>Agent</option>
+            <option>Agent-Contract</option>
+            <option>Agent-License</option>
+            <option>Agency</option>
+            <option>Carrier</option>
+            <option>Carrier-Deposit</option>
+          </select>
+        </div>
+      </div>
+
+      
+      <div id="form-view" style="background-color: #fff; padding: 30px; display: none;">
+        <div style="display: flex; justify-content: space-between;">
+          <h4 style="font-weight: bold;">Add/Edit Custom Field</h4>
+          <button class="btn btn-default btn-sm" onclick="showList()">Back</button>
+        </div>
+
+        <hr>
+
+        <form>
+          <div class="form-group">
+            <label>Field Name</label>
+            <input type="text" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label>Field Type</label>
+            <select class="form-control">
+              <option>Text Field</option>
+              <option>Text Area</option>
+              <option>Number</option>
+              <option>Percent</option>
+              <option>Currency</option>
+              <option>Date</option>
+              <option>Checkbox</option>
+              <option>Checkbox List</option>
+              <option>Dropdown</option>
+            </select>
+          </div>
+          
+        
+
+          <button class="btn btn-success">Save</button>
+          <button class="btn btn-default" type="button" onclick="showList()">Cancel</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- JS TOGGLE SCRIPT -->
+<script>
+  function showForm() {
+    document.getElementById("list-view").style.display = "none";
+    document.getElementById("form-view").style.display = "block";
+  }
+
+  function showList() {
+    document.getElementById("form-view").style.display = "none";
+    document.getElementById("list-view").style.display = "block";
+  }
+</script>
+
+<!-- Bootstrap + jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<!-- Scrollbar Custom Styles -->
+<style>
+  .divider {
+    padding: 10px 15px;
+    font-weight: bold;
+    color: #555;
+    background-color: #f5f5f5;
+    margin-top: 10px;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+
+  .sidebar-wrapper::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .sidebar-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .sidebar-wrapper::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+
+  .sidebar-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  .sidebar-wrapper {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+  }
+
+  @media (max-width: 767px) {
+    .col-sm-4, .col-sm-8 {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+
+    .sidebar-wrapper {
+      border-right: none;
+      border-bottom: 1px solid #ddd;
+      max-height: 300px;
+    }
+  }
+</style>
+
+{% endblock %}

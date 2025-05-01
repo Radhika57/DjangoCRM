@@ -14,10 +14,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path
-from django.conf.urls.static import static
-from django.conf import settings
+from django.contrib import admin # type: ignore
+from django.urls import path # type: ignore
+from django.conf.urls.static import static # type: ignore # type: ignore
+from django.conf import settings # type: ignore
 from main import views
 
 urlpatterns = [
@@ -27,6 +27,7 @@ urlpatterns = [
     path('save_carrier/', views.save_carrier, name='save_carrier'),
     path('carriers/detail/<int:pk>/', views.carrier_detail, name='carrier_detail'),
     path('carriers/individuals/', views.individuals_view, name='individuals'),
+     path('customfields/', views.custom_fields, name='custom_fields'),
 
     
     
