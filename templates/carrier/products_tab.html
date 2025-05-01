@@ -1,0 +1,187 @@
+<div id="products" class="tab-pane fade">
+    <div class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3 class="panel-title">Products for AARP</h3>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <select class="form-control">
+                                    <option>Active Products (0)</option>
+                                    <option>Inactive Products (0)</option>
+                                </select>
+                            </div>
+                            <button id="createNewProduct" class="btn btn-primary">
+                                <i class="fa fa-plus"></i> Create New
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!-- Product Form (Initially Hidden) -->
+                <div id="productFormContainer" style="display: none; margin-bottom: 20px;">
+                    <div class="well">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6">
+                                <div class="form-group">
+                                    <label>Coverage Type<span class="text-danger">*</span></label>
+                                    <select class="form-control">
+                                        <option value="">Select</option>
+                                        <option>Medical</option>
+                                        <option>Dental</option>
+                                        <option>Vision</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="form-group">
+                                    <label>Product Name<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" placeholder="Enter Product Name">
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="form-group">
+                                    <label>Product Effective Date</label>
+                                    <input type="text" class="form-control" placeholder="mm/dd/yyyy">
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="form-group">
+                                    <label>Product Term Date</label>
+                                    <input type="text" class="form-control" placeholder="mm/dd/yyyy">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Product Description</label>
+                            <textarea class="form-control" rows="3" placeholder="Enter description..."></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 col-sm-6">
+                                <div class="form-group">
+                                    <label>Benefit Summary</label>
+                                    <input type="file" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-6">
+                                <div class="form-group">
+                                    <label>Plan Grid</label>
+                                    <input type="file" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-6">
+                                <div class="form-group">
+                                    <label>Brochure</label>
+                                    <input type="file" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>States</label>
+                            <div style="border: 1px solid #ced4da; border-radius: 4px; max-height: 150px; overflow-y: auto; padding: 5px;">
+                                <div class="checkbox" style="margin: 5px 0;">
+                                    <label style="display: block; padding: 3px 5px;">
+                                        <input type="checkbox" name="states[]" value="Alabama" style="margin-right: 8px;">
+                                        Alabama
+                                    </label>
+                                </div>
+                                <div class="checkbox" style="margin: 5px 0;">
+                                    <label style="display: block; padding: 3px 5px;">
+                                        <input type="checkbox" name="states[]" value="Alaska" style="margin-right: 8px;">
+                                        Alaska
+                                    </label>
+                                </div>
+                                <div class="checkbox" style="margin: 5px 0;">
+                                    <label style="display: block; padding: 3px 5px;">
+                                        <input type="checkbox" name="states[]" value="Arizona" style="margin-right: 8px;">
+                                        Arizona
+                                    </label>
+                                </div>
+                                <div class="checkbox" style="margin: 5px 0;">
+                                    <label style="display: block; padding: 3px 5px;">
+                                        <input type="checkbox" name="states[]" value="Arkansas" style="margin-right: 8px;">
+                                        Arkansas
+                                    </label>
+                                </div>
+                                <!-- Add more states as needed -->
+                            </div>
+                        </div>
+
+                        <div class="text-right">
+                            <button class="btn btn-success">Save</button>
+                            <button id="cancelNewProduct" class="btn btn-default">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Table -->
+                <div class="row table-controls">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>Show 
+                                    <select class="form-control input-sm">
+                                        <option>25</option>
+                                        <option>50</option>
+                                        <option>100</option>
+                                    </select> 
+                                    entries
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 text-right">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>Search:
+                                    <input type="search" class="form-control input-sm" placeholder="Type to filter (Plan Code, Coverage Type, Username)">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive" style="margin-top: 10px;">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="sortable" data-column="product">Product <i class="fa fa-sort"></i></th>
+                                <th class="sortable" data-column="coverage">Coverage Type <i class="fa fa-sort"></i></th>
+                                <th class="sortable" data-column="effective">Product Effective Date <i class="fa fa-sort"></i></th>
+                                <th class="sortable" data-column="term">Product Term Date <i class="fa fa-sort"></i></th>
+                                <th class="sortable" data-column="modified">Last Modified By <i class="fa fa-sort"></i></th>
+                                <th class="sortable" data-column="benefit">Benefit Summary <i class="fa fa-sort"></i></th>
+                                <th class="sortable" data-column="grid">Plan Grid <i class="fa fa-sort"></i></th>
+                                <th class="sortable" data-column="brochure">Brochure <i class="fa fa-sort"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="8" class="text-center">No data available in table</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <p class="text-muted">Showing 0 to 0 of 0 entries</p>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 text-right">
+                        <ul class="pagination pagination-sm">
+                            <li class="enable"><a href="#">Previous</a></li>
+                            <li class="enable"><a href="#">Next</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

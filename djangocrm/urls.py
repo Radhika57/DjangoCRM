@@ -25,9 +25,9 @@ urlpatterns = [
     path('', views.dashboard, name='dashboard'),  # Main dashboard view
     path('carriers/', views.carrier_list, name='carrier_list'),  
     path('save_carrier/', views.save_carrier, name='save_carrier'),
-    path('carriers/detail/<int:pk>/', views.carrier_detail, name='carrier_detail'),
+    path('carriers/detail/<int:carrier_id>/', views.carrier_detail, name='carrier_detail'),
     path('carriers/individuals/', views.individuals_view, name='individuals'),
-     path('customfields/', views.custom_fields, name='custom_fields'),
+    path('customfields/', views.custom_fields, name='custom_fields'),
 
     
     

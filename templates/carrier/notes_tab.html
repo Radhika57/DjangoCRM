@@ -1,0 +1,83 @@
+<div id="notes" class="tab-pane fade">
+    <div class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3 class="panel-title">Notes & Attachments for {{carrier.name}}</h3>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        <button type="button" class="btn btn-primary" id="showNoteForm">
+                            <i class="fa fa-plus"></i> Create New
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!-- Empty state content -->
+                <div id="emptyNotesState" class="text-center">
+                    <div class="well" style="padding: 40px;">
+                        <h4>There are no "Notes & Attachments for AARP"</h4>
+                        <p class="text-muted">
+                            This data is not available because it hasn't been created yet or you don't have permission.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Note Creation Form -->
+                <div id="noteDetailsSection" style="display: none;">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="well">
+                            <h4>New Notes & Attachments</h4>
+                            
+                            <!-- Subject Section -->
+                            <div class="form-group">
+                                <label><strong>Subject *</strong></label>
+                                <input type="text" class="form-control" name="subject" placeholder="Enter subject">
+                            </div>
+                            
+                            <!-- Notes Section -->
+                            <div class="form-group">
+                                <label><strong>Notes</strong></label>
+                                <textarea class="form-control" name="notes" rows="5" placeholder="Type your notes here..."></textarea>
+                            </div>
+                            
+                            <hr>
+                            
+                            <!-- Attachments Section -->
+                            <div class="attachment-block">
+                                <label><b>📎Attachment(s)</b></label>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr><th>Filename</th><th>Size</th><th>Status</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="3" class="text-center" style="padding: 40px; background: #f8f9fa;">Drag files here.</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="3">
+                                                    <input type="file" name="attachment" id="attachment" class="form-control" />
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="button" class="btn btn-default" id="cancelNote">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
