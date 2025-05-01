@@ -21,9 +21,11 @@ from django.conf import settings
 from main import views
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('', views.dashboard, name='dashboard'),  # Main dashboard view
-    path('carriers/', views.carrier_list, name='carrier_list'),  # List of carriers
-    path('carriers/detail/', views.carrier_detail, name='carrier_detail'),
+    path('carriers/', views.carrier_list, name='carrier_list'),  
+    path('save_carrier/', views.save_carrier, name='save_carrier'),
+    path('carriers/detail/<int:pk>/', views.carrier_detail, name='carrier_detail'),
     path('carriers/individuals/', views.individuals_view, name='individuals'),
 
     

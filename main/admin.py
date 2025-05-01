@@ -1,3 +1,9 @@
 from django.contrib import admin
+from main.models import *
 
-# Register your models here.
+
+class CarrierAdmin(admin.ModelAdmin):
+    model = Carrier
+    list_display = ['name']
+    
+admin.site.register(Carrier,CarrierAdmin)

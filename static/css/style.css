@@ -3781,7 +3781,7 @@ div[data-role="editor-toolbar"] {
 }
 
 .modal-content {
-  box-shadow: 2px 2px 2px red
+  box-shadow: 2px 2px 2px 
 }
 
 .modalicon {
@@ -4425,9 +4425,9 @@ table td {
   justify-content: flex-end;
   margin: 0;
 }
-body {
+/* body {
   padding: 2rem;
-}
+} */
 .form-section {
   margin-bottom: 2rem;
 }
