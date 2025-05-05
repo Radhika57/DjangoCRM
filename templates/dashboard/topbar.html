@@ -2,7 +2,7 @@
 
     <!-- Start App Logo -->
     <div class="applogo">
-      <a href="index.html" class="logo">CRM</a>
+      <a href="{% url "dashboard" %}" class="logo">CRM</a>
     </div>
     <!-- End App Logo -->
 
@@ -12,14 +12,14 @@
     <!-- End Sidebar Show Hide Button -->
 
     <!-- Start Searchbox -->
-    <form class="searchform">
+    {% comment %} <form class="searchform">
       <input type="text" class="searchbox" id="searchbox" placeholder="Search">
       <span class="searchbutton"><i class="fa fa-search"></i></span>
-    </form>
+    </form> {% endcomment %}
     <!-- End Searchbox -->
 
     <!-- Start Top Menu -->
-    <ul class="topmenu">
+    {% comment %} <ul class="topmenu">
       <li><a href="#">Files</a></li>
       <li><a href="#">Authors</a></li>
       <li class="dropdown">
@@ -30,7 +30,7 @@
           <li><a href="#">Blog Posts</a></li>
         </ul>
       </li>
-    </ul>
+    </ul> {% endcomment %}
     <!-- End Top Menu -->
 
     <!-- Start Sidepanel Show-Hide Button -->
@@ -43,16 +43,16 @@
     <li class="dropdown link">
       <a href="#" data-toggle="dropdown" class="dropdown-toggle hdbutton">Create New <span class="caret"></span></a>
         <ul class="dropdown-menu dropdown-menu-list">
-          <li><a href="#"><i class="fa falist fa-paper-plane-o"></i>Product or Item</a></li>
-          <li><a href="#"><i class="fa falist fa-font"></i>Blog Post</a></li>
-          <li><a href="#"><i class="fa falist fa-file-image-o"></i>Image Gallery</a></li>
-          <li><a href="#"><i class="fa falist fa-file-video-o"></i>Video Gallery</a></li>
+          <li><a href="{% url "carrier_list" %}"><i class="fa falist fa-paper-plane-o"></i>Carrier</a></li>
+          <li><a href="#"><i class="fa falist fa-font"></i>Agents</a></li>
+          <li><a href="#"><i class="fa falist fa-file-image-o"></i>Individuals</a></li>
+          <li><a href="#"><i class="fa falist fa-file-video-o"></i>Policy</a></li>
         </ul>
     </li>
 
-    <li class="link">
+    {% comment %} <li class="link">
       <a href="#" class="notifications">6</a>
-    </li>
+    </li> {% endcomment %}
 
     <li class="dropdown link">
       <a href="#" data-toggle="dropdown" class="dropdown-toggle profilebox"><img src="img/profileimg.png" alt="img"><b>Jonathan Doe</b><span class="caret"></span></a>

@@ -81,13 +81,82 @@
             <div class="clearfix"></div>
             </div>
             <div class="panel-body text-center">
-            <div class="alert alert-info">
-                This record has no addresses or phone numbers yet<br>
-                <small>Add and track this contact information here..</small><br>
-                
+                {% if carrier_phones %}
+                <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Number</th>
+                            <th>Extension</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for phone in carrier_phones %}
+                        <tr>
+                            <td>{{ phone.phone_type }}</td>
+                            <td>{{ phone.number }}</td>
+                            <td>{{ phone.extension }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+                {% endif %}
+            
+                {% if addresses %}
+                <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Primary</th>
+                            <th>Address 1</th>
+                            <th>Address 2</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Zip</th>
+                            <th>County</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for address in addresses %}
+                        <tr>
+                            <td>{{ address.address_type }}</td>
+                            <td>{{ address.primary|yesno:"Yes,No" }}</td>
+                            <td>{{ address.address1 }}</td>
+                            <td>{{ address.address2 }}</td>
+                            <td>{{ address.city }}</td>
+                            <td>{{ address.state }}</td>
+                            <td>{{ address.zip_code }}</td>
+                            <td>{{ address.county }}</td>
+                            <td>{{ address.description }}</td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#editAddressModal{{ address.id }}">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteAddressModal{{ address.id }}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+            
+                        {% include "carrier/edit_address.html" with address=address %}
+                        {% include "carrier/deleteaddress.html" with address=address %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    This record has no addresses or phone numbers yet.<br>
+                    <small>Add and track this contact information here.</small>
+                </div>
+                {% endif %}
             </div>
             
-            </div>
         </div>
 
           
@@ -217,8 +286,8 @@
                     <select class="form-control" name="county">
                     <option>-- Select County --</option>
                     <option value="India" {% if primary_address.county == "India" %}selected{% endif %}>India</option>
-    <option value="USA" {% if primary_address.county == "USA" %}selected{% endif %}>USA</option>
-    <option value="Canada" {% if primary_address.county == "Canada" %}selected{% endif %}>Canada</option>
+            <option value="USA" {% if primary_address.county == "USA" %}selected{% endif %}>USA</option>
+            <option value="Canada" {% if primary_address.county == "Canada" %}selected{% endif %}>Canada</option>
                     </select>
                 </div>
         

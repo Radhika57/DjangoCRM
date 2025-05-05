@@ -16,12 +16,45 @@
             <div class="panel-body">
                 <!-- Empty state content -->
                 <div id="emptyNotesState" class="text-center">
+                    {% if notess %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Notes</th>
+                                    <th>Attachment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for note in notess %}
+                                <tr>
+                                    <td>{{ note.subject }}</td>
+                                    <td>{{ note.notes }}</td>
+                                    <td>
+                                        {% if note.attachment.url %}
+                                            <a href="{{ note.attachment.url }}" download>
+                                                <img src="{{ note.attachment.url }}" alt="Attachment" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                            </a>
+                                        {% else %}
+                                            No File
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    
+                    {% else %}
                     <div class="well" style="padding: 40px;">
                         <h4>There are no "Notes & Attachments for AARP"</h4>
                         <p class="text-muted">
                             This data is not available because it hasn't been created yet or you don't have permission.
                         </p>
                     </div>
+                    {% endif %}
                 </div>
                 
                 <!-- Note Creation Form -->

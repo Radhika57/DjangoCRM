@@ -16,6 +16,54 @@
             <div class="panel-body">
                 <!-- Empty state content -->
                 <div id="emptyActivitiesState" class="text-center">
+                    {% if activities %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Notes</th>
+                                    <th>Status</th>
+                                    <th>FollowUp User</th>
+                                    <th>FollowUp Team</th>
+                                    <th>Due Date</th>
+                                    <th>Activity Date</th>
+                                    <th>Priority</th>
+                                    <th>Activity Type</th>
+                                    <th>Method</th>
+                                    <th>Attachment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for act in activities %}
+                                <tr>
+                                    <td>{{ act.subject }}</td>
+                                    <td>{{ act.notes }}</td>
+                                    <td>{{ act.status }}</td>
+                                    <td>{{ act.follow_up_user }}</td>
+                                    <td>{{ act.follow_up_team }}</td>
+                                    <td>{{ act.due_date }}</td>
+                                    <td>{{ act.activity_date }}</td>
+                                    <td>{{ act.priority }}</td>
+                                    <td>{{ act.activity_type }}</td>
+                                    <td>{{ act.method }}</td>
+                                    <td>
+                                        {% if act.attachment.url %}
+                                            <a href="{{ act.attachment.url }}" download>
+                                                <img src="{{ act.attachment.url }}" alt="Attachment" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                            </a>
+                                        {% else %}
+                                            No File
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    
+                    {% else %}
                     <div class="well" style="padding: 40px;">
                         <i class="fa fa-tasks fa-3x text-muted mb-3"></i>
                         <h4>No activities have been associated yet</h4>
@@ -24,6 +72,7 @@
                             <a href="#">Learn more about activities</a>
                         </p>
                     </div>
+                    {% endif %}
                 </div>
                 
                 <!-- Activity Details Section -->

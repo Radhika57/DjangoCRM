@@ -8,6 +8,14 @@ CARRIER_SECURITY_GROUP_CHOICES = (
     ('commission_staff', 'Commission Staff'),
 )
 
+STATE_CHOICES = (
+    ('Alabama', 'Alabama'),
+    ('Alaska', 'Alaska'),
+    ('Arizona', 'Arizona'),
+    ('Arkansas', 'Arkansas'),
+    
+)
+
 CARRIER_STATUS_CHOICES = (
     ('active','Active'),
     ('inactive','InActive')
@@ -81,3 +89,39 @@ class CarrierFormName(models.Model):
     form_number = models.CharField(max_length=100,blank=True)
     coverage_type = models.CharField(max_length=100,blank=True)
     form_file = models.FileField(upload_to='carrier_notes_attachments/', null=True, blank=True)
+    
+class CarrierProduct(models.Model):
+    COVERAGE_CHOICES = [
+        ('Medical', 'Medical'),
+        ('Dental', 'Dental'),
+        ('Vision', 'Vision'),
+    ]
+
+    carrier = models.ForeignKey(Carrier, on_delete=models.CASCADE, related_name='products')
+    coverage_type = models.CharField(max_length=50, choices=COVERAGE_CHOICES)
+    product_name = models.CharField(max_length=255)
+    effective_date = models.DateField(null=True, blank=True)
+    term_date = models.DateField(null=True, blank=True)
+    description = models.TextField(blank=True, null=True)
+
+    benefit_summary = models.FileField(upload_to='product_files/', null=True, blank=True)
+    plan_grid = models.FileField(upload_to='product_files/', null=True, blank=True)
+    brochure = models.FileField(upload_to='product_files/', null=True, blank=True)
+
+    states = MultiSelectField(choices=STATE_CHOICES, null=True,blank=True)  
+    # modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    modified_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.product_name} ({self.coverage_type})"
+    
+    
+class CarrierWebsite(models.Model):
+    carrier = models.ForeignKey(Carrier, on_delete=models.CASCADE,related_name="websites")
+    website_name = models.CharField(max_length=255)
+    url = models.URLField(blank=True, null=True)
+    username = models.CharField(max_length=255, blank=True, null=True)
+    password = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.carrier.name} - {self.website_name}"

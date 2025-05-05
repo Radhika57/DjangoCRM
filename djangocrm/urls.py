@@ -26,7 +26,8 @@ urlpatterns = [
     path('carriers/', views.carrier_list, name='carrier_list'),  
     path('save_carrier/', views.save_carrier, name='save_carrier'),
     path('carriers/detail/<int:carrier_id>/', views.carrier_detail, name='carrier_detail'),
-    path('carriers/individuals/', views.individuals_view, name='individuals'),
+    path('carriers/address/edit/<int:address_id>/', views.edit_carrier_address, name='edit_carrier_address'),
+    path('carrier/address/delete/<int:address_id>/', views.delete_carrier_address, name='delete_carrier_address'),
     path('customfields/', views.custom_fields, name='custom_fields'),
 
     
