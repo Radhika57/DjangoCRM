@@ -1,4 +1,68 @@
+<style>
+  .sidebar {
+      position: fixed;
+      top: 60px; /* Offset for topbar */
+      left: 0;
+      width: 250px;
+      height: 100%;
+      background-color: #2f2f2f;
+      padding-top: 20px;
+      z-index: 999;
+    }
+
+    .sidebar a {
+      color: white;
+      padding: 15px;
+      text-decoration: none;
+      display: block;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #444;
+    }
+
+    /* Main content */
+    .main-content {
+      margin-left: 250px; /* Offset for sidebar */
+      padding-top: 70px; /* Offset for topbar */
+      padding: 20px;
+      flex: 1;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .topbar {
+        position: relative;
+      }
+
+      .sidebar {
+        width: 200px;
+        top: 50px;
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding-top: 60px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .sidebar {
+        width: 100%;
+        top: 50px;
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding-top: 60px;
+      }
+    }
+</style>
+
 <div class="sidebar clearfix">
+  <div class="scrollable" id="sidebar-scroll">
+    <div class="scroll-progress" id="scrollProgress"></div>
 
     <ul class="sidebar-panel nav">
       <li class="sidetitle">MAIN</li>
@@ -16,7 +80,7 @@
       <li><a href="#"><span class="icon color12"><i class="fa fa-font"></i></span>Commission</a></li>
       
     </ul>
-    
+
     <ul class="sidebar-panel nav">
       <li class="sidetitle">Use Your Data</li>
       <li><a href="#"><span class="icon color15"><i class="fa fa-columns"></i></span>Reports</a></li>
@@ -31,5 +95,17 @@
     
     
     </div>
-    
-    </div>
+  </div>
+</div>
+
+<script>
+  const scrollable = document.getElementById('sidebar-scroll');
+  const progressLine = document.getElementById('scrollProgress');
+
+  scrollable.addEventListener('scroll', () => {
+    const scrollTop = scrollable.scrollTop;
+    const scrollHeight = scrollable.scrollHeight - scrollable.clientHeight;
+    const progress = (scrollTop / scrollHeight) * 100;
+    progressLine.style.height = `${progress}%`;
+  });
+</script>
