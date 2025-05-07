@@ -1,4 +1,4 @@
-<style>
+{% comment %} <style>
   .sidebar {
       position: fixed;
       top: 60px; /* Offset for topbar */
@@ -58,7 +58,7 @@
         padding-top: 60px;
       }
     }
-</style>
+</style> {% endcomment %}
 
 <div class="sidebar clearfix">
   <div class="scrollable" id="sidebar-scroll">
@@ -98,7 +98,7 @@
   </div>
 </div>
 
-<script>
+{% comment %} <script>
   const scrollable = document.getElementById('sidebar-scroll');
   const progressLine = document.getElementById('scrollProgress');
 
@@ -108,4 +108,4 @@
     const progress = (scrollTop / scrollHeight) * 100;
     progressLine.style.height = `${progress}%`;
   });
-</script>
+</script> {% endcomment %}
