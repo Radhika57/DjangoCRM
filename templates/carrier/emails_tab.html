@@ -1,21 +1,38 @@
 <div id="emails" class="tab-pane fade">
     <div class="container-fluid">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Emails associated with AARP</h3>
-            </div>
-            <div class="panel-body text-center">
-                <div class="well" style="padding: 40px;">
-                    <h4>No emails have been associated yet</h4>
-                    <p class="text-muted">
-                        You can associate emails that were saved to AgencyBloc using Outlook Email Sync or copy them from other records to this one.
-                    </p>
-                    <div class="mt-3">
-                        <a href="#" class="btn btn-link">Learn more about Outlook Email Sync</a><br>
-                        <a href="#" class="btn btn-link">Learn how to associate & copy emails</a>
-                    </div>
-                </div>
-            </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Emails associated with AARP</h3>
         </div>
+        <div class="panel-body text-center">
+          <div class="well" style="padding: 40px; word-wrap: break-word; overflow-wrap: break-word;">
+            <h4>No emails have been associated yet</h4>
+            <p class="text-muted">
+              You can associate emails that were saved to AgencyBloc using Outlook Email Sync or copy them from other records to this one.
+            </p>
+            <div class="mt-3">
+              <a href="#" class="btn btn-link text-break text-wrap d-block w-100" style="white-space: normal;">
+                Learn more about Outlook Email Sync
+              </a>
+              <a href="#" class="btn btn-link text-break text-wrap d-block w-100" style="white-space: normal;">
+                Learn how to associate & copy emails
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+  <style>
+    /* Prevent all btn-link elements from overflowing their containers */
+.btn-link {
+  white-space: normal !important;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  text-align: left;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+  </style>
+  

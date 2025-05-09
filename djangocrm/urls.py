@@ -22,15 +22,18 @@ from main import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.dashboard, name='dashboard'),  # Main dashboard view
+    path('', views.dashboard, name='dashboard'),
     path('carriers/', views.carrier_list, name='carrier_list'),  
     path('save_carrier/', views.save_carrier, name='save_carrier'),
     path('carriers/detail/<int:carrier_id>/', views.carrier_detail, name='carrier_detail'),
     path('carriers/address/edit/<int:address_id>/', views.edit_carrier_address, name='edit_carrier_address'),
     path('carrier/address/delete/<int:address_id>/', views.delete_carrier_address, name='delete_carrier_address'),
     path('customfields/', views.custom_fields, name='custom_fields'),
-
-    
-    
-]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
+    path('search-agents/', views.search_agents, name='search_agents'),
+    path('agents/manage-agencies/', views.manage_agencies, name='manage_agencies'),
+    path('agents/settings/', views.agent_column_settings, name='agent_column_settings'),
+    path('agency/detail/<int:agency_id>/', views.agency_detail, name='agency_detail'),
+    path('agentcolumnsettings/', views.agent_column_settings, name='agentcolumnsettings'), 
+    path('agency/advanced-search/', views.advanced_search, name='advanced_search'),
+    path('agency/saved-searches/', views.saved_searches, name='saved_searches'),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

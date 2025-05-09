@@ -1,0 +1,415 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block main-content %}
+<style>
+  
+  .divider {
+        padding: 10px 15px;
+        font-weight: bold;
+        color: #555;
+        background-color: #f5f5f5;
+        margin-top: 10px;
+        text-transform: uppercase;
+        font-size: 12px;
+    }
+
+    .sidebar-wrapper {
+        height: calc(100vh - 120px);
+        overflow-y: auto;
+        position: sticky;
+        top: 70px;
+        border-right: 1px solid #ddd;
+        background-color: #fff;
+        padding: 10px;
+    }
+
+    .sidebar-wrapper::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .sidebar-wrapper::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .sidebar-wrapper::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+    }
+
+    .sidebar-wrapper::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    
+    .main-content-wrapper {
+        padding: 20px;
+        background-color: #fff;
+    }
+
+    .content-header {
+        background-color: #f8f9fa;
+        padding: 15px 20px;
+        border-bottom: 1px solid #dee2e6;
+        margin: -20px -20px 20px -20px;
+    }
+
+    
+    .column-row {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .column-row select {
+        flex-grow: 1;
+    }
+
+   
+    @media (max-width: 991px) {
+        .sidebar-wrapper {
+            height: auto;
+            max-height: 300px;
+            position: relative;
+            top: auto;
+            margin-bottom: 20px;
+            border-right: none;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .main-content-wrapper {
+            padding-top: 0;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .form-inline {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .form-inline label {
+            margin-right: 0;
+            margin-bottom: 5px;
+        }
+        
+      .column-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      padding: 4px;
+      font-size: 13px;
+    }
+
+    .column-row select {
+      flex: 1 1 auto;
+      max-width: 300px;
+      height: 32px;
+      font-size: 13px;
+      padding: 2px 6px;
+    }
+
+        .column-row button {
+            align-self: flex-end;
+        }
+    }
+</style>
+
+
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- Sidebar -->
+    <div class="col-md-3 col-sm-4 sidebar-wrapper"
+         style="height: 100vh; overflow-y: scroll; position: sticky; top: 0; border-right: 1px solid #ddd; background-color: #fff; scrollbar-width: thin;">
+      <div class="sidebar-content" style="padding: 10px;">
+        <h4><strong>Agency Settings</strong></h4>
+        <ul class="nav nav-pills nav-stacked">
+            <li><a href="#">Sales Records</a></li>
+            <li><a href="#">Lead Temperatures</a></li>
+            <li><a href="#">Lead Routing Rules</a></li>
+            <li><a href="#">Lead Tags</a></li>
+            <li><a href="#">Analytics Tables - Sales</a></li>
+
+            <li class="divider">Servicing & Agency Data</li>
+            <li class="active"><a href="#">Custom Fields</a></li>
+            <li><a href="#">Column Settings</a></li>
+            <li><a href="#">Data Utilities</a></li>
+
+            <li class="divider">Add-Ons & Integrations</li>
+            <li><a href="#">Quote+</a></li>
+            <li><a href="#">Commissions+</a></li>
+            <li><a href="#">Third Party Integrations</a></li>
+
+            <li class="divider">Users & Teams</li>
+            <li><a href="#">Users</a></li>
+            <li><a href="#">Security Groups</a></li>
+            <li><a href="#">Teams</a></li>
+            <li><a href="#">Team Notifications</a></li>
+
+            <li class="divider">Tasks & Communications</li>
+            <li><a href="#">Phone Dialer & Call Queues</a></li>
+            <li><a href="#">Optional Features</a></li>
+            <li><a href="#">Sales Dashboard Settings</a></li>
+            <li><a href="#">Appointment Scheduling</a></li>
+            <li><a href="#">Appointment Reminders</a></li>
+            <li><a href="#">Rx Collect</a></li>
+
+            <li class="divider">Marketing & Workflow</li>
+            <li><a href="#">Marketing Templates</a></li>
+            <li><a href="#">Landing Pages</a></li>
+            <li><a href="#">Contact Information</a></li>
+            <li><a href="#">Email Branding</a></li>
+            <li><a href="#">Lead Forms</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main Panel -->
+    <div class="col-md-9 col-sm-8">
+      <!-- Header -->
+      <div style="background-color: #f8f9fa; padding: 20px 30px; border-bottom: 1px solid #dee2e6;">
+        <h3 style="margin: 0;">Column Settings</h3>
+      </div>
+
+      <div class="alert alert-warning alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>Manage agencies ... Select "Agency" from the "New" dropdown in the header to get started..</strong><br>
+        Select "<strong>Agency</strong>" from the "<strong>New</strong>" dropdown in the header to get started.
+      </div>
+
+      <div id="list-view" style="background-color: #fff; padding: 20px 30px;">
+        <div class="form-inline" style="margin-bottom: 20px;">
+          <label for="admin-area" style="margin-right: 10px;">Select an area to administer:</label>
+          <select class="form-control" id="admin-area">
+            <option>Agents</option>
+            <option>Group - Individuals</option>
+            <option>Group - Policies</option>
+            <option>Group - Policies - Enrollments</option>
+            <option>Group - Opportunities</option>
+            <option>Individuals</option>
+            <option>Individual - Relationships</option>
+            <option>Individual - Policies</option>
+            <option>Individual - Policies - Enrollments</option>
+            <option>Individual - Opportunities</option>
+            <option>Policies</option>
+            <option>Policy - Enrollments</option>
+            <option>Policies - Opportunities</option>
+            <option>Agent - Contracts</option>
+            <option>Agent - Licenses</option>
+            <option>Carriers</option>
+            <option>Carrier - Individuals</option>
+            <option>Leads - Group</option>
+            <option>Leads - Individual</option>
+            <option>Opportunities - List View</option>
+            <option>Opportunities - Policies</option>
+          </select>
+        </div>
+
+        <hr>
+
+        <!-- Column Management -->
+        <div id="column-container" style="padding: 10px;"></div>
+
+        <!-- Add Column -->
+        <div class="form-inline" style="margin-bottom: 20px;">
+          <select id="new-column-select" class="form-control"></select>
+          <button type="button" class="btn btn-default btn-sm" id="add-column-btn">Add Column</button>
+        </div>
+
+        <!-- Actions -->
+        <button class="btn btn-success">Save</button>
+        <button class="btn btn-default">Reset To Default</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JS Scripts -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+      const columnOptionsByArea = {
+        "Agents": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Group - Individuals": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Group - Policies": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Group - Policies - Enrollments": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Group - Opportunities": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Individuals": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Individual - Relationships": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Individual - Policies": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Individual - Policies - Enrollments": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Individual - Opportunities": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Policies": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Policy - Enrollments": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Policies - Opportunities": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Agent - Contracts": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Agent - Licenses": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Carriers": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Carrier - Individuals": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Leads - Group": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Leads - Individual": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Opportunities - List View": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"],
+        "Opportunities - Policies": ["Agency", "Business Phone", "Cell Phone", "City, State Zip", "Classification", "County", "Date of Birth", "E&O Expires", "Email", "Lead Source", "Name", "Nickname", "NPN", "Other Lead Source", "Status", "Street", "Type"]
+      };
+  
+      const defaultColumnsByArea = {
+        "Agents": ["Agency", "Email", "Business Phone", "Status", "E&O Expires"],
+        "Group - Individuals": ["Name", "Email", "Type"],
+        "Group - Policies": ["Policy", "Status", "Type"],
+        "Group - Policies - Enrollments": ["Name", "Email"],
+        "Group - Opportunities": ["Opportunity", "Status"],
+        "Individuals": ["Name", "Email", "Date of Birth"],
+        "Individual - Relationships": ["Name", "Type"],
+        "Individual - Policies": ["Policy", "Start Date"],
+        "Individual - Policies - Enrollments": ["Enrollment Date", "Status"],
+        "Individual - Opportunities": ["Opportunity", "Stage"],
+        "Policies": ["Policy", "Type", "Start Date"],
+        "Policy - Enrollments": ["Enrollment Date", "End Date"],
+        "Policies - Opportunities": ["Opportunity", "Linked Policy"],
+        "Agent - Contracts": ["Contract Date", "Type"],
+        "Agent - Licenses": ["License Number", "Expiry Date"],
+        "Carriers": ["Carrier Name", "Status"],
+        "Carrier - Individuals": ["Name", "Carrier"],
+        "Leads - Group": ["Lead Source", "Status"],
+        "Leads - Individual": ["Lead Source", "Email"],
+        "Opportunities - List View": ["Opportunity", "Stage", "Close Date"],
+        "Opportunities - Policies": ["Opportunity", "Policy"]
+      };
+  
+      const fallbackColumns = ["Agency", "Email", "Business Phone", "Status", "E&O Expires"];
+  
+      function getColumnOptionsHTML(selectedValue = "") {
+        const selectedArea = $('#admin-area').val();
+        const options = columnOptionsByArea[selectedArea] || [];
+        return options.map(opt => `<option ${opt === selectedValue ? "selected" : ""}>${opt}</option>`).join('');
+      }
+  
+      function populateInitialColumns() {
+        $('#column-container').empty();
+        const selectedArea = $('#admin-area').val();
+        const defaultColumns = defaultColumnsByArea[selectedArea] || fallbackColumns;
+  
+        defaultColumns.forEach(value => {
+          const optionsHTML = getColumnOptionsHTML(value);
+          const newRow = `
+            <div class="column-row form-inline" style="margin-bottom: 10px;">
+              <select class="form-control column-select">${optionsHTML}</select>
+              <button type="button" class="btn btn-danger btn-sm remove-column">Remove</button>
+            </div>`;
+          $('#column-container').append(newRow);
+        });
+      }
+  
+      // Remove column
+      $(document).on('click', '.remove-column', function () {
+        $(this).closest('.column-row').remove();
+      });
+  
+      // Add column
+      $('#add-column-btn').click(function () {
+        const selectedOption = $('#new-column-select').val();
+        const optionsHTML = getColumnOptionsHTML(selectedOption);
+        const newRow = `
+          <div class="column-row form-inline" style="margin-bottom: 10px;">
+            <select class="form-control column-select">${optionsHTML}</select>
+            <button type="button" class="btn btn-danger btn-sm remove-column">Remove</button>
+          </div>`;
+        $('#column-container').append(newRow);
+      });
+  
+      $('#save-btn').click(function () {
+        const columns = [];
+        $('#column-container .column-row').each(function () {
+          const selectedColumn = $(this).find('.column-select').val();
+          columns.push(selectedColumn);
+        });
+        localStorage.setItem('columns', JSON.stringify(columns));
+        alert('Columns saved!');
+      });
+  
+      // Reset to default columns
+      $('#reset-btn').click(function () {
+        populateInitialColumns();
+      });
+
+      // Change area triggers column refresh
+      $('#admin-area').change(function () {
+        const selectedArea = $(this).val();
+        const optionsHTML = columnOptionsByArea[selectedArea] || [];
+        $('#new-column-select').html(optionsHTML.map(opt => `<option>${opt}</option>`).join(''));
+        populateInitialColumns();
+      });
+  
+      // Initial trigger
+      $('#admin-area').trigger('change');
+      populateInitialColumns();
+    });
+  
+    function showForm() {
+      document.getElementById("list-view").style.display = "none";
+      document.getElementById("form-view").style.display = "block";
+    }
+  
+    function showList() {
+      document.getElementById("form-view").style.display = "none";
+      document.getElementById("list-view").style.display = "block";
+    }
+  </script>
+  
+<!-- Custom Sidebar Styles -->
+<style>
+  .divider {
+    padding: 10px 15px;
+    font-weight: bold;
+    color: #555;
+    background-color: #f5f5f5;
+    margin-top: 10px;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+
+  .sidebar-wrapper::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .sidebar-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .sidebar-wrapper::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+
+  .sidebar-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  .sidebar-wrapper {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+  }
+
+  @media (max-width: 767px) {
+    .col-sm-4, .col-sm-8 {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+
+    .sidebar-wrapper {
+      border-right: none;
+      border-bottom: 1px solid #ddd;
+      max-height: 300px;
+    }
+  }
+</style>
+
+{% endblock %}

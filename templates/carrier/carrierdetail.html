@@ -41,6 +41,7 @@
         width: 100%;
         transition: all 0.3s ease;
         padding-right: 0;
+        min-height: calc(100vh - 120px); /* Added to prevent footer overlap */
     }
     
     .main-content-wrapper.sidebar-shown {
@@ -318,48 +319,46 @@
             <h3><span><img src="{% static "img/record-button.png" %}" alt="" srcset=""></span>{{carrier.name}}</h3>
         </div>
     </div>
-</div>
 
         
-        <div role="tabpanel">
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" href="#detail">Detail</a></li>
-                <li><a data-toggle="tab" href="#individuals">Individuals</a></li>
-                <li><a data-toggle="tab" href="#activities">Activities</a></li>
-                <li><a data-toggle="tab" href="#notes">Notes</a></li>
-                <li><a data-toggle="tab" href="#forms">Forms</a></li>
-                <li><a data-toggle="tab" href="#products">Products</a></li>
-                <li><a data-toggle="tab" href="#websites">Websites</a></li>
-                <li><a data-toggle="tab" href="#emails">Emails</a></li>
-            </ul>
+    <div role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#detail">Detail</a></li>
+            <li><a data-toggle="tab" href="#individuals">Individuals</a></li>
+            <li><a data-toggle="tab" href="#activities">Activities</a></li>
+            <li><a data-toggle="tab" href="#notes">Notes</a></li>
+            <li><a data-toggle="tab" href="#forms">Forms</a></li>
+            <li><a data-toggle="tab" href="#products">Products</a></li>
+            <li><a data-toggle="tab" href="#websites">Websites</a></li>
+            <li><a data-toggle="tab" href="#emails">Emails</a></li>
+        </ul>
+        
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- Detail Tab -->
+            {% include "Carrier/details_tab.html" %}
             
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <!-- Detail Tab -->
-                {% include "Carrier/details_tab.html" %}
-                
-                <!-- Individuals Tab -->
-                {% include "Carrier/individuals_tab.html" %}
-                
-                <!-- Activities Tab -->
-                {% include "Carrier/activities_tab.html" %}
-                
-                <!-- Notes Tab -->
-                {% include "Carrier/notes_tab.html" %}
-                
-                <!-- Forms Tab -->
-                {% include "Carrier/forms_tab.html" %}
-                
-                <!-- Products Tab -->
-                {% include "Carrier/products_tab.html" %}
-                
-                <!-- Websites Tab -->
-                {% include "Carrier/websites_tab.html" %}
-                
-                <!-- Emails Tab -->
-                {% include "Carrier/emails_tab.html" %}
-            </div>
+            <!-- Individuals Tab -->
+            {% include "Carrier/individuals_tab.html" %}
+            
+            <!-- Activities Tab -->
+            {% include "Carrier/activities_tab.html" %}
+            
+            <!-- Notes Tab -->
+            {% include "Carrier/notes_tab.html" %}
+            
+            <!-- Forms Tab -->
+            {% include "Carrier/forms_tab.html" %}
+            
+            <!-- Products Tab -->
+            {% include "Carrier/products_tab.html" %}
+            
+            <!-- Websites Tab -->
+            {% include "Carrier/websites_tab.html" %}
+            
+            <!-- Emails Tab -->
+            {% include "Carrier/emails_tab.html" %}
         </div>
     </div>
 </div>

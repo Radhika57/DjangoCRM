@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.shortcuts import render, redirect # type: ignore
+from django.http import JsonResponse # type: ignore
 from .models import *
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404 # type: ignore
 
 
 
@@ -235,3 +235,24 @@ def delete_carrier_address(request, address_id):
 
 def custom_fields(request):
     return render(request, 'carrier/customfields.html')
+
+def search_agents(request):
+    return render(request, 'agency/searchagency.html')
+
+def manage_agencies(request):
+    return render(request, 'agency/manageagencies.html')
+
+def agent_column_settings(request):
+    return render(request, 'agency/agentcolumnsettings.html')
+
+def agency_detail(request, agency_id):
+  
+    return render(request, 'agency/agencydetail.html', {'agency_id': agency_id})
+
+def agent_column_settings(request):
+    return render(request, 'agency/agentcolumnsettings.html')
+
+def advanced_search(request):
+    return render(request, 'agency/advancedsearch.html')
+def saved_searches(request):
+    return render(request, 'agency/savedsearch.html')
