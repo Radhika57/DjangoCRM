@@ -9,10 +9,12 @@
   <meta name="keywords" content="bootstrap, admin, dashboard, flat admin template, responsive," />
   <title>CRM</title>
   <link href="{% static "css/root.css" %}" rel="stylesheet">
+  
 
 
   </head>
   <body>
+    
   <!-- Start Page Loading -->
   <div class="loading"><img src="{% static "img/loading.gif" %}" alt="loading-img"></div>
   <!-- End Page Loading -->
@@ -77,28 +79,11 @@ Data Tables
 <script src="{% static "js/datatables/datatables.min.js" %}"></script>
 
 
-
 <script>
-$(document).ready(function() {
-    $('#example0').DataTable();
-} );
-</script>
-<script>
-$(document).ready(function() {
-    $('#example1').DataTable();
-} );
-</script>
-<script>
-$(document).ready(function() {
-    $('#example2').DataTable();
-} );
-</script>
-<script>
-$(document).ready(function() {
-    $('#example3').DataTable();
-} );
-</script>
-
+    $(document).ready(function() {
+        $('#example0, #example1, #example2, #example3').DataTable();
+    });
+  </script>
 
 
 <script>
