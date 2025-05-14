@@ -1,0 +1,331 @@
+<style>
+    /* Table styling */
+    #contracts-table {
+        width: 100% !important;
+    }
+
+    #contracts-table th {
+        white-space: nowrap;
+        position: relative;
+        cursor: pointer;
+    }
+
+    #contracts-table th.sorting:after,
+    #contracts-table th.sorting_asc:after,
+    #contracts-table th.sorting_desc:after {
+        font-family: 'FontAwesome';
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    #contracts-table th.sorting:after {
+        content: "\f0dc";
+        color: #ddd;
+    }
+
+    #contracts-table th.sorting_asc:after {
+        content: "\f0de";
+    }
+
+    #contracts-table th.sorting_desc:after {
+        content: "\f0dd";
+    }
+
+    @media (max-width: 767px) {
+        .table-controls .form-inline {
+            display: block;
+            margin-top: 10px;
+        }
+
+        .table-controls .form-group {
+            margin-bottom: 10px;
+        }
+
+        .pagination {
+            margin-top: 10px;
+        }
+    }
+</style>
+
+<div id="contracts-content" class="tab-pane">
+    <div id="contractsMainContent">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row align-items-center">
+                    <div class="col-sm-6 d-flex align-items-center">
+                        <strong>Contracts for Alyson Gross</strong>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary" id="showCreateContractBtn">Create New</button>
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-angle-down"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="{% url 'agent_column_settings' %}" target="_blank">Column Settings</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <div class="row table-controls">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <input type="text" id="contracts-search" class="form-control" placeholder="Search: Type to filter (Individual Name, Type, Status)">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 text-right">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>Show
+                                    <select id="contracts-length" class="form-control input-sm">
+                                        <option>25</option>
+                                        <option>50</option>
+                                        <option>100</option>
+                                    </select>
+                                    entries
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="contracts-table" class="table table-bordered table-hover" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Contract Date</th>
+                                <th>Carrier</th>
+                                <th>File</th>
+                                <th>Status</th>
+                                <th>Agent Number</th>
+                                <th>Medicare Number</th>
+                                <th>Termed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" class="text-center">No data available in table</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <p id="contracts-info" class="text-muted">Showing 0 to 0 of 0 entries</p>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 text-right">
+                        <ul id="contracts-pagination" class="pagination pagination-sm">
+                            <li class="disabled"><a href="#">Previous</a></li>
+                            <li class="disabled"><a href="#">Next</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="createcontractsContainer" style="display: none;">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong>New Contracts & Attachments</strong>
+                <button class="btn btn-default btn-sm" id="backToContractsBtn">
+                    <i class="fa fa-arrow-left"></i> Back to Contracts
+                </button>
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <form id="contractForm">
+                <!-- Carrier Contract Section -->
+                <div class="agent-info-container">
+                    <h1 class="section-title">Carrier Contract</h1>
+                    <div class="form-group-row">
+                        <div class="form-group-col">
+                            <label>Carrier</label>
+                            <select class="form-control">
+                                <option>Active / Contracted</option>
+                                <option>Inactive</option>
+                            </select>
+                        </div>
+                        <div class="form-group-col">
+                            <label>Contract Status</label>
+                            <select class="form-control">
+                                <option>Carriers Contracted</option>
+                                <option>Pending</option>
+                            </select>
+                        </div>
+                        <div class="form-group-col">
+                            <label>Contract File</label>
+                            <input type="file" name="eo_file" class="form-control" id="eoFile">
+                            {% if eo_file %}
+                                <small class="text-muted">Current file: {{ eo_file.name }}</small>
+                            {% endif %}
+                        </div>
+                        <div class="form-group-col">
+                            <div class="checkbox" style="margin-top: 0;">
+                                <input type="checkbox" id="eo_required" name="eo_required" {% if eo_required %}checked{% endif %}>
+                                <label for="eo_required">Direct Paid by Carrier</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contract Agent Numbers -->
+                <div class="agent-info-container">
+                    <h1 class="section-title">Contract Agent Numbers</h1>
+                    <div class="form-group-row">
+                        <div class="form-group-col">
+                            <label>Agent Number 1</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="form-group-col">
+                            <label>Agent Number 2</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="form-group-col">
+                            <label>Agent Number 3</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="form-group-col">
+                            <label>Medicare Number</label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contract Dates -->
+                <div class="agent-info-container">
+                    <h1 class="section-title">Contract Dates</h1>
+                    <div class="form-group-row">
+                        <div class="form-group-col">
+                            <label>Contract Date</label>
+                            <input type="date" class="form-control" name="contracted_date">
+                        </div>
+                        <div class="form-group-col">
+                            <label>Certified Date</label>
+                            <input type="date" class="form-control" name="effective_date">
+                        </div>
+                        <div class="form-group-col">
+                            <label>Termination Date</label>
+                            <input type="date" class="form-control" name="termination_date">
+                        </div>
+                        <div class="form-group-col">
+                            <label>Termination Reason</label>
+                            <select class="form-control">
+                                <option>Active / Contracted</option>
+                                <option>Inactive</option>
+                            </select>
+                        </div>
+                        <div class="form-group-col">
+                            <label>Entry Date</label><br>
+                            <label>01/02/2000</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="agent-info-container">
+                    <h1 class="section-title">Additional Info</h1>
+                    <div class="multi-checkbox-group" style="display: flex; flex-wrap: wrap; gap: 30px;">
+                        <div class="multi-checkbox-section" style="flex: 1 1 300px;">
+                            <h4>Primary Market</h4>
+                            <div class="checkbox-container">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="market1" name="market[]" value="health">
+                                    <label for="market1">Health</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="market2" name="market[]" value="nsa_supp">
+                                    <label for="market2">NSA Supp</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="market3" name="market[]" value="life">
+                                    <label for="market3">Life</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="market4" name="market[]" value="pc">
+                                    <label for="market4">P&C</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="multi-checkbox-section" style="flex: 1 1 300px;">
+                            <h4>Notes</h4>
+                            <div class="form-group">
+                                <textarea class="form-control" name="notes" style="min-height: 120px; padding: 10px; resize: vertical;" placeholder="Enter notes here..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Fields -->
+                <div class="custom-updated-info custom-fields-panel">
+                    <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <h1 class="section-title" style="margin: 0;">Custom Fields</h1>
+                        <div class="custom-fields-edit">
+                            <a href="{% url 'custom_fields' %}" target="_blank" class="btn btn-default btn-sm">
+                                <i class="glyphicon glyphicon-edit"></i> Add/Edit
+                            </a>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="alert alert-info text-center" style="margin-bottom: 0; font-size: 16px;">
+                        <div style="font-size: 18px;">There aren't any custom fields yet</div>
+                        <div style="font-size: 14px;">Use custom fields to track and report on data unique to your agency.</div>
+                        <a href="#" style="font-size: 14px;">How do I use custom fields?</a>
+                    </div>
+                </div>
+
+           
+                <!-- Final Submit Button -->
+                <div class="text-right">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fa fa-save"></i> Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const showCreateBtn = document.getElementById('showCreateContractBtn');
+    const backToContractsBtn = document.getElementById('backToContractsBtn');
+    const contractsMainContent = document.getElementById('contractsMainContent');
+    const createContractContainer = document.getElementById('createcontractsContainer');
+    const contractForm = document.getElementById('contractForm');
+
+    // Show create contract form
+    showCreateBtn.addEventListener('click', function () {
+        contractsMainContent.style.display = 'none';
+        createContractContainer.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Back to contracts list
+    backToContractsBtn.addEventListener('click', function () {
+        createContractContainer.style.display = 'none';
+        contractsMainContent.style.display = 'block';
+        contractForm.reset();
+    });
+
+    // Submit form
+    contractForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        alert('Contract saved successfully!');
+        createContractContainer.style.display = 'none';
+        contractsMainContent.style.display = 'block';
+        contractForm.reset();
+        location.reload();
+    });
+});
+</script>

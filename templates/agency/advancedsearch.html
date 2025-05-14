@@ -3,6 +3,8 @@
 {% block main-content %}
 
 <style>
+    
+    
     .search-agents-container .form-control,
     .search-agents-container .form-select {
         width: 100%;
@@ -48,84 +50,110 @@
     }
 
     
-    .nav-tabs {
-        border-bottom: none;
-        padding-left: 0;
-        margin-bottom: 0;
-        list-style: none;
-    }
+   /* General Search Agents Container */
+.search-agents-container {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border: 1px solid #e1e4e8;
+    margin-bottom: 20px;
+    min-height: calc(100vh - 200px); 
+}
 
-    .nav-tabs > li {
-        float: left;
-        margin-bottom: 0;
-    }
+/* Page Header */
+.page-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
 
-    .nav-tabs > li > a {
-        margin-right: 2px;
-        line-height: 1.42857143;
-        border: 1px solid transparent;
-        border-radius: 4px 4px 0 0;
-        padding: 10px 15px;
-        color: #337ab7;
-        text-decoration: none;
-        background-color: #f8f8f8;
-        border-color: #ddd #ddd transparent;
-    }
+.page-title {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #333;
+}
 
-    .nav-tabs > li > a:hover {
-        border-color: #eee #eee #ddd;
-        background-color: #eee;
-    }
+/* Navbar (Tabs Navigation) - Separate Style */
+.navbar-tabs {
+    border-bottom: none;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
 
-    .nav-tabs > li.active > a,
-    .nav-tabs > li.active > a:hover,
-    .nav-tabs > li.active > a:focus {
-        color: #555;
-        cursor: default;
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-bottom-color: transparent;
-        margin-bottom: -1px;
-    }
+.navbar-tabs > li {
+    float: left;
+    margin-bottom: 0;
+}
 
-   
-    .agents-panel {
-        border: 1px solid #ddd;
-        border-radius: 0 0 4px 4px;
-        background: #fff;
-        border-top: none;
-    }
+.navbar-tabs > li > a {
+    margin-right: 2px;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+    padding: 10px 15px;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #f8f8f8;
+    border-color: #ddd #ddd transparent;
+}
 
-    .panel-heading {
-        padding: 15px;
-        background-color: #f8f8f8;
-        border-bottom: 1px solid #ddd;
-    }
+.navbar-tabs > li > a:hover {
+    border-color: #eee #eee #ddd;
+    background-color: #eee;
+}
 
-   
-    .table-responsive {
+.navbar-tabs > li.active > a,
+.navbar-tabs > li.active > a:hover,
+.navbar-tabs > li.active > a:focus {
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    margin-bottom: -1px;
+}
+
+/* Panel Styles */
+.agents-panel {
+    border: 1px solid #ddd;
+    border-radius: 0 0 4px 4px;
+    background: #fff;
+    border-top: none;
+}
+
+.panel-heading {
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #ddd;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 20px; 
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 767px) {
+    .page-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .page-title {
+        margin-bottom: 15px;
+    }
+    .btn-group {
         width: 100%;
-        overflow-x: auto;
-        margin-bottom: 20px; 
     }
+    .search-agents-container {
+        min-height: calc(100vh - 150px); 
+    }
+}
 
-    
-    @media (max-width: 767px) {
-        .page-header-row {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-        .page-title {
-            margin-bottom: 15px;
-        }
-        .btn-group {
-            width: 100%;
-        }
-        .search-agents-container {
-            min-height: calc(100vh - 150px); 
-        }
-    }
-    
     .agent-info-container {
         background-color: #fff;
         padding: 12px;

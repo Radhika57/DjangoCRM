@@ -1,0 +1,189 @@
+<div id="clients-content" class="tab-pane">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Clients for Alyson Gross</strong>
+        </div>
+        
+        <div class="panel-body table-responsive">
+            <table id="example0" class="table display">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Lead Source</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="{% url 'agency_detail' 1 %}">John Doe</a></td>
+                        <td>Senior Select Plans</td>
+                        <td><a href="mailto:john@example.com">john@example.com</a></td>
+                        <td>123-456-7890</td>
+                        <td>Active</td>
+                    </tr>
+                    <tr>
+                        <td><a href="{% url 'agency_detail' 2 %}">Jane Smith</a></td>
+                        <td>Elite Insurance</td>
+                        <td><a href="mailto:jane@example.com">jane@example.com</a></td>
+                        <td>987-654-3210</td>
+                        <td>Inactive</td>
+                    </tr>
+                    <tr>
+                        <td><a href="{% url 'agency_detail' 3 %}">Robert Brown</a></td>
+                        <td>Trusted Coverage Group</td>
+                        <td><a href="mailto:robert@example.com">robert@example.com</a></td>
+                        <td>555-555-5555</td>
+                        <td>Pending</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Main tab container styling */
+    .nav-tabs-container {
+        position: relative;
+        overflow: hidden;
+        background: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    /* Tab navigation styling */
+    .nav-tabs {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+        scrollbar-width: none; /* Hide scrollbar for Firefox */
+        padding: 0 15px;
+        margin: 0;
+        white-space: nowrap;
+    }
+    
+    .nav-tabs::-webkit-scrollbar {
+        display: none; /* Hide scrollbar for Chrome/Safari */
+    }
+    
+    .nav-tabs > li {
+        display: inline-block;
+        float: none;
+        margin-right: 10px;
+    }
+    
+    .nav-tabs > li:last-child {
+        margin-right: 0;
+        padding-right: 15px; /* Add space at the end */
+    }
+    
+    .nav-tabs > li > a {
+        display: block;
+        padding: 10px 15px;
+        border: 1px solid transparent;
+        border-radius: 4px 4px 0 0;
+        background-color: #e9ecef;
+        color: #495057;
+        font-size: 14px;
+        text-align: center;
+        min-width: max-content;
+    }
+    
+    .nav-tabs > li.active > a,
+    .nav-tabs > li.active > a:hover,
+    .nav-tabs > li.active > a:focus {
+        background-color: white;
+        color: #495057;
+        border: 1px solid #dee2e6;
+        border-bottom-color: transparent;
+    }
+    
+    /* Panel and table styling */
+    .panel-body {
+        padding: 15px;
+    }
+    
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Mobile-specific styles */
+    @media (max-width: 767px) {
+        .nav-tabs {
+            padding: 0 10px;
+        }
+        
+        .nav-tabs > li > a {
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+        
+        .panel-heading {
+            padding: 10px 15px;
+        }
+        
+        .panel-body {
+            padding: 10px;
+        }
+        
+        table.display {
+            width: 100% !important;
+        }
+        
+        table.display th, 
+        table.display td {
+            white-space: nowrap;
+            padding: 8px 10px;
+            font-size: 13px;
+        }
+    }
+    
+    /* Very small screens (e.g., iPhone 5/SE) */
+    @media (max-width: 320px) {
+        .nav-tabs > li > a {
+            padding: 6px 8px;
+            font-size: 11px;
+        }
+    }
+</style>
+
+<script>
+$(document).ready(function() {
+    // Initialize DataTable with responsive settings
+    var table = $('#example0').DataTable({
+        responsive: true,
+        pagingType: $(window).width() < 768 ? 'simple' : 'full_numbers',
+        scrollX: false,
+        autoWidth: false,
+        dom: '<"top"f>rt<"bottom"lip><"clear">',
+        language: {
+            search: "_INPUT_",
+            searchPlaceholder: "Search clients...",
+            lengthMenu: "_MENU_ records per page"
+        },
+        columnDefs: [
+            { responsivePriority: 1, targets: 0 }, // Name
+            { responsivePriority: 2, targets: 4 }, // Status
+            { responsivePriority: 3, targets: 2 }, // Email
+            { responsivePriority: 4, targets: 3 }, // Phone
+            { responsivePriority: 5, targets: 1 }  // Type
+        ]
+    });
+    
+    // Handle window resize
+    $(window).on('resize orientationchange', function() {
+        table.columns.adjust().responsive.recalc();
+    });
+    
+    // Fix for iOS touch scrolling
+    $('.nav-tabs').on('touchmove', function(e) {
+        e.preventDefault();
+        this.scrollLeft -= e.originalEvent.touches[0].pageX;
+    });
+});
+</script>
