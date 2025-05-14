@@ -252,7 +252,25 @@ def agency_detail(request, agency_id):
 def agent_column_settings(request):
     return render(request, 'agency/agentcolumnsettings.html')
 
+
 def advanced_search(request):
     return render(request, 'agency/advancedsearch.html')
 def saved_searches(request):
     return render(request, 'agency/savedsearch.html')
+def agency_client(request):
+    return render(request, 'agency/agencyclient.html')
+def agency_policy(request):
+    return render(request, 'agency/agencypolicy.html')
+def agency_activity(request):
+    return render(request, 'agency/agencyactivity.html')
+def agency_note(request):
+    return render(request, 'agency/agencynote.html')
+
+def agency_eo(request):
+    return render(request, 'agency/agencyeo.html')
+
+
+
+
+
+

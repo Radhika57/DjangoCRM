@@ -34,6 +34,11 @@ urlpatterns = [
     path('agents/settings/', views.agent_column_settings, name='agent_column_settings'),
     path('agency/detail/<int:agency_id>/', views.agency_detail, name='agency_detail'),
     path('agentcolumnsettings/', views.agent_column_settings, name='agentcolumnsettings'), 
+    path('agency/agency-eo/', views.agency_eo, name='agency_eo'),
     path('agency/advanced-search/', views.advanced_search, name='advanced_search'),
     path('agency/saved-searches/', views.saved_searches, name='saved_searches'),
+    path('agency/agency-client/', views.agency_client, name='agency_client'),
+    path('agency/agency-agency-policy/', views.agency_policy, name='agency_policy'),
+    path('agency/agency-agency-activity/', views.agency_activity, name='agency_activity'),
+    path('agency/agency-agency-note/', views.agency_note, name='agency_note'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
