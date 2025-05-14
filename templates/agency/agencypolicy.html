@@ -6,7 +6,8 @@
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newPolicyModal">
                     <span class="btn-text">Create new</span>
                 </button>
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-angle-down"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
@@ -15,76 +16,79 @@
                 </ul>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-6">
-                        <div class="form-group">
-                            <input type="text" id="contracts-search" class="form-control" placeholder="Search: Type to filter (Individual Name, Type, Status)">
-                        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body table-responsive">
+
+                        <table id="example1" class="table display">
+                            <thead>
+                                <tr>
+                                    <th>Policy Number</th>
+                                    <th>Holder Name</th>
+                                    <th>Effective Date</th>
+                                    <th>Renewal Date</th>
+                                    <th>Status</th>
+                                    <th>Carrier</th>
+                                    <th>Coverage Type</th>
+                                    <th>Carrier Product</th>
+                                </tr>
+                            </thead>
+
+                            <tfoot>
+                                <tr>
+                                    <th>Policy Number</th>
+                                    <th>Holder Name</th>
+                                    <th>Effective Date</th>
+                                    <th>Renewal Date</th>
+                                    <th>Status</th>
+                                    <th>Carrier</th>
+                                    <th>Coverage Type</th>
+                                    <th>Carrier Product</th>
+                                </tr>
+                            </tfoot>
+
+                            <tbody>
+                                <tr>
+                                    <td><a href="#">POL123456</a></td>
+                                    <td>John Doe</td>
+                                    <td>2023-01-15</td>
+                                    <td>2024-01-15</td>
+                                    <td><span class="label label-success">Active</span></td>
+                                    <td>ABC Insurance</td>
+                                    <td>Health</td>
+                                    <td>Gold Plan</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">POL789012</a></td>
+                                    <td>Jane Smith</td>
+                                    <td>2023-03-20</td>
+                                    <td>2024-03-20</td>
+                                    <td><span class="label label-warning">Pending</span></td>
+                                    <td>XYZ Insurance</td>
+                                    <td>Life</td>
+                                    <td>Silver Plan</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">POL345678</a></td>
+                                    <td>Robert Brown</td>
+                                    <td>2022-11-05</td>
+                                    <td>2023-11-05</td>
+                                    <td><span class="label label-danger">Lapsed</span></td>
+                                    <td>DEF Insurance</td>
+                                    <td>Auto</td>
+                                    <td>Platinum Plan</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
                     </div>
-                    <div class="col-xs-12 col-sm-6 text-right">
-                        <div class="form-inline">
-                            <div class="form-group">
-                                <label>Show 
-                                    <select id="contracts-length" class="form-control input-sm">
-                                        <option>25</option>
-                                        <option>50</option>
-                                        <option>100</option>
-                                    </select> 
-                                    entries
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-        
-        <div class="panel-body">
-            <div class="table-responsive-wrapper">
-                <table id="policiesTable" class="table display responsive nowrap" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Policy Number</th>
-                            <th>Holder Name</th>
-                            <th>Effective Date</th>
-                            <th>Renewal Date</th>
-                            <th>Status</th>
-                            <th>Carrier</th>
-                            <th>Coverage Type</th>
-                            <th>Carrier Product</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><a href="#">POL123456</a></td>
-                            <td>John Doe</td>
-                            <td>2023-01-15</td>
-                            <td>2024-01-15</td>
-                            <td><span class="label label-success">Active</span></td>
-                            <td>ABC Insurance</td>
-                            <td>Health</td>
-                            <td>Gold Plan</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">POL789012</a></td>
-                            <td>Jane Smith</td>
-                            <td>2023-03-20</td>
-                            <td>2024-03-20</td>
-                            <td><span class="label label-warning">Pending</span></td>
-                            <td>XYZ Insurance</td>
-                            <td>Life</td>
-                            <td>Silver Plan</td>
-                        </tr>
-                        <tr>
-                            <td><a href="#">POL345678</a></td>
-                            <td>Robert Brown</td>
-                            <td>2022-11-05</td>
-                            <td>2023-11-05</td>
-                            <td><span class="label label-danger">Lapsed</span></td>
-                            <td>DEF Insurance</td>
-                            <td>Auto</td>
-                            <td>Platinum Plan</td>
-                        </tr>
-                    </tbody>
-                </table>
+
+                </div>
             </div>
         </div>
+
     </div>
 </div>
 
@@ -98,7 +102,7 @@
                 </button>
                 <h4 class="modal-title" id="newPolicyModalLabel">New Policy</h4>
             </div>
-            
+
             <div class="modal-body">
                 <form id="policyForm">
                     <div class="step-container">
@@ -119,8 +123,10 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="individualName">Individual Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="individualName" placeholder="Type to search" required>
+                                    <label for="individualName">Individual Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="individualName"
+                                        placeholder="Type to search" required>
                                 </div>
                             </div>
                         </div>
@@ -161,8 +167,8 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
-            </div>
-        </div>
+    </div>
+</div>
 
 <style>
     /* Panel heading with flex layout */
@@ -173,26 +179,20 @@
         align-items: center;
         padding: 10px 15px;
     }
-    
+
     /* Responsive button group */
     .btn-group-responsive {
         display: flex;
         flex-wrap: nowrap;
         margin-top: 10px;
     }
-    
-   
+
+
     .btn-text {
         display: inline;
     }
-    
-    /* Table responsive container */
-    .table-responsive-wrapper {
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
+
+
     /* Status labels */
     .label {
         display: inline-block;
@@ -201,22 +201,35 @@
         font-weight: bold;
         border-radius: 3px;
     }
-    .label-success { background-color: #5cb85c; color: white; }
-    .label-warning { background-color: #f0ad4e; color: white; }
-    .label-danger { background-color: #d9534f; color: white; }
-    
+
+    .label-success {
+        background-color: #5cb85c;
+        color: white;
+    }
+
+    .label-warning {
+        background-color: #f0ad4e;
+        color: white;
+    }
+
+    .label-danger {
+        background-color: #d9534f;
+        color: white;
+    }
+
     /* Modal footer adjustments */
     .modal-footer-responsive {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
     }
-    
+
     /* Step indicator styling */
     .step-indicator {
         display: flex;
         align-items: center;
     }
+
     .step-number {
         display: inline-flex;
         align-items: center;
@@ -229,116 +242,61 @@
         font-weight: bold;
         margin-right: 10px;
     }
-    
+
     /* Responsive adjustments */
     @media (max-width: 767px) {
         .panel-heading-flex {
             flex-direction: column;
             align-items: flex-start;
         }
-        
+
         .btn-group-responsive {
             width: 100%;
             margin-top: 10px;
         }
-        
+
         .btn-text {
             display: none;
         }
-        
-        .btn-group-responsive > .btn:first-child {
+
+        .btn-group-responsive>.btn:first-child {
             flex-grow: 1;
             text-align: left;
             padding-left: 10px;
         }
-        
-        .btn-group-responsive > .btn:first-child::after {
+
+        .btn-group-responsive>.btn:first-child::after {
             content: "New";
         }
-        
+
         .modal-footer-responsive {
             flex-direction: column-reverse;
             gap: 10px;
         }
-        
+
         .modal-footer-responsive .btn-group {
             width: 100%;
         }
-        
+
         .modal-footer-responsive .btn-default {
             width: 100%;
         }
-        
-        table.dataTable thead > tr > th {
-            padding-right: 30px; 
-        }
+
     }
-    
+
     @media (max-width: 480px) {
         .step-indicator {
             font-size: 14px;
         }
-        
+
         .step-number {
             width: 20px;
             height: 20px;
             font-size: 12px;
         }
-        
+
         .modal-body .form-group {
             margin-bottom: 10px;
         }
     }
 </style>
-
-<script>
-$(document).ready(function() {
-    // Initialize DataTable with responsive settings
-    $('#policiesTable').DataTable({
-        responsive: {
-            details: {
-                display: $.fn.dataTable.Responsive.display.modal({
-                    header: function(row) {
-                        return 'Policy Details';
-                    }
-                }),
-                renderer: $.fn.dataTable.Responsive.renderer.tableAll({
-                    tableClass: 'table'
-                })
-            }
-        },
-        dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
-             "<'row'<'col-sm-12'tr>>" +
-             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-        language: {
-            search: "_INPUT_",
-            searchPlaceholder: "Search policies...",
-            lengthMenu: "_MENU_ records per page",
-            paginate: {
-                previous: "<",
-                next: ">"
-            }
-        },
-        columnDefs: [
-            { responsivePriority: 1, targets: 0 }, // Policy Number
-            { responsivePriority: 2, targets: 1 }, // Holder Name
-            { responsivePriority: 3, targets: 4 }, // Status
-            { responsivePriority: 4, targets: 2 }  // Effective Date
-        ]
-    });
-
-    // Form submission handler for policy form
-    $('#policyForm').on('submit', function(e) {
-        e.preventDefault();
-        // Add your form submission logic here
-        $('#newPolicyModal').modal('hide');
-        alert('Policy saved successfully!');
-        this.reset();
-    });
-    
-    // Adjust table on window resize
-    $(window).on('resize', function() {
-        $('#policiesTable').DataTable().responsive.recalc();
-    });
-});
-</script>

@@ -71,33 +71,14 @@
                 </div>
             </div>
 
-            <div class="panel-body">
-                <div class="row table-controls">
-                    <div class="col-xs-12 col-sm-6">
-                        <div class="form-group">
-                            <input type="text" id="contracts-search" class="form-control" placeholder="Search: Type to filter (Individual Name, Type, Status)">
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 text-right">
-                        <div class="form-inline">
-                            <div class="form-group">
-                                <label>Show
-                                    <select id="contracts-length" class="form-control input-sm">
-                                        <option>25</option>
-                                        <option>50</option>
-                                        <option>100</option>
-                                    </select>
-                                    entries
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body table-responsive">
 
-                <div class="table-responsive">
-                    <table id="contracts-table" class="table table-bordered table-hover" style="width:100%">
-                        <thead>
-                            <tr>
+                        <table id="example2" class="table display">
+                            <thead>
+                               <tr>
                                 <th>Contract Date</th>
                                 <th>Carrier</th>
                                 <th>File</th>
@@ -106,27 +87,58 @@
                                 <th>Medicare Number</th>
                                 <th>Termed</th>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="7" class="text-center">No data available in table</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
 
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6">
-                        <p id="contracts-info" class="text-muted">Showing 0 to 0 of 0 entries</p>
+                            <tfoot>
+                                <tr>
+                                <th>Contract Date</th>
+                                <th>Carrier</th>
+                                <th>File</th>
+                                <th>Status</th>
+                                <th>Agent Number</th>
+                                <th>Medicare Number</th>
+                                <th>Termed</th>
+                            </tr>
+                            </tfoot>
+
+                            <tbody>
+                                <tr>
+                                    <td>John Doe</td>
+                                    <td>2023-01-15</td>
+                                    <td>2024-01-15</td>
+                                    <td><span class="label label-success">Active</span></td>
+                                    <td>ABC Insurance</td>
+                                    <td>Health</td>
+                                    <td>Gold Plan</td>
+                                </tr>
+                                <tr>
+                                    <td>Jane Smith</td>
+                                    <td>2023-03-20</td>
+                                    <td>2024-03-20</td>
+                                    <td><span class="label label-warning">Pending</span></td>
+                                    <td>XYZ Insurance</td>
+                                    <td>Life</td>
+                                    <td>Silver Plan</td>
+                                </tr>
+                                <tr>
+                                    <td>Robert Brown</td>
+                                    <td>2022-11-05</td>
+                                    <td>2023-11-05</td>
+                                    <td><span class="label label-danger">Lapsed</span></td>
+                                    <td>DEF Insurance</td>
+                                    <td>Auto</td>
+                                    <td>Platinum Plan</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
                     </div>
-                    <div class="col-xs-12 col-sm-6 text-right">
-                        <ul id="contracts-pagination" class="pagination pagination-sm">
-                            <li class="disabled"><a href="#">Previous</a></li>
-                            <li class="disabled"><a href="#">Next</a></li>
-                        </ul>
-                    </div>
+
                 </div>
             </div>
+        </div>
+
         </div>
     </div>
 </div>

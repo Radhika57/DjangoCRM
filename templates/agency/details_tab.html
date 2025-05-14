@@ -1,0 +1,360 @@
+<div id="detail-content" class="tab-pane active">
+                    <!-- Personal Info Container -->
+                    <div class="agent-info-container">
+                        <h1 class="section-title">Personal Info</h1>
+
+                        <!-- Name Section -->
+                        <div class="form-group-row">
+                            <div class="form-group-col">
+                                <label>First Name</label>
+                                <input type="text" class="form-control" value="Alyson">
+                            </div>
+                            <div class="form-group-col">
+                                <label>Middle Name</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="form-group-col">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control" value="Gross">
+                            </div>
+                            <div class="form-group-col">
+                                <label>Nickname</label>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group-row">
+                            <div class="form-group-col">
+                                <label>SSN</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="form-group-col">
+                                <label>D.O.B</label>
+                                <input type="date" class="form-control" value="1988-01-22">
+                            </div>
+                            <div class="form-group-col"></div>
+                            <div class="form-group-col"></div>
+                        </div>
+                    </div>
+
+                    <!-- Agent Info Container -->
+                    <div class="agent-info-container">
+                        <h1 class="section-title">Agent Info</h1>
+
+                        <div class="form-group-row">
+                            <div class="form-group-col">
+                                <label>Type</label>
+                                <select class="form-control">
+                                    <option>Active / Contracted</option>
+                                    <option>Inactive</option>
+                                </select>
+                            </div>
+                            <div class="form-group-col">
+                                <label>Status</label>
+                                <select class="form-control">
+                                    <option>Carriers Contracted</option>
+                                    <option>Pending</option>
+                                </select>
+                            </div>
+                            <div class="form-group-col">
+                                <label>Classification</label>
+                                <select class="form-control">
+                                    <option>- select -</option>
+                                    <option>Independent</option>
+                                    <option>Captive</option>
+                                </select>
+                            </div>
+                            <div class="form-group-col">
+                                <label>NPN</label>
+                                <input type="text" class="form-control" value="20718431">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info Container -->
+                    <div class="agent-info-container">
+                        <div class="section-header">
+                            <h1 class="section-title" style="margin: 0;">Contact Info</h1>
+                            <div>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                    data-target="#editPhoneModal">
+                                    <i class="glyphicon glyphicon-edit"></i> Edit Phone
+                                </button>
+                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                                    data-target="#newAddressModal">
+                                    <i class="glyphicon glyphicon-plus"></i> New Address
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Row 1: Emails -->
+                        <div class="form-group-row">
+                            <div class="form-group-col position-relative">
+                                <div class="edit-tools" style="position:absolute; top:0; right:0;">
+                                    <i class="glyphicon glyphicon-pencil text-success" style="cursor:pointer;"
+                                        data-toggle="modal" data-target="#editEmailModal"></i>
+                                    <div class="dropdown" style="display:inline;">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i
+                                                class="glyphicon glyphicon-chevron-down"></i></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="mailto:alyson@example.com">Send Email</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <label>Email</label>
+                                <input type="email" class="form-control" value="alyson@example.com">
+                            </div>
+
+                            <div class="form-group-col position-relative">
+                                <label>Secondary Email</label>
+                                <input type="email" class="form-control">
+                            </div>
+                        </div>
+
+                        <!-- Row 2: Business Phone + Cellular -->
+                        <div class="form-group-row">
+                            <!-- Business Phone -->
+                            <div class="form-group-col position-relative">
+                                <label class="d-flex justify-content-between align-items-center mb-1">
+                                    <span>Business phone</span>
+                                    <span class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                                            data-target="#editPhoneModal">Edit</button>
+                                        <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                                            data-toggle="dropdown">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li><a href="#">Make a Call</a></li>
+                                        </ul>
+                                    </span>
+                                </label>
+                                <input type="text" class="form-control" value="(555) 123-4567">
+                            </div>
+
+                            <!-- Cellular -->
+                            <div class="form-group-col position-relative">
+                                <label class="d-flex justify-content-between align-items-center mb-1">
+                                    <span>Cellular</span>
+                                    <span class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                                            data-target="#editPhoneModal">Edit</button>
+                                        <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                                            data-toggle="dropdown">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li><a href="#">Make a Call</a></li>
+                                            <li><a href="#">Send Text Message</a></li>
+                                        </ul>
+                                    </span>
+                                </label>
+                                <input type="text" class="form-control" value="(555) 987-6543">
+                            </div>
+                        </div>
+
+                        <!-- Row 3: Home + Fax -->
+                        <div class="form-group-row">
+                            <!-- Home -->
+                            <div class="form-group-col position-relative">
+                                <label class="d-flex justify-content-between align-items-center mb-1">
+                                    <span>Home</span>
+                                    <span class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                                            data-target="#newAddressModal">Edit</button>
+                                        <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                                            data-toggle="dropdown">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li><a href="#">Get directions</a></li>
+                                            <li><a href="#">Map a Location</a></li>
+                                        </ul>
+                                    </span>
+                                </label>
+                                <input type="text" class="form-control" value="(555) 456-7890">
+                            </div>
+
+                            <!-- Fax -->
+                            <div class="form-group-col position-relative">
+                                <label class="d-flex justify-content-between align-items-center mb-1">
+                                    <span>Business</span>
+                                    <span class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                                            data-target="#newAddressModal">Edit</button>
+                                        <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                                            data-toggle="dropdown">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li><a href="#">Get directions</a></li>
+                                            <li><a href="#">Map a Location</a></li>
+                                        </ul>
+                                    </span>
+                                </label>
+                                <input type="text" class="form-control" value="(555) 789-0123">
+                            </div>
+
+
+                            <!-- Row 4: Checkbox -->
+                            <div class="form-group-row">
+                                <div class="form-group-col">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" class="form-check-input"> Opt Out of Emails
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lead Info Container -->
+                    <div class="agent-info-container">
+                        <h1 class="section-title">Lead Info</h1>
+
+                        <div class="form-group-row">
+                            <div class="form-group-col">
+                                <label>Lead Date</label>
+                                <input type="date" class="form-control">
+                            </div>
+                            <div class="form-group-col">
+                                <label>Lead Source</label>
+                                <select class="form-control">
+                                    <option>- Select -</option>
+                                    <option>Referral</option>
+                                    <option>Advertisement</option>
+                                    <option>Website</option>
+                                    <option>Event</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group-col">
+                                <label>Other Lead Source</label>
+                                <input type="text" class="form-control" placeholder="If other selected">
+                            </div>
+                            <div class="form-group-col">
+                                <label>Project Code</label>
+                                <select class="form-control">
+                                    <option>- Select -</option>
+                                    <option>Project A</option>
+                                    <option>Project B</option>
+                                    <option>Project C</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Info Container -->
+                    <div class="agent-info-container">
+                        <h1 class="section-title">Additional Info</h1>
+
+                        <div class="multi-checkbox-group">
+                            <div class="multi-checkbox-section">
+                                <h4>Primary Market</h4>
+                                <div class="checkbox-container">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="market1" name="market[]" value="health">
+                                        <label for="market1">Health</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="market2" name="market[]" value="nsa_supp">
+                                        <label for="market2">NSA Supp</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="market3" name="market[]" value="life">
+                                        <label for="market3">Life</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="market4" name="market[]" value="pc">
+                                        <label for="market4">P&C</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="multi-checkbox-section">
+                                <h4>Notes</h4>
+                                <textarea class="form-control"
+                                    style="min-height: 120px; padding: 10px; resize: vertical;"
+                                    placeholder="Enter notes here..."></textarea>
+                            </div>
+
+                            <div class="multi-checkbox-section">
+                                <h4>Team</h4>
+                                <div class="checkbox-container">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="team1" name="team[]" value="north">
+                                        <label for="team1">Team 1</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="team2" name="team[]" value="south">
+                                        <label for="team2">Team 2</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="team3" name="team[]" value="east">
+                                        <label for="team3">Your Sales Pipeline Team</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="multi-checkbox-section">
+                                <h4>Representative</h4>
+                                <div class="checkbox-container">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="rep1" name="rep[]" value="john">
+                                        <label for="rep1">John Smith</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="rep2" name="rep[]" value="sarah">
+                                        <label for="rep2">Sarah Johnson</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="rep3" name="rep[]" value="mike">
+                                        <label for="rep3">Mike Williams</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="business-name-section">
+                            <div class="form-group-row">
+                                <div class="form-group-col" style="flex: 0 0 100%; max-width: 300px;">
+                                    <label>Business Name</label>
+                                    <input type="text" class="form-control" placeholder="Business name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="keyagent-name-section">
+                            <div class="form-group-row">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="rep3" name="rep[]" value="mike">
+                                    <label for="rep3">Key Agent </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="custom-updated-info custom-fields-panel">
+                        <div class="section-header"
+                            style="display: flex; justify-content: space-between; align-items: center;">
+                            <h1 class="section-title" style="margin: 0;">Custom Fields</h1>
+                            <div class="custom-fields-edit">
+                                <a href="{% url 'custom_fields' %}" target="_blank" class="btn btn-default btn-sm">
+                                    <i class="glyphicon glyphicon-edit"></i> Add/Edit
+                                </a>
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="alert alert-info text-center" style="margin-bottom: 0; font-size: 16px;">
+                            <div style="font-size: 18px;">There aren't any custom fields yet</div>
+                            <div style="font-size: 14px;">Use custom fields to track and report on data unique to your
+                                agency.</div>
+                            <a href="#" style="font-size: 14px;">How do I use custom fields?</a>
+                        </div>
+                    </div>
+
+                    <div class="search-actions">
+                        <button class="btn btn-secondary" id="resetCriteria">Save</button>
+                        <a href="#" class="btn btn-primary">Delete </a>
+                    </div>
+                </div>

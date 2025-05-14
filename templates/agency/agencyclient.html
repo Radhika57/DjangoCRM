@@ -3,42 +3,62 @@
         <div class="panel-heading">
             <strong>Clients for Alyson Gross</strong>
         </div>
-        
-        <div class="panel-body table-responsive">
-            <table id="example0" class="table display">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Status</th>
-                        <th>Lead Source</th>
-                        <th>Phone</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><a href="{% url 'agency_detail' 1 %}">John Doe</a></td>
-                        <td>Senior Select Plans</td>
-                        <td><a href="mailto:john@example.com">john@example.com</a></td>
-                        <td>123-456-7890</td>
-                        <td>Active</td>
-                    </tr>
-                    <tr>
-                        <td><a href="{% url 'agency_detail' 2 %}">Jane Smith</a></td>
-                        <td>Elite Insurance</td>
-                        <td><a href="mailto:jane@example.com">jane@example.com</a></td>
-                        <td>987-654-3210</td>
-                        <td>Inactive</td>
-                    </tr>
-                    <tr>
-                        <td><a href="{% url 'agency_detail' 3 %}">Robert Brown</a></td>
-                        <td>Trusted Coverage Group</td>
-                        <td><a href="mailto:robert@example.com">robert@example.com</a></td>
-                        <td>555-555-5555</td>
-                        <td>Pending</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body table-responsive">
+
+                        <table id="example0" class="table display">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Lead Source</th>
+                                    <th>Phone</th>
+                                </tr>
+                            </thead>
+
+                            <tfoot>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Lead Source</th>
+                                    <th>Phone</th>
+                                </tr>
+                            </tfoot>
+
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>2</td>
+                                    <td>3</td>
+                                    <td>4</td>
+                                    <td>5</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>2</td>
+                                    <td>3</td>
+                                    <td>4</td>
+                                    <td>5</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>2</td>
+                                    <td>3</td>
+                                    <td>4</td>
+                                    <td>5</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -152,38 +172,3 @@
     }
 </style>
 
-<script>
-$(document).ready(function() {
-    // Initialize DataTable with responsive settings
-    var table = $('#example0').DataTable({
-        responsive: true,
-        pagingType: $(window).width() < 768 ? 'simple' : 'full_numbers',
-        scrollX: false,
-        autoWidth: false,
-        dom: '<"top"f>rt<"bottom"lip><"clear">',
-        language: {
-            search: "_INPUT_",
-            searchPlaceholder: "Search clients...",
-            lengthMenu: "_MENU_ records per page"
-        },
-        columnDefs: [
-            { responsivePriority: 1, targets: 0 }, // Name
-            { responsivePriority: 2, targets: 4 }, // Status
-            { responsivePriority: 3, targets: 2 }, // Email
-            { responsivePriority: 4, targets: 3 }, // Phone
-            { responsivePriority: 5, targets: 1 }  // Type
-        ]
-    });
-    
-    // Handle window resize
-    $(window).on('resize orientationchange', function() {
-        table.columns.adjust().responsive.recalc();
-    });
-    
-    // Fix for iOS touch scrolling
-    $('.nav-tabs').on('touchmove', function(e) {
-        e.preventDefault();
-        this.scrollLeft -= e.originalEvent.touches[0].pageX;
-    });
-});
-</script>

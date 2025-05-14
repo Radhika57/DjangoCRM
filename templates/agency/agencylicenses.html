@@ -74,34 +74,24 @@
                 </div>
             </div>
 
-            <div class="panel-body">
-                <!-- Search & length controls -->
-                <div class="row table-controls">
-                    <div class="col-xs-12 col-sm-6">
-                        <div class="form-group">
-                            <input type="text" id="licenses-search" class="form-control" placeholder="Search: Type to filter (Individual Name, Type, Status)">
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 text-right">
-                        <div class="form-inline">
-                            <div class="form-group">
-                                <label>Show
-                                    <select id="licenses-length" class="form-control input-sm">
-                                        <option>25</option>
-                                        <option>50</option>
-                                        <option>100</option>
-                                    </select>
-                                    entries
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+           <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body table-responsive">
 
-                <!-- Table -->
-                <div class="table-responsive">
-                    <table id="licenses-table" class="table table-bordered table-hover" style="width:100%">
-                        <thead>
+                        <table id="example3" class="table display">
+                            <thead>
+                                <tr>
+                                <th>License Number</th>
+                                <th>State</th>
+                                <th>License File</th>
+                                <th>Effective Date</th>
+                                <th>Expiration Date</th>
+                                <th>Residence State</th>
+                            </tr>
+                            </thead>
+
+                            <tfoot>
                             <tr>
                                 <th>License Number</th>
                                 <th>State</th>
@@ -110,28 +100,44 @@
                                 <th>Expiration Date</th>
                                 <th>Residence State</th>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="8" class="text-center">No data available in table</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                            </tfoot>
 
-                <!-- Pagination -->
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6">
-                        <p id="licenses-info" class="text-muted">Showing 0 to 0 of 0 entries</p>
+                            <tbody>
+                                <tr>
+                                    
+                                    <td>John Doe</td>
+                                    <td>2023-01-15</td>
+                                    <td>2024-01-15</td>
+                                    <td>ABC Insurance</td>
+                                    <td>Health</td>
+                                    <td>Gold Plan</td>
+                                </tr>
+                                <tr>
+                                    <td>Jane Smith</td>
+                                    <td>2023-03-20</td>
+                                    <td>2024-03-20</td>
+                                    <td>XYZ Insurance</td>
+                                    <td>Life</td>
+                                    <td>Silver Plan</td>
+                                </tr>
+                                <tr>
+                                    <td>Robert Brown</td>
+                                    <td>2022-11-05</td>
+                                    <td>2023-11-05</td>
+                                    <td>DEF Insurance</td>
+                                    <td>Auto</td>
+                                    <td>Platinum Plan</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
                     </div>
-                    <div class="col-xs-12 col-sm-6 text-right">
-                        <ul id="licenses-pagination" class="pagination pagination-sm">
-                            <li class="disabled"><a href="#">Previous</a></li>
-                            <li class="disabled"><a href="#">Next</a></li>
-                        </ul>
-                    </div>
+
                 </div>
             </div>
+        </div>
+
         </div>
     </div>
 
