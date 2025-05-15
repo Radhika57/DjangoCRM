@@ -1,0 +1,887 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block main-content %}
+
+<style>
+     /* Panel heading with flex layout */
+    .panel-heading-flex {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+    }
+
+    /* Responsive button group */
+    .btn-group-responsive {
+        display: flex;
+        flex-wrap: nowrap;
+        margin-top: 10px;
+    }
+
+
+    .btn-text {
+        display: inline;
+    }
+
+
+    /* Status labels */
+    .label {
+        display: inline-block;
+        padding: 3px 6px;
+        font-size: 12px;
+        font-weight: bold;
+        border-radius: 3px;
+    }
+
+    .label-success {
+        background-color: #5cb85c;
+        color: white;
+    }
+
+    .label-warning {
+        background-color: #f0ad4e;
+        color: white;
+    }
+
+    .label-danger {
+        background-color: #d9534f;
+        color: white;
+    }
+
+    /* Modal footer adjustments */
+    .modal-footer-responsive {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    /* Step indicator styling */
+    .step-indicator {
+        display: flex;
+        align-items: center;
+    }
+
+    .step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        background-color: #07408b;
+        color: white;
+        border-radius: 50%;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 767px) {
+        .panel-heading-flex {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .btn-group-responsive {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-text {
+            display: none;
+        }
+
+        .btn-group-responsive>.btn:first-child {
+            flex-grow: 1;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .btn-group-responsive>.btn:first-child::after {
+            content: "New";
+        }
+
+        .modal-footer-responsive {
+            flex-direction: column-reverse;
+            gap: 10px;
+        }
+
+        .modal-footer-responsive .btn-group {
+            width: 100%;
+        }
+
+        .modal-footer-responsive .btn-default {
+            width: 100%;
+        }
+
+    }
+
+    @media (max-width: 480px) {
+        .step-indicator {
+            font-size: 14px;
+        }
+
+        .step-number {
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+        }
+
+        .modal-body .form-group {
+            margin-bottom: 10px;
+        }
+    }
+    .search-agents-container .form-control,
+    .search-agents-container .form-select {
+        width: 100%;
+        padding: 4px 8px;
+        border: 1px solid #e1e4e8;
+        border-radius: 3px;
+        font-size: 12px;
+        height: 26px;
+        max-width: 200px;
+    }
+
+    #newAgentModal .form-control,
+    #newAgentModal .form-select {
+        font-size: 14px;
+        height: auto;
+        max-width: 100%;
+    }
+
+    .search-agents-container {
+        background-color: #fff;
+        padding: 15px;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        border: 1px solid #e1e4e8;
+        margin-bottom: 20px;
+        min-height: calc(100vh - 200px); 
+    }
+   
+    .page-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .page-title {
+        margin: 0;
+        font-size: 1.8rem;
+        color: #333;
+    }
+
+    /* General Search Agents Container */
+    .search-agents-container {
+        background-color: #fff;
+        padding: 15px;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        border: 1px solid #e1e4e8;
+        margin-bottom: 20px;
+        min-height: calc(100vh - 200px); 
+    }
+
+    /* Page Header */
+    .page-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .page-title {
+        margin: 0;
+        font-size: 1.8rem;
+        color: #333;
+    }
+
+    /* Navbar (Tabs Navigation) - Separate Style */
+    .navbar-tabs {
+        border-bottom: none;
+        padding-left: 0;
+        margin-bottom: 0;
+        list-style: none;
+    }
+
+    .navbar-tabs > li {
+        float: left;
+        margin-bottom: 0;
+    }
+
+    .navbar-tabs > li > a {
+        margin-right: 2px;
+        line-height: 1.42857143;
+        border: 1px solid transparent;
+        border-radius: 4px 4px 0 0;
+        padding: 10px 15px;
+        color: #337ab7;
+        text-decoration: none;
+        background-color: #f8f8f8;
+        border-color: #ddd #ddd transparent;
+    }
+
+    .navbar-tabs > li > a:hover {
+        border-color: #eee #eee #ddd;
+        background-color: #eee;
+    }
+
+    .navbar-tabs > li.active > a,
+    .navbar-tabs > li.active > a:hover,
+    .navbar-tabs > li.active > a:focus {
+        color: #555;
+        cursor: default;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-bottom-color: transparent;
+        margin-bottom: -1px;
+    }
+
+    /* Panel Styles */
+    .agents-panel {
+        border: 1px solid #ddd;
+        border-radius: 0 0 4px 4px;
+        background: #fff;
+        border-top: none;
+    }
+
+    .panel-heading {
+        padding: 15px;
+        background-color: #f8f8f8;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        margin-bottom: 20px; 
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 767px) {
+        .page-header-row {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .page-title {
+            margin-bottom: 15px;
+        }
+        .btn-group {
+            width: 100%;
+        }
+        .search-agents-container {
+            min-height: calc(100vh - 150px); 
+        }
+    }
+
+    .agent-info-container {
+        background-color: #fff;
+        padding: 12px;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        margin-bottom: 15px;
+        border: 1px solid #e1e4e8;
+    }
+    
+    .agent-info-section {
+        margin-bottom: 12px;
+    }
+    
+    .form-group-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -6px;
+    }
+    
+    .form-group-col {
+        padding: 0 6px;
+        margin-bottom: 10px;
+        flex: 1 0 160px;
+    }
+    
+    .form-group-col label {
+        display: block;
+        margin-bottom: 3px;
+        font-weight: 500;
+        color: #586069;
+        font-size: 12px;
+    }
+    
+    .form-control, .form-select {
+        width: 100%;
+        padding: 4px 8px;
+        border: 1px solid #e1e4e8;
+        border-radius: 3px;
+        font-size: 12px;
+        height: 26px;
+        max-width: 200px;
+    }
+    
+    .date-range-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .date-range-group {
+        flex: 1;
+        min-width: 200px;
+    }
+    
+    .date-range-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .date-range-row .form-control {
+        flex: 1;
+    }
+    
+    .search-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 15px;
+    }
+    
+    .btn {
+        padding: 6px 12px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 500;
+        border: 1px solid transparent;
+    }
+    
+    .btn-primary {
+        background-color: #07408b;
+        border-color: #07408b;
+    }
+    
+    .btn-secondary {
+        background-color: #f6f8fa;
+        color: #24292e;
+        border-color: #d1d5da;
+    }
+    
+    .section-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0 0 12px 0;
+        color: #24292e;
+        padding-bottom: 6px;
+        border-bottom: 1px solid #e1e4e8;
+    }
+    
+    .checkbox-container {
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        max-height: 80px; 
+        overflow-y: auto;
+        padding: 1px 5px;
+        width: 220px; 
+    }
+    
+    .checkbox-item {
+        padding: 0;
+        margin: 0;
+    }
+    
+    .checkbox-item input[type="checkbox"] {
+        margin: 0 5px 0 0;
+        vertical-align: middle;
+    }
+    
+    .checkbox-item label {
+        margin: 0;
+        display: inline;
+        font-size: 12px; 
+    }
+    
+    .compact-section {
+        margin-bottom: 10px;
+    }
+    
+    .attribute-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .attribute-col {
+        flex: 1;
+        min-width: 180px;
+    }
+    
+    .tight-form-group {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .tight-form-group .form-group-col {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .inline-sections {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        align-items: flex-start;
+    }
+    
+    .lead-date-section {
+        flex: 1;
+        min-width: 250px;
+    }
+    
+    .primary-market-section {
+        flex: 1;
+        min-width: 220px;
+    }
+ .curved-btn {
+  border-radius: 6px !important;
+}
+
+/* Reduce spacing between buttons */
+.btn-group-custom .btn {
+  margin-right: 6px;
+  margin-bottom: 6px;
+}
+
+/* Remove extra margin on the last button */
+.btn-group-custom .btn:last-child {
+  margin-right: 0;
+}
+
+/* Center-align and wrap on small screens */
+@media (min-width: 768px) {
+  .btn-group-custom .btn {
+    min-width: 150px;
+  }
+}
+
+@media (max-width: 767px) {
+  .btn-group-custom {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-group-custom .btn {
+    width: 100%;
+    margin: 4px 0;
+  }
+}
+</style>
+
+<div class="container-default">
+    <div class="search-agents-container">
+        <!-- Page Header -->
+        <div class="page-header-row">
+            <h1 class="page-title">Search Policy</h1>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newAgentModal">
+                    New Policy
+                </button>
+                
+            </div>
+        </div>
+
+        <div class="nav-tabs-container">
+            <ul class="nav nav-tabs">
+                <li><a href="{% url 'search_policy' %}">Quick Search</a></li>
+                <li class="active"><a href="{% url 'advanced_policy' %}">Advanced Search</a></li>
+                <li><a href="{% url 'saved_policy' %}">Saved Searches</a></li>
+            </ul>
+        </div>
+
+        <!-- Agent Information Container -->
+        <div class="agent-info-container">
+            <h1 class="section-title">AGENT INFORMATION</h1>
+            
+            <!-- Name Section -->
+            <div class="compact-section">
+                <div class="form-group-row">
+                    <div class="form-group-col">
+                        <label>Holder Name</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group-col">
+                        <label>Policy Name</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group-col">
+                        <label>Pay Frequency</label>
+                        <select class="form-select">
+                            <option value="">Select State</option>
+                            <option value="M">Monthly</option>
+                            <option value="W">Weekly</option>
+                             <option value="M">Annually</option>
+                            <option value="W">One-Time</option>
+                        </select>
+                    </div>
+                    <div class="form-group-col">
+                        <label>Project Code</label>
+                        <select class="form-select">
+                            <option value="">Select State</option>
+                            <option value="M">54545</option>
+                            
+                        </select>
+                    </div>
+                    <div class="form-group-col">
+                        <label>Lead Source</label>
+                        <select class="form-select">
+                            <option value="">Agent Referral</option>
+                            <option value="M">Client Referral</option>
+                            <option value="W">Website</option>
+                             <option value="M">Seminar</option>
+                            <option value="W">T-65</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+             <div class="compact-section">
+                <div class="date-range-container">
+                    <div class="date-range-group">
+                        <label>Create Date (Range)</label>
+                        <div class="date-range-row">
+                            <input type="date" class="form-control">
+                            <span style="font-size: 12px;">to</span>
+                            <input type="date" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div class="date-range-group">
+                        <label>App Submit Date (Range)</label>
+                        <div class="date-range-row">
+                            <input type="date" class="form-control">
+                            <span style="font-size: 12px;">to</span>
+                            <input type="date" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div class="date-range-group">
+                        <label>Effective Date (Range)</label>
+                        <div class="date-range-row">
+                            <input type="date" class="form-control">
+                            <span style="font-size: 12px;">to</span>
+                            <input type="date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="date-range-group">
+                        <label>Renewal Date (Range)</label>
+                        <div class="date-range-row">
+                            <input type="date" class="form-control">
+                            <span style="font-size: 12px;">to</span>
+                            <input type="date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="date-range-group">
+                        <label>Term Date (Range)</label>
+                        <div class="date-range-row">
+                            <input type="date" class="form-control">
+                            <span style="font-size: 12px;">to</span>
+                            <input type="date" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        
+           
+             
+            
+            
+            <!-- Status/Classification/Type Section -->
+           <div class="row compact-section attribute-group">
+    <!-- Create Date (Range) -->
+    <div class="col-md-3">
+        <div class="form-group mb-1">
+            <label class="mb-0">Carrier</label>
+            <div class="checkbox-container">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="status1" name="status[]" value="completing_paperwork">
+                    <label for="status1">AARP</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="status2" name="status[]" value="not_contacted">
+                    <label for="status2">Aetna</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="status3" name="status[]" value="not_interested">
+                    <label for="status3">Anthem</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="status4" name="status[]" value="agency_contracted">
+                    <label for="status4">Cigna</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="status3" name="status[]" value="not_interested">
+                    <label for="status3">Highmark</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="status3" name="status[]" value="not_interested">
+                    <label for="status3">Humana</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="status3" name="status[]" value="not_interested">
+                    <label for="status3">Med Mutual PDP</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="status3" name="status[]" value="not_interested">
+                    <label for="status3">Medico</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="status3" name="status[]" value="not_interested">
+                    <label for="status3">Peak</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="status3" name="status[]" value="not_interested">
+                    <label for="status3">United Healthcare</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="status3" name="status[]" value="not_interested">
+                    <label for="status3">UPMC</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="status3" name="status[]" value="not_interested">
+                    <label for="status3">Wellcare</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Submit Date (Range) -->
+    <div class="col-md-3">
+        <div class="form-group mb-1">
+            <label class="mb-0">Status</label>
+            <div class="checkbox-container">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="type1" name="type[]" value="active">
+                    <label for="type1">Active</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="type2" name="type[]" value="onboarding">
+                    <label for="type2">Pending</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="type3" name="type[]" value="prospect">
+                    <label for="type3">Cancelled</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="type4" name="type[]" value="termed">
+                    <label for="type4">Replaced</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Effective Date (Range) -->
+    <div class="col-md-3">
+        <div class="form-group mb-1">
+            <label class="mb-0">Coverage Type</label>
+            <div class="checkbox-container">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="eff1" name="eff[]" value="active">
+                    <label for="eff1">Dental</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="eff2" name="eff[]" value="onboarding">
+                    <label for="eff2">Med Supp</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="eff3" name="eff[]" value="prospect">
+                    <label for="eff3">PDP</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="eff4" name="eff[]" value="termed">
+                    <label for="eff4">MAPD</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="eff4" name="eff[]" value="termed">
+                    <label for="eff4">MA</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="eff4" name="eff[]" value="termed">
+                    <label for="eff4">Medical</label>
+                </div>
+            </div>
+        </div>
+    </div>
+      </div>
+
+    
+
+        <div class="agent-info-container">
+            <h1 class="section-title">Agency & Agent Information</h1>
+            
+            <!-- Name Section -->
+            <div class="compact-section">
+                <div class="form-group-row">
+                    <div class="form-group-col">
+                        <label>Agency</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    
+                    <div class="form-group-col">
+                        <label>Servicing Agent</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group-col">
+                        <label>Account Manager</label>
+                        <select class="form-select">
+                            <option value="">Select State</option>
+                            <option value="M">Monthly</option>
+                            <option value="W">Weekly</option>
+                             <option value="M">Annually</option>
+                            <option value="W">One-Time</option>
+                        </select>
+                    </div>
+                   
+                 <div class="form-group-row">
+                    <div class="form-group-col">
+                        <label>Signed By</label>
+                        <input type="text" class="form-control">
+                    </div>
+            
+                </div>
+                <div class="col-md-3">
+        <div class="form-group mb-1">
+            <label class="mb-0">AgentStatus</label>
+            <div class="checkbox-container">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="type1" name="type[]" value="active">
+                    <label for="type1">Active</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="type2" name="type[]" value="onboarding">
+                    <label for="type2">Pending</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="type3" name="type[]" value="prospect">
+                    <label for="type3">Cancelled</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="type4" name="type[]" value="termed">
+                    <label for="type4">Replaced</label>
+                </div>
+            </div>
+        </div>
+    </div>
+            </div>
+               </div>
+               </div>
+               </div>
+                  
+        
+        
+            <div class="search-actions">
+                <button class="btn btn-secondary" id="resetCriteria">Reset Criteria</button>
+                <a href="adsearch.html" class="btn btn-primary">Search</a>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="newAgentModal" tabindex="-1" role="dialog" aria-labelledby="newAgentModalLabel">
+           <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="newPolicyModalLabel">New Policy</h4>
+            </div>
+
+            <div class="modal-body">
+                <form id="policyForm">
+                    <div class="step-container">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="step-indicator">
+                                    <span class="step-number">1</span>
+                                    <span class="step-title">Client Info</span>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label for="recordType">Select Record Type</label>
+                                    <select id="recordType" class="form-control" required>
+                                        <option value="">-- Select --</option>
+                                        <option>Existing Individual</option>
+                                        <option>New Individual</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="individualName">Individual Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="individualName"
+                                        placeholder="Type to search" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="step-indicator">
+                                    <span class="step-number">2</span>
+                                    <span class="step-title">Policy Info</span>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <p>Fields marked with an <span class="text-danger">*</span> are required.</p>
+                                <div class="form-group">
+                                    <label for="policyType">Policy Type <span class="text-danger">*</span></label>
+                                    <select id="policyType" class="form-control" required>
+                                        <option value="">-- Select --</option>
+                                        <option>Health</option>
+                                        <option>Life</option>
+                                        <option>Auto</option>
+                                        <option>Home</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="effectiveDate">Effective Date <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="effectiveDate" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+<div class="modal-footer modal-footer-responsive text-center">
+  <div class="btn-group btn-group-custom">
+    <button type="submit" class="btn btn-success curved-btn" form="policyForm">Save</button>
+    <button type="submit" class="btn btn-success curved-btn" form="policyForm">Save & Add Coverage</button>
+    <button type="submit" class="btn btn-success curved-btn" form="policyForm">Save & Add Another</button>
+    <button type="button" class="btn btn-default curved-btn" data-dismiss="modal">Cancel</button>
+  </div>
+</div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Reset form functionality
+        document.getElementById('resetCriteria').addEventListener('click', function() {
+            // Reset all text inputs and selects
+            document.querySelectorAll('.form-control, .form-select').forEach(input => {
+                if (input.type !== 'checkbox') {
+                    input.value = '';
+                }
+            });
+            
+            // Reset all checkboxes
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        });
+    });
+</script>
+
+{% endblock %}

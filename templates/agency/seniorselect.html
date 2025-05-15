@@ -1,0 +1,34 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+
+{% block main-content %}
+
+<div class="container-default">
+    <div class="content-wrapper">
+        <div class="search-agents-container">
+            <!-- Page Header -->
+            <div class="page-header-row">
+                <h1 class="page-title">Senior Select Plan</h1>
+            </div>
+            
+            <!-- Tab Navigation -->
+            <ul class="nav nav-tabs" id="mainTabs">
+                <li class="active"><a href="#detail-senior" data-toggle="tab">Agency Detail</a></li>
+                <li><a href="#note-senior" data-toggle="tab">Notes/Attachments</a></li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <div id="detail-senior" class="tab-pane fade in active">
+                    {% include "agency/seniordetail.html" %}
+                </div>
+
+                <div id="note-senior" class="tab-pane fade">
+                    {% include "agency/seniornote.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

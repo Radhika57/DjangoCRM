@@ -1,0 +1,203 @@
+
+<!-- Policy Info Container -->
+<div class="agent-info-container mt-4">
+    <h1 class="section-title">Policy Info</h1>
+    <div class="row">
+        <div class="col-md-3">
+            <label>Carrier</label>
+            <select class="form-control">
+                <option>AARP</option>
+                <option>Aetna</option>
+                <option>Wellcare</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label>Policy Number</label>
+            <input type="number" class="form-control" value="20718431">
+        </div>
+        <div class="col-md-3">
+            <label>Status</label>
+            <select class="form-control">
+                <option>Carriers Contracted</option>
+                <option>Pending</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label>Coverage Type</label>
+            <select class="form-control">
+                <option>- select -</option>
+                <option>PDP</option>
+                <option>MA</option>
+                <option>Medical</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label>Project Code</label>
+            <select class="form-control">
+                <option>- select -</option>
+                <option>PDP</option>
+                <option>MA</option>
+                <option>Medical</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label>Pay Frequency</label>
+            <select class="form-control">
+                <option>- select -</option>
+                <option>PDP</option>
+                <option>MA</option>
+                <option>Medical</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label>Lives</label>
+            <input type="number" class="form-control" value="1" step="1" min="-100">
+        </div>
+        <div class="col-md-3">
+            <label>Premium</label>
+            <div class="dollar-input-wrapper">
+                <input type="number" class="form-control dollar-input" value="0.00" step="0.01">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Lead Dates Container -->
+<div class="agent-info-container mt-4">
+    <h1 class="section-title">Lead Dates</h1>
+    <div class="row">
+        <div class="col-md-3">
+            <label>App Submit Date</label>
+            <input type="date" class="form-control">
+        </div>
+        <div class="col-md-3">
+            <label>Effective Date</label>
+            <input type="date" class="form-control">
+        </div>
+        <div class="col-md-3">
+            <label>Renewal Date</label>
+            <input type="date" class="form-control">
+        </div>
+        <div class="col-md-3">
+            <label>Term Date</label>
+            <input type="date" class="form-control">
+        </div>
+    </div>
+</div>
+
+<!-- Agent Info Container -->
+<div class="agent-info-container mt-4">
+    <h1 class="section-title">Agent Info</h1>
+    <div class="row">
+         <div class="col-md-3">
+            <label>Signed By</label>
+            <input type="text" class="form-control" value="Type to Search">
+        </div>
+        <div class="col-md-3">
+            <label>Account Manager</label>
+            <select class="form-control">
+                <option>- select -</option>
+                <option>A</option>
+                <option>B</option>
+                <option>C</option>
+            </select>
+        </div>
+       <div class="col-md-3">
+            <label>Servicing Agent</label>
+            <input type="text" class="form-control" value="">
+        </div>
+        <div class="col-md-3">
+            <label>Additional Agent</label>
+            <input type="text" class="form-control" value="Type to Search">
+        </div>
+    </div>
+</div>
+
+<!-- Individual Policy Container -->
+<div class="agent-info-container mt-4">
+    <h1 class="section-title">Individual Policy</h1>
+    <div class="row">
+        <div class="col-md-3">
+            <label>Pay Method</label>
+            <select class="form-control">
+                <option>- select -</option>
+                <option>Direct Bill</option>
+                <option>Credit Card</option>
+                <option>SS Deduction</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label>Notes</label>
+            <textarea class="form-control"
+                      style="min-height: 120px; padding: 10px; resize: vertical; width: 250px;"
+                      placeholder="Enter notes here..."></textarea>
+        </div>
+    </div>
+</div>
+
+<!-- Election Container -->
+<div class="agent-info-container mt-4">
+    <h1 class="section-title">Election</h1>
+    <div class="row">
+        <div class="col-md-3">
+            <label>Member ID</label>
+            <input type="number" class="form-control" value="20718431">
+        </div>
+        <div class="col-md-3">
+            <label>Election</label>
+            <select class="form-control">
+                <option>- select -</option>
+                <option>Child Only</option>
+                <option>Employee Only</option>
+                <option>Self + family</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label>Notes</label>
+            <textarea class="form-control"
+                      style="min-height: 120px; padding: 10px; resize: vertical;"
+                      placeholder="Enter notes here..."></textarea>
+        </div>
+        <div class="col-md-3">
+            <label>Who Is Covered</label>
+            <div class="checkbox-container" style="max-height: 120px; overflow-y: auto;">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="team1" name="team[]" value="north">
+                    <label for="team1"> 1</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="team2" name="team[]" value="south">
+                    <label for="team2"> 2</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="team3" name="team[]" value="east">
+                    <label for="team3">3</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Fields Panel -->
+<div class="custom-updated-info custom-fields-panel mt-4">
+    <div class="section-header">
+        <h1 class="section-title">Custom Fields</h1>
+        <div class="custom-fields-edit">
+            <a href="{% url 'custom_fields' %}" target="_blank" class="btn btn-default btn-sm">
+                <i class="glyphicon glyphicon-edit"></i> Add/Edit
+            </a>
+        </div>
+    </div>
+    <div class="alert alert-info text-center mt-3">
+        <div style="font-size: 18px;">There aren't any custom fields yet</div>
+        <div style="font-size: 14px;">Use custom fields to track and report on data unique to your agency.</div>
+        <a href="#" style="font-size: 14px;">How do I use custom fields?</a>
+    </div>
+</div>
+
+<!-- Actions: buttons right aligned -->
+<div class="d-flex justify-content-end mt-4">
+    <button class="btn btn-success me-2" id="save">Save</button>
+    <button class="btn btn-success me-2" id="saveadd">Save & Add Changes</button>
+    <a href="#" class="btn btn-primary">Delete</a>
+</div>

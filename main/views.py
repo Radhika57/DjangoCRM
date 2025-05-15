@@ -259,8 +259,10 @@ def saved_searches(request):
     return render(request, 'agency/savedsearch.html')
 def agency_client(request):
     return render(request, 'agency/agencyclient.html')
-def agency_policy(request):
-    return render(request, 'agency/agencypolicy.html')
+
+def policy_detail(request, policy_id):
+    
+    return render(request, 'policy/policydetail.html', {'policy_id': policy_id})
 def agency_activity(request):
     return render(request, 'agency/agencyactivity.html')
 def agency_note(request):
@@ -268,6 +270,17 @@ def agency_note(request):
 
 def agency_eo(request):
     return render(request, 'agency/agencyeo.html')
+def search_policy(request):
+    return render(request, 'policy/searchpolicy.html')
+def advanced_policy(request):
+    return render(request, 'policy/advancedpolicy.html')
+
+def saved_policy(request):
+    return render(request, 'policy/savedpolicy.html')
+def senior_select(request):
+    return render(request, 'agency/seniorselect.html')
+
+
 
 
 

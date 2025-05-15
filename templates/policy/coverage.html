@@ -1,0 +1,302 @@
+<style>
+  .section-header.with-divider {
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  .section-title1 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #222222;
+    letter-spacing: 0.05em;
+    padding-bottom: 8px;
+    text-transform: capitalize;
+    margin: 0;
+  }
+  .text-muted {
+    font-weight: 400;
+    color: #777;
+    font-style: Segoe UI;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+  }
+  .flex-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    position: relative; /* needed for dropdown container */
+  }
+  /* Dropdown container */
+  #carrierDropdowns {
+    position: absolute;
+    top: 40px; /* below the button */
+    right: 0; /* align right side */
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    padding: 10px;
+    display: none; /* hidden by default */
+    z-index: 1000;
+    width: 220px;
+  }
+  /* Each dropdown list */
+  #carrierDropdowns ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+  #carrierDropdowns ul:last-child {
+    border-bottom: none;
+  }
+  #carrierDropdowns ul li a {
+    display: block;
+    padding: 5px 10px;
+    color: #333;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  #carrierDropdowns ul li a:hover {
+    background-color: #f5f5f5;
+  }
+</style>
+
+<div class="tab-pane" id="Coverage-policy">
+  <div class="Coverage-updated-info Coverage-fields-panel mt-4">
+    <div class="section-header with-divider">
+      <h1 class="section-title1">Edit Coverage <span class="text-muted">(Using Drug Fields)</span></h1>
+      <div class="Coverage-fields-edit">
+        <a href="#" target="_blank" class="btn btn-primary btn-sm">
+          <i class=""></i>Add New Coverage
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="agent-info-container mt-4">
+  <div class="flex-header">
+    <h1 class="section-title1">Product Details</h1>
+    <div class="Coverage-fields-edit" style="position: relative;">
+      <button id="addCarrierBtn" class="btn btn-primary btn-sm" type="button">
+        Add Carrier
+      </button>
+
+      <div id="carrierDropdowns" aria-labelledby="addCarrierBtn">
+        <ul>
+          <li><a href="#">Use Existing Carrier Product</a></li>
+          <li><a id="addNewCarrierProduct" href="#">+Add new Carrier Product</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      <label>Carrier Product</label>
+      <select class="form-control">
+        <option>- select -</option>
+        <option>AARP</option>
+        <option>Aetna</option>
+        <option>Wellcare</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+
+<div class="agent-info-container mt-4">
+  <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
+    <h1 class="section-title1" style="margin-bottom: 0;">
+      Details
+      <small class="text-muted" style="font-size: 13px; font-weight: 400; margin-left: 10px;">
+        (Coverage templates can pre-populate data from the carrier product.
+        <a href="#" style="font-size: 13px;">Learn more</a>)
+      </small>
+    </h1>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      <label>Coverage Status</label>
+      <select class="form-control">
+        <option>- select -</option>
+        <option>Active</option>
+        <option>Inactive</option>
+        <option>Pending</option>
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label>Coverage Lives</label>
+      <input type="text" class="form-control" placeholder="Enter number of lives">
+    </div>
+     <div class="col-md-3">
+      <label>Coverage Termination Policy</label>
+      <input type="text" class="form-control" placeholder="Enter number of lives">
+    </div>
+
+   <div class="col-md-3">
+      <label>Coverage Premium</label>
+      <input type="text" class="form-control" placeholder="$">
+    </div>
+
+
+    <div class="col-md-3">
+      <label>Coverage Premium</label>
+      <input type="text" class="form-control" placeholder="$">
+    </div>
+
+    <div class="col-md-3">
+      <label>Coverage Renewal Date</label>
+      <input type="date" class="form-control">
+    </div>
+
+    <div class="col-md-3">
+      <label>Coverage Effective Date</label>
+      <input type="date" class="form-control">
+    </div>
+  </div>
+</div>
+
+
+<div class="agent-info-container mt-4">
+  <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
+    <h1 class="section-title1" style="margin-bottom: 0;">
+      Details
+      <small class="text-muted" style="font-size: 13px; font-weight: 400; margin-left: 10px;">
+        (Coverage templates can pre-populate data from the carrier product.
+        <a href="#" style="font-size: 13px;">Learn more</a>)
+      </small>
+    </h1>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      <label>Coverage Status</label>
+      <select class="form-control">
+        <option>- select -</option>
+        <option>Active</option>
+        <option>Inactive</option>
+        <option>Pending</option>
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label>Coverage Lives</label>
+      <input type="text" class="form-control" placeholder="Enter number of lives">
+    </div>
+     <div class="col-md-3">
+      <label>Coverage Termination Policy</label>
+      <input type="text" class="form-control" placeholder="Enter number of lives">
+    </div>
+
+   <div class="col-md-3">
+      <label>Coverage Premium</label>
+      <input type="text" class="form-control" placeholder="$">
+    </div>
+
+
+    <div class="col-md-3">
+      <label>Coverage Premium</label>
+      <input type="text" class="form-control" placeholder="$">
+    </div>
+
+    <div class="col-md-3">
+      <label>Coverage Renewal Date</label>
+      <input type="date" class="form-control">
+    </div>
+
+    <div class="col-md-3">
+      <label>Coverage Effective Date</label>
+      <input type="date" class="form-control">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- Bootstrap 3 Modal -->
+<div id="addCarrierModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addCarrierModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="addCarrierModalLabel">New Product for Wellcare</h4>
+      </div>
+      <div class="modal-body">
+        <!-- Red message on top -->
+        <p style="color: red; font-weight: bold;">Please review the required fields</p>
+
+        <form>
+          <div class="form-group">
+            <label for="carrierName">Coverage Type <span style="color: red;">*</span></label>
+            <input type="text" class="form-control" id="carrierName" placeholder="Enter carrier name">
+          </div>
+          <div class="form-group">
+            <label for="productDetails">Product Name <span style="color: red;">*</span></label>
+            <textarea class="form-control" id="productDetails" rows="3" placeholder="Enter product details"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="productDescription">Product Description</label>
+            <textarea class="form-control" id="productDescription" rows="3" placeholder="Enter product details"></textarea>
+          </div>
+
+          <!-- Dates in same row -->
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="effectiveDate">Product Effective Date</label>
+              <input type="date" class="form-control" id="effectiveDate" placeholder="Enter effective date">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="termDate">Product Term Date</label>
+              <input type="date" class="form-control" id="termDate" placeholder="Enter term date">
+            </div>
+          </div>
+
+          <!-- Required fields message -->
+          <p>Fields marked with an <span style="color: red;">*</span> are required.</p>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  const addCarrierBtn = document.getElementById('addCarrierBtn');
+  const carrierDropdowns = document.getElementById('carrierDropdowns');
+  const addNewCarrierLink = document.getElementById('addNewCarrierProduct');
+
+  addCarrierBtn.addEventListener('click', function(event) {
+    event.stopPropagation(); // prevent event bubbling
+    if (carrierDropdowns.style.display === 'block') {
+      carrierDropdowns.style.display = 'none';
+    } else {
+      carrierDropdowns.style.display = 'block';
+    }
+  });
+
+  // Open modal when +Add new Carrier Product clicked
+  addNewCarrierLink.addEventListener('click', function(event) {
+    event.preventDefault();
+    carrierDropdowns.style.display = 'none'; // hide dropdown
+    $('#addCarrierModal').modal('show'); // show Bootstrap modal
+  });
+
+  // Close dropdown if clicking outside
+  document.addEventListener('click', function() {
+    carrierDropdowns.style.display = 'none';
+  });
+</script>
+
+<!-- Make sure you have Bootstrap 3 JS and jQuery loaded in your page -->
