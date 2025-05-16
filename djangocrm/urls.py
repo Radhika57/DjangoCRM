@@ -47,4 +47,6 @@ urlpatterns = [
     path('policy/advanced-policy/', views.advanced_policy, name='advanced_policy'),
     path('policy/saved-policy/', views.saved_policy, name='saved_policy'),
     path('agency/senior-select/', views.senior_select, name='senior_select'),
+    path('policy/payment-report/', views.payment_report, name='payment_report'),
+    path('policy/payment-report1/', views.payment_report1, name='payment_report1'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

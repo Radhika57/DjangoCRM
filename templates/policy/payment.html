@@ -1,0 +1,395 @@
+<div class="tab-pane active" id="payment-policy">  <!-- removed '#' from id -->
+  <div class="row">
+    <!-- Summary Boxes -->
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <strong>Commissions Received From Carrier</strong>
+          <p><span class="text-danger"><strong>0 of 16</strong></span> from 1/1/24 to 4/30/25.</p>
+          <!-- Change this link to trigger modal -->
+          <a href="#" data-toggle="modal" data-target="#commissionModal">Show commission not received</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <strong>Actual vs. Expected Commissions</strong>
+          <p><a href="#projected-commission">Add a Projection Table to view</a></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <strong>Projected Commissions</strong>
+          <p><a href="#">Add a Projection Table to view</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="contractsMainContent">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row align-items-center">
+                    <div class="col-sm-6 d-flex align-items-center">
+                        <strong>Payment History</strong>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        <div class="btn-group">
+                           
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-angle-down"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                               <li><a href="#" target="_blank" style="font-size: 12px;">Export</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body table-responsive">
+
+                        <table id="example6" class="table display">
+                            <thead>
+                               <tr>
+                                <th>Agent Statement Date</th>
+                                <th>Transaction</th>
+                                <th>Carrier Statement Date</th>
+                                <th>Bill From Date</th>
+                                <th>Payee</th>
+                                <th>Agent#</th>
+                                <th>Agency</th>
+                                <th>Rate Table</th>
+                                <th>Rate Type</th>
+                                <th>Rate</th>
+                                <th>Received</th>
+                                <th>Paid</th>
+                            </tr>
+                            </thead>
+
+                            <tfoot>
+                                <tr>
+                                <th>Agent Statement Date</th>
+                                <th>Transaction</th>
+                                <th>Carrier Statement Date</th>
+                                <th>Bill From Date</th>
+                                <th>Payee</th>
+                                <th>Agent#</th>
+                                <th>Agency</th>
+                                <th>Rate Table</th>
+                                <th>Rate Type</th>
+                                <th>Rate</th>
+                                <th>Received</th>
+                                <th>Paid</th>
+                            </tr>
+                            </tfoot>
+
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </div>
+
+
+<div id="createcontractsContainer" style="display: none;">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong>New Contracts & Attachments</strong>
+                <button class="btn btn-default btn-sm" id="backToContractsBtn">
+                    <i class="fa fa-arrow-left"></i> Back to Contracts
+                </button>
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <form id="contractForm">
+                <!-- Carrier Contract Section -->
+                <div class="agent-info-container">
+                    <h1 class="section-title">Carrier Contract</h1>
+                    <div class="form-group-row">
+                        <div class="form-group-col">
+                            <label>Carrier</label>
+                            <select class="form-control">
+                                <option>Active / Contracted</option>
+                                <option>Inactive</option>
+                            </select>
+                        </div>
+                        <div class="form-group-col">
+                            <label>Contract Status</label>
+                            <select class="form-control">
+                                <option>Carriers Contracted</option>
+                                <option>Pending</option>
+                            </select>
+                        </div>
+                        <div class="form-group-col">
+                            <label>Contract File</label>
+                            <input type="file" name="eo_file" class="form-control" id="eoFile">
+                            {% if eo_file %}
+                                <small class="text-muted">Current file: {{ eo_file.name }}</small>
+                            {% endif %}
+                        </div>
+                        <div class="form-group-col">
+                            <div class="checkbox" style="margin-top: 0;">
+                                <input type="checkbox" id="eo_required" name="eo_required" {% if eo_required %}checked{% endif %}>
+                                <label for="eo_required">Direct Paid by Carrier</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contract Agent Numbers -->
+                <div class="agent-info-container">
+                    <h1 class="section-title">Contract Agent Numbers</h1>
+                    <div class="form-group-row">
+                        <div class="form-group-col">
+                            <label>Agent Number 1</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="form-group-col">
+                            <label>Agent Number 2</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="form-group-col">
+                            <label>Agent Number 3</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="form-group-col">
+                            <label>Medicare Number</label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contract Dates -->
+                <div class="agent-info-container">
+                    <h1 class="section-title">Contract Dates</h1>
+                    <div class="form-group-row">
+                        <div class="form-group-col">
+                            <label>Contract Date</label>
+                            <input type="date" class="form-control" name="contracted_date">
+                        </div>
+                        <div class="form-group-col">
+                            <label>Certified Date</label>
+                            <input type="date" class="form-control" name="effective_date">
+                        </div>
+                        <div class="form-group-col">
+                            <label>Termination Date</label>
+                            <input type="date" class="form-control" name="termination_date">
+                        </div>
+                        <div class="form-group-col">
+                            <label>Termination Reason</label>
+                            <select class="form-control">
+                                <option>Active / Contracted</option>
+                                <option>Inactive</option>
+                            </select>
+                        </div>
+                        <div class="form-group-col">
+                            <label>Entry Date</label><br>
+                            <label>01/02/2000</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="agent-info-container">
+                    <h1 class="section-title">Additional Info</h1>
+                    <div class="multi-checkbox-group" style="display: flex; flex-wrap: wrap; gap: 30px;">
+                        <div class="multi-checkbox-section" style="flex: 1 1 300px;">
+                            <h4>Primary Market</h4>
+                            <div class="checkbox-container">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="market1" name="market[]" value="health">
+                                    <label for="market1">Health</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="market2" name="market[]" value="nsa_supp">
+                                    <label for="market2">NSA Supp</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="market3" name="market[]" value="life">
+                                    <label for="market3">Life</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="market4" name="market[]" value="pc">
+                                    <label for="market4">P&C</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="multi-checkbox-section" style="flex: 1 1 300px;">
+                            <h4>Notes</h4>
+                            <div class="form-group">
+                                <textarea class="form-control" name="notes" style="min-height: 120px; padding: 10px; resize: vertical;" placeholder="Enter notes here..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Fields -->
+                <div class="custom-updated-info custom-fields-panel">
+                    <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <h1 class="section-title" style="margin: 0;">Custom Fields</h1>
+                        <div class="custom-fields-edit">
+                            <a href="{% url 'custom_fields' %}" target="_blank" class="btn btn-default btn-sm">
+                                <i class="glyphicon glyphicon-edit"></i> Add/Edit
+                            </a>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="alert alert-info text-center" style="margin-bottom: 0; font-size: 16px;">
+                        <div style="font-size: 18px;">There aren't any custom fields yet</div>
+                        <div style="font-size: 14px;">Use custom fields to track and report on data unique to your agency.</div>
+                        <a href="#" style="font-size: 14px;">How do I use custom fields?</a>
+                    </div>
+                </div>
+
+           
+                <!-- Final Submit Button -->
+                <div class="text-right">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fa fa-save"></i> Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- Modal HTML for Commission Not Received -->
+<div class="modal fade" id="commissionModal" tabindex="-1" role="dialog" aria-labelledby="commissionModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span> <!-- Close button -->
+        </button>
+        <h4 class="modal-title" id="commissionModalLabel">Months with commission not received</h4>
+      </div>
+      <div class="modal-body">
+        <p>Policy commission frequency, effective date and the bill from date define months you expect commissions. This policy did not receive the expected commissions from the carrier.</p>
+        <button id="downloadPolicyReportBtn" class="btn btn-success">Download report for this policy</button>
+        <a href="{% url 'payment_report' %}" class="btn btn-link">Commission not received report</a>
+
+        <table class="table table-bordered table-striped table-hover" style="margin-top:15px;">
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th>Month(s)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>2025</td>
+              <td>4/2025, 3/2025, 2/2025, 1/2025</td>
+            </tr>
+            <tr>
+              <td>2024</td>
+              <td>12/2024, 11/2024, 10/2024, 9/2024, 8/2024, 7/2024, 6/2024, 5/2024, 4/2024, 3/2024, 2/2024, 1/2024</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Add this script at the bottom of your template or in a separate JS file
+document.getElementById('downloadPolicyReportBtn').addEventListener('click', function() {
+    // Collect data from the table
+    const tableRows = document.querySelectorAll('#commissionModal table tbody tr');
+    const reportData = [];
+    
+    // Add headers
+    reportData.push(['Year', 'Months']);
+    
+    // Add table data
+    tableRows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        reportData.push([cells[0].textContent, cells[1].textContent]);
+    });
+    
+    // Create CSV content
+    const csvContent = reportData.map(row => row.join(',')).join('\n');
+    
+    // Create download link
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'policy_commission_report.csv');
+    link.style.visibility = 'hidden';
+    
+    // Trigger download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Show download confirmation
+    const originalText = this.innerHTML;
+    this.innerHTML = '<i class="fa fa-check"></i> Download Started';
+    setTimeout(() => {
+        this.innerHTML = originalText;
+    }, 2000);
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const showCreateBtn = document.getElementById('showCreateContractBtn');
+    const backToContractsBtn = document.getElementById('backToContractsBtn');
+    const contractsMainContent = document.getElementById('contractsMainContent');
+    const createContractContainer = document.getElementById('createcontractsContainer');
+    const contractForm = document.getElementById('contractForm');
+
+    // Show create contract form
+    showCreateBtn.addEventListener('click', function () {
+        contractsMainContent.style.display = 'none';
+        createContractContainer.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Back to contracts list
+    backToContractsBtn.addEventListener('click', function () {
+        createContractContainer.style.display = 'none';
+        contractsMainContent.style.display = 'block';
+        contractForm.reset();
+    });
+
+    // Submit form
+    contractForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        alert('Contract saved successfully!');
+        createContractContainer.style.display = 'none';
+        contractsMainContent.style.display = 'block';
+        contractForm.reset();
+        location.reload();
+    });
+});
+
+
+</script>

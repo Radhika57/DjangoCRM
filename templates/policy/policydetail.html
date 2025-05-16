@@ -81,9 +81,7 @@
   text-transform: capitalize;
   
 }
-
 </style>
-
 
 <div class="container-default">
     <div class="content-wrapper">
@@ -97,19 +95,20 @@
             <ul class="nav nav-tabs" id="mainTabs">
                 <li class="active"><a href="#detail-policy" data-toggle="tab">Detail</a></li>
                 <li><a href="#Coverage-policy" data-toggle="tab">Coverage</a></li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        Commissions <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#Commissions-policy" data-toggle="tab">Commissions Summary</a></li>
-                        <li><a href="#CommissionDetails-policy" data-toggle="tab">Commission Details</a></li>
-                        <li><a href="#CommissionStatements-policy" data-toggle="tab">Statements</a></li>
+
+                <li class="dropdown" id="commissions-dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Commissions <span class="caret"></span></a>
+                    <ul class="dropdown-menu" id="commissions-menu">
+                        <li><a href="#payment-policy" data-toggle="tab">Payment History</a></li>
+                        <li><a href="#projected-commission" data-toggle="tab">Projected Commission</a></li>
+                        <li><a href="#payees" data-toggle="tab">Payees</a></li>
+                        <li><a href="#settings" data-toggle="tab">Settings</a></li>
                     </ul>
                 </li>
+                
                 <li><a href="#Activities-policy" data-toggle="tab">Activities</a></li>
                 <li><a href="#Notes-policy" data-toggle="tab">Notes</a></li>
-               <li class="dropdown">
+                <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         WorkFlow <span class="caret"></span>
                     </a>
@@ -144,11 +143,17 @@
                 </div>
                 
                 <!-- Commissions Tabs -->
-                <div class="tab-pane" id="Commissions-policy">
-                    {% include "policy/commissions.html" %}
+                <div class="tab-pane" id="payment-policy">
+                    {% include "policy/payment.html" %}
                 </div>
-                <div class="tab-pane" id="CommissionDetails-policy">
-                    {% include "policy/commission_details.html" %}
+                <div class="tab-pane" id="projected-commission">
+                    {% include "policy/projected.html" %}
+                </div>
+                <div class="tab-pane" id="payees">
+                    {% include "policy/Payees.html" %}
+                </div>
+                <div class="tab-pane" id="settings">
+                    {% include "policy/Settings.html" %}
                 </div>
              
                 <!-- Other Tabs -->
@@ -165,37 +170,65 @@
                     {% include "policy/emails.html" %}
                 </div>
             </div>
-
-           
-    <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
-    
-
-    <script>
-        $(document).ready(function () {
-            // Initialize tabs
-            $('#mainTabs a[data-toggle="tab"]').click(function (e) {
-                e.preventDefault();
-                $(this).tab('show');
-            });
-
-            // Handle hash in URL
-            if (location.hash) {
-                $('a[href="' + location.hash + '"]').tab('show');
-            }
-
-            // Update hash when tab changes
-            $('#mainTabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                window.location.hash = e.target.hash;
-            });
-
-            // Initialize dropdowns
-            $('.dropdown-toggle').dropdown();
-            
-            // Prevent dropdown from closing when clicking inside
-            $('.dropdown-menu').click(function(e) {
-                e.stopPropagation();
-            });
-        });
-    </script>
+        </div>
+    </div>
 </div>
+
+<script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
+    
+<script>
+
+  $(document).ready(function () {
+    // Bootstrap tab show
+    $('#mainTabs a[data-toggle="tab"]').click(function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+    });
+
+    // Show tab if URL has hash
+    if (location.hash) {
+      $('a[href="' + location.hash + '"]').tab('show');
+    }
+
+    // Update hash on tab change
+    $('#mainTabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+      window.location.hash = e.target.hash;
+    });
+
+    // Bootstrap dropdown init
+    $('.dropdown-toggle').dropdown();
+
+    // Prevent dropdown from closing on inner clicks
+    $('.dropdown-menu').click(function (e) {
+      e.stopPropagation();
+    });
+
+    // Define commission tab hashes
+    const commissionTabs = ['#payment-policy', '#projected-commission', '#payees', '#settings'];
+
+    // Show/hide dropdown menu on page load
+    const currentTab = window.location.hash;
+    if (commissionTabs.includes(currentTab)) {
+      $('#commissions-menu').hide();
+    } else {
+      $('#commissions-menu').show();
+    }
+
+    // Tab switch event
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+      const newTab = $(e.target).attr("href");
+      if (commissionTabs.includes(newTab)) {
+        $('#commissions-menu').hide();
+      } else {
+        $('#commissions-menu').show();
+      }
+
+      // Hide the open dropdown menu after clicking
+      $('.dropdown.open .dropdown-toggle').dropdown('toggle'); // closes the open dropdown
+    });
+  });
+
+
+</script>
+
 {% endblock %}

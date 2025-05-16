@@ -279,6 +279,11 @@ def saved_policy(request):
     return render(request, 'policy/savedpolicy.html')
 def senior_select(request):
     return render(request, 'agency/seniorselect.html')
+def payment_report(request):
+    return render(request, 'policy/paymentreport.html')
+def payment_report1(request):
+    return render(request, 'policy/paymentreport1.html')
+
 
 
 
