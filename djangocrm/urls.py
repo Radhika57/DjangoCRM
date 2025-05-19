@@ -29,24 +29,30 @@ urlpatterns = [
     path('carriers/address/edit/<int:address_id>/', views.edit_carrier_address, name='edit_carrier_address'),
     path('carrier/address/delete/<int:address_id>/', views.delete_carrier_address, name='delete_carrier_address'),
     path('customfields/', views.custom_fields, name='custom_fields'),
+
     path('search-agents/', views.search_agents, name='search_agents'),
     path('agents/manage-agencies/', views.manage_agencies, name='manage_agencies'),
     path('agents/settings/', views.agent_column_settings, name='agent_column_settings'),
     path('agency/detail/<int:agency_id>/', views.agency_detail, name='agency_detail'),
-    
     path('agentcolumnsettings/', views.agent_column_settings, name='agentcolumnsettings'), 
     path('agency/agency-eo/', views.agency_eo, name='agency_eo'),
     path('agency/advanced-search/', views.advanced_search, name='advanced_search'),
     path('agency/saved-searches/', views.saved_searches, name='saved_searches'),
     path('agency/agency-client/', views.agency_client, name='agency_client'),
-   
+    path('agency/senior-select/', views.senior_select, name='senior_select'),
     path('agency/agency-agency-activity/', views.agency_activity, name='agency_activity'),
     path('agency/agency-agency-note/', views.agency_note, name='agency_note'),
-    path('policy/detail/<int:policy_id>/', views.policy_detail, name='policy_detail'),
+
+    path('policy/detail/<int:policy_id>/', views.policy_tab, name='policy_tab'),
     path('policy/search-policy/', views.search_policy, name='search_policy'),
     path('policy/advanced-policy/', views.advanced_policy, name='advanced_policy'),
     path('policy/saved-policy/', views.saved_policy, name='saved_policy'),
-    path('agency/senior-select/', views.senior_select, name='senior_select'),
-    path('policy/payment-report/', views.payment_report, name='payment_report'),
-    path('policy/payment-report1/', views.payment_report1, name='payment_report1'),
+   
+
+    path('Individuals/search-individuals/', views.search_individuals, name='search_individuals'),
+    path('Individuals/advanced-individuals/', views.advanced_individuals, name='advanced_individuals'),
+    path('Individuals/saved-individuals/', views.saved_individuals, name='saved_individuals'),
+    path('Individuals/detail/<int:individual_id>/', views.individual_tab, name='individual_tab'),
+
+  
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
