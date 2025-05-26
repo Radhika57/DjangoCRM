@@ -1,0 +1,294 @@
+<style>
+/* Panel heading with flex layout */
+.panel-heading-flex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+}
+
+/* Responsive button group */
+.btn-group-responsive {
+    display: flex;
+    flex-wrap: nowrap;
+    margin-top: 10px;
+}
+
+.btn-text {
+    display: inline;
+}
+
+/* Status labels */
+.label {
+    display: inline-block;
+    padding: 3px 6px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+.label-success {
+    background-color: #5cb85c;
+    color: white;
+}
+
+.label-warning {
+    background-color: #f0ad4e;
+    color: white;
+}
+
+.label-danger {
+    background-color: #d9534f;
+    color: white;
+}
+
+/* Modal footer adjustments */
+.modal-footer-responsive {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* Step indicator styling */
+.step-indicator {
+    display: flex;
+    align-items: center;
+}
+
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: #07408b;
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+/* Responsive adjustments */
+
+    @media (max-width: 767px) {
+  /* Make panel heading a flex container on mobile only */
+  .agents-panel .panel-heading {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+  }
+
+  /* Ensure heading text doesn’t wrap and shrinks if needed */
+  .agents-panel .panel-heading h4 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    flex-shrink: 1;
+  }
+
+  /* Keep buttons side by side */
+  .agents-panel .panel-heading .btn-group {
+    display: flex !important;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+}
+@media (max-width: 480px) {
+    .step-indicator {
+        font-size: 14px;
+    }
+
+    .step-number {
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+    }
+
+    .modal-body .form-group {
+        margin-bottom: 10px;
+    }
+}
+
+/* Smaller font for column setting & CSV dropdown items */
+.panel-heading-flex .dropdown-menu li a {
+    font-size: 12px;
+    padding: 6px 12px;
+}
+</style>
+
+<div class="tab-pane" id="policies-individuals">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-flex">
+            <strong>Policies for Judith Abel</strong>
+            <div class="btn-group btn-group-responsive">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newPolicyModal">
+                    <span class="btn-text">Create new</span>
+                </button>
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="{% url 'agent_column_settings' %}">Column Setting</a></li>
+                    <li><a href="#">Download CSV</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body table-responsive">
+
+                        <table id="example1" class="table display">
+                            <thead>
+                                <tr>
+                                    <th>Policy Number</th>
+                                    <th>Holder Name</th>
+                                    <th>Effective Date</th>
+                                    <th>Renewal Date</th>
+                                    <th>Status</th>
+                                    <th>Carrier</th>
+                                    <th>Coverage Type</th>
+                                    
+                                </tr>
+                            </thead>
+
+                            <tfoot>
+                                <tr>
+                                    <th>Policy Number</th>
+                                    <th>Holder Name</th>
+                                    <th>Effective Date</th>
+                                    <th>Renewal Date</th>
+                                    <th>Status</th>
+                                    <th>Carrier</th>
+                                    <th>Coverage Type</th>
+                                    
+                                </tr>
+                            </tfoot>
+
+                            <tbody>
+                                <tr>
+                                    <td><a href="#">POL123456</a></td>
+                                    <td>John Doe</td>
+                                    <td>2023-01-15</td>
+                                    <td>2024-01-15</td>
+                                    <td><span class="label label-success">Active</span></td>
+                                    <td>ABC Insurance</td>
+                                    <td>Health</td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td><a href="#">POL789012</a></td>
+                                    <td>Jane Smith</td>
+                                    <td>2023-03-20</td>
+                                    <td>2024-03-20</td>
+                                    <td><span class="label label-warning">Pending</span></td>
+                                    <td>XYZ Insurance</td>
+                                    <td>Life</td>
+                                   
+                                </tr>
+                                <tr>
+                                    <td><a href="#">POL345678</a></td>
+                                    <td>Robert Brown</td>
+                                    <td>2022-11-05</td>
+                                    <td>2023-11-05</td>
+                                    <td><span class="label label-danger">Lapsed</span></td>
+                                    <td>DEF Insurance</td>
+                                    <td>Auto</td>
+                                   
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- New Policy Modal -->
+<div class="modal fade" id="newPolicyModal" tabindex="-1" role="dialog" aria-labelledby="newPolicyModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="newPolicyModalLabel">New Policy</h4>
+            </div>
+
+            <div class="modal-body">
+                <form id="policyForm">
+                    <div class="step-container">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="step-indicator">
+                                    <span class="step-number">1</span>
+                                    <span class="step-title">Client Info</span>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label for="recordType">Select Record Type</label>
+                                    <select id="recordType" class="form-control" required>
+                                        <option value="">-- Select --</option>
+                                        <option>Existing Individual</option>
+                                        <option>New Individual</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="individualName">Individual Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="individualName"
+                                        placeholder="Type to search" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="step-indicator">
+                                    <span class="step-number">2</span>
+                                    <span class="step-title">Policy Info</span>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <p>Fields marked with an <span class="text-danger">*</span> are required.</p>
+                                <div class="form-group">
+                                    <label for="policyType">Policy Type <span class="text-danger">*</span></label>
+                                    <select id="policyType" class="form-control" required>
+                                        <option value="">-- Select --</option>
+                                        <option>Health</option>
+                                        <option>Life</option>
+                                        <option>Auto</option>
+                                        <option>Home</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="effectiveDate">Effective Date <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="effectiveDate" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" form="policyForm">Save</button>
+                <button type="submit" class="btn btn-success" form="policyForm">Save & Add Coverage</button>
+                <button type="submit" class="btn btn-success" form="policyForm">Save & Add Another</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+          
+                

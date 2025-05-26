@@ -64,62 +64,7 @@
 </div>
 
 <style>
-    /* Main tab container styling */
-    .nav-tabs-container {
-        position: relative;
-        overflow: hidden;
-        background: #f8f9fa;
-        border-bottom: 1px solid #dee2e6;
-    }
-    
-    /* Tab navigation styling */
-    .nav-tabs {
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        -ms-overflow-style: -ms-autohiding-scrollbar;
-        scrollbar-width: none; /* Hide scrollbar for Firefox */
-        padding: 0 15px;
-        margin: 0;
-        white-space: nowrap;
-    }
-    
-    .nav-tabs::-webkit-scrollbar {
-        display: none; /* Hide scrollbar for Chrome/Safari */
-    }
-    
-    .nav-tabs > li {
-        display: inline-block;
-        float: none;
-        margin-right: 10px;
-    }
-    
-    .nav-tabs > li:last-child {
-        margin-right: 0;
-        padding-right: 15px; /* Add space at the end */
-    }
-    
-    .nav-tabs > li > a {
-        display: block;
-        padding: 10px 15px;
-        border: 1px solid transparent;
-        border-radius: 4px 4px 0 0;
-        background-color: #e9ecef;
-        color: #495057;
-        font-size: 14px;
-        text-align: center;
-        min-width: max-content;
-    }
-    
-    .nav-tabs > li.active > a,
-    .nav-tabs > li.active > a:hover,
-    .nav-tabs > li.active > a:focus {
-        background-color: white;
-        color: #495057;
-        border: 1px solid #dee2e6;
-        border-bottom-color: transparent;
-    }
+   
     
     /* Panel and table styling */
     .panel-body {
@@ -132,43 +77,6 @@
         -webkit-overflow-scrolling: touch;
     }
     
-    /* Mobile-specific styles */
-    @media (max-width: 767px) {
-        .nav-tabs {
-            padding: 0 10px;
-        }
-        
-        .nav-tabs > li > a {
-            padding: 8px 12px;
-            font-size: 12px;
-        }
-        
-        .panel-heading {
-            padding: 10px 15px;
-        }
-        
-        .panel-body {
-            padding: 10px;
-        }
-        
-        table.display {
-            width: 100% !important;
-        }
-        
-        table.display th, 
-        table.display td {
-            white-space: nowrap;
-            padding: 8px 10px;
-            font-size: 13px;
-        }
-    }
-    
-    /* Very small screens (e.g., iPhone 5/SE) */
-    @media (max-width: 320px) {
-        .nav-tabs > li > a {
-            padding: 6px 8px;
-            font-size: 11px;
-        }
-    }
+ 
 </style>
 

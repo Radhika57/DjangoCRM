@@ -1,0 +1,261 @@
+<style>
+    /* Custom smaller modal size */
+    .modal-dialog.modal-lg {
+        max-width: 600px;  /* Shrinks default lg modal (~900px) to 600px */
+        width: 90%;
+        margin: 30px auto;
+    }
+
+    /* Responsive tweaks for mobile */
+    @media (max-width: 768px) {
+        .modal-dialog.modal-lg {
+            width: 95%;
+            margin: 10px auto;
+        }
+        .modal-content {
+            padding: 10px;
+        }
+        .modal-body {
+            padding: 10px;
+        }
+    }
+
+    /* Improve form spacing */
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    /* Modal header and footer styling */
+    .modal-header,
+    .modal-footer {
+        padding: 12px 15px;
+        border-color: #e5e5e5;
+    }
+
+    /* Optional: Reduce font size in modal */
+    .modal-title {
+        font-size: 18px;
+    }
+
+    /* Optional: shrink buttons */
+    .modal-footer .btn {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+</style>
+
+
+<div class="tab-pane" id="Consent-individuals">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <!-- Mobile View -->
+                    <div class="visible-xs">
+                        <h1 class="panel-title" style="font-size: 20px;">
+                            <strong>SOA AND ACA DOCUMENTS</strong>
+                        </h1>
+                        <div style="margin-top: 10px;">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                    Create New <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" data-toggle="modal" data-target="#soaModal">
+                                        <i class="fa fa-paper-plane-o"></i> Scope of Appointment
+                                    </a></li>
+                                    <li><a href="#" data-toggle="modal" data-target="#acaModal">
+                                        <i class="fa fa-file-text-o"></i> ACA Forms
+                                    </a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Desktop View -->
+                    <div class="hidden-xs clearfix">
+                        <h1 class="panel-title pull-left" style="font-size: 24px;">
+                            <strong>SOA AND ACA DOCUMENTS</strong>
+                        </h1>
+                        <div class="btn-group pull-right">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                Create New <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="#" data-toggle="modal" data-target="#soaModal">
+                                    <i class="fa fa-paper-plane-o"></i> Scope of Appointment
+                                </a></li>
+                                <li><a href="#" data-toggle="modal" data-target="#acaModal">
+                                    <i class="fa fa-file-text-o"></i> ACA Forms
+                                </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-body text-center">
+                    <h3 style="font-size: 20px;"><i class="fa fa-paperclip"></i> Consents</h3>
+                    <p class="lead" style="font-size: 18px;">No Consents Found</p>
+                    <p style="font-size: 16px;">Use the Create New button to generate an SOA or ACA Form.</p>
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+                        <p style="font-size: 16px; margin-bottom: 5px;">More information:</p>
+                        <div style="font-size: 16px;">
+                            <a href="#" class="text-success" style="font-weight: bold; text-decoration: underline;">Create an SOA</a>
+                            <span style="margin: 0 10px; color: #ccc;">|</span>
+                            <a href="#" class="text-success" style="font-weight: bold; text-decoration: underline;">Create an ACA</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SOA Modal - Responsive -->
+<div class="modal fade" id="soaModal" tabindex="-1" role="dialog" aria-labelledby="soaModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="soaModalLabel">Generate SOA Signature Request</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Details for the SOA Request</h4>
+                            
+                            <div class="form-group">
+                                <label>Language <span class="text-danger">*</span></label>
+                                <select class="form-control">
+                                    <option>English</option>
+                                    <option>Spanish</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Agent/User <span class="text-danger">*</span></label>
+                                <select class="form-control">
+                                    <option>Rohan Dhillon</option>
+                                </select>
+                                <span class="text-danger">To continue, the agent must add their phone, signature, and sales rep ID to their SOA/ACA Consent user settings. <a href="#">Learn More.</a></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Sales Representative ID</label>
+                                <select class="form-control">
+                                    <option value="">-- Select --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Initial Method of Contact <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" placeholder="">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Plan(s) the Licensed Sales Representative will Represent During the Meeting</label>
+                                <input type="text" class="form-control" value="UnitedHealthcare/Aetna/Ant">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Date Appointment will be Completed (optional)</label>
+                                <input type="text" class="form-control" placeholder="dd-mm-yyyy">
+                            </div>
+
+                            <hr>
+
+                            <h4>Beneficiary Information</h4>
+                            <p><strong>Name:</strong> Judith Abel</p>
+                            <p><strong>Phone:</strong> (330) 627-4252</p>
+                            <p><strong>Address:</strong> 245 Leatherberry Rd<br> Carrollton, OH 44615</p>
+
+                            <p class="help-block">Fields marked with <span class="text-danger">*</span> are required.</p>
+
+                            <div class="alert alert-info" style="margin-top: 15px;">
+                                The <a href="#">SOA</a> will be sent to <strong>ohiojudy@icloud.com</strong>.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Send SOA Email</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ACA Modal - Responsive -->
+<div class="modal fade" id="acaModal" tabindex="-1" role="dialog" aria-labelledby="acaModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="acaModalLabel">Generate ACA Forms</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="alert alert-info">
+                                <strong><i class="fa fa-info-circle"></i> How to Send and Collect ACA Forms</strong><br>
+                                AMS+ offers several ways to collect and store ACA Consent to Contact forms and Attestations. 
+                                <a href="#">Learn more.</a>
+                            </div>
+
+                            <h4>Details for the ACA Request</h4>
+
+                            <div class="form-group">
+                                <label>Default Language <span class="text-danger">*</span></label>
+                                <select class="form-control">
+                                    <option>English</option>
+                                    <option>Spanish</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Form</label>
+                                <select class="form-control">
+                                    <option>ACA Consent</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Agent/User <span class="text-danger">*</span></label>
+                                <select class="form-control">
+                                    <option>Rohan Dhillon</option>
+                                </select>
+                                <span class="text-danger">
+                                    To continue, the agent must add their phone and NPN to their SOA/ACA Consent user settings.
+                                    <a href="#">Learn More.</a>
+                                </span>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Date <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" placeholder="dd-mm-yyyy">
+                            </div>
+
+                            <p class="help-block">Fields marked with <span class="text-danger">*</span> are required.</p>
+
+                            <div class="alert alert-info">
+                                The <a href="#">ACA</a> will be sent to <strong>ohiojudy@icloud.com</strong>.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Send ACA Email</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

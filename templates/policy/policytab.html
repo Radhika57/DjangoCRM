@@ -92,37 +92,50 @@
             </div>
 
             <!-- Tab Navigation -->
-            <ul class="nav nav-tabs" id="mainTabs">
-                <li class="active"><a href="#detail-policy" data-toggle="tab">Detail</a></li>
-                <li><a href="#Coverage-policy" data-toggle="tab">Coverage</a></li>
+        <div class="nav-tabs-container d-flex flex-wrap">
+    <!-- Detail Tab -->
+    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+        <a href="#detail-policy" class="btn btn-secondary nav-tab-btn active" data-toggle="tab">Detail</a>
+    </div>
 
-              
-                
-                <li><a href="#Activities-policy" data-toggle="tab">Activities</a></li>
-                <li><a href="#Notes-policy" data-toggle="tab">Notes</a></li>
-               
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        WorkFlow <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#workflow-action" data-toggle="tab">Triggered Action</a></li>
-                        <li><a href="#workflow-detail" data-toggle="tab">Triggered Workflow</a></li>
-                       
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        Email <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#incoming-email" data-toggle="tab">Incoming Emails</a></li>
+    <!-- Coverage Tab -->
+    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+        <a href="#Coverage-policy" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Coverage</a>
+    </div>
 
-                        <li><a href="#outgoing-email" data-toggle="tab">Outcoming-emails</a></li>
-                        <li><a href="#Campaigns" data-toggle="tab">Campaigns</a></li>
-                    </ul>
-                </li>
-            </ul>
+    <!-- Activities Tab -->
+    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+        <a href="#Activities-policy" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Activities</a>
+    </div>
+
+    <!-- Notes Tab -->
+    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+        <a href="#Notes-policy" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Notes</a>
+    </div>
+
+    <!-- WorkFlow Dropdown -->
+    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+        <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            WorkFlow ▼
+        </button>
+        <ul class="dropdown-menu shadow p-2 border-0">
+            <li><a class="dropdown-item py-2" href="#workflow-action" data-toggle="tab">Triggered Action</a></li>
+            <li><a class="dropdown-item py-2" href="#workflow-detail" data-toggle="tab">Triggered Workflow</a></li>
+        </ul>
+    </div>
+
+    <!-- Email Dropdown -->
+    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+        <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Email ▼
+        </button>
+        <ul class="dropdown-menu shadow p-2 border-0">
+            <li><a class="dropdown-item py-2" href="#incoming-email" data-toggle="tab">Incoming Emails</a></li>
+            <li><a class="dropdown-item py-2" href="#outgoing-email" data-toggle="tab">Outcoming Emails</a></li>
+            <li><a class="dropdown-item py-2" href="#Campaigns" data-toggle="tab">Campaigns</a></li>
+        </ul>
+    </div>
+</div>
 
             <!-- Tab Content Sections -->
             <div class="tab-content">

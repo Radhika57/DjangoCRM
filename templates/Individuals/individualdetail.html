@@ -1,4 +1,506 @@
-   <div class="tab-pane active" id="detail-individuals">
-                  
-                </div>
+<div id="detail-content" class="tab-pane active">
+ 
+<!-- Policy Info Container -->
+<div class="agent-info-container mt-4">
+    <h1 class="section-title">Personal Info</h1>
+    <div class="row">
+         <div class="col-md-3">
+            <label>First Name</label>
+            <input type="text" class="form-control" value="">
+        </div>
+        <div class="col-md-3">
+            <label>Middle Name</label>
+            <input type="text" class="form-control" value="">
+        </div>
+         <div class="col-md-3">
+            <label>Last Name</label>
+            <input type="text" class="form-control" value="">
+        </div>
+         <div class="col-md-3">
+            <label>Nickname</label>
+            <input type="text" class="form-control" value="">
+        </div>
+         <div class="col-md-3">
+            <label>Title</label>
+            <input type="text" class="form-control" value="">
+        </div>
+        <div class="col-md-3">
+            <label>Gender</label>
+            <select class="form-control">
+                <option>- select -</option>
+                <option>F</option>
+                <option>M</option>
                 
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label>DOB</label>
+            <input type="date" class="form-control">
+        </div>
+       <div class="col-md-3">
+            <label>SSN</label>
+            <input type="text" class="form-control" value="">
+        </div>
+        <div class="col-md-3">
+            <label>Driver's License #</label>
+            <input type="text" class="form-control" value="">
+        </div>
+       
+        <div class="col-md-3">
+            <label>Deceased Date</label>
+            <input type="date" class="form-control">
+        </div>
+    </div>
+</div>
+
+<!-- Lead Dates Container -->
+<div class="agent-info-container mt-4">
+    <h1 class="section-title">Client Info</h1>
+    <div class="row">
+        <div class="col-md-3">
+            <label>Type</label>
+            <input type="text" class="form-control" value="">
+        </div>
+        <div class="col-md-3">
+            <label>Status</label>
+            <select class="form-control">
+                <option>- select -</option>
+                <option>Sold</option>
+                <option>Placed</option>
+                <option>Call Bcak</option>
+                <option>Appoinment set</option>
+                <option>Enrolled</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label>Medicare Beneficiary ID (MBI)</label>
+            <input type="text" class="form-control" value="">
+        </div>
+        <div class="col-md-3">
+            <label>Medicare Effective Date (Part A)</label>
+            <input type="date" class="form-control">
+        </div>
+         <div class="col-md-3">
+            <label>Medicare Effective Date (Part B)e</label>
+            <input type="date" class="form-control">
+        </div>
+         <div class="col-md-3">
+            <label>Smoker Status</label>
+            <select class="form-control">
+                <option>- select -</option>
+                <option>Yes</option>
+                <option>No</option>
+               
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label>Servicing Agent</label>
+            <input type="text" class="form-control" value="">
+        </div>
+        <div class="col-md-3">
+            <label>Additional Agent</label>
+            <input type="text" class="form-control" value="">
+        </div>
+    </div>
+</div>
+<!-- Contact Info Container -->
+
+<div class="contact-updated-info contact-fields-panel mt-4">
+    <div class="section-header">
+        <h1 class="section-title">Contact Info</h1>
+        <div class="contact-fields-edit">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editPhoneModal">
+            <i class="glyphicon glyphicon-edit"></i> Edit Phone
+        </button>
+        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#newAddressModal">
+            <i class="glyphicon glyphicon-plus"></i> New Address
+        </button>
+        </div>
+    </div>
+    <!-- Rest of your content remains unchanged -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6 position-relative">
+                    <label>Email</label>
+                    <input type="email" class="form-control" value="alyson@example.com">
+                </div>
+                <div class="col-md-6">
+                    <label>Secondary Email</label>
+                    <input type="email" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="d-flex justify-content-between align-items-center mb-1">
+                        <span>Business phone</span>
+                        <span class="btn-group">
+                            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                                data-target="#editPhoneModal">Edit</button>
+                            <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                                data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="#">Make a Call</a></li>
+                            </ul>
+                        </span>
+                    </label>
+                    <input type="text" class="form-control" value="(555) 123-4567">
+                </div>
+                <div class="col-md-6">
+                    <label class="d-flex justify-content-between align-items-center mb-1">
+                        <span>Cellular</span>
+                        <span class="btn-group">
+                            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                                data-target="#editPhoneModal">Edit</button>
+                            <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                                data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="#">Make a Call</a></li>
+                                <li><a href="#">Send Text Message</a></li>
+                            </ul>
+                        </span>
+                    </label>
+                    <input type="text" class="form-control" value="(555) 987-6543">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="d-flex justify-content-between align-items-center mb-1">
+                        <span>Home</span>
+                        <span class="btn-group">
+                            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                                data-target="#newAddressModal">Edit</button>
+                            <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                                data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="#">Get directions</a></li>
+                                <li><a href="#">Map a Location</a></li>
+                            </ul>
+                        </span>
+                    </label>
+                    <input type="text" class="form-control" value="(555) 456-7890">
+                </div>
+                <div class="col-md-6">
+                    <label class="d-flex justify-content-between align-items-center mb-1">
+                        <span>Business</span>
+                        <span class="btn-group">
+                            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                                data-target="#newAddressModal">Edit</button>
+                            <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                                data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="#">Get directions</a></li>
+                                <li><a href="#">Map a Location</a></li>
+                            </ul>
+                        </span>
+                    </label>
+                    <input type="text" class="form-control" value="(555) 789-0123">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input"> Opt Out of Emails
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Individual Policy Container -->
+<div class="agent-info-container mt-4">
+    <h1 class="section-title">Lead Info</h1>
+    <div class="row">
+        <div class="col-md-3">
+            <label>Lead Source</label>
+            <select class="form-control">
+               <option>- Select -</option>
+                                    <option>Referral</option>
+                                    <option>Advertisement</option>
+                                    <option>Website</option>
+                                    <option>Event</option>
+                                    <option>Other</option>
+            </select>
+        </div>
+         <div class="col-md-3">
+            <label>Lead Date</label>
+            <input type="date" class="form-control">
+        </div>
+         <div class="col-md-3">
+            <label>Other Lead Source</label>
+            <input type="text" class="form-control" value="">
+        </div>
+         <div class="col-md-3">
+            <label>Agent/Affiliate</label>
+            <input type="text" class="form-control" value="">
+        </div>
+        <div class="col-md-3">
+            <label>Project Code</label>
+            <select class="form-control">
+                <option>- Select -</option>
+                                    <option>Project A</option>
+                                    <option>Project B</option>
+                                    <option>Project C</option>
+            </select>
+        </div>
+      
+    </div>
+</div>
+
+
+
+<!-- Custom Fields Panel -->
+<div class="custom-updated-info custom-fields-panel mt-4">
+    <div class="section-header">
+        <h1 class="section-title">Custom Fields</h1>
+        <div class="custom-fields-edit">
+            <a href="{% url 'custom_fields' %}" target="_blank" class="btn btn-default btn-sm">
+                <i class="glyphicon glyphicon-edit"></i> Add/Edit
+            </a>
+        </div>
+    </div>
+   
+    <div class="row">
+        <div class="col-md-3">
+            <label>Lead Source</label>
+            <select class="form-control">
+               <option>- Select -</option>
+                                    <option>Referral</option>
+                                    <option>Advertisement</option>
+                                    <option>Website</option>
+                                    <option>Event</option>
+                                    <option>Other</option>
+            </select>
+        </div>
+         <div class="col-md-3">
+            <label>Appointment</label>
+            <input type="date" class="form-control">
+        </div>
+         <div class="col-md-3">
+            <label>Time</label>
+            <input type="text" class="form-control" value="">
+        </div>
+         <div class="col-md-3">
+            <label>Note</label>
+            <input type="text" class="form-control" value="">
+        </div>
+        <div class="col-md-3">
+            <label>Medicaid #</label>
+            <input type="text" class="form-control" value="">
+        </div>
+        <div class="col-md-3">
+            <label>Medicaid Level (QMB, SLMB, etc)</label>
+            <input type="text" class="form-control" value="">
+        </div>
+        <div class="col-md-3">
+            <label>LIS / Extra Help %</label>
+            <input type="text" class="form-control" value="">
+        </div>
+        <div class="col-md-3">
+            <label>LIS Level</label>
+            <input type="text" class="form-control" value="">
+        </div>
+        <div class="col-md-3">
+            <label>Referral Source</label>
+            <input type="text" class="form-control" value="">
+        </div>
+        <div class="col-md-3">
+            <label>Plan/Year</label>
+            <input type="text" class="form-control" value="">
+        </div>
+        
+      
+    </div>
+</div>
+
+   
+
+
+<!-- Actions: buttons right aligned -->
+<div class="d-flex justify-content-end mt-4">
+    <button class="btn btn-success me-2" id="save">Save</button>
+    <!-- <button class="btn btn-success me-2" id="saveadd">Start Quote</button> -->
+    <a href="#" class="btn btn-primary">Delete</a>
+    
+</div>
+
+</div>
+ <div class="modal fade" id="editPhoneModal" tabindex="-1" role="dialog" aria-labelledby="editPhoneModalLabel">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Edit Phone</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <label>Business Phone</label>
+                                    <input type="text" class="form-control" name="business_phone" placeholder="(xxx) xxx-xxxx"
+                                    value="{{ phone_dict.business.number|default:'' }}">
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Ext.</label>
+                                    <input type="text" name="business_ext" class="form-control"
+                                    value="{{ phone_dict.business.extension|default:'' }}">
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>Home Phone</label>
+                                    <input type="text" class="form-control" name="home_phone" placeholder="(xxx) xxx-xxxx"
+                                    value="{{ phone_dict.home.number|default:'' }}">
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Ext.</label>
+                                    <input type="text" class="form-control" name="home_ext"
+                                    value="{{ phone_dict.home.extension|default:'' }}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <label>Cell Phone</label>
+                                    <input type="text" class="form-control" name="cell_phone" placeholder="(xxx) xxx-xxxx"
+                                    value="{{ phone_dict.cell.number|default:'' }}">
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Ext.</label>
+                                    <input type="text" class="form-control" name="cell_ext"
+                                    value="{{ phone_dict.cell.extension|default:'' }}">
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>Fax</label>
+                                    <input type="text" class="form-control" name="fax_phone" placeholder="(xxx) xxx-xxxx"
+                                    value="{{ phone_dict.fax.number|default:'' }}">
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Ext.</label>
+                                    <input type="text" class="form-control" name="fax_ext"
+                                    value="{{ phone_dict.fax.extension|default:'' }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Save</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- New Address Modal -->
+          <div class="modal fade" id="newAddressModal" tabindex="-1" role="dialog" aria-labelledby="newAddressModalLabel">
+    <div class="modal-dialog" style="max-width: 800px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">New Address</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <!-- Row 1: Address Type -->
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Address Type</label>
+                            <select class="form-control" name="address_type">
+                                <option value="Business" {% if primary_address.address_type == "Business" %}selected{% endif %}>Business</option>
+                                <option value="Home" {% if primary_address.address_type == "Home" %}selected{% endif %}>Home</option>
+                                <option value="Other" {% if primary_address.address_type == "Other" %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Row 2: Primary Address Checkbox -->
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input id="checkbox102" type="checkbox" name="primary_address" {% if primary_address.primary %}checked{% endif %}> Primary Address
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Address Line 1 & 2 -->
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Address 1</label>
+                            <input type="text" name="address1" class="form-control" value="{{ primary_address.address1|default:'' }}">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Address 2</label>
+                            <input type="text" name="address2" class="form-control" value="{{ primary_address.address2|default:'' }}">
+                        </div>
+                    </div>
+
+                    <!-- Row 4: Zip, City, County -->
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>Zip Code</label>
+                            <input type="text" name="zip_code" class="form-control" value="{{ primary_address.zip_code|default:'' }}">
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label>City</label>
+                            <input type="text" name="city" class="form-control" value="{{ primary_address.city|default:'' }}">
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label>County</label>
+                            <select class="form-control" name="county">
+                                <option>-- Select County --</option>
+                                <option value="India" {% if primary_address.county == "India" %}selected{% endif %}>India</option>
+                                <option value="USA" {% if primary_address.county == "USA" %}selected{% endif %}>USA</option>
+                                <option value="Canada" {% if primary_address.county == "Canada" %}selected{% endif %}>Canada</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Row 5: State (required) -->
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>State <span class="text-danger">*</span></label>
+                            <select class="form-control" name="state" required>
+                                <option value="">- select -</option>
+                                <option value="CA" {% if primary_address.state == "CA" %}selected{% endif %}>CA</option>
+                                <option value="NY" {% if primary_address.state == "NY" %}selected{% endif %}>NY</option>
+                                <option value="TX" {% if primary_address.state == "TX" %}selected{% endif %}>TX</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Row 6: Description -->
+                    <div class="row">
+                        <div class="form-group col-sm-12">
+                            <label>Description</label>
+                            <textarea class="form-control" name="description" rows="6" style="min-height: 120px;">{{ primary_address.description|default:'' }}</textarea>
+                        </div>
+                    </div>
+                </form>
+                <p><small>Fields marked with <span class="text-danger">*</span> are required.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+        </div>
+ 
+    

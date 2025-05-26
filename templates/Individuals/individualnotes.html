@@ -1,0 +1,206 @@
+<style>
+    .section-title1 {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: 700;
+        font-size: 2.3rem;
+        color: #222222;
+        letter-spacing: 0.05em;
+        padding-bottom: 8px;
+        text-transform: capitalize;
+        margin: 5px 0 0 0;
+    }
+
+    @media (max-width: 767px) {
+        .agents-panel .panel-heading {
+            display: block !important;
+        }
+
+        .agents-panel .panel-heading h4 {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 0 0 10px 0;
+            width: 100%;
+        }
+
+        .mobile-btn-container {
+            display: flex;
+            justify-content: flex-start;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .agents-panel .panel-heading .btn-group.pull-right {
+            display: none !important;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .mobile-btn-container {
+            display: none !important;
+        }
+    }
+</style>
+
+<div class="tab-pane" id="Notes-individuals">
+    <!-- Main Content Container (renamed to noteMainContent as requested) -->
+    <div id="noteMainContent">
+        <div class="agents-panel panel panel-default">
+            <div class="panel-heading clearfix">
+                <h4 class="section-title1 pull-left" style="margin-top: 5px;">note Activities</h4>
+                
+                <!-- Desktop Buttons -->
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-primary" id="showCreateNoteBtn">
+                        <i class="fa fa-plus"></i> Create new
+                    </button>
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-angle-down"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a href="{% url 'manage_agencies' %}" target="_blank">Mass Update</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Mobile Buttons -->
+                <div class="mobile-btn-container">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" id="showCreateNoteBtnMobile">
+                            <i class="fa fa-plus"></i> Create new
+                        </button>
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-angle-down"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'manage_agencies' %}" target="_blank">Mass Update</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body table-responsive">
+                <table id="example10" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Subject & Note</th>
+                            <th>Last updated</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a href="{% url 'individual_tab' 1 %}">John Doe</a></td>
+                            <td>Senior Select Plans</td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Note Container (Hidden by default) -->
+    <div id="createNewnoteContainer" style="display: none;">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong>New Notes & Attachments</strong>
+                    <button class="btn btn-default btn-sm" id="backToNotesBtn">
+                        <i class="fa fa-arrow-left"></i> Back to Notes
+                    </button>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <form method="post" enctype="multipart/form-data" id="noteForm">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="subject">Subject <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="subject" id="subject" required>
+                        <div class="checkbox" style="margin-top: 5px;">
+                            <label><input type="checkbox" name="pin_note"> Pin Note</label>
+                        </div>
+                        <div class="form-group">
+                            <label>Notes</label>
+                            <textarea class="form-control" name="notes" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Attachments(s)</label>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Filename</th>
+                                    <th>Size</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="3" style="text-align: center;">
+                                        <div class="well text-center" style="margin: 0;">
+                                            <i class="fa fa-download fa-2x"></i><br>
+                                            <strong>Drag and Drop Files Here</strong><br>
+                                            <input type="file" name="attachment" class="form-control" style="margin-top: 10px;">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fa fa-save"></i> Save
+                        </button>
+                        <button type="button" class="btn btn-default" id="cancelNoteBtn">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get elements
+    const showCreateBtn = document.getElementById('showCreateNoteBtn');
+    const showCreateBtnMobile = document.getElementById('showCreateNoteBtnMobile');
+    const backToNotesBtn = document.getElementById('backToNotesBtn');
+    const cancelNoteBtn = document.getElementById('cancelNoteBtn');
+    const noteMainContent = document.getElementById('noteMainContent'); // Changed to noteMainContent
+    const createNoteContainer = document.getElementById('createNewnoteContainer');
+    const noteForm = document.getElementById('noteForm');
+
+    // Function to show create note form
+    function showCreateNote() {
+        noteMainContent.style.display = 'none';
+        createNoteContainer.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Function to show notes list
+    function showNotesList() {
+        createNoteContainer.style.display = 'none';
+        noteMainContent.style.display = 'block';
+        noteForm.reset();
+    }
+
+    // Event listeners
+    showCreateBtn.addEventListener('click', showCreateNote);
+    showCreateBtnMobile.addEventListener('click', showCreateNote);
+    backToNotesBtn.addEventListener('click', showNotesList);
+    cancelNoteBtn.addEventListener('click', showNotesList);
+
+    // Form submission
+    noteForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        // Add your form submission logic here
+        showNotesList();
+        alert('Note saved successfully!');
+        // location.reload(); // Uncomment if you want to reload after save
+    });
+});
+</script>

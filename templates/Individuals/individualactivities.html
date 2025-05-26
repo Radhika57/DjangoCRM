@@ -1,0 +1,300 @@
+<style>
+    .section-title1 {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: 700;
+        font-size: 2.3rem;
+        color: #222222;
+        letter-spacing: 0.05em;
+        padding-bottom: 8px;
+        text-transform: capitalize;
+        margin: 5px 0 0 0; /* top margin 5px */
+    }
+    .dropdown-menu li a {
+        font-size: 1.5rem;
+    }
+
+    @media (max-width: 767px) {
+        /* Make panel heading a flex container on mobile only */
+        .agents-panel .panel-heading {
+            display: block !important;
+        }
+        
+
+        /* Ensure heading text doesn't wrap and shrinks if needed */
+        .agents-panel .panel-heading h4 {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 0 0 10px 0;
+            width: 100%;
+        }
+
+        /* Mobile button container */
+        .mobile-btn-container {
+            display: flex;
+            justify-content: flex-start;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* Hide desktop buttons in mobile */
+        .agents-panel .panel-heading .btn-group.pull-right {
+            display: none !important;
+        }
+    }
+
+    @media (min-width: 768px) {
+        /* Hide mobile buttons on desktop */
+        .mobile-btn-container {
+            display: none !important;
+        }
+    }
+</style>
+
+<div class="tab-pane" id="Activities-individuals">
+    <!-- Main Activities List Container -->
+    <div id="activityMainContent">
+        <div class="agents-panel panel panel-default">
+            <!-- Panel Heading -->
+            <div class="panel-heading clearfix">
+                <h4 class="section-title1 pull-left" style="margin-top: 5px;">Associated Activities</h4>
+                
+                <!-- Desktop Button Group -->
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-primary" onclick="showCreateNew()">
+                        <i class="fa fa-plus"></i> Create new
+                    </button>
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-angle-down"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a href="{% url 'manage_agencies' %}" target="_blank">Mass Update</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Mobile Button Group (hidden on desktop) -->
+                <div class="mobile-btn-container">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" onclick="showCreateNew()">
+                            <i class="fa fa-plus"></i> Create new
+                        </button>
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-angle-down"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'manage_agencies' %}" target="_blank">Mass Update</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel Body -->
+            <div class="panel-body table-responsive">
+                <table id="example10" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Subject & Note</th>
+                            <th>Association</th>
+                            <th>Due Date</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Follow-up User</th>
+                            <th>Follow-up Team</th>
+                            <th>Last Update</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a href="{% url 'individual_tab' 1 %}">John Doe</a></td>
+                            <td>Senior Select Plans</td>
+                            <td><a href="mailto:john@example.com">john@example.com</a></td>
+                            <td>123-456-7890</td>
+                            <td>Active</td>
+                            <td><a href="{% url 'individual_tab' 2 %}">John Doe</a></td>
+                            <td>Active</td>
+                            <td>2025-12-31</td>
+                        </tr>
+                        <tr>
+                            <td><a href="{% url 'individual_tab' 3 %}">Jane Smith</a></td>
+                            <td>Elite Insurance</td>
+                            <td><a href="mailto:jane@example.com">jane@example.com</a></td>
+                            <td>987-654-3210</td>
+                            <td>Inactive</td>
+                            <td><a href="{% url 'individual_tab' 4 %}">John Doe</a></td>
+                            <td>Active</td>
+                            <td>2025-12-31</td>
+                        </tr>
+                        <tr>
+                            <td><a href="{% url 'individual_tab' 1 %}">Robert Brown</a></td>
+                            <td>Trusted Coverage Group</td>
+                            <td><a href="mailto:robert@example.com">robert@example.com</a></td>
+                            <td>555-555-5555</td>
+                            <td>Pending</td>
+                            <td><a href="{% url 'individual_tab' 1 %}">John Doe</a></td>
+                            <td>Active</td>
+                            <td>2025-12-31</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create New Activity Container (Initially Hidden) -->
+    <div id="createNewactivityContainer" style="display: none;">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong>Activity Details</strong>
+                    <button class="btn btn-default btn-sm" onclick="showNotesMain()">
+                        <i class="fa fa-arrow-left"></i> Back to Activities
+                    </button>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <form method="post" enctype="multipart/form-data" id="activityForm">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="subject">Subject <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="subject" id="subject" required>
+                        
+
+                        <div class="form-group">
+                            <label>Notes</label>
+                            <textarea class="form-control" name="notes" rows="5"></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="status">Status</label>
+                                <select class="form-control" name="status" id="status">
+                                    <option>In Progress</option>
+                                    <option>Completed</option>
+                                    <option>Pending</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="follow_user">Follow-up User</label>
+                                <select class="form-control" name="follow_user" id="follow_user">
+                                    <option>Rohan Dhillon</option>
+                                    <option>John Doe</option>
+                                    <option>Jane Smith</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="follow_team">Follow-up Team</label>
+                                <select class="form-control" name="follow_team" id="follow_team">
+                                    <option>(None)</option>
+                                    <option>Sales</option>
+                                    <option>Support</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><input type="checkbox" name="due_date_check"> Due Date</label>
+                        </div>
+
+                        <h5><strong>Additional Activity Details</strong></h5>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="activity_date">Activity Date <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" name="activity_date" id="activity_date" value="2025-05-11" required>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="priority">Related To</label>
+                                <select class="form-control" name="priority" id="priority">
+                                    <option>yyy</option>
+                                    <option selected></option>
+                                    <option></option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="type">Priority</label>
+                                <select class="form-control" name="type" id="type">
+                                    <option>Low</option>
+                                    <option selected>Medium</option>
+                                    <option>High</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="method">Type</label>
+                                <select class="form-control" name="method" id="method">
+                                    <option>Initial contact</option>
+                                    <option>Follow-up</option>
+                                    <option>Meeting</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="method">Email</label>
+                                <select class="form-control" name="method" id="method">
+                                    <option>Email</option>
+                                    <option>Phone</option>
+                                    <option>In Person</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Attachments(s)</label>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Filename</th>
+                                    <th>Size</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="3" style="text-align: center;">
+                                        <div class="well text-center" style="margin: 0;">
+                                            <i class="fa fa-download fa-2x"></i><br>
+                                            <strong>Drag and Drop Files Here</strong><br>
+                                            <input type="file" name="attachment" class="form-control" style="margin-top: 10px;">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
+                        <button type="button" class="btn btn-default" onclick="showNotesMain()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showCreateNew() {
+    document.getElementById('activityMainContent').style.display = 'none';
+    document.getElementById('createNewactivityContainer').style.display = 'block';
+    window.scrollTo({
+        top: document.getElementById('createNewactivityContainer').offsetTop - 20,
+        behavior: 'smooth'
+    });
+}
+
+function showNotesMain() {
+    document.getElementById('activityMainContent').style.display = 'block';
+    document.getElementById('createNewactivityContainer').style.display = 'none';
+    document.getElementById('activityForm').reset();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('activityForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        // TODO: Add your form submission logic here (AJAX or normal submit)
+        
+        // After success, switch back to main activities and reload
+        showNotesMain();
+        location.reload();
+    });
+});
+</script>
