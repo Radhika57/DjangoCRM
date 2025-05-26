@@ -55,7 +55,7 @@ urlpatterns = [
     
     # Policy
     
-    path('policy/detail/<int:policy_id>/', views.policy_detail, name='policy_detail'),
+    path('policy/detail/<int:policy_id>/', views.policy_tab, name='policy_detail'),
     path('policy/search-policy/', views.search_policy, name='search_policy'),
     path('policy/advanced-policy/', views.advanced_policy, name='advanced_policy'),
     path('policy/saved-policy/', views.saved_policy, name='saved_policy'),
@@ -67,6 +67,4 @@ urlpatterns = [
     path('Individuals/detail/<int:individual_id>/', views.individual_tab, name='individual_tab'),
 
   
-    path('policy/payment-report/', views.payment_report, name='payment_report'),
-    path('policy/payment-report1/', views.payment_report1, name='payment_report1'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
