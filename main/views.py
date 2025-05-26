@@ -593,8 +593,9 @@ def agent_column_settings(request):
 def agency_client(request):
     return render(request, 'agent/agencyclient.html')
 
-def policy_detail(request, policy_id):
-    return render(request, 'policy/policydetail.html', {'policy_id': policy_id})
+def policy_tab(request, policy_id):
+    
+    return render(request, 'policy/policytab.html', {'policy_id': policy_id})
 def agency_activity(request):
     return render(request, 'agent/agencyactivity.html')
 def agency_note(request):
@@ -609,11 +610,21 @@ def advanced_policy(request):
 
 def saved_policy(request):
     return render(request, 'policy/savedpolicy.html')
+def senior_select(request):
+    return render(request, 'agency/seniorselect.html')
 
-def payment_report(request):
-    return render(request, 'policy/paymentreport.html')
-def payment_report1(request):
-    return render(request, 'policy/paymentreport1.html')
+def search_individuals(request):
+    return render(request, 'Individuals/searchindividuals.html')
+
+def advanced_individuals(request):
+    return render(request, 'Individuals/advancedindividuals.html')
+
+def saved_individuals(request):
+    return render(request, 'Individuals/savedindividuals.html')
+
+def individual_tab(request, individual_id):
+    return render(request, 'Individuals/individualtab.html', {'individual_id': individual_id})
+
 
 
 

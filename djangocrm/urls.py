@@ -33,6 +33,7 @@ urlpatterns = [
     path('agency/manage-agencies/', views.manage_agencies, name='manage_agencies'),
     path('save-agency/', views.save_agency, name='save_agency'),
     path('agency/<int:agency_id>/edit-details/', views.edit_agency_details, name='edit_agency_details'),
+
     
     
     # Agents
@@ -58,6 +59,14 @@ urlpatterns = [
     path('policy/search-policy/', views.search_policy, name='search_policy'),
     path('policy/advanced-policy/', views.advanced_policy, name='advanced_policy'),
     path('policy/saved-policy/', views.saved_policy, name='saved_policy'),
+   
+
+    path('Individuals/search-individuals/', views.search_individuals, name='search_individuals'),
+    path('Individuals/advanced-individuals/', views.advanced_individuals, name='advanced_individuals'),
+    path('Individuals/saved-individuals/', views.saved_individuals, name='saved_individuals'),
+    path('Individuals/detail/<int:individual_id>/', views.individual_tab, name='individual_tab'),
+
+  
     path('policy/payment-report/', views.payment_report, name='payment_report'),
     path('policy/payment-report1/', views.payment_report1, name='payment_report1'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
