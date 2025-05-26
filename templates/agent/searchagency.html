@@ -1,6 +1,6 @@
 {% extends "dashboard/base.html" %}
 {% load static %}
-
+{% load phone_filters %}
 {% block main-content %}
 <style>
     
@@ -131,11 +131,12 @@
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newAgentModal">
                     New Agent
                 </button>
+                {% include "agent/addagent_modal.html" %}
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-angle-down"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-left">
-                    <li><a href="{% url 'manage_agencies' %}" target="_blank">Manage Agencies</a></li>
+                    <li><a href="{% url 'manage_agencies' %}">Manage Agencies</a></li>
                 </ul>
             </div>
         </div>
@@ -146,11 +147,21 @@
             <li><a href="{% url 'advanced_search' %}">Advanced Search</a></li>
             <li><a href="{% url 'saved_searches' %}">Saved Searches</a></li>
         </ul>
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>{{message}}</strong>
+        </div>
+        {% endfor %}
+        {% endif %}
 
         <!-- Main Content Panel -->
         <div class="agents-panel">
             <div class="panel-heading clearfix">
-                <strong class="pull-left">Agencies</strong>
+                <strong class="pull-left">Agents</strong>
                 <div class="dropdown pull-right">
                     <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="agentsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-cog"></i> <i class="fa fa-angle-down"></i>
@@ -175,146 +186,22 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for i in agents %}
                         <tr>
-                            <td><a href="{% url 'agency_detail' 1 %}">John Doe</a></td>
-                            <td>Senior Select Plans</td>
-                            <td><a href="mailto:john@example.com">john@example.com</a></td>
-                            <td>123-456-7890</td>
-                            <td>Active</td>
-                            <td>2025-12-31</td>
+                            <td><a href="{% url "agent_detail" i.id %}">{{i.first_name}} {{i.last_name}}</a></td>
+                            <td>{{i.agency.name}}</td>
+                            <td><a href="mailto:{{i.email}}">{{i.email}}</a></td>
+                            <td>{{i.business_phone|format_phone}}</td>
+                            <td>{{i.status}}</td>
+                            <td>{% if i.agent_eo.all %}
+                                {{ i.agent_eo.all.0.eo_expiration_date|date:"Y-m-d" }}
+                            {% else %}
+                                No E&O
+                            {% endif %}</td>
                         </tr>
-                        <tr>
-                            <td><a href="{% url 'agency_detail' 2 %}">Jane Smith</a></td>
-                            <td>Elite Insurance</td>
-                            <td><a href="mailto:jane@example.com">jane@example.com</a></td>
-                            <td>987-654-3210</td>
-                            <td>Inactive</td>
-                            <td>2024-10-15</td>
-                        </tr>
-                        <tr>
-                            <td><a href="{% url 'agency_detail' 3 %}">Robert Brown</a></td>
-                            <td>Trusted Coverage Group</td>
-                            <td><a href="mailto:robert@example.com">robert@example.com</a></td>
-                            <td>555-555-5555</td>
-                            <td>Pending</td>
-                            <td>2026-01-20</td>
-                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- New Agent Modal -->
-    <div class="modal fade" id="newAgentModal" tabindex="-1" role="dialog" aria-labelledby="newAgentModalLabel">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <form id="agentForm">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title" id="newAgentModalLabel"><strong>New Agent</strong></h4>
-                        <p style="color: #a94442; margin-top: 10px;"><em>Please review the required fields.</em></p>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-6">
-                                <div class="form-group">
-                                    <label>First Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="first_name" required>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-6">
-                                <div class="form-group">
-                                    <label>Last Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="last_name" required>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-4">
-                                <div class="form-group">
-                                    <label>Business Phone</label>
-                                    <input type="tel" class="form-control" name="business_phone">
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-2">
-                                <div class="form-group">
-                                    <label>Ext.</label>
-                                    <input type="text" class="form-control" name="extension">
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-6">
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <input type="email" class="form-control" name="email">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-4">
-                                <div class="form-group">
-                                    <label>Type</label>
-                                    <select class="form-control" name="agent_type">
-                                        <option value="">Select Type</option>
-                                        <option value="captive">Captive</option>
-                                        <option value="independent">Independent</option>
-                                        <option value="broker">Broker</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-4">
-                                <div class="form-group">
-                                    <label>Status</label>
-                                    <select class="form-control" name="status">
-                                        <option value="">Select Status</option>
-                                        <option value="active">Active</option>
-                                        <option value="inactive">Inactive</option>
-                                        <option value="pending">Pending</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-4">
-                                <div class="form-group">
-                                    <label>NPN</label>
-                                    <input type="text" class="form-control" name="npn">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-6">
-                                <div class="form-group">
-                                    <label>Agency <span class="text-danger">*</span></label>
-                                    <select class="form-control" name="agency" required>
-                                        <option value="">Select Agency</option>
-                                        <option value="1">Senior Select Plans</option>
-                                        <option value="2">Other Agency</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-6">
-                                <div class="form-group">
-                                    <label>Agent Number</label>
-                                    <input type="text" class="form-control" name="agent_number">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <p class="text-muted">Fields marked with an <span class="text-danger">*</span> are required.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">Save</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -411,15 +298,6 @@ $(window).on('load', function() {
             console.log('Column '+i+':', this.visible());
         });
     };
-
-
-    // Form submission handler
-    $('#agentForm').on('submit', function(e) {
-        e.preventDefault();
-        $('#newAgentModal').modal('hide');
-        alert('Agent saved successfully!');
-        this.reset();
-    });
 });
 </script>
 {% endblock %}

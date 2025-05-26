@@ -4,7 +4,7 @@
             <div class="panel-heading">
                 <div class="row align-items-center">
                     <div class="col-sm-6 d-flex align-items-center">
-                        <strong>Agencies for Renee Lopes</strong>
+                        <strong>Agencies for {{agent.first_name}} {{agent.last_name}}</strong>
                     </div>
                     <div class="col-sm-6 text-right">
                         <div class="btn-group">
@@ -26,10 +26,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for agny in agent_agencies %}
                                     <tr>
-                                        <td>John Doe</td>
-                                        <td>123456</td>
+                                        <td>{{agny.agency.name}}</td>
+                                        <td>{{agny.agent_number}}</td>
                                     </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -45,7 +47,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <strong>Agencies for Renee Lopes</strong>
+                <strong>Agencies for {{agent.first_name}} {{agent.last_name}}</strong>
                 <button class="btn btn-default btn-sm" id="backToAgenciesBtn">
                     <i class="fa fa-arrow-left"></i> Back to Agencies
                 </button>
@@ -53,26 +55,30 @@
         </div>
 
         <div class="panel-body">
-            <form id="agencyForm">
+            <form id="agencyForm" method="post" >
+                {% csrf_token %}
                 <!-- Agency Info Section -->
                 <div class="agent-info-container">
                     <div class="form-group-row">
                         <div class="form-group-col">
                             <label>Agency</label>
-                            <select class="form-control">
-                                <option>Senior Select plan</option>
-                            </select>
+                            <select class="form-control" name="agency" required>
+                                    <option value="">Select Agency</option>
+                                    {% for agency in agencies %}
+                                        <option value="{{ agency.id }}">{{ agency.name }}</option>
+                                    {% endfor %}
+                                </select>
                         </div>
 
                         <div class="form-group-col">
                             <label>Agent Number</label>
-                            <input type="number" class="form-control">
+                            <input type="number" class="form-control" name="agent_number">
                         </div>
 
                         <div class="form-group-col">
                             <div class="checkbox" style="margin-top: 0;">
-                                <input type="checkbox" id="eo_required" name="eo_required" {% if eo_required %}checked{% endif %}>
-                                <label for="eo_required">Active</label>
+                                <input type="checkbox" id="active" name="active">
+                                <label for="active">Active</label>
                             </div>
                         </div>
                     </div>
@@ -112,16 +118,6 @@ document.addEventListener('DOMContentLoaded', function () {
         createAgenciesContainer.style.display = 'none';
         agenciesMainContent.style.display = 'block';
         agencyForm.reset();
-    });
-
-    // Submit form
-    agencyForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        alert('Agency saved successfully!');
-        createAgenciesContainer.style.display = 'none';
-        agenciesMainContent.style.display = 'block';
-        agencyForm.reset();
-        location.reload();
     });
 });
 </script>

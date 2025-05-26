@@ -5,7 +5,7 @@
             <div class="panel-heading">
                 <div class="row align-items-center">
                     <div class="col-sm-6 d-flex align-items-center">
-                        <strong>Licenses for Alyson Gross</strong>
+                        <strong>Licenses for {{agent.first_name}} {{agent.last_name}}</strong>
                     </div>
                     <div class="col-sm-6 text-right">
                         <div class="btn-group">
@@ -52,31 +52,22 @@
                             </tfoot>
 
                             <tbody>
-                                <tr>
-                                    
-                                    <td>John Doe</td>
-                                    <td>2023-01-15</td>
-                                    <td>2024-01-15</td>
-                                    <td>ABC Insurance</td>
-                                    <td>Health</td>
-                                    <td>Gold Plan</td>
+                                {% for i in license %}
+                                <tr>  
+                                    <td>{{i.license_number}}</td>
+                                    <td>{{i.state}}</td>
+                                    <td>{% if i.license_file %}
+                                        <a href="{{ i.license_file.url }}" download>
+                                            <img src="{{ i.license_file.url }}" alt="Attachment" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                        </a>
+                                    {% else %}
+                                        No File
+                                    {% endif %}</td>
+                                    <td>{{i.effective_date|date:'y-m-d'}}</td>
+                                    <td>{{i.expiration_date|date:'y-m-d'}}</td>
+                                    <td>{{ i.resident_state|yesno:"Yes,No" }}</td>
                                 </tr>
-                                <tr>
-                                    <td>Jane Smith</td>
-                                    <td>2023-03-20</td>
-                                    <td>2024-03-20</td>
-                                    <td>XYZ Insurance</td>
-                                    <td>Life</td>
-                                    <td>Silver Plan</td>
-                                </tr>
-                                <tr>
-                                    <td>Robert Brown</td>
-                                    <td>2022-11-05</td>
-                                    <td>2023-11-05</td>
-                                    <td>DEF Insurance</td>
-                                    <td>Auto</td>
-                                    <td>Platinum Plan</td>
-                                </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
 
@@ -95,26 +86,32 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <strong>License for Alyson Gross</strong>
+                    <strong>License for {{agent.first_name}} {{agent.last_name}}</strong>
                     <button id="backToLicensesBtn" class="btn btn-default btn-sm">
                         <i class="fa fa-arrow-left"></i> Back to Licenses
                     </button>
                 </div>
             </div>
-
             <div class="panel-body">
-                <form id="licensesForm">
+                <form method="post" enctype="multipart/form-data" id="licensesForm">
+                    {% csrf_token %}
                     <!-- License Form Fields -->
                     <div class="agent-info-container">
                         <h1 class="section-title">License Information</h1>
                         <div class="form-group-row">
-                            <div class="form-group col-sm-4">
+                            <div class="form-group col-sm-3">
                                 <label>License Number</label>
                                 <input type="text" class="form-control" name="license_number">
                             </div>
-                            <div class="form-group col-sm-4">
+                            <div class="form-group col-sm-3">
                                 <label>State</label>
                                 <input type="text" class="form-control" name="state">
+                            </div>
+                            <div class="form-group col-sm-2">
+                                <div class="checkbox" style="margin-top: 0;">
+                                    <input type="checkbox" id="resident_state" name="resident_state">
+                                    <label for="resident_state">Resident State</label>
+                                 </div>
                             </div>
                             <div class="form-group col-sm-4">
                                 <label>License File</label>
@@ -136,20 +133,20 @@
                             <h4>Primary Market</h4>
                             <div class="checkbox-container">
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="market1" name="market[]" value="health">
+                                    <input type="checkbox" id="market1" name="qualifications[]" value="Health">
                                     <label for="market1">Health</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="market2" name="market[]" value="nsa_supp">
-                                    <label for="market2">NSA Supp</label>
+                                    <input type="checkbox" id="market2" name="qualifications[]" value="Other">
+                                    <label for="market2">Other</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="market3" name="market[]" value="life">
-                                    <label for="market3">Life</label>
+                                    <input type="checkbox" id="market3" name="qualifications[]" value="Annuties">
+                                    <label for="market3">Annuties</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="market4" name="market[]" value="pc">
-                                    <label for="market4">P&C</label>
+                                    <input type="checkbox" id="market4" name="qualifications[]" value="Life">
+                                    <label for="market4">Life</label>
                                 </div>
                             </div>
                         </div>
@@ -157,13 +154,13 @@
                         <div class="multi-checkbox-section" style="flex: 1 1 300px;">
                             <h4>Notes</h4>
                             <div class="form-group">
-                                <textarea class="form-control" name="notes" style="min-height: 120px; padding: 10px; resize: vertical;" placeholder="Enter notes here..."></textarea>
+                                <textarea class="form-control" name="license_notes" style="min-height: 120px; padding: 10px; resize: vertical;" placeholder="Enter notes here..."></textarea>
                             </div>
                         </div>
                     </div>
 
                     <!-- Custom Fields -->
-                     <div class="custom-updated-info custom-fields-panel">
+                     {% comment %} <div class="custom-updated-info custom-fields-panel">
                     <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
                         <h1 class="section-title" style="margin: 0;">Custom Fields</h1>
                         <div class="custom-fields-edit">
@@ -178,7 +175,7 @@
                         <div style="font-size: 14px;">Use custom fields to track and report on data unique to your agency.</div>
                         <a href="#" style="font-size: 14px;">How do I use custom fields?</a>
                     </div>
-                </div>
+                </div> {% endcomment %}
 
            
 
@@ -214,16 +211,6 @@ document.addEventListener('DOMContentLoaded', function () {
         createLicensesContainer.style.display = 'none';  // Hide create license form
         licensesMainContent.style.display = 'block';  // Show licenses main content
         licensesForm.reset();  // Reset form
-    });
-
-    // Submit form
-    licensesForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        alert('License saved successfully!');
-        createLicensesContainer.style.display = 'none';  // Hide create license form
-        licensesMainContent.style.display = 'block';  // Show licenses main content
-        licensesForm.reset();  // Reset form
-        location.reload();  // Reload page if needed
     });
 });
 </script>

@@ -48,7 +48,8 @@
                                     <td>{{ act.activity_type }}</td>
                                     <td>{{ act.method }}</td>
                                     <td>
-                                        {% if act.attachment.url %}
+                                        
+                                        {% if act.attachment %}
                                             <a href="{{ act.attachment.url }}" download>
                                                 <img src="{{ act.attachment.url }}" alt="Attachment" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
                                             </a>
@@ -85,7 +86,7 @@
                             <!-- Subject Section -->
                             <div class="form-group">
                                 <label><strong>Subject *</strong></label>
-                                <input type="text" class="form-control" name="subject" placeholder="Enter subject">
+                                <input type="text" class="form-control" name="subject" placeholder="Enter subject" required>
                             </div>
                             
                             <!-- Notes Section -->
@@ -147,7 +148,7 @@
                                 <div class="col-md-4 col-sm-6">
                                     <div class="form-group">
                                         <label><strong>Activity Date *</strong></label>
-                                        <input type="date" class="form-control" name="activity_date">
+                                        <input type="date" class="form-control" name="activity_date" required>
                                     </div>
                                     <div class="form-group">
                                         <label><strong>Priority</strong></label>
@@ -188,26 +189,8 @@
                             
                             <!-- Attachments Section -->
                             <div class="attachment-block">
-                                <label><b>📎Attachment(s)</b></label>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr><th>Filename</th><th>Size</th><th>Status</th></tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td colspan="3" class="text-center" style="padding: 40px; background: #f8f9fa;">Drag files here.</td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="3">
-                                                    <input type="file" class="form-control" name="attachment" id="attachment" />
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
+                                <label><b>📎Attachment</b></label>
+                                <input type="file" class="form-control" name="attachment" id="attachment" />
                             </div>
                             
                             <!-- Action Buttons -->

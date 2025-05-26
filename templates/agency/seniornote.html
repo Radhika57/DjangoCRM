@@ -1,10 +1,10 @@
-<div id=#note-senior class="tab-pane active">
+<div id="note-senior" class="tab-pane fade">
               
     <!-- Main Notes Content (shown by default) -->
     <div id="notesMainContent">
         <div class="panel panel-default">
             <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center;">
-                <strong>Notes & Attachments for Alyson Gross</strong>
+                <strong>Notes & Attachments for {{ agency.name }}</strong>
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary" id="showCreateNoteBtn">
                         <i class="fa fa-plus"></i> Create new
@@ -13,60 +13,47 @@
             </div>
             
             <div class="panel-body">
-                {% if activities %}
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Subject</th>
-                                <th>Notes</th>
-                                <th>Status</th>
-                                <th>FollowUp User</th>
-                                <th>FollowUp Team</th>
-                                <th>Due Date</th>
-                                <th>Activity Date</th>
-                                <th>Priority</th>
-                                <th>Activity Type</th>
-                                <th>Method</th>
-                                <th>Attachment</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for act in activities %}
-                            <tr>
-                                <td>{{ act.subject }}</td>
-                                <td>{{ act.notes }}</td>
-                                <td>{{ act.status }}</td>
-                                <td>{{ act.follow_up_user }}</td>
-                                <td>{{ act.follow_up_team }}</td>
-                                <td>{{ act.due_date }}</td>
-                                <td>{{ act.activity_date }}</td>
-                                <td>{{ act.priority }}</td>
-                                <td>{{ act.activity_type }}</td>
-                                <td>{{ act.method }}</td>
-                                <td>
-                                    {% if act.attachment.url %}
-                                        <a href="{{ act.attachment.url }}" download>
-                                            <img src="{{ act.attachment.url }}" alt="Attachment" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
-                                        </a>
-                                    {% else %}
-                                        No File
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                <div id="emptyNotesState" class="text-center">
+                    {% if notess %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Notes</th>
+                                    <th>Attachment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for note in notess %}
+                                <tr>
+                                    <td>{{ note.subject }}</td>
+                                    <td>{{ note.notes }}</td>
+                                    <td>
+                                        {% if note.attachment %}
+                                            <a href="{{ note.attachment.url }}" download>
+                                                <img src="{{ note.attachment.url }}" alt="Attachment" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                            </a>
+                                        {% else %}
+                                            No File
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    
+                    {% else %}
+                    <div class="well" style="padding: 40px;">
+                        <h4>There are no "Notes & Attachments for AARP"</h4>
+                        <p class="text-muted">
+                            This data is not available because it hasn't been created yet or you don't have permission.
+                        </p>
+                    </div>
+                    {% endif %}
                 </div>
-                {% else %}
-                <div class="well text-center" style="padding: 40px;">
-                    <i class="fa fa-tasks fa-3x text-muted mb-3"></i>
-                    <h4>There are no "Notes & Attachments for Alyson Gross"</h4>
-                    <p class="text-muted">
-                        This data is not available because it hasn't been created yet or you don't have permission.
-                    </p>
-                </div>
-                {% endif %}
             </div>
         </div>
     </div>
@@ -89,36 +76,21 @@
                     <div class="form-group">
                         <label for="subject">Subject <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" name="subject" id="subject" required>
-                        <div class="checkbox" style="margin-top: 5px;">
-                            <label><input type="checkbox" name="pin_note"> Pin Note</label>
+                        <div class="checkbox checkbox-primary">
+                            <input id="checkbox10" type="checkbox" name="pin_note">
+                            <label for="checkbox10">
+                                Pin Note
+                            </label>
                         </div>
+
                         <div class="form-group">
                             <label>Notes</label>
                             <textarea class="form-control" name="notes" rows="5"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Attachments(s)</label>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Filename</th>
-                                    <th>Size</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="3" style="text-align: center;">
-                                        <div class="well text-center" style="margin: 0;">
-                                            <i class="fa fa-download fa-2x"></i><br>
-                                            <strong>Drag and Drop Files Here</strong><br>
-                                            <input type="file" name="attachment" class="form-control" style="margin-top: 10px;">
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <label>Attachment</label>
+                        <input type="file" name="attachment" class="form-control" style="margin-top: 10px;">
                     </div>
 
                     <div class="text-right">
@@ -166,30 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Attach event listeners to back and cancel buttons
     backToNotesBtn.addEventListener('click', showNotesList);
     cancelNoteBtn.addEventListener('click', showNotesList);
-
-    // Form submission handler
-    noteForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Here you would typically submit the form via AJAX or let it submit normally
-        // For demonstration, we'll just show the notes list and refresh
-        showNotesList();
-        
-        // In a real implementation, you might use:
-        // fetch(noteForm.action, {
-        //     method: 'POST',
-        //     body: new FormData(noteForm)
-        // }).then(response => {
-        //     if(response.ok) {
-        //         showNotesList();
-        //         location.reload(); // Or update the table dynamically
-        //     }
-        // });
-        
-        // For now, we'll just simulate success
-        alert('Note saved successfully!');
-        location.reload(); // Refresh the page to show new note
-    });
+    
 });
 </script>
              

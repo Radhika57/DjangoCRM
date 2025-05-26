@@ -1,3 +1,4 @@
+{% load phone_filters %}
 <div id="detail" class="tab-pane active">
     <form action="" method="POST">
         {% csrf_token %}
@@ -66,250 +67,159 @@
             </div>
         </div>
         
-        <!-- Contact Info -->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-            <h3 class="panel-title">Contact Info</h3>
-            <div class="pull-right">
-                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editPhoneModal">
-                <i class="glyphicon glyphicon-edit"></i> Edit Phone
-                </button>
-                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#newAddressModal">
-                <i class="glyphicon glyphicon-plus"></i> New Address
-                </button>
-            </div>
-            <div class="clearfix"></div>
-            </div>
-            <div class="panel-body text-center">
-                {% if carrier_phones %}
-                <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Type</th>
-                            <th>Number</th>
-                            <th>Extension</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for phone in carrier_phones %}
-                        <tr>
-                            <td>{{ phone.phone_type }}</td>
-                            <td>{{ phone.number }}</td>
-                            <td>{{ phone.extension }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <!-- Contact Info -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                <h3 class="panel-title">Contact Info</h3>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editPhoneModal">
+                    <i class="glyphicon glyphicon-edit"></i> Edit Phone
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#newAddressModal">
+                    <i class="glyphicon glyphicon-plus"></i> New Address
+                    </button>
                 </div>
-                {% endif %}
-            
-                {% if addresses %}
-                <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Type</th>
-                            <th>Primary</th>
-                            <th>Address 1</th>
-                            <th>Address 2</th>
-                            <th>City</th>
-                            <th>State</th>
-                            <th>Zip</th>
-                            <th>County</th>
-                            <th>Description</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for address in addresses %}
-                        <tr>
-                            <td>{{ address.address_type }}</td>
-                            <td>{{ address.primary|yesno:"Yes,No" }}</td>
-                            <td>{{ address.address1 }}</td>
-                            <td>{{ address.address2 }}</td>
-                            <td>{{ address.city }}</td>
-                            <td>{{ address.state }}</td>
-                            <td>{{ address.zip_code }}</td>
-                            <td>{{ address.county }}</td>
-                            <td>{{ address.description }}</td>
-                            <td>
-                                <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#editAddressModal{{ address.id }}">
-                                    <i class="fa fa-pencil"></i>
+                <div class="clearfix"></div>
+                </div>
+                {% if carrier_phones or addresses %}
+                <div class="form-group-row">
+                <!-- Business Phone -->
+                {% for phone in carrier_phones %}
+                <div class="form-group-col position-relative">
+                    <label class="d-flex justify-content-between align-items-center mb-1">
+                        <span>{{phone.phone_type}}</span>
+                        <span class="btn-group">
+                            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                                data-target="#editPhoneModal"><i class="fa fa-pencil"></i></button>
+                            <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="#">Make a Call</a></li>
+                            </ul>
+                        </span>
+                    </label>
+                    <p>{{phone.number|format_phone}}</p>
+                    {% comment %} <input type="text" class="form-control" value="{{phone.number}}"> {% endcomment %}
+                </div>
+                {% endfor %}
+                
+                </div>
+
+                <!-- Row 3: Home + Fax -->
+                <div class="form-group-row">
+                    <!-- Home -->
+                    {% for add in addresses %}
+                    <div class="form-group-col position-relative">
+                        <label class="d-flex justify-content-between align-items-center mb-1">
+                            <span>
+                                {{ add.address_type }}
+                                {% if add.primary %}
+                                    <span class="badge badge-success">Primary</span>
+                                {% endif %}
+                            </span>
+                            <span class="btn-group">
+                                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                                    data-target="#newAddressModal"><i class="fa fa-pencil"></i></button>
+                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
                                 </button>
-                                <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteAddressModal{{ address.id }}">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-            
-                        {% include "carrier/edit_address.html" with address=address %}
-                        {% include "carrier/deleteaddress.html" with address=address %}
-                        {% endfor %}
-                    </tbody>
-                </table>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li><a href="#">Get directions</a></li>
+                                    <li><a href="#">Map a Location</a></li>
+                                </ul>
+                            </span>
+                        </label>
+                        <p>{{ add.address1 }} {{ add.address2 }} <br> {{ add.city }} {{ add.state }} <br> {{ add.zip_code }}</p>
+                    </div>
+                    {% endfor %}
+
+
+                    <!-- Row 4: Checkbox -->
+                    <div class="form-group-row">
+                        <div class="form-group-col">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input"> Opt Out of Emails
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 </div>
                 {% else %}
-                <div class="alert alert-info">
-                    This record has no addresses or phone numbers yet.<br>
-                    <small>Add and track this contact information here.</small>
-                </div>
+                    <div class="alert alert-info">
+                        This record has no addresses or phone numbers yet.<br>
+                        <small>Add and track this contact information here.</small>
+                    </div>
                 {% endif %}
-            </div>
             
-        </div>
-
-          
           <!-- Edit Phone Modal -->
         <div class="modal fade" id="editPhoneModal" tabindex="-1" role="dialog" aria-labelledby="editPhoneModalLabel">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Edit Phone</h4>
-            </div>
-            <div class="modal-body">
-                
-                <div class="form-group row">
-                    <div class="col-sm-4">
-                    <label>Business Phone</label>
-                    <input type="text" class="form-control" name="business_phone" placeholder="(xxx) xxx-xxxx"
-                    value="{{ phone_dict.business.number|default:'' }}">
-                    </div>
-                    <div class="col-sm-2">
-                    <label>Ext.</label>
-                    <input type="text" name="business_ext" class="form-control"
-                    value="{{ phone_dict.business.extension|default:'' }}">
-                    </div>
-                    <div class="col-sm-4">
-                    <label>Home Phone</label>
-                    <input type="text" class="form-control" name="home_phone" placeholder="(xxx) xxx-xxxx"
-                    value="{{ phone_dict.home.number|default:'' }}">
-                    </div>
-                    <div class="col-sm-2">
-                    <label>Ext.</label>
-                    <input type="text" class="form-control" name="home_ext"
-                    value="{{ phone_dict.home.extension|default:'' }}">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-sm-4">
-                    <label>Cell Phone</label>
-                    <input type="text" class="form-control" name="cell_phone" placeholder="(xxx) xxx-xxxx"
-                    value="{{ phone_dict.cell.number|default:'' }}">
-                    </div>
-                    <div class="col-sm-2">
-                    <label>Ext.</label>
-                    <input type="text" class="form-control" name="cell_ext"
-                    value="{{ phone_dict.cell.extension|default:'' }}">
-                    </div>
-                    <div class="col-sm-4">
-                    <label>Fax</label>
-                    <input type="text" class="form-control" name="fax_phone" placeholder="(xxx) xxx-xxxx"
-                    value="{{ phone_dict.fax.number|default:'' }}">
-                    </div>
-                    <div class="col-sm-2">
-                    <label>Ext.</label>
-                    <input type="text" class="form-control" name="fax_ext"
-                    value="{{ phone_dict.fax.extension|default:'' }}">
-                    </div>
-                </div>
-                
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Save</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
-            </div>
-        </div>
-        </div>
-          
-          <!-- New Address Modal -->
-        <div class="modal fade" id="newAddressModal" tabindex="-1" role="dialog" aria-labelledby="newAddressModalLabel">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">New Address</h4>
-            </div>
-            <div class="modal-body">
-                
-                <div class="form-group">
-                    <label>Address Type</label>
-                    <select class="form-control" name="address_type">
-                        <option value="Business" {% if primary_address.address_type == "Business" %}selected{% endif %}>Business</option>
-                        <option value="Home" {% if primary_address.address_type == "Home" %}selected{% endif %}>Home</option>
-                        <option value="Other" {% if primary_address.address_type == "Other" %}selected{% endif %}>Other</option>
-                    
-                    </select>
-                </div>
-                <div class="checkbox checkbox-primary">
-                    <input id="checkbox102" type="checkbox" name="primary_address"  {% if primary_address.primary %}checked{% endif %}>
-                    <label for="checkbox102">
-                        Primary Address
-                    </label>
-                </div>
-                   
-                <div class="form-group row">
-                    <div class="col-sm-6">
-                    <label>Address 1</label>
-                    <input type="text" name="address1" class="form-control" value="{{ primary_address.address1|default:'' }}">
-                    </div>
-                    <div class="col-sm-6">
-                    <label>Address 2</label>
-                    <input type="text" name="address2" class="form-control" value="{{ primary_address.address2|default:'' }}">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Edit Phone</h4>
+                        </div>
+                        <div class="modal-body">
+                            
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                <label>Business Phone</label>
+                                <input type="text" class="form-control" name="business_phone" placeholder="(xxx) xxx-xxxx"
+                                value="{{ phone_dict.business.number|format_phone|default:'' }}">
+                                </div>
+                                <div class="col-sm-2">
+                                <label>Ext.</label>
+                                <input type="text" name="business_ext" class="form-control"
+                                value="{{ phone_dict.business.extension|format_phone|default:'' }}">
+                                </div>
+                                <div class="col-sm-4">
+                                <label>Home Phone</label>
+                                <input type="text" class="form-control" name="home_phone" placeholder="(xxx) xxx-xxxx"
+                                value="{{ phone_dict.home.number|format_phone|default:'' }}">
+                                </div>
+                                <div class="col-sm-2">
+                                <label>Ext.</label>
+                                <input type="text" class="form-control" name="home_ext"
+                                value="{{ phone_dict.home.extension|format_phone|default:'' }}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                <label>Cell Phone</label>
+                                <input type="text" class="form-control" name="cell_phone" placeholder="(xxx) xxx-xxxx"
+                                value="{{ phone_dict.cell.number|default:'' }}">
+                                </div>
+                                <div class="col-sm-2">
+                                <label>Ext.</label>
+                                <input type="text" class="form-control" name="cell_ext"
+                                value="{{ phone_dict.cell.extension|default:'' }}">
+                                </div>
+                                <div class="col-sm-4">
+                                <label>Fax</label>
+                                <input type="text" class="form-control" name="fax_phone" placeholder="(xxx) xxx-xxxx"
+                                value="{{ phone_dict.fax.number|default:'' }}">
+                                </div>
+                                <div class="col-sm-2">
+                                <label>Ext.</label>
+                                <input type="text" class="form-control" name="fax_ext"
+                                value="{{ phone_dict.fax.extension|default:'' }}">
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Save</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        </div>
+                        </div>
                     </div>
                 </div>
-        
-                <div class="form-group row">
-                    <div class="col-sm-4">
-                    <label>Zip Code</label>
-                    <input type="text" name="zip_code" class="form-control" value="{{ primary_address.zip_code|default:'' }}">
-                    </div>
-                    <div class="col-sm-4">
-                    <label>City</label>
-                    <input type="text" name="city" class="form-control" value="{{ primary_address.city|default:'' }}">
-                    </div>
-                    <div class="col-sm-4">
-                    <label>State <span style="color:red">*</span></label>
-                    <select class="form-control" name="state">
-                        <option>- select -</option>
-                        <option value="CA" {% if primary_address.state == "CA" %}selected{% endif %}>CA</option>
-                    <option value="NY" {% if primary_address.state == "NY" %}selected{% endif %}>NY</option>
-                    <option value="TX" {% if primary_address.state == "TX" %}selected{% endif %}>TX</option>
-                    </select>
-                    </div>
-                </div>
-        
-                <div class="form-group">
-                    <label>County</label>
-                    <select class="form-control" name="county">
-                    <option>-- Select County --</option>
-                    <option value="India" {% if primary_address.county == "India" %}selected{% endif %}>India</option>
-            <option value="USA" {% if primary_address.county == "USA" %}selected{% endif %}>USA</option>
-            <option value="Canada" {% if primary_address.county == "Canada" %}selected{% endif %}>Canada</option>
-                    </select>
-                </div>
-        
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea class="form-control" name="description">{{ primary_address.description|default:'' }}</textarea>
-                </div>
-        
-                <p><small>Fields marked with <span style="color:red">*</span> are required.</small></p>
-               
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Save</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
-            </div>
-        </div>
-        </div>
-          
         
         <!-- Custom Fields -->
-        <div class="panel panel-default">
+        {% comment %} <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Custom Fields</h3>
             </div>
@@ -324,7 +234,7 @@
 
                
             </div>
-        </div>
+        </div> {% endcomment %}
         
         <!-- Footer Buttons -->
         <div class="well">
@@ -340,3 +250,27 @@
         </div>
     </form>
 </div>
+{% include "carrier/carrier_address.html" %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const phoneFields = document.querySelectorAll('input[name$="_phone"]');
+
+    phoneFields.forEach(function (field) {
+        const warning = document.createElement('small');
+        warning.style.color = 'red';
+        warning.style.display = 'none';
+        warning.textContent = 'Phone number must be exactly 10 digits.';
+        field.parentElement.appendChild(warning);
+
+        field.addEventListener('input', function () {
+            const digitsOnly = field.value.replace(/\D/g, '');
+            if (digitsOnly.length > 0 && digitsOnly.length < 10) {
+                warning.style.display = 'block';
+            } else {
+                warning.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+

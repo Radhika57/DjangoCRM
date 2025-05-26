@@ -16,6 +16,14 @@ STATE_CHOICES = (
     
 )
 
+PRIMARY_MARKET_CHOICES = (
+    ('Med Supp', 'Med Supp'),
+    ('Health', 'Health'),
+    ('Life', 'Life'),
+    ('P&C', 'P&C'),
+    
+)
+
 CARRIER_STATUS_CHOICES = (
     ('active','Active'),
     ('inactive','InActive')
@@ -25,6 +33,30 @@ ADDRESS_TYPE_CHOICES = (
     ('Business','Business'),
     ('Home','Home'),
     ('Other','Other')
+)
+
+TEAM_CHOICES = (
+    ('Team 1','Team 1'),
+    ('Team 2','Team 2'),
+    ('Your Sales Pipeline Team','Your Sales Pipeline Team')
+)
+
+AGENT_TYPE_CHOICES = (
+    ('Active_Contracted','Active_Contracted'),
+    ('Onbording','Onbording'),
+    ('Prospect','Prospect'),
+    ('Termed','Termed'),
+    ('Decreased','Decreased'),
+    ('Retired','Retired')
+)
+
+AGENT_STATUS_CHOICES = (
+    ('Completing Paperwork','Completing Paperwork'),
+    ('Not Contracted','Not Contracted'),
+    ('Not Intrested','Not Intrested'),
+    ('Agency Contracted','Agency Contracted'),
+    ('Carrier Contracted','Carrier Contracted'),
+    ('Contracting W/Carriers','Contracting W/Carriers'),
 )
 
 class Carrier(models.Model):
@@ -44,7 +76,7 @@ class CarrierDetails(models.Model):
 class CarrierPhone(models.Model):
     carrier = models.ForeignKey(Carrier, on_delete=models.CASCADE, related_name='phones')
     phone_type = models.CharField(max_length=50, blank=True, null=True)  
-    number = models.CharField(max_length=20, blank=True, null=True)
+    number = models.CharField(max_length=10, blank=True, null=True)
     extension = models.CharField(max_length=10, blank=True, null=True)
 
 class CarrierAddress(models.Model):
@@ -125,3 +157,165 @@ class CarrierWebsite(models.Model):
 
     def __str__(self):
         return f"{self.carrier.name} - {self.website_name}"
+    
+    
+class Agency(models.Model):
+    name = models.CharField(max_length=255,unique=True)
+    business_phone = models.CharField(max_length=10, blank=True, null=True)
+    ext = models.CharField(max_length=12, blank=True, null=True)
+    
+class AgencyDetails(models.Model):
+    agency_name = models.ForeignKey(Agency,on_delete=models.CASCADE,related_name="agency_detail")
+    federal_tax_number = models.CharField(max_length=50, blank=True, null=True)
+    active = models.BooleanField(default=False)
+    email = models.EmailField(null=True,blank=True)
+    
+class AgencyPhone(models.Model):
+    agency_name = models.ForeignKey(Agency, on_delete=models.CASCADE, related_name='agency_phones')
+    phone_type = models.CharField(max_length=50, blank=True, null=True)  
+    number = models.CharField(max_length=10, blank=True, null=True)
+    extension = models.CharField(max_length=10, blank=True, null=True)
+
+class AgencyAddress(models.Model):
+    agency_name = models.ForeignKey(Agency, on_delete=models.CASCADE, related_name='agency_addresses')
+    address_type = models.CharField(max_length=50, choices=ADDRESS_TYPE_CHOICES,blank=True, null=True)  
+    address1 = models.CharField(max_length=255, blank=True, null=True)
+    address2 = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    state = models.CharField(max_length=100)
+    zip_code = models.CharField(max_length=10, blank=True, null=True)
+    county = models.CharField(max_length=100, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    primary = models.BooleanField(default=False)
+    
+class AgencyNotes(models.Model):
+    agency = models.ForeignKey(Agency, on_delete=models.CASCADE , related_name='agencynotes')
+    pin_note = models.BooleanField(default=False)
+    subject = models.CharField(max_length=255)
+    notes = models.TextField(blank=True)
+    attachment = models.FileField(upload_to='agency_notes_attachments/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    
+class Agent(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100,null=True,blank=True)
+    business_phone = models.CharField(max_length=12,null=True,blank=True)
+    ext = models.CharField(max_length=10,null=True,blank=True)
+    email = models.EmailField(null=True,blank=True)
+    agent_type = models.CharField(max_length=50,null=True,blank=True)
+    status = models.CharField(max_length=50,null=True,blank=True)
+    npn = models.CharField(max_length=100,null=True,blank=True)
+    agency = models.ForeignKey(Agency,on_delete=models.CASCADE,related_name="agent_agency")
+    agent_number = models.CharField(max_length=100,null=True,blank=True)
+    
+class Agent_details(models.Model):
+    agent = models.ForeignKey(Agent,on_delete=models.CASCADE,related_name="agent_detail")
+    middle_name = models.CharField(max_length=100,null=True,blank=True)
+    nick_name = models.CharField(max_length=100,null=True,blank=True)
+    ssn = models.CharField(max_length=100,null=True,blank=True)
+    date_of_birth = models.DateField(null=True,blank=True)
+    classification = models.CharField(max_length=100,null=True,blank=True)
+    secondary_email = models.EmailField(null=True,blank=True)
+    lead_date = models.DateField(null=True,blank=True)
+    lead_source = models.CharField(max_length=100,null=True,blank=True)
+    other_lead_source = models.CharField(max_length=100,null=True,blank=True)
+    project_code = models.CharField(max_length=100,null=True,blank=True)
+    primary_market = MultiSelectField(choices=PRIMARY_MARKET_CHOICES, null=True,blank=True)
+    notes = models.TextField(null=True,blank=True)
+    team = MultiSelectField(choices=TEAM_CHOICES,null=True,blank=True)
+    # representative 
+    business_name = models.CharField(max_length=100,null=True,blank=True)
+    key_agent = models.BooleanField(default=False)
+    
+class AgentPhone(models.Model):
+    agent_name = models.ForeignKey(Agent, on_delete=models.CASCADE, related_name='agent_phones')
+    phone_type = models.CharField(max_length=50, blank=True, null=True)  
+    number = models.CharField(max_length=10, blank=True, null=True)
+    extension = models.CharField(max_length=10, blank=True, null=True)
+
+class AgentAddress(models.Model):
+    agent_name = models.ForeignKey(Agent, on_delete=models.CASCADE, related_name='agent_addresses')
+    address_type = models.CharField(max_length=50, choices=ADDRESS_TYPE_CHOICES,blank=True, null=True)  
+    address1 = models.CharField(max_length=255, blank=True, null=True)
+    address2 = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    state = models.CharField(max_length=100)
+    zip_code = models.CharField(max_length=10, blank=True, null=True)
+    county = models.CharField(max_length=100, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    primary = models.BooleanField(default=False)
+    
+class AgentAgencies(models.Model):
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE , related_name='agent_agencies')
+    agency = models.ForeignKey(Agency,on_delete=models.SET_NULL,null=True)
+    agent_number = models.CharField(max_length=100,null=True,blank=True)
+    active = models.BooleanField(default=False)
+    
+class Agent_Activity(models.Model):
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE , related_name='agent_activity')
+    pin_note = models.BooleanField(default=False)
+    subject = models.CharField(max_length=255)
+    notes = models.TextField(blank=True)
+    status = models.CharField(max_length=100,null=True,blank=True)
+    # follow_up_user = models.CharField(max_length=100,null=True,blank=True)
+    follow_up_team = models.CharField(max_length=100,null=True,blank=True)
+    due_date = models.BooleanField(default=False)
+    activity_date = models.DateField(null=True,blank=True)
+    priority = models.CharField(max_length=100,null=True,blank=True)
+    type = models.CharField(max_length=100,null=True,blank=True)
+    method = models.CharField(max_length=100,null=True,blank=True)
+    attachment = models.FileField(upload_to='agent_activity_attachments/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+class AgentNotes(models.Model):
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE , related_name='agent_notes')
+    pin_note = models.BooleanField(default=False)
+    subject = models.CharField(max_length=255)
+    notes = models.TextField(null=True,blank=True)
+    attachment = models.FileField(upload_to='agent_notes_attachments/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+class Agent_EO(models.Model):
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE , related_name='agent_eo')
+    eo_required = models.BooleanField(default=False)
+    eo_expiration_date = models.DateField(null=True,blank=True)
+    eo_attachment = models.FileField(upload_to='agent_eo_attachments/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+class Agents_contract(models.Model):
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE , related_name='agent_contract')
+    carrier = models.ForeignKey(Carrier,on_delete=models.SET_NULL,null=True)
+    contract_status = models.CharField(max_length=100,null=True,blank=True)
+    contact_file = models.FileField(upload_to='agent_contract_file/', null=True, blank=True)
+    direct_paid_by_carrier = models.BooleanField(default=False)
+    agent_number1 = models.CharField(max_length=100,null=True,blank=True)
+    agent_number2 = models.CharField(max_length=100,null=True,blank=True)
+    agent_number3 = models.CharField(max_length=100,null=True,blank=True)
+    medicare_number = models.CharField(max_length=100,null=True,blank=True)
+    contract_date = models.DateField(null=True,blank=True)
+    certified_date = models.DateField(null=True,blank=True)
+    termination_date = models.DateField(null=True,blank=True)
+    termination_reason = models.CharField(max_length=100,null=True,blank=True)
+    agent_state = models.CharField(max_length=100,null=True,blank=True)
+    notes = models.TextField(null=True,blank=True)
+    
+class Agent_license(models.Model):
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE , related_name='agent_license')
+    license_number = models.CharField(max_length=100,null=True,blank=True)
+    state = models.CharField(max_length=100,null=True,blank=True)
+    resident_state = models.BooleanField(default=False)
+    effective_date = models.DateField(null=True,blank=True)
+    expiration_date = models.DateField(null=True,blank=True)
+    license_file = models.FileField(upload_to='agent_license_file/', null=True, blank=True)
+    qualifications = models.CharField(max_length=100,null=True,blank=True)
+    notes = models.TextField(null=True,blank=True)
+    
+class Agent_personal(models.Model):
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE , related_name='agent_personal')
+    spouse_name = models.CharField(max_length=100,null=True,blank=True)
+    anniversary_date = models.DateField(null=True,blank=True)
+    children_names = models.TextField(null=True,blank=True)
+    incentives = models.TextField(null=True,blank=True)
+    hobbies = models.TextField(null=True,blank=True)
+    additional_information = models.TextField(null=True,blank=True)

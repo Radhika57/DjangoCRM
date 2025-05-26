@@ -1,0 +1,47 @@
+<div id="eo-content" class="tab-pane">
+  <div class="panel panel-default">
+      <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center;">
+          <strong>E&O for {{agent.first_name}} {{agent.last_name}}</strong>
+      </div>
+      <div class="panel-body">
+          <form method="post" enctype="multipart/form-data" class="form-horizontal" id="eoForm">
+              {% csrf_token %}
+              
+              <div class="form-group">
+                  <div class="col-sm-2">
+                      <div class="checkbox" style="margin-top: 0;">
+                          <input type="checkbox" id="eo_required" name="eo_required" 
+                                 {% if eo.eo_required %}checked{% endif %}>
+                          <label for="eo_required">E&O Required</label>
+                      </div>
+                  </div>
+                  
+                  <label class="col-sm-2 control-label text-right">E&O Expiration Date</label>
+                  <div class="col-sm-3">
+                      <input type="date" name="eo_expiration_date" class="form-control" 
+                             value="{{ eo.eo_expiration_date|date:'Y-m-d' }}" id="eoExpiration">
+                  </div>
+                  
+                  <label class="col-sm-1 control-label text-right">E&O File</label>
+                  <div class="col-sm-4">
+                      <input type="file" name="eo_attachment" class="form-control" id="eoFile">
+                      {% if eo.eo_attachment %}
+                      <a href="{{ eo.eo_attachment.url }}" download>
+                                                <img src="{{ eo.eo_attachment.url }}" alt="Attachment" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                            </a>
+                      {% endif %}
+                  </div>
+              </div>
+              
+              <hr>
+              
+              <div class="form-group">
+                  <div class="col-sm-12">
+                      <button type="submit" class="btn btn-success">Save</button>
+                  </div>
+              </div>
+          </form>
+      </div>
+  </div>
+</div>
+

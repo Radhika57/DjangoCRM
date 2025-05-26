@@ -59,7 +59,7 @@
                                 <div class="input-group">
                                     <span class="input-group-btn">
                                         <span class="btn btn-default btn-file">
-                                            Browse... <input type="file" id="formFileUpload" name="form_file">
+                                            Browse... <input type="file" id="formFileUpload" name="form_file" required>
                                         </span>
                                     </span>
                                     <input type="text" class="form-control" readonly>
@@ -109,7 +109,7 @@
                                     {% for form in carrier_forms %}
                                         <tr>
                                             <td>{{ form.form_name }}</td>
-                                            <td>{% if form.form_file.url %}
+                                            <td>{% if form.form_file %}
                                                 <a href="{{ form.form_file.url }}" download>
                                                     <img src="{{ form.form_file.url }}" alt="Form Image" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
                                                 </a>

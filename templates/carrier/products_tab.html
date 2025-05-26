@@ -127,7 +127,7 @@
                         
                         <div class="panel-body table-responsive">
                 
-                            <table id="example0" class="table display">
+                            <table id="example8" class="table display">
                                 <thead>
                                     <tr>
                                         <th>PRODUCT</th>
@@ -155,7 +155,6 @@
                                 </tfoot>
                             
                                 <tbody>
-                                    {% if products %}
                                         {% for product in products %}
                                             <tr>
                                                 <td>{{ product.product_name }}</td>
@@ -163,34 +162,32 @@
                                                 <td>{{ product.effective_date }}</td>
                                                 <td>{{ product.term_date }}</td>
                                                 <td>XYZ</td>
-                                                <td>
-                                                    {% if product.benefit_summary %}
-                                                        <a href="{{ product.benefit_summary.url }}" target="_blank">Download</a>
-                                                    {% else %}
-                                                        -
-                                                    {% endif %}
-                                                </td>
-                                                <td>
-                                                    {% if product.plan_grid %}
-                                                        <a href="{{ product.plan_grid.url }}" target="_blank">Download</a>
-                                                    {% else %}
-                                                        -
-                                                    {% endif %}
-                                                </td>
-                                                <td>
-                                                    {% if product.brochure %}
-                                                        <a href="{{ product.brochure.url }}" target="_blank">Download</a>
-                                                    {% else %}
-                                                        -
-                                                    {% endif %}
-                                                </td>
+                                                <td>{% if product.benefit_summary %}
+                                                    <a href="{{ product.benefit_summary.url }}" download>
+                                                        <img src="{{ product.benefit_summary.url }}" alt="Attachment" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                                    </a>
+                                                {% else %}
+                                                    No File
+                                                {% endif %}</td>
+                                                <td>{% if product.plan_grid %}
+                                                    <a href="{{ product.plan_grid.url }}" download>
+                                                        <img src="{{ product.plan_grid.url }}" alt="Attachment" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                                    </a>
+                                                {% else %}
+                                                    No File
+                                                {% endif %}</td>
+                                                <td>{% if product.brochure %}
+                                                    <a href="{{ product.brochure.url }}" download>
+                                                        <img src="{{ product.brochure.url }}" alt="Attachment" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                                    </a>
+                                                {% else %}
+                                                    No File
+                                                {% endif %}</td>
+                                                
+                                                
                                             </tr>
                                         {% endfor %}
-                                    {% else %}
-                                        <tr>
-                                            <td colspan="8" class="text-center">No data available in table</td>
-                                        </tr>
-                                    {% endif %}
+                                    
                                     </tbody>
                                     
                             </table>

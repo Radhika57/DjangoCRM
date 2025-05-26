@@ -1,0 +1,406 @@
+{% load phone_filters %}
+<div id="detail-content" class="tab-pane active">
+    <form action="" method="POST">
+        {% csrf_token %}
+    <!-- Personal Info Container -->
+    <div class="agent-info-container">
+        <h1 class="section-title">Personal Info</h1>
+
+        <!-- Name Section -->
+        <div class="form-group-row">
+            <div class="form-group-col">
+                <label>First Name</label>
+                <input type="text" class="form-control" value="{{agent.first_name}}" readonly>
+            </div>
+            <div class="form-group-col">
+                <label>Middle Name</label>
+                <input type="text" class="form-control" value="{{agent_details.middle_name|default:""}}" name="middle_name">
+            </div>
+            <div class="form-group-col">
+                <label>Last Name</label>
+                <input type="text" class="form-control" value="{{agent.last_name|default:""}}" name="last_name">
+            </div>
+            <div class="form-group-col">
+                <label>Nickname</label>
+                <input type="text" class="form-control" value="{{agent_details.nick_name|default:""}}" name="nick_name">
+            </div>
+        </div>
+
+        <div class="form-group-row">
+            <div class="form-group-col">
+                <label>SSN</label>
+                <input type="text" class="form-control" value="{{agent_details.ssn|default:""}}" name="ssn">
+            </div>
+            <div class="form-group-col">
+                <label>D.O.B</label>
+                <input type="date" class="form-control" value="{{agent_details.date_of_birth|date:'Y-m-d'}}" name="date_of_birth">
+            </div>
+            <div class="form-group-col"></div>
+            <div class="form-group-col"></div>
+        </div>
+    </div>
+
+    <!-- Agent Info Container -->
+    <div class="agent-info-container">
+        <h1 class="section-title">Agent Info</h1>
+
+        <div class="form-group-row">
+            <div class="form-group-col">
+                <label>Type</label>
+                <select class="form-control" name="agent_type">
+                    <option>Select</option>
+                    <option value="Active Contracted" {% if agent.agent_type == "Active Contracted" %}selected{% endif %}>Active Contracted</option>
+                    <option value="Onbording" {% if agent.agent_type == "Onbording" %}selected{% endif %}>Onbording</option>
+                    <option value="Prospect" {% if agent.agent_type == "Prospect" %}selected{% endif %}>Prospect</option>
+                    <option value="Termed" {% if agent.agent_type == "Termed" %}selected{% endif %}>Termed</option>
+                    <option value="Decreased" {% if agent.agent_type == "Decreased" %}selected{% endif %}>Decreased</option>
+                    <option value="Retired" {% if agent.agent_type == "Retired" %}selected{% endif %}>Retired</option>
+                </select>
+            </div>
+            <div class="form-group-col">
+                <label>Status</label>
+                <select class="form-control" name="status">
+                    <option >Select</option>
+                    <option value="Completing Paperwork" {% if agent.status == "Completing Paperwork" %}selected{% endif %}>Completing Paperwork</option>
+                    <option value="Not Contracted" {% if agent.status == "Not Contracted" %}selected{% endif %}>Not Contracted</option>
+                    <option value="Not Intrested" {% if agent.status == "Not Intrested" %}selected{% endif %}>Not Intrested</option>
+                    <option value="Agency Contracted" {% if agent.status == "Agency Contracted" %}selected{% endif %}>Agency Contracted</option>
+                    <option value="Carrier Contracted" {% if agent.status == "Carrier Contracted" %}selected{% endif %}>Carrier Contracted</option>
+                    <option value="Contracting W/Carriers" {% if agent.status == "Contracting W/Carriers" %}selected{% endif %}>Contracting W/Carriers</option>
+                </select>
+            </div>
+            <div class="form-group-col">
+                <label>Classification</label>
+                <select class="form-control" name="classification">
+                    <option>Select</option>
+                    <option value="Tier 2" {% if agent_details.classification == "Tier 2" %}selected{% endif %}>Tier 2</option>
+                    <option value="Tier 1" {% if agent_details.classification == "Tier 1" %}selected{% endif %}>Tier 1</option>
+                </select>
+            </div>
+            <div class="form-group-col">
+                <label>NPN</label>
+                <input type="text" class="form-control" value="{{agent.npn|default:""}}" name="npn">
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Info Container -->
+    <div class="agent-info-container">
+        <div class="section-header">
+            <h1 class="section-title" style="margin: 0;">Contact Info</h1>
+            <div>
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editPhoneModal">
+                    <i class="glyphicon glyphicon-edit"></i> Edit Phone
+                </button>
+                <div class="modal fade" id="editPhoneModal" tabindex="-1" role="dialog" aria-labelledby="editPhoneModalLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Edit Phone</h4>
+                        </div>
+                        <div class="modal-body">
+                            
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                <label>Business Phone</label>
+                                <input type="text" class="form-control" name="business_phone" placeholder="(xxx) xxx-xxxx"
+                                value="{{ phone_dict.business.number|format_phone|default:'' }}">
+                                </div>
+                                <div class="col-sm-2">
+                                <label>Ext.</label>
+                                <input type="text" name="business_ext" class="form-control"
+                                value="{{ phone_dict.business.extension|format_phone|default:'' }}">
+                                </div>
+                                <div class="col-sm-4">
+                                <label>Home Phone</label>
+                                <input type="text" class="form-control" name="home_phone" placeholder="(xxx) xxx-xxxx"
+                                value="{{ phone_dict.home.number|format_phone|default:'' }}">
+                                </div>
+                                <div class="col-sm-2">
+                                <label>Ext.</label>
+                                <input type="text" class="form-control" name="home_ext"
+                                value="{{ phone_dict.home.extension|format_phone|default:'' }}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                <label>Cell Phone</label>
+                                <input type="text" class="form-control" name="cell_phone" placeholder="(xxx) xxx-xxxx"
+                                value="{{ phone_dict.cell.number|default:'' }}">
+                                </div>
+                                <div class="col-sm-2">
+                                <label>Ext.</label>
+                                <input type="text" class="form-control" name="cell_ext"
+                                value="{{ phone_dict.cell.extension|default:'' }}">
+                                </div>
+                                <div class="col-sm-4">
+                                <label>Fax</label>
+                                <input type="text" class="form-control" name="fax_phone" placeholder="(xxx) xxx-xxxx"
+                                value="{{ phone_dict.fax.number|default:'' }}">
+                                </div>
+                                <div class="col-sm-2">
+                                <label>Ext.</label>
+                                <input type="text" class="form-control" name="fax_ext"
+                                value="{{ phone_dict.fax.extension|default:'' }}">
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Save</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#newAddressModal">
+                    <i class="glyphicon glyphicon-plus"></i> New Address
+                </button>
+                
+
+            </div>
+        </div>
+
+        <!-- Row 1: Emails -->
+        <div class="form-group-row">
+            <div class="form-group-col position-relative">
+                <div class="edit-tools" style="position:absolute; top:0; right:0;">
+                    <i class="glyphicon glyphicon-pencil text-success" style="cursor:pointer;" data-toggle="modal"
+                        data-target="#editEmailModal"></i>
+                    <div class="dropdown" style="display:inline;">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i
+                                class="glyphicon glyphicon-chevron-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="mailto:{{agent.email}}">Send Email</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <label>Email</label>
+                <input type="email" class="form-control" value="{{agent.email|default:""}}" name="email">
+            </div>
+
+            <div class="form-group-col position-relative">
+                <label>Secondary Email</label>
+                <input type="email" class="form-control" value="{{agent_details.secondary_email|default:""}}" name="secondary_email">
+            </div>
+        </div>
+
+        <!-- Row 2: Business Phone + Cellular -->
+        <div class="form-group-row">
+            <!-- Business Phone -->
+             {% for phone in agent_phones %}
+            <div class="form-group-col position-relative">
+                <label class="d-flex justify-content-between align-items-center mb-1">
+                    <span>{{phone.phone_type}}</span>
+                    <span class="btn-group">
+                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                            data-target="#editPhoneModal"><i class="fa fa-pencil"></i></button>
+                        <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="#">Make a Call</a></li>
+                        </ul>
+                    </span>
+                </label>
+                <p>{{phone.number|format_phone}}</p>
+                {% comment %} <input type="text" class="form-control" value="{{phone.number}}"> {% endcomment %}
+            </div>
+            {% endfor %}
+            
+        </div>
+
+        <!-- Row 3: Home + Fax -->
+        <div class="form-group-row">
+            <!-- Home -->
+             {% for add in agent_address %}
+            <div class="form-group-col position-relative">
+                <label class="d-flex justify-content-between align-items-center mb-1">
+                    <span>
+                        {{ add.address_type }}
+                        {% if add.primary %}
+                            <span class="badge badge-success">Primary</span>
+                        {% endif %}
+                    </span>
+                    <span class="btn-group">
+                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                            data-target="#newAddressModal"><i class="fa fa-pencil"></i></button>
+                        <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="#">Get directions</a></li>
+                            <li><a href="#">Map a Location</a></li>
+                        </ul>
+                    </span>
+                </label>
+                <p>{{ add.address1 }} {{ add.address2 }} <br> {{ add.city }} {{ add.state }} <br> {{ add.zip_code }}</p>
+            </div>
+            {% endfor %}
+
+
+            <!-- Row 4: Checkbox -->
+            <div class="form-group-row">
+                <div class="form-group-col">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input"> Opt Out of Emails
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lead Info Container -->
+    <div class="agent-info-container">
+        <h1 class="section-title">Lead Info</h1>
+
+        <div class="form-group-row">
+            <div class="form-group-col">
+                <label>Lead Date</label>
+                <input type="date" class="form-control" value="{{agent_details.lead_date|date:'Y-m-d'}}" name="lead_date">
+            </div>
+            <div class="form-group-col">
+                <label>Lead Source</label>
+                <select class="form-control" name="lead_source">
+                    <option>Select</option>
+                    <option value="Website" {% if agent_details.lead_source == "Website" %}selected{% endif %}>Website</option>
+                    <option value="Client Referral" {% if agent_details.lead_source == "Client Referral" %}selected{% endif %}>Client Referral</option>
+                    <option value="Agent Referral" {% if agent_details.lead_source == "Agent Referral" %}selected{% endif %}>Agent Referral</option>
+                    <option value="Purchased" {% if agent_details.lead_source == "Purchased" %}selected{% endif %}>Purchased</option>
+                    <option value="Seminar" {% if agent_details.lead_source == "Seminar" %}selected{% endif %}>Seminar</option>
+                    <option value="T-65" {% if agent_details.lead_source == "T-65" %}selected{% endif %}>T-65</option>
+                </select>
+            </div>
+            <div class="form-group-col">
+                <label>Other Lead Source</label>
+                <input type="text" class="form-control" value="{{agent_details.other_lead_source|default:""}}" name="other_lead_source">
+            </div>
+            <div class="form-group-col">
+                <label>Project Code</label>
+                <select class="form-control" name="project_code">
+                    <option>Select</option>
+                    <option value="Project Code AGT" {% if agent_details.project_code == "Project Code AGT" %}selected{% endif %}>Project Code AGT</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Info Container -->
+    <div class="agent-info-container">
+        <h1 class="section-title">Additional Info</h1>
+
+        <div class="multi-checkbox-group">
+            <div class="multi-checkbox-section">
+                <h4>Primary Market</h4>
+                <div class="checkbox-container">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="market1" name="primary_market[]" value="Med Supp" {% if agent_details and 'Med Supp' in agent_details.primary_market %}checked{% endif %}>
+                        <label for="market1">Med Supp</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="market2" name="primary_market[]" value="Health" {% if agent_details and 'Health' in agent_details.primary_market %}checked{% endif %}>
+                        <label for="market2">Health</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="market3" name="primary_market[]" value="Life" {% if agent_details and 'Life' in agent_details.primary_market %}checked{% endif %}>
+                        <label for="market3">Life</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="market4" name="primary_market[]" value="P&C" {% if agent_details and 'P&C' in agent_details.primary_market %}checked{% endif %}>
+                        <label for="market4">P&C</label>
+                    </div>
+                </div>
+            </div>
+            <div class="multi-checkbox-section">
+                <h4>Notes</h4>
+                <textarea class="form-control" style="min-height: 120px; padding: 10px; resize: vertical;"
+                    name="notes">{{agent_details.notes|default:""}}</textarea>
+            </div>
+
+            <div class="multi-checkbox-section">
+                <h4>Team</h4>
+                <div class="checkbox-container">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="team1" name="team[]" value="Team 1" {% if agent_details and 'Team 1' in agent_details.team %}checked{% endif %}>
+                        <label for="team1">Team 1</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="team2" name="team[]" value="Team 2" {% if agent_details and 'Team 2' in agent_details.team %}checked{% endif %}>
+                        <label for="team2">Team 2</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="team3" name="team[]" value="Your Sales Pipeline Team" {% if agent_details and 'Your Sales Pipeline Team' in agent_details.team %}checked{% endif %}>
+                        <label for="team3">Your Sales Pipeline Team</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="multi-checkbox-section">
+                <h4>Representative</h4>
+                <div class="checkbox-container">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="rep1" name="rep[]" value="john">
+                        <label for="rep1">John Smith</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="rep2" name="rep[]" value="sarah">
+                        <label for="rep2">Sarah Johnson</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="rep3" name="rep[]" value="mike">
+                        <label for="rep3">Mike Williams</label>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+
+        <div class="business-name-section">
+            <div class="form-group-row">
+                <div class="form-group-col" style="flex: 0 0 100%; max-width: 300px;">
+                    <label>Business Name</label>
+                    <input type="text" class="form-control" value="{{agent_details.business_name|default:""}}" name="business_name">
+                </div>
+            </div>
+        </div>
+        <div class="keyagent-name-section">
+            <div class="form-group-row">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="rep3" name="key_agent" {% if agent_details.key_agent %}checked{% endif %}>
+                    <label for="rep3">Key Agent </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="search-actions">
+        <button type="submit" class="btn btn-secondary">Save</button>
+        <button type="button" class="btn btn-primary">Delete</button>
+    </div>
+</form>
+</div>
+
+{% include "agent/agent_address.html" %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const phoneFields = document.querySelectorAll('input[name$="_phone"]');
+
+    phoneFields.forEach(function (field) {
+        const warning = document.createElement('small');
+        warning.style.color = 'red';
+        warning.style.display = 'none';
+        warning.textContent = 'Phone number must be exactly 10 digits.';
+        field.parentElement.appendChild(warning);
+
+        field.addEventListener('input', function () {
+            const digitsOnly = field.value.replace(/\D/g, '');
+            if (digitsOnly.length > 0 && digitsOnly.length < 10) {
+                warning.style.display = 'block';
+            } else {
+                warning.style.display = 'none';
+            }
+        });
+    });
+});
+</script>

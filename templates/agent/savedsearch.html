@@ -1,6 +1,6 @@
 {% extends "dashboard/base.html" %}
 {% load static %}
-
+{% load phone_filters %}
 {% block main-content %}
 <style>
     .search-agents-container {
@@ -110,11 +110,12 @@
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newAgentModal">
                     New Agent
                 </button>
+                {% include "agent/addagent_modal.html" %}
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-angle-down"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-left">
-                    <li><a href="{% url 'manage_agencies' %}" target="_blank">Manage Agencies</a></li>
+                    <li><a href="{% url 'manage_agencies' %}">Manage Agencies</a></li>
                 </ul>
             </div>
         </div>
@@ -153,30 +154,20 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for i in agents %}
                         <tr>
-                            <td><a href="{% url 'agency_detail' 1 %}">John Doe</a></td>
-                            <td>Senior Select Plans</td>
-                            <td><a href="mailto:john@example.com">john@example.com</a></td>
-                            <td>123-456-7890</td>
-                            <td>Active</td>
-                            <td>2025-12-31</td>
+                            <td><a href="">{{i.first_name}} {{i.last_name}}</a></td>
+                            <td>{{i.agency.name}}</td>
+                            <td><a href="mailto:{{i.email}}">{{i.email}}</a></td>
+                            <td>{{i.business_phone|format_phone}}</td>
+                            <td>{{i.status}}</td>
+                            <td>{% if i.agent_eo.all %}
+                                {{ i.agent_eo.all.0.eo_expiration_date|date:"Y-m-d" }}
+                            {% else %}
+                                No E&O
+                            {% endif %}</td>
                         </tr>
-                        <tr>
-                            <td><a href="{% url 'agency_detail' 2 %}">Jane Smith</a></td>
-                            <td>Elite Insurance</td>
-                            <td><a href="mailto:jane@example.com">jane@example.com</a></td>
-                            <td>987-654-3210</td>
-                            <td>Inactive</td>
-                            <td>2024-10-15</td>
-                        </tr>
-                        <tr>
-                            <td><a href="{% url 'agency_detail' 3 %}">Robert Brown</a></td>
-                            <td>Trusted Coverage Group</td>
-                            <td><a href="mailto:robert@example.com">robert@example.com</a></td>
-                            <td>555-555-5555</td>
-                            <td>Pending</td>
-                            <td>2026-01-20</td>
-                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
