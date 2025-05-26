@@ -7,10 +7,25 @@
     <div class="content-wrapper">
         <div class="search-agents-container">
             <!-- Page Header -->
-            <div class="page-header-row">
-                <h1 class="page-title">Senior Select Plan</h1>
+            <div class="page-header-row" style="display: flex; justify-content: space-between; align-items: center;">
+                <h1 class="page-title">{{agency.name}}</h1>
+                <a href="{% url "manage_agencies" %}">
+                <button class="btn btn-default btn-sm">
+                        <i class="fa fa-arrow-left"></i> Back
+            </button>
+            </a>
             </div>
             
+            {% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>{{message}}</strong>
+</div>
+  {% endfor %}
+{% endif %}
             <!-- Tab Navigation -->
             <ul class="nav nav-tabs" id="mainTabs">
                 <li class="active"><a href="#detail-senior" data-toggle="tab">Agency Detail</a></li>
@@ -19,13 +34,13 @@
 
             <!-- Tab Content -->
             <div class="tab-content">
-                <div id="detail-senior" class="tab-pane fade in active">
+                
                     {% include "agency/seniordetail.html" %}
-                </div>
+                
 
-                <div id="note-senior" class="tab-pane fade">
+                
                     {% include "agency/seniornote.html" %}
-                </div>
+                
             </div>
         </div>
     </div>

@@ -65,6 +65,17 @@
     <strong>Manage agencies ... Select "Agency" from the "New" dropdown in the header to get started..</strong><br>
     Select "<strong>Agency</strong>" from the "<strong>New</strong>" dropdown in the header to get started.
 </div>
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>{{message}}</strong>
+</div>
+  {% endfor %}
+{% endif %}
+
 
 <div class="row">
     <div class="col-md-12">
@@ -82,27 +93,25 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for i in agency %}
                         <tr>
-                            <td><a href="{% url 'agency_detail' 1 %}">ABC Insurance</a></td>
-                            <td>12-3456789</td>
-                            <td><span class="badge badge-success">Active</span></td>
-                            <td>12</td>
+                            <td><a href="{% url "edit_agency_details" i.id %}">{{i.name}}</a></td>
+                            <td>
+                                {% if i.agency_detail.all %}
+                                    {{ i.agency_detail.all.0.federal_tax_number}}
+                                {% else %}
+                                    No Federal Tax Number
+                                {% endif %}
+                            </td>
+                            <td><span class="badge badge-success">
+                                {% if i.agency_detail.all %}
+                                    {{ i.agency_detail.all.0.active}}
+                                {% endif %}
+                            </span></td>
+                            <td>{{i.agent_count}}</td>
                             
                         </tr>
-                        <tr>
-                            <td><a href="{% url 'agency_detail' 2 %}">XYZ Agency</a></td>
-                            <td>98-7654321</td>
-                            <td><span class="badge badge-secondary">Inactive</span></td>
-                            <td>5</td>
-                           
-                        </tr>
-                        <tr>
-                            <td><a href="{% url 'agency_detail' 3 %}">United Brokers</a></td>
-                            <td>45-6789123</td>
-                            <td><span class="badge badge-success">Active</span></td>
-                            <td>8</td>
-                            
-                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -115,39 +124,41 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="newAgencyLabel"><strong>New Agency</strong></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                  </button>
+                </button>
+                <h5 class="modal-title" id="newAgencyLabel"><strong>New Agency</strong></h5>
             </div>
-            <form method="post" action="#">
+            <form method="post" action="{% url 'save_agency' %}">
+                {% csrf_token %}
                 <div class="modal-body">
                     <p class="text-danger"><em>Please review the required fields.</em></p>
+
                     <div class="form-group">
                         <label for="agencyName">Agency Name <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="agencyName" name="agency_name" required>
                     </div>
-                   
+
                     <div class="row mb-3">
                         <div class="col-md-8">
-                          <label for="phone" class="form-label">Business Phone</label>
-                          <input type="tel" class="form-control" id="phone" name="phone" placeholder="Phone">
+                            <label for="phone" class="form-label">Business Phone</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Phone">
                         </div>
                         <div class="col-md-4">
-                          <label for="ext" class="form-label">Ext.</label>
-                          <input type="tel" class="form-control" id="ext" name="ext" placeholder="Ext">
+                            <label for="ext" class="form-label">Ext.</label>
+                            <input type="text" class="form-control" id="ext" name="ext" placeholder="Ext">
                         </div>
-                      </div>
-                      
-                      
-                    
-                    <p>Fields marked with an <span class="text-danger">*</span> are required.</p>
+                    </div>
+
+                    <p>Fields marked with a <span class="text-danger">*</span> are required.</p>
                 </div>
+
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success">Save Agency</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </div>
             </form>
+
         </div>
     </div>
 </div>
@@ -163,14 +174,6 @@
         // Initialize DataTable
         $('#agencyTable').DataTable({
             responsive: true
-        });
-
-        // You can add additional JavaScript here for form handling, etc.
-        $('form').on('submit', function(e) {
-            e.preventDefault();
-            // Add your form submission logic here
-            alert('Agency creation would be handled here in a real application');
-            $('#newAgencyModal').modal('hide');
         });
     });
 </script>

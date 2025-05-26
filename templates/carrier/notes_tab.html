@@ -32,7 +32,7 @@
                                     <td>{{ note.subject }}</td>
                                     <td>{{ note.notes }}</td>
                                     <td>
-                                        {% if note.attachment.url %}
+                                        {% if note.attachment %}
                                             <a href="{{ note.attachment.url }}" download>
                                                 <img src="{{ note.attachment.url }}" alt="Attachment" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
                                             </a>
@@ -80,27 +80,10 @@
                             
                             <!-- Attachments Section -->
                             <div class="attachment-block">
-                                <label><b>📎Attachment(s)</b></label>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr><th>Filename</th><th>Size</th><th>Status</th></tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td colspan="3" class="text-center" style="padding: 40px; background: #f8f9fa;">Drag files here.</td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="3">
-                                                    <input type="file" name="attachment" id="attachment" class="form-control" />
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
+                                <label><b>📎Attachment</b></label>
+                                <input type="file" name="attachment" id="attachment" class="form-control" />
                             </div>
+                            <br>
                             
                             <!-- Action Buttons -->
                             <div class="text-right">

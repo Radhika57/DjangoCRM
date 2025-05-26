@@ -1,4 +1,4 @@
- <div class="tab-pane active" id="Activities-policy">
+<div class="tab-pane active" id="Activities-policy">
     <!-- Main Activities Content (shown by default) -->
     <div id="activityMainContent">
         <div class="panel panel-default">
@@ -106,8 +106,11 @@
                                 <label for="status">Status</label>
                                 <select class="form-control" name="status" id="status">
                                     <option>In Progress</option>
-                                    <option>Completed</option>
-                                    <option>Pending</option>
+                                    <option>Waiting</option>
+                                    <option>Not Started</option>
+                                    <option>Complete</option>
+                                    <option>Deferred</option>
+                                    
                                 </select>
                             </div>
                             <div class="form-group col-md-4">
@@ -122,8 +125,9 @@
                                 <label for="follow_team">Follow-up Team</label>
                                 <select class="form-control" name="follow_team" id="follow_team">
                                     <option>(None)</option>
-                                    <option>Sales</option>
-                                    <option>Support</option>
+                                    <option>Team 1</option>
+                                    <option>Team 2</option>
+                                    <option>Your Sales Pipeline Team </option>
                                 </select>
                             </div>
                         </div>
@@ -131,9 +135,10 @@
                         <div class="form-group">
                             <label><input type="checkbox" name="due_date_check"> Due Date</label>
                         </div>
+                        <br>
         
                         <!-- Additional Activity Details -->
-                        <h5><strong>Additional Activity Details</strong></h5>
+                        <h3><strong>Additional Activity Details</strong></h3>
                         <div class="form-row">
                             <div class="form-group col-md-3">
                                 <label for="activity_date">Activity Date <span class="text-danger">*</span></label>
@@ -145,9 +150,18 @@
                                     <option>Low</option>
                                     <option selected>Medium</option>
                                     <option>High</option>
+                                    <option>Urgent</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-3">
+                                <label for="type">Related To</label>
+                                <select class="form-control" name="type" id="type">
+                                    <option>United Healthcare-A03912111-Med Supp</option>
+                                    <option>Wellcare-(Not set)-PDP</option>
+                                   
+                                </select>
+                            </div>
+                             <div class="form-group col-md-3">
                                 <label for="type">Type</label>
                                 <select class="form-control" name="type" id="type">
                                     <option>Initial contact</option>
@@ -166,33 +180,45 @@
                         </div>
         
                     </div>
-                    <div class="form-group">
-                        <label>Attachments(s)</label>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Filename</th>
-                                    <th>Size</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="3" style="text-align: center;">
-                                        <div class="well text-center" style="margin: 0;">
-                                            <i class="fa fa-download fa-2x"></i><br>
-                                            <strong>Drag and Drop Files Here</strong><br>
-                                            <input type="file" name="attachment" class="form-control" style="margin-top: 10px;">
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <br>
+                   <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Attachment(s)</label>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Filename</th>
+                                        <th>Size</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="3" style="text-align: center;">
+                                            <div class="well text-center" style="margin: 0;">
+                                                <i class="fa fa-download fa-2x"></i><br>
+                                                <strong>Drag and Drop Files Here</strong><br>
+                                                <input type="file" name="attachment" class="form-control" style="margin-top: 10px;">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
-                    <div class="text-right">
-                        <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
-                        <button type="button" class="btn btn-default" onclick="showNotesMain()">Cancel</button>
+                    <!-- Form Actions - Save and Cancel Buttons -->
+                    <div class="form-actions" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+                        <div class="row">
+                            <div class="col-md-12 text-right">
+                                <button type="button" class="btn btn-default" onclick="showNotesMain()" style="margin-right: 10px;">
+                                    Save 
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-save"></i> Cancel
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

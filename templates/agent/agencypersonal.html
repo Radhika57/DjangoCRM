@@ -1,0 +1,73 @@
+<style>
+    .save-button-row {
+    margin-top: 40px; /* Increase or decrease space above */
+    margin-bottom: 20px; /* Optional bottom spacing */
+}
+
+</style>
+
+<div id="personal-content" class="tab-pane">
+    <div id="licensesMainContent">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row align-items-center">
+                    <div class="col-sm-6 d-flex align-items-center">
+                        <strong>Personal Info for {{agent.first_name}} {{agent.last_name}}</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <!-- Detail Tab -->
+                    <div id="detail-content" class="tab-pane active">
+                        <!-- Personal Info Container -->
+                        <div class="form-group-row">
+                            <div class="form-group-col">
+                                <label>Spouse Name</label>
+                                <input type="text" class="form-control" name="spouse_name" value="{{agent_personal.spouse_name|default:''}}">
+                            </div>
+                            <div class="form-group-col">
+                                <label>Anniversary Date</label>
+                                <input type="date" class="form-control" name="anniversary_date" value="{{agent_personal.anniversary_date|date:'Y-m-d'}}">
+                            </div>
+                        </div>
+
+                        <!-- Notes Section (1 row with 4 columns) -->
+                        <div class="row mt-4">
+                            <div class="col-md-3">
+                                <h4 style="font-size: 14px;">Childrens Name</h4>
+                                <textarea class="form-control" name="children_names" style="min-height: 120px; resize: vertical;">{{agent_personal.children_names|default:''}}</textarea>
+                            </div>
+                            <div class="col-md-3">
+                                <h4 style="font-size: 14px;">Incentives (Preferred)</h4>
+                                <textarea class="form-control" name="incentives" style="min-height: 120px; resize: vertical;">{{agent_personal.incentives|default:''}}</textarea>
+                            </div>
+                            <div class="col-md-3">
+                                <h4 style="font-size: 14px;">Hobbies</h4>
+                                <textarea class="form-control" name="hobbies" style="min-height: 120px; resize: vertical;">{{agent_personal.hobbies|default:''}}</textarea>
+                            </div>
+                            <div class="col-md-3">
+                                <h4 style="font-size: 14px;">Additional Information</h4>
+                                <textarea class="form-control" name="additional_information" style="min-height: 120px; resize: vertical;">{{agent_personal.additional_information|default:''}}</textarea>
+                            </div>
+                        </div>
+
+                        <!-- Save Button Section with proper spacing -->
+                        <!-- Save Button Section with more space above -->
+<div class="row save-button-row">
+
+    <div class="col-md-12 text-right">
+        <button type="submit" class="btn btn-success">
+            <i class="fa fa-save"></i> Save
+        </button>
+    </div>
+</div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

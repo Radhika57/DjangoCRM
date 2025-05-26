@@ -23,26 +23,34 @@ from main import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.dashboard, name='dashboard'),
+    
+    # Carrier
     path('carriers/', views.carrier_list, name='carrier_list'),  
     path('save_carrier/', views.save_carrier, name='save_carrier'),
     path('carriers/detail/<int:carrier_id>/', views.carrier_detail, name='carrier_detail'),
-    path('carriers/address/edit/<int:address_id>/', views.edit_carrier_address, name='edit_carrier_address'),
-    path('carrier/address/delete/<int:address_id>/', views.delete_carrier_address, name='delete_carrier_address'),
-    path('customfields/', views.custom_fields, name='custom_fields'),
+    
+    # Agency
+    path('agency/manage-agencies/', views.manage_agencies, name='manage_agencies'),
+    path('save-agency/', views.save_agency, name='save_agency'),
+    path('agency/<int:agency_id>/edit-details/', views.edit_agency_details, name='edit_agency_details'),
 
+    
+    
+    # Agents
     path('search-agents/', views.search_agents, name='search_agents'),
-    path('agents/manage-agencies/', views.manage_agencies, name='manage_agencies'),
-    path('agents/settings/', views.agent_column_settings, name='agent_column_settings'),
-    path('agency/detail/<int:agency_id>/', views.agency_detail, name='agency_detail'),
-    path('agentcolumnsettings/', views.agent_column_settings, name='agentcolumnsettings'), 
-    path('agency/agency-eo/', views.agency_eo, name='agency_eo'),
+    path('save-agent/', views.save_agent, name='save_agent'),
     path('agency/advanced-search/', views.advanced_search, name='advanced_search'),
     path('agency/saved-searches/', views.saved_searches, name='saved_searches'),
-    path('agency/agency-client/', views.agency_client, name='agency_client'),
-    path('agency/senior-select/', views.senior_select, name='senior_select'),
-    path('agency/agency-agency-activity/', views.agency_activity, name='agency_activity'),
-    path('agency/agency-agency-note/', views.agency_note, name='agency_note'),
+    path('agency/detail/<int:agent_id>/', views.agent_detail, name='agent_detail'),
+    
 
+    
+    path('customfields/', views.custom_fields, name='custom_fields'),
+    path('agents/settings/', views.agent_column_settings, name='agent_column_settings'),
+    
+    
+    # Policy
+    
     path('policy/detail/<int:policy_id>/', views.policy_tab, name='policy_tab'),
     path('policy/search-policy/', views.search_policy, name='search_policy'),
     path('policy/advanced-policy/', views.advanced_policy, name='advanced_policy'),

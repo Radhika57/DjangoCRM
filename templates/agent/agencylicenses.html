@@ -1,0 +1,216 @@
+
+<div id="licenses-content" class="tab-pane">
+    <div id="licensesMainContent">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row align-items-center">
+                    <div class="col-sm-6 d-flex align-items-center">
+                        <strong>Licenses for {{agent.first_name}} {{agent.last_name}}</strong>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        <div class="btn-group">
+                            <button id="showCreateLicensesBtn" type="button" class="btn btn-primary">
+                                Create New
+                            </button>
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-angle-down"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="{% url 'agent_column_settings' %}" target="_blank">Column Settings</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+           <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body table-responsive">
+
+                        <table id="example3" class="table display">
+                            <thead>
+                                <tr>
+                                <th>License Number</th>
+                                <th>State</th>
+                                <th>License File</th>
+                                <th>Effective Date</th>
+                                <th>Expiration Date</th>
+                                <th>Residence State</th>
+                            </tr>
+                            </thead>
+
+                            <tfoot>
+                            <tr>
+                                <th>License Number</th>
+                                <th>State</th>
+                                <th>License File</th>
+                                <th>Effective Date</th>
+                                <th>Expiration Date</th>
+                                <th>Residence State</th>
+                            </tr>
+                            </tfoot>
+
+                            <tbody>
+                                {% for i in license %}
+                                <tr>  
+                                    <td>{{i.license_number}}</td>
+                                    <td>{{i.state}}</td>
+                                    <td>{% if i.license_file %}
+                                        <a href="{{ i.license_file.url }}" download>
+                                            <img src="{{ i.license_file.url }}" alt="Attachment" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                        </a>
+                                    {% else %}
+                                        No File
+                                    {% endif %}</td>
+                                    <td>{{i.effective_date|date:'y-m-d'}}</td>
+                                    <td>{{i.expiration_date|date:'y-m-d'}}</td>
+                                    <td>{{ i.resident_state|yesno:"Yes,No" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </div>
+
+    <!-- Create New License Form -->
+    <div id="createLicensesContainer" style="display: none;">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong>License for {{agent.first_name}} {{agent.last_name}}</strong>
+                    <button id="backToLicensesBtn" class="btn btn-default btn-sm">
+                        <i class="fa fa-arrow-left"></i> Back to Licenses
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <form method="post" enctype="multipart/form-data" id="licensesForm">
+                    {% csrf_token %}
+                    <!-- License Form Fields -->
+                    <div class="agent-info-container">
+                        <h1 class="section-title">License Information</h1>
+                        <div class="form-group-row">
+                            <div class="form-group col-sm-3">
+                                <label>License Number</label>
+                                <input type="text" class="form-control" name="license_number">
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <label>State</label>
+                                <input type="text" class="form-control" name="state">
+                            </div>
+                            <div class="form-group col-sm-2">
+                                <div class="checkbox" style="margin-top: 0;">
+                                    <input type="checkbox" id="resident_state" name="resident_state">
+                                    <label for="resident_state">Resident State</label>
+                                 </div>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label>License File</label>
+                                <input type="file" class="form-control" name="license_file">
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label>Effective Date</label>
+                                <input type="date" class="form-control" name="effective_date">
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label>Expiration Date</label>
+                                <input type="date" class="form-control" name="expiration_date">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="multi-checkbox-group" style="display: flex; flex-wrap: wrap; gap: 30px;">
+                        <div class="multi-checkbox-section" style="flex: 1 1 300px;">
+                            <h4>Primary Market</h4>
+                            <div class="checkbox-container">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="market1" name="qualifications[]" value="Health">
+                                    <label for="market1">Health</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="market2" name="qualifications[]" value="Other">
+                                    <label for="market2">Other</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="market3" name="qualifications[]" value="Annuties">
+                                    <label for="market3">Annuties</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="market4" name="qualifications[]" value="Life">
+                                    <label for="market4">Life</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="multi-checkbox-section" style="flex: 1 1 300px;">
+                            <h4>Notes</h4>
+                            <div class="form-group">
+                                <textarea class="form-control" name="license_notes" style="min-height: 120px; padding: 10px; resize: vertical;" placeholder="Enter notes here..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Custom Fields -->
+                     {% comment %} <div class="custom-updated-info custom-fields-panel">
+                    <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <h1 class="section-title" style="margin: 0;">Custom Fields</h1>
+                        <div class="custom-fields-edit">
+                            <a href="{% url 'custom_fields' %}" target="_blank" class="btn btn-default btn-sm">
+                                <i class="glyphicon glyphicon-edit"></i> Add/Edit
+                            </a>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="alert alert-info text-center" style="margin-bottom: 0; font-size: 16px;">
+                        <div style="font-size: 18px;">There aren't any custom fields yet</div>
+                        <div style="font-size: 14px;">Use custom fields to track and report on data unique to your agency.</div>
+                        <a href="#" style="font-size: 14px;">How do I use custom fields?</a>
+                    </div>
+                </div> {% endcomment %}
+
+           
+
+                    <!-- Final Submit Button -->
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fa fa-save"></i> Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const showCreateLicensesBtn = document.getElementById('showCreateLicensesBtn');  // Create New Button
+    const backToLicensesBtn = document.getElementById('backToLicensesBtn');  // Back Button
+    const licensesMainContent = document.getElementById('licensesMainContent');
+    const createLicensesContainer = document.getElementById('createLicensesContainer');
+    const licensesForm = document.getElementById('licensesForm');  // Form ID
+
+    // Show create license form
+    showCreateLicensesBtn.addEventListener('click', function () {
+        licensesMainContent.style.display = 'none';  // Hide licenses main content
+        createLicensesContainer.style.display = 'block';  // Show create licenses container
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Back to licenses list
+    backToLicensesBtn.addEventListener('click', function () {
+        createLicensesContainer.style.display = 'none';  // Hide create license form
+        licensesMainContent.style.display = 'block';  // Show licenses main content
+        licensesForm.reset();  // Reset form
+    });
+});
+</script>
