@@ -55,7 +55,7 @@
         </div>
 
         <div class="panel-body">
-            <form id="agencyForm" method="post" >
+            <form id="agencyForm" method="post">
                 {% csrf_token %}
                 <!-- Agency Info Section -->
                 <div class="agent-info-container">
@@ -63,11 +63,11 @@
                         <div class="form-group-col">
                             <label>Agency</label>
                             <select class="form-control" name="agency" required>
-                                    <option value="">Select Agency</option>
-                                    {% for agency in agencies %}
-                                        <option value="{{ agency.id }}">{{ agency.name }}</option>
-                                    {% endfor %}
-                                </select>
+                                <option value="">Select Agency</option>
+                                {% for agency in agencies %}
+                                <option value="{{ agency.id }}">{{ agency.name }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
 
                         <div class="form-group-col">
@@ -82,10 +82,10 @@
                             </div>
                         </div>
                     </div>
-                </div> 
+                </div>
 
                 <!-- Custom Fields -->
-              
+
 
                 <!-- Final Submit Button -->
                 <div class="text-right" style="margin-top: 20px;">
@@ -99,25 +99,25 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const showCreateBtn = document.getElementById('showCreateAgencyBtn');
-    const backToAgenciesBtn = document.getElementById('backToAgenciesBtn');
-    const agenciesMainContent = document.getElementById('agenciesMainContent');
-    const createAgenciesContainer = document.getElementById('createAgenciesContainer');
-    const agencyForm = document.getElementById('agencyForm');
+    document.addEventListener('DOMContentLoaded', function () {
+        const showCreateBtn = document.getElementById('showCreateAgencyBtn');
+        const backToAgenciesBtn = document.getElementById('backToAgenciesBtn');
+        const agenciesMainContent = document.getElementById('agenciesMainContent');
+        const createAgenciesContainer = document.getElementById('createAgenciesContainer');
+        const agencyForm = document.getElementById('agencyForm');
 
-    // Show create agency form
-    showCreateBtn.addEventListener('click', function () {
-        agenciesMainContent.style.display = 'none';
-        createAgenciesContainer.style.display = 'block';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+        // Show create agency form
+        showCreateBtn.addEventListener('click', function () {
+            agenciesMainContent.style.display = 'none';
+            createAgenciesContainer.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
 
-    // Back to agencies list
-    backToAgenciesBtn.addEventListener('click', function () {
-        createAgenciesContainer.style.display = 'none';
-        agenciesMainContent.style.display = 'block';
-        agencyForm.reset();
+        // Back to agencies list
+        backToAgenciesBtn.addEventListener('click', function () {
+            createAgenciesContainer.style.display = 'none';
+            agenciesMainContent.style.display = 'block';
+            agencyForm.reset();
+        });
     });
-});
 </script>
