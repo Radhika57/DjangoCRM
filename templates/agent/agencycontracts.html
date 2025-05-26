@@ -9,7 +9,8 @@
                     <div class="col-sm-6 text-right">
                         <div class="btn-group">
                             <button type="button" class="btn btn-primary" id="showCreateContractBtn">Create New</button>
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-angle-down"></i>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-right">
@@ -21,64 +22,65 @@
             </div>
 
             <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-body table-responsive">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body table-responsive">
 
-                        <table id="example2" class="table display">
-                            <thead>
-                               <tr>
-                                <th>Contract Date</th>
-                                <th>Carrier</th>
-                                <th>File</th>
-                                <th>Status</th>
-                                <th>Agent Number</th>
-                                <th>Medicare Number</th>
-                                <th>Termed</th>
-                            </tr>
-                            </thead>
+                            <table id="example2" class="table display">
+                                <thead>
+                                    <tr>
+                                        <th>Contract Date</th>
+                                        <th>Carrier</th>
+                                        <th>File</th>
+                                        <th>Status</th>
+                                        <th>Agent Number</th>
+                                        <th>Medicare Number</th>
+                                        <th>Termed</th>
+                                    </tr>
+                                </thead>
 
-                            <tfoot>
-                                <tr>
-                                <th>Contract Date</th>
-                                <th>Carrier</th>
-                                <th>File</th>
-                                <th>Status</th>
-                                <th>Agent Number</th>
-                                <th>Medicare Number</th>
-                                <th>Termed</th>
-                            </tr>
-                            </tfoot>
+                                <tfoot>
+                                    <tr>
+                                        <th>Contract Date</th>
+                                        <th>Carrier</th>
+                                        <th>File</th>
+                                        <th>Status</th>
+                                        <th>Agent Number</th>
+                                        <th>Medicare Number</th>
+                                        <th>Termed</th>
+                                    </tr>
+                                </tfoot>
 
-                            <tbody>
-                                {% for i in contract %}
-                                <tr>
-                                    <td>{{i.contract_date|date:'Y-m-d'}}</td>
-                                    <td>{{i.carrier.name}}</td>
-                                    <td>
-                                        {% if i.contact_file %}
+                                <tbody>
+                                    {% for i in contract %}
+                                    <tr>
+                                        <td>{{i.contract_date|date:'Y-m-d'}}</td>
+                                        <td>{{i.carrier.name}}</td>
+                                        <td>
+                                            {% if i.contact_file %}
                                             <a href="{{ i.contact_file.url }}" download>
-                                                <img src="{{ i.contact_file.url }}" alt="Attachment" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                                <img src="{{ i.contact_file.url }}" alt="Attachment"
+                                                    style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
                                             </a>
-                                        {% else %}
+                                            {% else %}
                                             No File
-                                        {% endif %}
-                                    </td>
-                                    <td>{{i.contract_status}}</td>
-                                    <td>{{i.agent_number1}}</td>
-                                    <td>{{i.medicare_number}}</td>
-                                    <td>{{i.termination_date|date:'Y-m-d'}}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{i.contract_status}}</td>
+                                        <td>{{i.agent_number1}}</td>
+                                        <td>{{i.medicare_number}}</td>
+                                        <td>{{i.termination_date|date:'Y-m-d'}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
 
+
+                        </div>
 
                     </div>
-
                 </div>
             </div>
-        </div>
 
         </div>
     </div>
@@ -105,11 +107,11 @@
                         <div class="form-group-col">
                             <label>Carrier</label>
                             <select class="form-control" name="carrier" required>
-                            <option value="">Select</option>
-                                    {% for carrier in carriers %}
-                                        <option value="{{ carrier.id }}">{{ carrier.name }}</option>
-                                    {% endfor %}
-                                     </select>
+                                <option value="">Select</option>
+                                {% for carrier in carriers %}
+                                <option value="{{ carrier.id }}">{{ carrier.name }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                         <div class="form-group-col">
                             <label>Contract Status</label>
@@ -221,7 +223,9 @@
                         <div class="multi-checkbox-section" style="flex: 1 1 300px;">
                             <h4>Notes</h4>
                             <div class="form-group">
-                                <textarea class="form-control" name="notes" style="min-height: 120px; padding: 10px; resize: vertical;" placeholder="Enter notes here..."></textarea>
+                                <textarea class="form-control" name="notes"
+                                    style="min-height: 120px; padding: 10px; resize: vertical;"
+                                    placeholder="Enter notes here..."></textarea>
                             </div>
                         </div>
                     </div>
@@ -239,27 +243,27 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const showCreateBtn = document.getElementById('showCreateContractBtn');
-    const backToContractsBtn = document.getElementById('backToContractsBtn');
-    const contractsMainContent = document.getElementById('contractsMainContent');
-    const createContractContainer = document.getElementById('createcontractsContainer');
-    const contractForm = document.getElementById('contractForm');
+    document.addEventListener('DOMContentLoaded', function () {
+        const showCreateBtn = document.getElementById('showCreateContractBtn');
+        const backToContractsBtn = document.getElementById('backToContractsBtn');
+        const contractsMainContent = document.getElementById('contractsMainContent');
+        const createContractContainer = document.getElementById('createcontractsContainer');
+        const contractForm = document.getElementById('contractForm');
 
-    // Show create contract form
-    showCreateBtn.addEventListener('click', function () {
-        contractsMainContent.style.display = 'none';
-        createContractContainer.style.display = 'block';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Show create contract form
+        showCreateBtn.addEventListener('click', function () {
+            contractsMainContent.style.display = 'none';
+            createContractContainer.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Back to contracts list
+        backToContractsBtn.addEventListener('click', function () {
+            createContractContainer.style.display = 'none';
+            contractsMainContent.style.display = 'block';
+            contractForm.reset();
+        });
+
+
     });
-
-    // Back to contracts list
-    backToContractsBtn.addEventListener('click', function () {
-        createContractContainer.style.display = 'none';
-        contractsMainContent.style.display = 'block';
-        contractForm.reset();
-    });
-
-    
-});
 </script>
