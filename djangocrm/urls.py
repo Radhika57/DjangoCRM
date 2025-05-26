@@ -47,11 +47,7 @@ urlpatterns = [
     
     path('customfields/', views.custom_fields, name='custom_fields'),
     path('agents/settings/', views.agent_column_settings, name='agent_column_settings'),
-    path('agentcolumnsettings/', views.agent_column_settings, name='agentcolumnsettings'), 
-    path('agency/agency-eo/', views.agency_eo, name='agency_eo'),
-    path('agency/agency-client/', views.agency_client, name='agency_client'),
-    path('agency/agency-agency-activity/', views.agency_activity, name='agency_activity'),
-    path('agency/agency-agency-note/', views.agency_note, name='agency_note'),
+    
     
     # Policy
     

@@ -587,22 +587,10 @@ def custom_fields(request):
 def agent_column_settings(request):
     return render(request, 'agent/agentcolumnsettings.html')
 
-def agent_column_settings(request):
-    return render(request, 'agent/agentcolumnsettings.html')
-
-def agency_client(request):
-    return render(request, 'agent/agencyclient.html')
-
 def policy_tab(request, policy_id):
     
     return render(request, 'policy/policytab.html', {'policy_id': policy_id})
-def agency_activity(request):
-    return render(request, 'agent/agencyactivity.html')
-def agency_note(request):
-    return render(request, 'agent/agencynote.html')
 
-def agency_eo(request):
-    return render(request, 'agent/agencyeo.html')
 def search_policy(request):
     return render(request, 'policy/searchpolicy.html')
 def advanced_policy(request):
