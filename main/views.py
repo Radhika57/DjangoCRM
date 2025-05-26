@@ -249,9 +249,6 @@ def agency_detail(request, agency_id):
   
     return render(request, 'agency/agencydetail.html', {'agency_id': agency_id})
 
-def agent_column_settings(request):
-    return render(request, 'agency/agentcolumnsettings.html')
-
 
 def advanced_search(request):
     return render(request, 'agency/advancedsearch.html')
