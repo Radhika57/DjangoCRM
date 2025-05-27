@@ -112,28 +112,121 @@ document.addEventListener('DOMContentLoaded', function() {
     const notesMainContent = document.getElementById('notesMainContent');
     const createNoteContainer = document.getElementById('createNewnoteContainer');
     const noteForm = document.getElementById('noteForm');
+    const notesTableBody = document.querySelector('#notesMainContent table tbody');
+    const noNotesMessage = document.querySelector('#notesMainContent .well.text-center');
 
     // Show create note form
-    showCreateBtn.addEventListener('click', function() {
+    showCreateBtn.addEventListener('click', function(e) {
+        e.preventDefault();
         notesMainContent.style.display = 'none';
         createNoteContainer.style.display = 'block';
-        // Smooth scroll to form
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+        
+        // Ensure we're on the Notes tab
+        activateNotesTab();
     });
+
+    // Function to activate the Notes tab
+    function activateNotesTab() {
+        // Remove active class from all tab buttons
+        document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Add active class to Notes tab button
+        const notesTabBtn = document.querySelector('.nav-tab-btn[href="#notes-content"]');
+        if (notesTabBtn) {
+            notesTabBtn.classList.add('active');
+        }
+        
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content > div').forEach(tab => {
+            tab.style.display = 'none';
+        });
+        
+        // Show notes content
+        document.getElementById('notes-content').style.display = 'block';
+    }
 
     // Back to notes list
     function showNotesList() {
         createNoteContainer.style.display = 'none';
         notesMainContent.style.display = 'block';
         noteForm.reset();
+        activateNotesTab();
     }
 
     // Attach event listeners to back and cancel buttons
     backToNotesBtn.addEventListener('click', showNotesList);
     cancelNoteBtn.addEventListener('click', showNotesList);
 
+    // Handle form submission
+    noteForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form values
+        const subject = document.getElementById('subject').value;
+        const notes = document.querySelector('textarea[name="note_notes"]').value;
+        const isPinned = document.getElementById('checkboxpin').checked;
+        const fileInput = document.querySelector('input[name="attachment"]');
+        
+        // Create a new table row
+        const newRow = document.createElement('tr');
+        
+        // Add subject cell
+        const subjectCell = document.createElement('td');
+        subjectCell.textContent = subject;
+        if (isPinned) {
+            subjectCell.innerHTML = '<i class="fa fa-thumb-tack"></i> ' + subject;
+        }
+        newRow.appendChild(subjectCell);
+        
+        // Add notes cell
+        const notesCell = document.createElement('td');
+        notesCell.textContent = notes;
+        newRow.appendChild(notesCell);
+        
+        // Add attachment cell
+        const attachmentCell = document.createElement('td');
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.height = '50px';
+                img.style.width = 'auto';
+                img.style.border = '1px solid #ccc';
+                img.style.padding = '2px';
+                img.style.borderRadius = '4px';
+                
+                const link = document.createElement('a');
+                link.href = e.target.result;
+                link.download = file.name;
+                link.appendChild(img);
+                
+                attachmentCell.appendChild(link);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            attachmentCell.textContent = 'No File';
+        }
+        newRow.appendChild(attachmentCell);
+        
+        // Add the new row to the table
+        notesTableBody.insertBefore(newRow, notesTableBody.firstChild);
+        
+        // Hide "no notes" message if it exists
+        if (noNotesMessage) {
+            noNotesMessage.style.display = 'none';
+        }
+        
+        // Reset form and show notes list
+        noteForm.reset();
+        showNotesList();
+        
+        // Show success message
+        alert('Note saved successfully!');
+    });
 });
 </script>
