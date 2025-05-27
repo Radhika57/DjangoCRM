@@ -3,6 +3,54 @@
 {% block main-content %}
 
 <style>
+            /* Modal footer adjustments */
+.modal-footer-responsive {
+  padding: 15px;
+  overflow-x: auto; /* Prevent horizontal scrolling */
+}
+
+.btn-container {
+  max-width: 100%;
+}
+
+.btn-group-custom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+}
+
+.curved-btn {
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  white-space: nowrap;
+  min-width: 120px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .btn-group-custom {
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .curved-btn {
+    width: 100%;
+    margin: 2px 0 !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+  .btn-group-custom {
+    flex-wrap: wrap;
+  }
+  
+  .curved-btn {
+    flex: 1 0 calc(50% - 8px);
+    max-width: calc(50% - 8px);
+  }
+}
      /* Panel heading with flex layout */
     .panel-heading-flex {
         display: flex;
@@ -484,7 +532,7 @@
         <div class="page-header-row">
             <h1 class="page-title">Search Policy</h1>
             <div class="btn-group">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newAgentModal">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newPolicyModal">
                     New Policy
                 </button>
                 
@@ -794,8 +842,8 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="newAgentModal" tabindex="-1" role="dialog" aria-labelledby="newAgentModalLabel">
-           <div class="modal-dialog modal-lg" role="document">
+ <div class="modal fade" id="newPolicyModal" tabindex="-1" role="dialog" aria-labelledby="newPolicyModalLabel">
+    <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -807,6 +855,7 @@
             <div class="modal-body">
                 <form id="policyForm">
                     <div class="step-container">
+                        <!-- Step 1: Client Info -->
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <div class="step-indicator">
@@ -817,21 +866,89 @@
                             <div class="panel-body">
                                 <div class="form-group">
                                     <label for="recordType">Select Record Type</label>
-                                    <select id="recordType" class="form-control" required>
-                                        <option value="">-- Select --</option>
-                                        <option>Existing Individual</option>
-                                        <option>New Individual</option>
-                                    </select>
+                                   <select id="recordType" class="form-control" required>
+                                   <option value="">-- Select --</option>
+                                   <option value="existing">Existing Individual</option>
+                                   <option value="new">New Individual</option>
+                            </select>
+
                                 </div>
+
                                 <div class="form-group">
-                                    <label for="individualName">Individual Name <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="individualName"
-                                        placeholder="Type to search" required>
+                                    <label for="individualName">Individual Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="individualName" placeholder="Type to search" required>
                                 </div>
+
+                                <!-- Only for New Individual -->
+                              <div id="newIndividualFields" style="display:none;">
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label for="firstName">First Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="firstName" placeholder="First Name">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="middleName">Middle Name</label>
+            <input type="text" class="form-control" id="middleName" placeholder="Middle Name">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label for="lastName">Last Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="lastName" placeholder="Last Name">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="clientType">Type</label>
+            <select id="clientType" class="form-control">
+                <option value="">-- Select Type --</option>
+                <option value="individual">Individual</option>
+                <option value="business">Business</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label for="servicingAgent">Servicing Agent</label>
+            <input type="text" class="form-control" id="servicingAgent" placeholder="Type to search">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter email">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label for="businessPhone">Business Phone/Ext</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="businessPhone" placeholder="Enter phone">
+                <span class="input-group-addon">ext</span>
+                <input type="text" class="form-control" id="businessExt" placeholder="Ext">
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="homePhone">Home Phone/Ext</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="homePhone" placeholder="Enter phone">
+                <span class="input-group-addon">ext</span>
+                <input type="text" class="form-control" id="homeExt" placeholder="Ext">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label for="cellPhone">Cell Phone/Ext</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="cellPhone" placeholder="Enter phone">
+                <span class="input-group-addon">ext</span>
+                <input type="text" class="form-control" id="cellExt" placeholder="Ext">
+            </div>
+        </div>
+    </div>
+</div>
+
                             </div>
                         </div>
 
+                        <!-- Step 2: Policy Info -->
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <div class="step-indicator">
@@ -841,27 +958,14 @@
                             </div>
                             <div class="panel-body">
                                 <p>Fields marked with an <span class="text-danger">*</span> are required.</p>
-                                <div class="form-group">
-                                    <label for="policyType">Policy Type <span class="text-danger">*</span></label>
-                                    <select id="policyType" class="form-control" required>
-                                        <option value="">-- Select --</option>
-                                        <option>Health</option>
-                                        <option>Life</option>
-                                        <option>Auto</option>
-                                        <option>Home</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="effectiveDate">Effective Date <span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" id="effectiveDate" required>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
-<div class="modal-footer modal-footer-responsive text-center">
-  <div class="btn-group btn-group-custom">
+
+<div class="modal-footer modal-footer-responsive justify-content-center text-center">
+  <div class="btn-group-custom">
     <button type="submit" class="btn btn-success curved-btn" form="policyForm">Save</button>
     <button type="submit" class="btn btn-success curved-btn" form="policyForm">Save & Add Coverage</button>
     <button type="submit" class="btn btn-success curved-btn" form="policyForm">Save & Add Another</button>
@@ -873,21 +977,26 @@
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Reset form functionality
-        document.getElementById('resetCriteria').addEventListener('click', function() {
-            // Reset all text inputs and selects
-            document.querySelectorAll('.form-control, .form-select').forEach(input => {
-                if (input.type !== 'checkbox') {
-                    input.value = '';
-                }
-            });
-            
-            // Reset all checkboxes
-            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                checkbox.checked = false;
-            });
+    $(function () {
+        function toggleNewIndividualFields() {
+            var isNew = $('#recordType').val() === 'new';
+            if (isNew) {
+                $('#newIndividualFields').slideDown(200);
+            } else {
+                $('#newIndividualFields').slideUp(200);
+            }
+        }
+
+        $('#recordType').on('change', toggleNewIndividualFields);
+
+        $('#newPolicyModal').on('show.bs.modal', function() {
+            $('#policyForm')[0].reset();
+            $('#newIndividualFields').hide();
+            $('#recordType').val('').trigger('change'); 
         });
     });
 </script>

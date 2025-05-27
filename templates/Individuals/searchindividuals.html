@@ -372,9 +372,9 @@
         </div>
     </div>
 
-<!-- New Agent Modal Clone -->
+
 <div class="modal fade" id="newAgentModal" tabindex="-1" role="dialog" aria-labelledby="newAgentModalLabel">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
 
       <form method="post">
@@ -382,13 +382,13 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-          <h4 class="modal-title">New Individual</h4>
+           <h2 class="modal-title" style="font-size: 2.2rem;">New Individual</h2>
         </div>
 
         <div class="modal-body">
           <fieldset>
             <legend>
-              <span class="label label-success">1</span> <strong>Individual Info</strong>
+              <span class="label label-success">1</span> Individual Info
               <em class="text-muted">Please review the required fields.</em>
             </legend>
 
@@ -427,38 +427,43 @@
               </div>
             </div>
 
-            <div class="row">
-              <div class="form-group col-md-4">
-                <label>Business Phone/Ext.</label>
-                <div class="input-group">
-                  <input type="text" class="form-control" name="business_phone">
-                  <span class="input-group-addon">ext</span>
-                  <input type="text" class="form-control" style="width: 50px;" name="business_ext">
-                </div>
-              </div>
+           <!-- Business Phone -->
+<div class="form-group row">
+  <label class="col-sm-2 col-form-label">Business Phone/Ext.</label>
+  <div class="col-sm-5">
+    <input type="text" class="form-control" placeholder="Phone">
+  </div>
+  <div class="col-sm-2">
+    <input type="text" class="form-control" placeholder="ext">
+  </div>
+</div>
 
-              <div class="form-group col-md-4">
-                <label>Home Phone/Ext.</label>
-                <div class="input-group">
-                  <input type="text" class="form-control" name="home_phone">
-                  <span class="input-group-addon">ext</span>
-                  <input type="text" class="form-control" style="width: 50px;" name="home_ext">
-                </div>
-              </div>
+<!-- Home Phone -->
+<div class="form-group row">
+  <label class="col-sm-2 col-form-label">Home Phone/Ext.</label>
+  <div class="col-sm-5">
+    <input type="text" class="form-control" placeholder="Phone">
+  </div>
+  <div class="col-sm-2">
+    <input type="text" class="form-control" placeholder="ext">
+  </div>
+</div>
 
-              <div class="form-group col-md-4">
-                <label>Cell Phone/Ext.</label>
-                <div class="input-group">
-                  <input type="text" class="form-control" name="cell_phone">
-                  <span class="input-group-addon">ext</span>
-                  <input type="text" class="form-control" style="width: 50px;" name="cell_ext">
-                </div>
-              </div>
-            </div>
+<!-- Cell Phone -->
+<div class="form-group row">
+  <label class="col-sm-2 col-form-label">Cell Phone/Ext.</label>
+  <div class="col-sm-5">
+    <input type="text" class="form-control" placeholder="Phone">
+  </div>
+  <div class="col-sm-2">
+    <input type="text" class="form-control" placeholder="ext">
+  </div>
+</div>
+
 
             <hr>
             <legend>
-              <span class="label label-default">2</span> <strong>Associate Individual</strong>
+              <span class="label label-default">2</span> Associate Individual
             </legend>
 
             <p><small>Fields marked with an <span class="text-danger">*</span> are required.</small></p>
