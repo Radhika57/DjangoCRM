@@ -3,6 +3,13 @@
 {% block main-content %}
 
 <style>
+    .client-info-section,
+    .policy-info-section {
+        display: none;
+    }
+    .active-section {
+        display: block;
+    }
         /* Modal footer adjustments */
 .modal-footer-responsive {
   padding: 15px;
@@ -647,148 +654,191 @@
                         <!-- Step 1: Client Info -->
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <div class="step-indicator">
+                                <div class="step-indicator" id="clientInfoTab">
                                     <span class="step-number">1</span>
                                     <span class="step-title">Client Info</span>
                                 </div>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body client-info-section active-section">
                                 <div class="form-group">
                                     <label for="recordType">Select Record Type</label>
-                                   <select id="recordType" class="form-control" required>
-                                   <option value="">-- Select --</option>
-                                   <option value="existing">Existing Individual</option>
-                                   <option value="new">New Individual</option>
-                            </select>
-
+                                    <select id="recordType" class="form-control" required>
+                                        <option value="">-- Select --</option>
+                                        <option value="existing">Existing Individual</option>
+                                        <option value="new">New Individual</option>
+                                    </select>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="individualName">Individual Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="individualName" placeholder="Type to search" required>
+                                
+
+                                <!-- New Individual Fields -->
+                                <div id="newIndividualFields" style="display:none;">
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label for="firstName">First Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="firstName" placeholder="First Name">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="middleName">Middle Name</label>
+                                            <input type="text" class="form-control" id="middleName" placeholder="Middle Name">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="lastName">Last Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="lastName" placeholder="Last Name">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label for="clientType">Type</label>
+                                            <select id="clientType" class="form-control">
+                                                <option value="">-- Select Type --</option>
+                                                <option value="individual">Individual</option>
+                                                <option value="business">Business</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="servicingAgent">Servicing Agent</label>
+                                            <input type="text" class="form-control" id="servicingAgent" placeholder="Type to search">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="email">Email</label>
+                                            <input type="email" class="form-control" id="email" placeholder="Enter email">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label for="businessPhone">Business Phone/Ext</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="businessPhone" placeholder="Phone">
+                                                <span class="input-group-addon">ext</span>
+                                                <input type="text" class="form-control" id="businessExt" placeholder="Ext">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="homePhone">Home Phone/Ext</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="homePhone" placeholder="Phone">
+                                                <span class="input-group-addon">ext</span>
+                                                <input type="text" class="form-control" id="homeExt" placeholder="Ext">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="cellPhone">Cell Phone/Ext</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="cellPhone" placeholder="Phone">
+                                                <span class="input-group-addon">ext</span>
+                                                <input type="text" class="form-control" id="cellExt" placeholder="Ext">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <!-- Only for New Individual -->
-                              <div id="newIndividualFields" style="display:none;">
-    <div class="row">
-        <div class="form-group col-md-6">
-            <label for="firstName">First Name <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" id="firstName" placeholder="First Name">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="middleName">Middle Name</label>
-            <input type="text" class="form-control" id="middleName" placeholder="Middle Name">
-        </div>
-    </div>
-    <div class="row">
-        <div class="form-group col-md-6">
-            <label for="lastName">Last Name <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" id="lastName" placeholder="Last Name">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="clientType">Type</label>
-            <select id="clientType" class="form-control">
-                <option value="">-- Select Type --</option>
-                <option value="individual">Individual</option>
-                <option value="business">Business</option>
-            </select>
-        </div>
-    </div>
-    <div class="row">
-        <div class="form-group col-md-6">
-            <label for="servicingAgent">Servicing Agent</label>
-            <input type="text" class="form-control" id="servicingAgent" placeholder="Type to search">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" placeholder="Enter email">
-        </div>
-    </div>
-    <div class="row">
-        <div class="form-group col-md-6">
-            <label for="businessPhone">Business Phone/Ext</label>
-            <div class="input-group">
-                <input type="text" class="form-control" id="businessPhone" placeholder="Enter phone">
-                <span class="input-group-addon">ext</span>
-                <input type="text" class="form-control" id="businessExt" placeholder="Ext">
-            </div>
-        </div>
-        <div class="form-group col-md-6">
-            <label for="homePhone">Home Phone/Ext</label>
-            <div class="input-group">
-                <input type="text" class="form-control" id="homePhone" placeholder="Enter phone">
-                <span class="input-group-addon">ext</span>
-                <input type="text" class="form-control" id="homeExt" placeholder="Ext">
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="form-group col-md-6">
-            <label for="cellPhone">Cell Phone/Ext</label>
-            <div class="input-group">
-                <input type="text" class="form-control" id="cellPhone" placeholder="Enter phone">
-                <span class="input-group-addon">ext</span>
-                <input type="text" class="form-control" id="cellExt" placeholder="Ext">
-            </div>
-        </div>
-    </div>
-</div>
-
                             </div>
                         </div>
 
                         <!-- Step 2: Policy Info -->
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <div class="step-indicator">
+                                <div class="step-indicator" id="policyInfoTab">
                                     <span class="step-number">2</span>
                                     <span class="step-title">Policy Info</span>
                                 </div>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body policy-info-section">
                                 <p>Fields marked with an <span class="text-danger">*</span> are required.</p>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label for="carrier">Carrier <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="carrier" placeholder="Carrier">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="policyNumber">Policy Number</label>
+                                        <input type="text" class="form-control" id="policyNumber" placeholder="Policy Number">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="status">Status <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="status" placeholder="Status">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label>Coverage Type</label>
+                                        <select class="form-control">
+                                            <option value="">Select Coverage</option>
+                                            <option value="M">Monthly</option>
+                                            <option value="W">Weekly</option>
+                                            <option value="A">Annually</option>
+                                            <option value="O">One-Time</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="effectiveDate">Effective Date</label>
+                                        <input type="date" class="form-control" id="effectiveDate" placeholder="mm/dd/yyyy">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="agentAgency">Agent/Agency</label>
+                                        <input type="text" class="form-control" id="agentAgency" placeholder="Type to search">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
 
-<div class="modal-footer modal-footer-responsive justify-content-center text-center">
-  <div class="btn-group-custom">
-    <button type="submit" class="btn btn-success curved-btn" form="policyForm">Save</button>
-    <button type="submit" class="btn btn-success curved-btn" form="policyForm">Save & Add Coverage</button>
-    <button type="submit" class="btn btn-success curved-btn" form="policyForm">Save & Add Another</button>
-    <button type="button" class="btn btn-default curved-btn" data-dismiss="modal">Cancel</button>
-  </div>
-</div>
-
+            <div class="modal-footer modal-footer-responsive justify-content-center text-center">
+                <div class="btn-group-custom">
+                    <button type="submit" class="btn btn-success curved-btn" form="policyForm">Save</button>
+                    <button type="submit" class="btn btn-success curved-btn" form="policyForm">Save & Add Coverage</button>
+                    <button type="submit" class="btn btn-success curved-btn" form="policyForm">Save & Add Another</button>
+                    <button type="button" class="btn btn-default curved-btn" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 
 <script>
     $(function () {
         function toggleNewIndividualFields() {
-            var isNew = $('#recordType').val() === 'new';
-            if (isNew) {
+            var selectedType = $('#recordType').val();
+            if (selectedType === 'new') {
                 $('#newIndividualFields').slideDown(200);
-            } else {
+                $('#existingIndividualFields').slideUp(200);
+            } else if (selectedType === 'existing') {
+                $('#existingIndividualFields').slideDown(200);
                 $('#newIndividualFields').slideUp(200);
+            } else {
+                $('#existingIndividualFields, #newIndividualFields').slideUp(200);
             }
         }
 
         $('#recordType').on('change', toggleNewIndividualFields);
 
-        $('#newPolicyModal').on('show.bs.modal', function() {
+        $('#newPolicyModal').on('show.bs.modal', function () {
             $('#policyForm')[0].reset();
+            $('#existingIndividualFields').hide();
             $('#newIndividualFields').hide();
-            $('#recordType').val('').trigger('change'); 
+            $('#recordType').val('');
+            $('.client-info-section').addClass('active-section');
+            $('.policy-info-section').removeClass('active-section');
+        });
+
+        $('#clientInfoTab').on('click', function () {
+            $('.client-info-section').addClass('active-section');
+            $('.policy-info-section').removeClass('active-section');
+        });
+
+        $('#policyInfoTab').on('click', function () {
+            $('.policy-info-section').addClass('active-section');
+            $('.client-info-section').removeClass('active-section');
         });
     });
 </script>
+
 
 
 {% endblock %}
