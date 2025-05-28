@@ -682,7 +682,12 @@
                                 </div>
 
                                 <!-- Existing Individual Fields -->
-                               
+                                 <div id="existingIndividualFields" style="display:none;">
+                                    <div class="form-group">
+                                        <label for="existingClientSearch">Individual Name</label>
+                                        <input type="text" class="form-control" id="existingClientSearch" placeholder="Type search">
+                                    </div>
+                                </div>
                                 <!-- New Individual Fields -->
                                 <div id="newIndividualFields" style="display:none;">
                                     <div class="row">
@@ -759,8 +764,21 @@
                                 <p>Fields marked with an <span class="text-danger">*</span> are required.</p>
                                 <div class="row">
                                     <div class="form-group col-md-4">
-                                        <label for="carrier">Carrier <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="carrier" placeholder="Carrier">
+                                        <label>Carrier</label>
+                                        <select class="form-control">
+                                            <option>AARP</option>
+            <option>Aetna</option>
+            <option>Anthem</option>
+            <option>Cigna</option>
+            <option>Highmark</option>
+            <option>Humana</option>
+            <option>Med Mutual PDP</option>
+            <option>Medico</option>
+            <option>Peak</option>
+            <option>United Healthcare</option>
+            <option>UPMC</option>
+            <option>Wellcare</option>
+                                        </select>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="policyNumber">Policy Number</label>
@@ -848,9 +866,52 @@
             $('.policy-info-section').addClass('active-section');
             $('.client-info-section').removeClass('active-section');
         });
+
+        // Handle Save & Add Coverage button click
+        $('button[form="policyForm"]').on('click', function(e) {
+            e.preventDefault();
+            
+            // Check which button was clicked
+            var buttonText = $(this).text().trim();
+            
+            if (buttonText === 'Save & Add Coverage') {
+                // Validate required fields in client info section
+                var isValid = true;
+                $('#newIndividualFields [required]').each(function() {
+                    if (!$(this).val()) {
+                        isValid = false;
+                        $(this).addClass('is-invalid');
+                    } else {
+                        $(this).removeClass('is-invalid');
+                    }
+                });
+                
+                if (isValid) {
+                    // Show policy info section
+                    $('.policy-info-section').addClass('active-section');
+                    $('.client-info-section').removeClass('active-section');
+                    
+                    // Scroll to policy info section
+                    $('.modal-body').animate({
+                        scrollTop: $('#policyInfoTab').offset().top - 20
+                    }, 500);
+                } else {
+                    alert('Please fill all required fields in Client Info section.');
+                }
+            } else if (buttonText === 'Save') {
+                // Handle regular save action
+                $('#policyForm').submit();
+            } else if (buttonText === 'Save & Add Another') {
+                // Handle save and add another action
+                $('#policyForm').submit();
+                $('#newPolicyModal').modal('hide');
+                setTimeout(function() {
+                    $('#newPolicyModal').modal('show');
+                }, 500);
+            }
+        });
     });
 </script>
-
 
 
 {% endblock %}
