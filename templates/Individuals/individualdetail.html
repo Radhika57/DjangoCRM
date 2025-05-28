@@ -59,12 +59,20 @@
     <div class="row">
         <div class="col-md-3">
             <label>Type</label>
-            <input type="text" class="form-control" value="">
+            <select class="form-control" name="type">
+                    <option value="">-- Select Type --</option>
+                    <option value="Prospect">Prospect</option>
+                    <option value="Client">Client</option>
+                    <option value="Ex-Prospect">Ex-Prospect</option>
+                    <option value="Ex-Client">Ex-Client</option>
+                    <option value="Contact">Contact</option>
+                    
+                  </select>
         </div>
         <div class="col-md-3">
             <label>Status</label>
             <select class="form-control">
-                <option>- select -</option>
+                <option value="">- select -</option>
                 <option>In progress</option>
                 <option>Not Contacted Yet</option>
                 <option>Unqualified</option>

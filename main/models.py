@@ -319,3 +319,20 @@ class Agent_personal(models.Model):
     incentives = models.TextField(null=True,blank=True)
     hobbies = models.TextField(null=True,blank=True)
     additional_information = models.TextField(null=True,blank=True)
+    
+class Individuals(models.Model):
+    first_name = models.CharField(max_length=100)
+    middle_name = models.CharField(max_length=100,null=True,blank=True)
+    last_name = models.CharField(max_length=100)
+    individual_type = models.CharField(max_length=100,null=True,blank=True)
+    servicing_agent = models.ForeignKey(Agent,on_delete=models.CASCADE,null=True,blank=True)
+    email = models.EmailField(null=True,blank=True)
+    business_phone = models.CharField(max_length=10, blank=True, null=True)
+    business_ext = models.CharField(max_length=10, blank=True, null=True)
+    home_phone = models.CharField(max_length=10, blank=True, null=True)
+    home_ext = models.CharField(max_length=10, blank=True, null=True)
+    cell_phone = models.CharField(max_length=10, blank=True, null=True)
+    cell_ext = models.CharField(max_length=10, blank=True, null=True)
+
+    
+    

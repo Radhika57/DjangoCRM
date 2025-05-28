@@ -44,10 +44,14 @@ urlpatterns = [
     path('agency/detail/<int:agent_id>/', views.agent_detail, name='agent_detail'),
     
 
+    # Individual
     
-    path('customfields/', views.custom_fields, name='custom_fields'),
-    path('agents/settings/', views.agent_column_settings, name='agent_column_settings'),
-    
+    path('Individuals/search-individuals/', views.search_individuals, name='search_individuals'),
+    path('Individuals/advanced-individuals/', views.advanced_individuals, name='advanced_individuals'),
+    path('Individuals/saved-individuals/', views.saved_individuals, name='saved_individuals'),
+    path('individuals/create/', views.create_individual, name='create_individual'),
+    path('agents/search/', views.agent_autocomplete, name='agent_autocomplete'),
+    path('Individuals/detail/<int:individual_id>/', views.individual_tab, name='individual_tab'),
     
     # Policy
     
@@ -55,12 +59,17 @@ urlpatterns = [
     path('policy/search-policy/', views.search_policy, name='search_policy'),
     path('policy/advanced-policy/', views.advanced_policy, name='advanced_policy'),
     path('policy/saved-policy/', views.saved_policy, name='saved_policy'),
+    
+    
+    path('customfields/', views.custom_fields, name='custom_fields'),
+    path('agents/settings/', views.agent_column_settings, name='agent_column_settings'),
+    
+    
+    
    
 
-    path('Individuals/search-individuals/', views.search_individuals, name='search_individuals'),
-    path('Individuals/advanced-individuals/', views.advanced_individuals, name='advanced_individuals'),
-    path('Individuals/saved-individuals/', views.saved_individuals, name='saved_individuals'),
-    path('Individuals/detail/<int:individual_id>/', views.individual_tab, name='individual_tab'),
+    
+    
 
 
   

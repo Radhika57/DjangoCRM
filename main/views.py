@@ -354,7 +354,6 @@ def saved_searches(request):
     return render(request, 'agent/savedsearch.html',{'agencies': agencies, 'agents': agents})
 
 
-
 def agent_detail(request, agent_id):
     agent = get_object_or_404(Agent, id=agent_id)
     agent_details, _ = Agent_details.objects.get_or_create(agent=agent)
@@ -579,6 +578,93 @@ def agent_detail(request, agent_id):
 
 
 
+# Individual
+
+def search_individuals(request):
+    individual = Individuals.objects.all()
+    context = {
+        'individual':individual
+    }
+    return render(request, 'Individuals/searchindividuals.html',context)
+
+def advanced_individuals(request):
+    return render(request, 'Individuals/advancedindividuals.html')
+
+def saved_individuals(request):
+    return render(request, 'Individuals/savedindividuals.html')
+
+def create_individual(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        middle_name = request.POST.get('middle_name')
+        last_name = request.POST.get('last_name')
+        individual_type = request.POST.get('type')
+        servicing_agent_id = request.POST.get('servicing_agent_id')
+        email = request.POST.get('email')
+        business_phone = request.POST.get('business_phone')
+        business_ext = request.POST.get('business_ext')
+        home_phone = request.POST.get('home_phone')
+        home_ext = request.POST.get('home_ext')
+        cell_phone = request.POST.get('cell_phone')
+        cell_ext = request.POST.get('cell_ext')
+
+        servicing_agent = Agent.objects.filter(id=servicing_agent_id).first() if servicing_agent_id else None
+
+        individual = Individuals.objects.create(
+            first_name=first_name,
+            middle_name=middle_name,
+            last_name=last_name,
+            individual_type=individual_type,
+            servicing_agent=servicing_agent,
+            email=email,
+            business_phone=business_phone,
+            business_ext=business_ext,
+            home_phone=home_phone,
+            home_ext=home_ext,
+            cell_phone=cell_phone,
+            cell_ext=cell_ext,
+        )
+
+        return JsonResponse({'success': True, 'message': 'Saved successfully'})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=400)
+
+
+def agent_autocomplete(request):
+    query = request.GET.get('term', '')
+    agents = Agent.objects.filter(
+        models.Q(first_name__icontains=query) | models.Q(last_name__icontains=query)
+    ).values('id', 'first_name', 'last_name')[:10]
+
+    results = [
+        {'id': a['id'], 'label': f"{a['first_name']} {a['last_name']}"}
+        for a in agents
+    ]
+    return JsonResponse(results, safe=False)
+
+
+
+def individual_tab(request, individual_id):
+    return render(request, 'Individuals/individualtab.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def custom_fields(request):
     return render(request, 'carrier/customfields.html')
 
@@ -587,27 +673,6 @@ def custom_fields(request):
 def agent_column_settings(request):
 
     return render(request, 'agency/agentcolumnsettings.html')
-
-def agency_detail(request, agency_id):
-  
-    return render(request, 'agency/agencydetail.html', {'agency_id': agency_id})
-
-
-def advanced_search(request):
-    return render(request, 'agent/advancedsearch.html')
-def saved_searches(request):
-    return render(request, 'agent/savedsearch.html')
-def agency_client(request):
-    return render(request, 'agency/agencyclient.html')
-
-    return render(request, 'agent/agentcolumnsettings.html')
-def agency_activity(request):
-    return render(request, 'agency/agencyactivity.html')
-def agency_note(request):
-    return render(request, 'agency/agencynote.html')
-
-def agency_eo(request):
-    return render(request, 'agency/agencyeo.html')
 
 
 
@@ -625,17 +690,6 @@ def saved_policy(request):
 def senior_select(request):
     return render(request, 'agency/seniorselect.html')
 
-def search_individuals(request):
-    return render(request, 'Individuals/searchindividuals.html')
-
-def advanced_individuals(request):
-    return render(request, 'Individuals/advancedindividuals.html')
-
-def saved_individuals(request):
-    return render(request, 'Individuals/savedindividuals.html')
-
-def individual_tab(request, individual_id):
-    return render(request, 'Individuals/individualtab.html', {'individual_id': individual_id})
 
 
 
