@@ -137,27 +137,68 @@
                         </div>
                     </div>
                     <div class="form-group col-md-4">
-                        <label>Relationship to Individual <span class="text-danger">*</span></label>
-                        <select class="form-control">
-                            <option>Select relationship</option>
-                            <option>Spouse</option>
-                            <option>Child</option>
-                            <option>Parent</option>
-                        </select>
-                    </div>
+    <label>Relationship to Individual <span class="text-danger">*</span></label>
+    <select class="form-control">
+        <option disabled selected>Select relationship</option>
+        <optgroup label="Personal">
+            <option>Common Law</option>
+            <option>Domestic Partner</option>
+            <option>Ex-Spouse</option>
+            <option>Life Partner</option>
+            <option>Significant Other</option>
+            <option>Spouse</option>
+            <option>Widow</option>
+            <option>Widower</option>
+        </optgroup>
+        <optgroup label="Family">
+            <option>Child</option>
+            <option>Foster Child</option>
+            <option>Foster Parent</option>
+            <option>Grandchild</option>
+            <option>Grandparent</option>
+            <option>In-Law</option>
+            <option>Parent</option>
+            <option>Relative</option>
+            <option>Sibling</option>
+            <option>Step Grandparent</option>
+            <option>Stepchild</option>
+            <option>Stepsibling</option>
+        </optgroup>
+        <optgroup label="Legal">
+            <option>Beneficiary</option>
+            <option>Conservatee</option>
+            <option>Conservator</option>
+            <option>Dependent</option>
+            <option>Fiduciary</option>
+            <option>Fiduciary Principal</option>
+            <option>Legal Guardian</option>
+            <option>POA Principal</option>
+            <option>Power of Attorney</option>
+            <option>Trustee</option>
+            <option>Ward</option>
+        </optgroup>
+        <optgroup label="Other">
+            <option>Other</option>
+        </optgroup>
+    </select>
+</div>
+
                     <div class="form-group col-md-4">
                         <label>Notes</label>
                         <textarea class="form-control" rows="3"></textarea>
                     </div>
                     <hr>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="correspondingCheckbox" checked>
-                            Add a corresponding relationship
-                        </label>
-                    </div>
+                   <div class="form-group w-50">
+    <label for="correspondingToggle">Add Corresponding Relationship?</label>
+    <select id="correspondingToggle" class="form-control form-control-sm">
+        <option value="">--Select--</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+    </select>
+</div>
+
                     <hr>
-                    <div id="correspondingSection">
+                    <div id="correspondingSection" style="display: none;">
                         <h5>
                             <strong>Corresponding Relationship</strong>
                             <small><a href="#"><i>(What is this?)</i></a></small>
@@ -167,15 +208,53 @@
                                 <label>Name</label>
                                 <p><strong>Judith Abel</strong></p>
                             </div>
-                            <div class="form-group col-md-4">
-                                <label>Corresponding Relationship <span class="text-danger">*</span></label>
-                                <select class="form-control">
-                                    <option>Select relationship</option>
-                                    <option>Spouse</option>
-                                    <option>Child</option>
-                                    <option>Parent</option>
-                                </select>
-                            </div>
+                           <div class="form-group col-md-4">
+    <label>Corresponding Relationship <span class="text-danger">*</span></label>
+    <select class="form-control">
+        <option disabled selected>Select relationship</option>
+        <optgroup label="Personal">
+            <option>Common Law</option>
+            <option>Domestic Partner</option>
+            <option>Ex-Spouse</option>
+            <option>Life Partner</option>
+            <option>Significant Other</option>
+            <option>Spouse</option>
+            <option>Widow</option>
+            <option>Widower</option>
+        </optgroup>
+        <optgroup label="Family">
+            <option>Child</option>
+            <option>Foster Child</option>
+            <option>Foster Parent</option>
+            <option>Grandchild</option>
+            <option>Grandparent</option>
+            <option>In-Law</option>
+            <option>Parent</option>
+            <option>Relative</option>
+            <option>Sibling</option>
+            <option>Step Grandparent</option>
+            <option>Stepchild</option>
+            <option>Stepsibling</option>
+        </optgroup>
+        <optgroup label="Legal">
+            <option>Beneficiary</option>
+            <option>Conservatee</option>
+            <option>Conservator</option>
+            <option>Dependent</option>
+            <option>Fiduciary</option>
+            <option>Fiduciary Principal</option>
+            <option>Legal Guardian</option>
+            <option>POA Principal</option>
+            <option>Power of Attorney</option>
+            <option>Trustee</option>
+            <option>Ward</option>
+        </optgroup>
+        <optgroup label="Other">
+            <option>Other</option>
+        </optgroup>
+    </select>
+</div>
+
                             <div class="form-group col-md-4">
                                 <label>Notes</label>
                                 <textarea class="form-control" rows="3"></textarea>
@@ -348,41 +427,81 @@
     </div>
 </div>
 
-<script>
-// Namespace all functions to avoid conflicts
-var RelationshipsUI = {
-    init: function() {
-        // Form submission handler
-        $('#activityForm').on('submit', function(e) {
-            e.preventDefault();
-            // Add your form submission logic here
-            RelationshipsUI.showNotesMain();
-            location.reload();
-        });
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-        // Corresponding relationship toggle
-        $('#correspondingCheckbox').change(function() {
-            $('#correspondingSection').toggle(this.checked);
-        });
-    },
+    <script>
+    var RelationshipsUI = {
+        init: function() {
+            // Initialize event handlers and UI state
+            this.initModals();
 
-    showCreateNew: function() {
-        $('#RelationshipsMainContent').hide();
-        $('#createNewRelationshipsContainer').show();
-        $('html, body').animate({
-            scrollTop: $('#createNewRelationshipsContainer').offset().top - 20
-        }, 'smooth');
-    },
+            // Toggle corresponding section on dropdown change
+            var self = this;
+            $('#correspondingToggle').on('change', function() {
+                self.toggleCorrespondingSection();
+            });
 
-    showNotesMain: function() {
-        $('#RelationshipsMainContent').show();
-        $('#createNewRelationshipsContainer').hide();
-        $('#activityForm')[0].reset();
-    }
-};
+            // Initialize corresponding section as hidden on page load
+            $('#correspondingSection').hide();
+        },
 
-// Initialize when DOM is ready
-$(document).ready(function() {
-    RelationshipsUI.init();
-});
-</script>
+        toggleCorrespondingSection: function() {
+            var selectedValue = $('#correspondingToggle').val();
+            if (selectedValue === 'yes') {
+                $('#correspondingSection').slideDown(200);
+            } else {
+                $('#correspondingSection').slideUp(200);
+            }
+        },
+
+        initModals: function() {
+            // Dropdown menu handlers
+            $(document).on('click', '.dropdown-menu li a', function(e) {
+                e.preventDefault();
+                var action = $(this).text().trim();
+                
+                if (action === 'Create New Individual') {
+                    $('#newIndividualModal').modal('show');
+                } else if (action === 'Enter Text (Basic info)') {
+                    $('#basicinfoModal').modal('show');
+                }
+            });
+
+            // Modal save handlers
+            $(document).on('click', '#newIndividualModal .btn-success, #basicinfoModal .btn-success', function() {
+                var modalId = $(this).closest('.modal').attr('id');
+                $('#' + modalId).modal('hide');
+            });
+        },
+
+        showCreateNew: function() {
+            $('#RelationshipsMainContent').hide();
+            $('#createNewRelationshipsContainer').show();
+
+            // Reset form and set default state
+            $('#activityForm')[0].reset();
+            $('#correspondingSection').hide();
+            $('#correspondingToggle').val('');
+
+            $('html, body').animate({
+                scrollTop: $('#createNewRelationshipsContainer').offset().top - 20
+            }, 'smooth');
+        },
+
+        showNotesMain: function() {
+            $('#RelationshipsMainContent').show();
+            $('#createNewRelationshipsContainer').hide();
+            $('#activityForm')[0].reset();
+        }
+    };
+
+    // Initialize when DOM is ready
+    $(document).ready(function() {
+        RelationshipsUI.init();
+
+       
+      
+    });
+    </script>
