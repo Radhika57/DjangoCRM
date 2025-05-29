@@ -79,22 +79,43 @@
             </div>
 
             <div class="panel-body table-responsive">
-                <table id="example10" class="table table-bordered table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>Subject & Note</th>
-                            <th>Last updated</th>
-                            
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><a href="{% url 'individual_tab' 1 %}">John Doe</a></td>
-                            <td>Senior Select Plans</td>
-                            
-                        </tr>
-                    </tbody>
-                </table>
+                 {% if individual_notes %}
+                    <table id="example10" class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Notes</th>
+                                <th>Attachment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for note in individual_notes %}
+                            <tr>
+                                <td>{{ note.subject }}</td>
+                                <td>{{ note.notes }}</td>
+                                <td>
+                                    {% if note.attachment %}
+                                        <a href="{{ note.attachment.url }}" download>
+                                            <img src="{{ note.attachment.url }}" alt="Attachment" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                        </a>
+                                    {% else %}
+                                        No File
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                <div class="well text-center" style="padding: 40px;">
+                    <i class="fa fa-tasks fa-3x text-muted mb-3"></i>
+                    <h4>There are no "Notes & Attachments for {{individual.first_name}} {{individual.last_name}}"</h4>
+                    <p class="text-muted">
+                        This data is not available because it hasn't been created yet or you don't have permission.
+                    </p>
+                </div>
+                {% endif %}
+
             </div>
         </div>
     </div>
@@ -116,37 +137,21 @@
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="subject">Subject <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="subject" id="subject" required>
-                        <div class="checkbox" style="margin-top: 5px;">
-                            <label><input type="checkbox" name="pin_note"> Pin Note</label>
+                        <input type="text" class="form-control" name="note_subject" id="subject" required>
+                        <div class="checkbox checkbox-primary">
+                            <input id="checkboxpin" type="checkbox" name="pin_note">
+                            <label for="checkboxpin">
+                                Pin Note
+                            </label>
                         </div>
                         <div class="form-group">
                             <label>Notes</label>
-                            <textarea class="form-control" name="notes" rows="5"></textarea>
+                            <textarea class="form-control" name="note_notes" rows="5"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Attachments(s)</label>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Filename</th>
-                                    <th>Size</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="3" style="text-align: center;">
-                                        <div class="well text-center" style="margin: 0;">
-                                            <i class="fa fa-download fa-2x"></i><br>
-                                            <strong>Drag and Drop Files Here</strong><br>
-                                            <input type="file" name="attachment" class="form-control" style="margin-top: 10px;">
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <label>Attachment</label>
+                        <input type="file" name="attachment" class="form-control" style="margin-top: 10px;">
                     </div>
 
                     <div class="text-right">
@@ -194,13 +199,5 @@ document.addEventListener('DOMContentLoaded', function() {
     backToNotesBtn.addEventListener('click', showNotesList);
     cancelNoteBtn.addEventListener('click', showNotesList);
 
-    // Form submission
-    noteForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Add your form submission logic here
-        showNotesList();
-        alert('Note saved successfully!');
-        // location.reload(); // Uncomment if you want to reload after save
-    });
 });
 </script>

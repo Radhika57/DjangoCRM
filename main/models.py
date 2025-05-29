@@ -319,3 +319,87 @@ class Agent_personal(models.Model):
     incentives = models.TextField(null=True,blank=True)
     hobbies = models.TextField(null=True,blank=True)
     additional_information = models.TextField(null=True,blank=True)
+    
+class Individuals(models.Model):
+    first_name = models.CharField(max_length=100)
+    middle_name = models.CharField(max_length=100,null=True,blank=True)
+    last_name = models.CharField(max_length=100)
+    individual_type = models.CharField(max_length=100,null=True,blank=True)
+    servicing_agent = models.ForeignKey(Agent,on_delete=models.CASCADE,null=True,blank=True)
+    email = models.EmailField(null=True,blank=True)
+    business_phone = models.CharField(max_length=10, blank=True, null=True)
+    business_ext = models.CharField(max_length=10, blank=True, null=True)
+    home_phone = models.CharField(max_length=10, blank=True, null=True)
+    home_ext = models.CharField(max_length=10, blank=True, null=True)
+    cell_phone = models.CharField(max_length=10, blank=True, null=True)
+    cell_ext = models.CharField(max_length=10, blank=True, null=True)
+
+class IndividualDetails(models.Model):
+    individual_name = models.ForeignKey(Individuals,on_delete=models.CASCADE,related_name="individual_detail")
+    nick_name = models.CharField(max_length=100,null=True,blank=True)
+    title = models.CharField(max_length=10,null=True,blank=True)
+    gender = models.CharField(max_length=10,null=True,blank=True)
+    dob = models.DateField(null=True,blank=True)
+    ssn = models.CharField(max_length=100,null=True,blank=True)
+    driver_license = models.CharField(max_length=100,null=True,blank=True)
+    descresed_date = models.DateField(null=True,blank=True)
+    status = models.CharField(max_length=100,null=True,blank=True)
+    mbi = models.CharField(max_length=100,null=True,blank=True)
+    medicare_effective_date_A = models.DateField(null=True,blank=True)
+    medicare_effective_date_B = models.DateField(null=True,blank=True)
+    smoker_status = models.CharField(max_length=100,null=True,blank=True)
+    additional_agent = models.ForeignKey(Agent,on_delete=models.CASCADE,null=True,blank=True,related_name="additional_agent")
+    secondary_email = models.EmailField(null=True,blank=True)
+    lead_date = models.DateField(null=True,blank=True)
+    lead_source = models.CharField(max_length=100,null=True,blank=True)
+    other_lead_source = models.CharField(max_length=100,null=True,blank=True)
+    project_code = models.CharField(max_length=100,null=True,blank=True)
+    affiliate_agent = models.ForeignKey(Agent,on_delete=models.CASCADE,null=True,blank=True,related_name="affiliate_agent")
+
+
+class IndividualAddress(models.Model):
+    individual_name = models.ForeignKey(Individuals, on_delete=models.CASCADE, related_name='individual_addresses')
+    address_type = models.CharField(max_length=50, choices=ADDRESS_TYPE_CHOICES,blank=True, null=True)  
+    address1 = models.CharField(max_length=255, blank=True, null=True)
+    address2 = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    state = models.CharField(max_length=100)
+    zip_code = models.CharField(max_length=10, blank=True, null=True)
+    county = models.CharField(max_length=100, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    primary = models.BooleanField(default=False)
+    
+class IndividualActivity(models.Model):
+    individual_name = models.ForeignKey(Individuals, on_delete=models.CASCADE , related_name='individual_activity')
+    subject = models.CharField(max_length=255)
+    notes = models.TextField(blank=True)
+    status = models.CharField(max_length=100,null=True,blank=True)
+    # follow_up_user = models.CharField(max_length=100,null=True,blank=True)
+    follow_up_team = models.CharField(max_length=100,null=True,blank=True)
+    due_date = models.BooleanField(default=False)
+    activity_date = models.DateField(null=True,blank=True)
+    priority = models.CharField(max_length=100,null=True,blank=True)
+    type = models.CharField(max_length=100,null=True,blank=True)
+    method = models.CharField(max_length=100,null=True,blank=True)
+    attachment = models.FileField(upload_to='individual_activity_attachments/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+class IndividualNotes(models.Model):
+    individual_name = models.ForeignKey(Individuals, on_delete=models.CASCADE , related_name='individual_notes')
+    pin_note = models.BooleanField(default=False)
+    subject = models.CharField(max_length=255)
+    notes = models.TextField(null=True,blank=True)
+    attachment = models.FileField(upload_to='individual_notes_attachments/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+class IndividualRelationship(models.Model):
+    individual_name = models.ForeignKey(Individuals, on_delete=models.CASCADE , related_name='individual_relationship')
+    name = models.CharField(max_length=100)
+    relationship = models.CharField(max_length=100)
+    notes = models.TextField(null=True,blank=True)
+    correspondence = models.CharField(max_length=100)
+    correspondence_relationship = models.CharField(max_length=100,null=True,blank=True)
+    correspondence_notes = models.TextField(null=True,blank=True)
+    
+
+    

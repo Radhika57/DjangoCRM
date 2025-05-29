@@ -1,0 +1,229 @@
+
+{% load phone_filters %} 
+<div class="modal fade" id="newIndividualModal" tabindex="-1" role="dialog" aria-labelledby="newIndividualModalLabel">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+
+        <form id="individualForm">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h2 class="modal-title" style="font-size: 2.2rem;">New Individual</h2>
+          </div>
+
+          <div class="modal-body">
+            <fieldset>
+              <legend>
+                <span class="label label-success">1</span> Individual Info
+                <em class="text-muted">Please review the required fields.</em>
+              </legend>
+
+              <div class="row">
+                <div class="form-group col-md-4">
+                  <label>First Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="first_name">
+                </div>
+                <div class="form-group col-md-4">
+                  <label>Middle Name</label>
+                  <input type="text" class="form-control" name="middle_name">
+                </div>
+                <div class="form-group col-md-4">
+                  <label>Last Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="last_name">
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="form-group col-md-4">
+                  <label>Type</label>
+                  <select class="form-control" name="type">
+                    <option value="">-- Select Type --</option>
+                    <option value="Prospect">Prospect</option>
+                    <option value="Client">Client</option>
+                    <option value="Ex-Prospect">Ex-Prospect</option>
+                    <option value="Ex-Client">Ex-Client</option>
+                    <option value="Contact">Contact</option>
+                    
+                  </select>
+                </div>
+                <div class="form-group position-relative col-md-4">
+                    <label>Servicing Agent</label>
+                    <input type="text" class="form-control" id="servicing_agent" autocomplete="off">
+                    <input type="hidden" id="servicing_agent_id" name="servicing_agent_id">
+                    <div id="agentSuggestions" class="list-group position-absolute w-100" style="z-index: 1000;"></div>
+                </div>
+                <div class="form-group col-md-4">
+                  <label>Email</label>
+                  <input type="email" class="form-control" name="email">
+                </div>
+              </div>
+
+              <!-- Business Phone -->
+              <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Business Phone/Ext.</label>
+                <div class="col-sm-5">
+                  <input type="text" name="business_phone" class="form-control" placeholder="Phone">
+                </div>
+                <div class="col-sm-2">
+                  <input type="text" name="business_ext" class="form-control" placeholder="ext">
+                </div>
+              </div>
+
+              <!-- Home Phone -->
+              <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Home Phone/Ext.</label>
+                <div class="col-sm-5">
+                 <input type="text" name="home_phone" class="form-control" placeholder="Phone">
+                </div>
+                <div class="col-sm-2">
+                  <input type="text" name="home_ext" class="form-control" placeholder="ext">
+                </div>
+              </div>
+
+              <!-- Cell Phone -->
+              <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Cell Phone/Ext.</label>
+                <div class="col-sm-5">
+                  <input type="text" name="cell_phone" class="form-control" placeholder="Phone">
+                </div>
+                <div class="col-sm-2">
+                 <input type="text" name="cell_ext" class="form-control" placeholder="ext">
+                </div>
+              </div>
+
+
+              <hr>
+              <legend>
+                <span class="label label-default">2</span> Associate Individual
+              </legend>
+
+              <p><small>Fields marked with an <span class="text-danger">*</span> are required.</small></p>
+            </fieldset>
+          </div>
+
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success" id="saveIndividual">Save</button>
+            <button type="submit" class="btn btn-success" id="saveAddAnother">Save &amp; Add Another</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<script>
+$(document).ready(function () {
+  $("#servicing_agent").on("input", function () {
+    let query = $(this).val();
+    if (query.length >= 2) {
+      $.ajax({
+        url: "/agents/search/",
+        data: { term: query },
+        success: function (data) {
+          let suggestions = "";
+          if (data.length === 0) {
+            suggestions = '<a href="#" class="list-group-item list-group-item-action disabled">No results found</a>';
+          } else {
+            data.forEach(agent => {
+              suggestions += `<a href="#" class="list-group-item list-group-item-action" data-id="${agent.id}" data-label="${agent.label}">${agent.label}</a>`;
+            });
+          }
+          $("#agentSuggestions").html(suggestions).show();
+        }
+      });
+    } else {
+      $("#agentSuggestions").empty().hide();
+    }
+  });
+
+  $(document).on("click", "#agentSuggestions a", function (e) {
+    e.preventDefault();
+    const name = $(this).data("label");
+    const id = $(this).data("id");
+    $("#servicing_agent").val(name);
+    $("#servicing_agent_id").val(id);
+    $("#agentSuggestions").empty().hide();
+  });
+
+  $("#servicing_agent").on("blur", function () {
+    setTimeout(() => {
+      $("#agentSuggestions").fadeOut();
+    }, 150);
+  });
+});
+</script>
+
+
+<script>
+$(document).ready(function () {
+  $("#saveIndividual").click(function (e) {
+    e.preventDefault();
+    submitForm(false); 
+  });
+
+  $("#saveAddAnother").click(function (e) {
+    e.preventDefault();
+    submitForm(true); 
+  });
+
+  function clearFormFields() {
+    $("#individualForm")[0].reset();
+    $("#servicing_agent").val('');
+    $("#servicing_agent_id").val('');
+  }
+
+  function submitForm(clearAfter = false) {
+    $.ajax({
+      url: "{% url 'create_individual' %}",
+      method: "POST",
+      data: $("#individualForm").serialize(),
+      headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+      success: function (res) {
+        if (res.success) {
+          alert("Saved successfully");
+
+          clearFormFields(); 
+
+          if (!clearAfter) {
+            $('#newIndividualModal').modal('hide');
+          }
+        } else {
+          alert("Save failed.");
+        }
+      },
+      error: function () {
+        alert("Error saving data.");
+      }
+    });
+  }
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const phoneFields = document.querySelectorAll('input[name$="_phone"]');
+
+    phoneFields.forEach(function (field) {
+        const warning = document.createElement('small');
+        warning.style.color = 'red';
+        warning.style.display = 'none';
+        warning.textContent = 'Phone number must be exactly 10 digits.';
+        field.parentElement.appendChild(warning);
+
+        field.addEventListener('input', function () {
+            const digitsOnly = field.value.replace(/\D/g, '');
+            if (digitsOnly.length > 0 && digitsOnly.length < 10) {
+                warning.style.display = 'block';
+            } else {
+                warning.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
