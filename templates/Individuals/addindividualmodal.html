@@ -1,4 +1,6 @@
- <div class="modal fade" id="newIndividualModal" tabindex="-1" role="dialog" aria-labelledby="newIndividualModalLabel">
+
+{% load phone_filters %} 
+<div class="modal fade" id="newIndividualModal" tabindex="-1" role="dialog" aria-labelledby="newIndividualModalLabel">
     <div class="modal-dialog modal-md" role="document">
       <div class="modal-content">
 
@@ -141,7 +143,6 @@ $(document).ready(function () {
     }
   });
 
-  // Handle click on suggestion
   $(document).on("click", "#agentSuggestions a", function (e) {
     e.preventDefault();
     const name = $(this).data("label");
@@ -151,7 +152,6 @@ $(document).ready(function () {
     $("#agentSuggestions").empty().hide();
   });
 
-  // Hide suggestions on blur
   $("#servicing_agent").on("blur", function () {
     setTimeout(() => {
       $("#agentSuggestions").fadeOut();
@@ -165,12 +165,12 @@ $(document).ready(function () {
 $(document).ready(function () {
   $("#saveIndividual").click(function (e) {
     e.preventDefault();
-    submitForm(false); // Save and hide modal
+    submitForm(false); 
   });
 
   $("#saveAddAnother").click(function (e) {
     e.preventDefault();
-    submitForm(true); // Save and keep modal open
+    submitForm(true); 
   });
 
   function clearFormFields() {
@@ -189,7 +189,7 @@ $(document).ready(function () {
         if (res.success) {
           alert("Saved successfully");
 
-          clearFormFields(); // Always clear fields
+          clearFormFields(); 
 
           if (!clearAfter) {
             $('#newIndividualModal').modal('hide');
@@ -203,5 +203,27 @@ $(document).ready(function () {
       }
     });
   }
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const phoneFields = document.querySelectorAll('input[name$="_phone"]');
+
+    phoneFields.forEach(function (field) {
+        const warning = document.createElement('small');
+        warning.style.color = 'red';
+        warning.style.display = 'none';
+        warning.textContent = 'Phone number must be exactly 10 digits.';
+        field.parentElement.appendChild(warning);
+
+        field.addEventListener('input', function () {
+            const digitsOnly = field.value.replace(/\D/g, '');
+            if (digitsOnly.length > 0 && digitsOnly.length < 10) {
+                warning.style.display = 'block';
+            } else {
+                warning.style.display = 'none';
+            }
+        });
+    });
 });
 </script>

@@ -601,11 +601,11 @@ def create_individual(request):
         individual_type = request.POST.get('type')
         servicing_agent_id = request.POST.get('servicing_agent_id')
         email = request.POST.get('email')
-        business_phone = request.POST.get('business_phone')
+        business_phone = clean_phone(request.POST.get('business_phone'))
         business_ext = request.POST.get('business_ext')
-        home_phone = request.POST.get('home_phone')
+        home_phone = clean_phone(request.POST.get('home_phone'))
         home_ext = request.POST.get('home_ext')
-        cell_phone = request.POST.get('cell_phone')
+        cell_phone = clean_phone(request.POST.get('cell_phone'))
         cell_ext = request.POST.get('cell_ext')
 
         servicing_agent = Agent.objects.filter(id=servicing_agent_id).first() if servicing_agent_id else None
@@ -644,7 +644,134 @@ def agent_autocomplete(request):
 
 
 def individual_tab(request, individual_id):
-    return render(request, 'Individuals/individualtab.html')
+    individual = get_object_or_404(Individuals,id=individual_id)
+    individual_details , _ = IndividualDetails.objects.get_or_create(individual_name=individual)
+    individual_address = IndividualAddress.objects.filter(individual_name=individual)
+    individual_activity = IndividualActivity.objects.filter(individual_name=individual)
+    individual_notes = IndividualNotes.objects.filter(individual_name=individual)
+    agents = Agent.objects.all()
+    if request.method == 'POST':
+        if 'last_name' in request.POST:
+            individual.middle_name = request.POST.get('middle_name')
+            individual.last_name = request.POST.get('last_name')
+            individual.individual_type = request.POST.get('type')
+            individual.email = request.POST.get('email')
+            individual.business_phone = clean_phone(request.POST.get('business_phone'))
+            individual.business_ext = request.POST.get('business_ext')
+            individual.home_phone = clean_phone(request.POST.get('home_phone'))
+            individual.home_ext = request.POST.get('home_ext')
+            individual.cell_phone = clean_phone(request.POST.get('cell_phone'))
+            individual.cell_ext = request.POST.get('cell_ext')
+            servicing_agent_id = request.POST.get('servicing_agent_id')
+            if servicing_agent_id:
+                individual.servicing_agent = Agent.objects.get(id=servicing_agent_id)
+
+            individual.save()
+            
+        # --- Individual Details ---
+        if 'nick_name' in request.POST or 'title_name' in request.POST:
+            individual_details.nick_name = request.POST.get('nick_name')
+            individual_details.title = request.POST.get('title_name')
+            individual_details.gender = request.POST.get('gender')
+            individual_details.dob = request.POST.get('dob') or None
+            individual_details.ssn = request.POST.get('ssn')
+            individual_details.driver_license = request.POST.get('driver_license')
+            individual_details.descresed_date = request.POST.get('deceased_date') or None
+            individual_details.status = request.POST.get('status')
+            individual_details.mbi = request.POST.get('mbi')
+            individual_details.medicare_effective_date_A = request.POST.get('parta') or None
+            individual_details.medicare_effective_date_B = request.POST.get('partb') or None
+            individual_details.smoker_status = request.POST.get('smoker_status')
+            individual_details.secondary_email = request.POST.get('secondary_email')
+            individual_details.lead_date = request.POST.get('lead_date') or None
+            individual_details.lead_source = request.POST.get('lead_source')
+            individual_details.other_lead_source = request.POST.get('other_lead_source')
+            individual_details.project_code = request.POST.get('project_code')
+            additional_agent_id = request.POST.get('additional_agent_id')
+            if additional_agent_id:
+                individual_details.additional_agent = Agent.objects.get(id=additional_agent_id)
+
+            affiliate_agent_id = request.POST.get('affiliate_agent_id')
+            if affiliate_agent_id:
+                individual_details.affiliate_agent = Agent.objects.get(id=affiliate_agent_id)
+            individual_details.save()
+            
+        
+        # --- Address ---
+        address_type = request.POST.get('address_type')
+
+        if request.POST.get('address1'):
+            existing_address = IndividualAddress.objects.filter(individual_name=individual, address_type=address_type).first()
+
+            if existing_address:
+                existing_address.address1 = request.POST.get('address1')
+                existing_address.address2 = request.POST.get('address2')
+                existing_address.zip_code = request.POST.get('zip_code')
+                existing_address.city = request.POST.get('city')
+                existing_address.state = request.POST.get('state')
+                existing_address.description = request.POST.get('description')
+                existing_address.primary = request.POST.get('primary_address') == 'on'
+                existing_address.save()
+            else:
+                IndividualAddress.objects.create(
+                    individual_name=individual,
+                    address_type=address_type,
+                    address1=request.POST.get('address1'),
+                    address2=request.POST.get('address2'),
+                    zip_code=request.POST.get('zip_code'),
+                    city=request.POST.get('city'),
+                    state=request.POST.get('state'),
+                    description=request.POST.get('description'),
+                    primary=request.POST.get('primary_address') == 'on'
+                )
+                
+        # --- Activity ---
+        if request.POST.get('activity_subject'):
+            activity_id = request.POST.get('activity_id')
+            if activity_id:
+                individual_activity = IndividualActivity.objects.get(id=activity_id)
+            else:
+                individual_activity = IndividualActivity(individual_name=individual)
+
+            individual_activity.subject = request.POST.get('activity_subject')
+            individual_activity.notes = request.POST.get('activity_notes')
+            individual_activity.status = request.POST.get('activity_status')
+            individual_activity.follow_up_team = request.POST.get('follow_up_team')
+            individual_activity.due_date = request.POST.get('due_date') == 'on'
+            individual_activity.activity_date = request.POST.get('activity_date') or None
+            individual_activity.priority = request.POST.get('priority')
+            individual_activity.type = request.POST.get('type')
+            individual_activity.method = request.POST.get('method')
+            if request.FILES.get('attachment'):
+                individual_activity.attachment = request.FILES.get('attachment')
+            individual_activity.save()
+
+        # --- Notes ---
+        if request.POST.get('note_subject'):
+            note_id = request.POST.get('note_id')
+            if note_id:
+                individual_note = IndividualNotes.objects.get(id=note_id)
+            else:
+                individual_note = IndividualNotes(individual_name=individual)
+
+            individual_note.subject = request.POST.get('note_subject')
+            individual_note.notes = request.POST.get('note_notes')
+            individual_note.pin_note = request.POST.get('pin_note') == 'on'
+            if request.FILES.get('attachment'):
+                individual_note.attachment = request.FILES.get('attachment')
+            individual_note.save()
+
+
+        return redirect('individual_tab', individual_id=individual.id)
+    
+    return render(request, 'Individuals/individualtab.html', {
+        'individual': individual,
+        'individual_details': individual_details,
+        'agents': agents,
+        'individual_address': individual_address,
+        'individual_activity': individual_activity,
+        'individual_notes': individual_notes,     
+    })
 
 
 
