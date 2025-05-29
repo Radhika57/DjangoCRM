@@ -3,6 +3,16 @@
 {% block main-content %}
 
 <style>
+    .modal-header {
+  border-bottom: 1px solid #dee2e6;
+}
+.modal-footer {
+  border-top: 1px solid #dee2e6;
+}
+.alert-danger {
+  font-size: 1rem;
+}
+    
     /* Base Styles */
     .modal {
         z-index: 1060 !important; 
@@ -291,6 +301,31 @@
         cursor: inherit;
         display: block;
     }
+ .step-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin: 15px 0 10px;
+}
+.step-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #2c7a2c;
+  color: #fff;
+  text-align: center;
+  line-height: 28px;
+  margin-right: 10px;
+  font-weight: bold;
+}
+.step-title {
+  font-size: 16px;
+  font-weight: 500;
+}
+.step-content {
+  padding-left: 40px;
+  margin-bottom: 20px;
+}
 </style>
 
 <!-- Action buttons -->
@@ -374,7 +409,7 @@
     <div class="summary-item">
         <h4><i class="fa fa-user"></i> Contact Info</h4>
         <p class="text-muted">Business: -</p>
-        <a href="#" class="btn btn-xs btn-default"><i class="fa fa-plus"></i> Add Contact</a>
+        
     </div>
     
     <div class="summary-item">
@@ -396,7 +431,11 @@
     <div class="summary-item">
         <h4><i class="fa fa-tasks"></i> Activities Due</h4>
         <p class="text-muted">No activities.</p>
-        <a href="#" class="btn btn-xs btn-success"><i class="fa fa-plus"></i> Create new</a>
+       <!-- Trigger Button -->
+<a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#activityModal">
+  <i class="fa fa-plus"></i> Create new
+</a>
+
     </div>
     
     <div class="summary-item">
@@ -404,6 +443,181 @@
         <p class="text-muted">No pinned note.</p>
         <a href="#" class="btn btn-xs btn-info"><i class="fa fa-plus"></i> Create new</a>
     </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="activityModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title"><strong>New Activity</strong></h5>
+        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form id="activityForm">
+
+          <!-- Step 1 -->
+          <div class="step-header" onclick="showStep(1)">
+            <div class="step-number">1</div>
+            <div class="step-title text-success">
+              Activity Details <span class="text-danger">Please review the required fields.</span>
+            </div>
+          </div>
+          <div class="step-content" id="step-1">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Select Record Type <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" value="Existing Carrier" disabled>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Carrier Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" value="Highmark" disabled>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Subject <span class="text-danger">*</span></label>
+              <input type="text" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label>Notes</label>
+              <textarea class="form-control"></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label>Status</label>
+                <select class="form-control">
+                  <option>In Progress</option>
+                  <option>Completed</option>
+                </select>
+              </div>
+              <div class="form-group col-md-4">
+                <label>Follow-up User</label>
+                <select class="form-control">
+                  <option>Dhillon, Rohan</option>
+                </select>
+              </div>
+              <div class="form-group col-md-4">
+                <label>Follow-up Team</label>
+                <select class="form-control">
+                  <option></option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" id="dueDateCheck">
+              <label class="form-check-label" for="dueDateCheck">Due Date</label>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step-header" onclick="showStep(2)">
+            <div class="step-number">2</div>
+            <div class="step-title text-success">Additional Activity Details</div>
+          </div>
+          <div class="step-content" id="step-2" style="display: none;">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Activity Date <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" value="05/28/2025" readonly>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Priority</label>
+                <select class="form-control">
+                  <option>Medium</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Type</label>
+                <select class="form-control">
+                  <option>Initial contact</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Method</label>
+                <select class="form-control">
+                  <option>Email</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Added Upload Attachment section to Step 2 -->
+            <div class="form-group">
+              <label>Upload Attachments</label>
+              <div class="border p-3 mb-3" style="min-height: 120px; background-color: #f8f9fa; text-align: center;">
+                <p class="text-muted mb-2">Drag files here.</p>
+                <input type="file" multiple class="form-control-file d-block mx-auto" style="width: auto;">
+              </div>
+              <table class="table table-bordered table-sm">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Filename</th>
+                    <th style="width: 80px;">Size</th>
+                    <th style="width: 80px;">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="3" class="text-muted text-center">No files uploaded</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-header" onclick="showStep(3)">
+            <div class="step-number">3</div>
+            <div class="step-title text-success">Upload Attachments</div>
+          </div>
+          <div class="step-content" id="step-3" style="display: none;">
+            <div class="alert alert-info">
+              <h5><i class="fa fa-info-circle"></i> Review your activity details</h5>
+              <p>Please review all the information you've entered before submitting.</p>
+            </div>
+            
+            <div class="form-group">
+              <label>Summary</label>
+              <div class="border p-3 bg-light">
+                <!-- Summary of entered data would go here -->
+                <p><strong>Subject:</strong> <span id="review-subject"></span></p>
+                <p><strong>Activity Date:</strong> <span id="review-date"></span></p>
+                <p><strong>Type:</strong> <span id="review-type"></span></p>
+                <p><strong>Method:</strong> <span id="review-method"></span></p>
+                <p><strong>Attachments:</strong> <span id="review-attachments">0 files</span></p>
+              </div>
+            </div>
+          </div>
+
+          <small class="text-muted">
+            Fields marked with an <span class="text-danger">*</span> are required.
+          </small>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer justify-content-between">
+        <div>
+          <button type="button" class="btn btn-secondary" id="prevStep" style="display: none;">Previous</button>
+        </div>
+        <div>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-success" id="nextStep">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- jQuery -->
@@ -417,232 +631,243 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <script>
-    $(document).ready(function() {
-        // --------- Sorting logic for table columns -------------
-        var sortDirections = {};
-        
-        $('.sortable').click(function() {
-            const column = $(this).data('column') || $(this).data('key');
-            const $icon = $(this).find('i');
-            const table = $(this).closest("table");
-            const rows = table.find("tbody > tr").toArray();
-            const index = $(this).index();
-            
-            // Reset all icons in this table
-            $(this).closest('thead').find('.sortable i')
-                .removeClass('fa-sort-up fa-sort-down fa-sort-asc fa-sort-desc')
-                .addClass('fa-sort');
-            
-            // Toggle sort direction
-            sortDirections[column] = sortDirections[column] === 'asc' ? 'desc' : 'asc';
-            const sortOrder = sortDirections[column] === 'asc' ? 1 : -1;
-            
-            // Update icon
-            $icon.removeClass('fa-sort')
-                 .addClass(sortDirections[column] === 'asc' ? 'fa-sort-up' : 'fa-sort-down');
-            
-            // Manual sorting
-            rows.sort(function(a, b) {
-                var A = $(a).children().eq(index).text().toUpperCase();
-                var B = $(b).children().eq(index).text().toUpperCase();
-                if (A < B) return -1 * sortOrder;
-                if (A > B) return 1 * sortOrder;
-                return 0;
-            });
-            
-            $.each(rows, function(i, row) {
-                table.children("tbody").append(row);
-            });
-        });
-    
-        // -------- Form Section Toggles ----------
-        // Activities
-        $('#showActivityForm').click(function() {
-            $('#emptyActivitiesState').hide();
-            $('#activityDetailsSection').show();
-        });
-        
-        $('#cancelActivity').click(function() {
-            $('#activityDetailsSection').hide();
-            $('#emptyActivitiesState').show();
-        });
-        
-        // Notes
-        $('#showNoteForm').click(function() {
-            $('#emptyNotesState').hide();
-            $('#noteDetailsSection').show();
-        });
-        
-        $('#cancelNote').click(function() {
-            $('#noteDetailsSection').hide();
-            $('#emptyNotesState').show();
-        });
-        
-        // Forms
-        $('#showFormCreate').click(function() {
-            // Hide all table-related elements
-            $('#forms .panel-body > .row:not(#formCreateSection)').hide();
-            $('#forms .table-responsive').hide();
-            // Show the create form
-            $('#formCreateSection').show();
-        });
-        
-        $('#cancelFormCreate').click(function() {
-            // Show all table-related elements
-            $('#forms .panel-body > .row:not(#formCreateSection)').show();
-            $('#forms .table-responsive').show();
-            // Hide the create form
-            $('#formCreateSection').hide();
-        });
-        
-        // Websites
-        $('#showWebsiteForm').click(function() {
-            $('#emptyWebsitesState').hide();
-            $('#websiteFormSection').show();
-        });
-        
-        $('#cancelWebsiteCreate').click(function() {
-            $('#websiteFormSection').hide();
-            $('#emptyWebsitesState').show();
-        });
-        
-        // Products
-        $('#createNewProduct').click(function() {
-            // Hide all table-related elements
-            $('#products .panel-body > .row:not(#productFormContainer)').hide();
-            $('#products .table-responsive').hide();
-            // Show the create form
-            $('#productFormContainer').show();
-        });
-        
-        $('#cancelNewProduct').click(function() {
-            // Show all table-related elements
-            $('#products .panel-body > .row:not(#productFormContainer)').show();
-            $('#products .table-responsive').show();
-            // Hide the create form
-            $('#productFormContainer').hide();
-        });
-        
-        // --------- Fix issue when switching tabs ------------
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-            var targetTab = $(e.target).attr("href");
-            
-            // Reset all tabs to show table content
-            $('.panel-body > .row').show();
-            $('.table-responsive').show();
-            // Hide all form sections
-            $('[id$="Section"]').hide();
-            $('[id$="State"]').show();
-            $('[id$="Container"]').hide();
-        });
-        
-        // Toggle password visibility
-        $('.input-group-btn button').click(function() {
-            var input = $(this).closest('.input-group').find('input');
-            var icon = $(this).find('i');
-            
-            if (input.attr('type') === 'password') {
-                input.attr('type', 'text');
-                icon.removeClass('fa-eye').addClass('fa-eye-slash');
-            } else {
-                input.attr('type', 'password');
-                icon.removeClass('fa-eye-slash').addClass('fa-eye');
-            }
-        });
-        
-        // File input styling
-        $(document).on('change', '.btn-file :file', function() {
-            var input = $(this),
-                numFiles = input.get(0).files ? input.get(0).files.length : 1,
-                label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-            input.trigger('fileselect', [numFiles, label]);
-        });
-        
-        $('.btn-file :file').on('fileselect', function(event, numFiles, label) {
-            var input = $(this).parents('.input-group').find(':text'),
-                log = numFiles > 1 ? numFiles + ' files selected' : label;
-            
-            if (input.length) {
-                input.val(log);
-            }
-        });
-        
-        // Initialize Dropzone for file uploads
-        Dropzone.autoDiscover = false;
-        $(".attachment-block table").each(function() {
-            var dropzoneElement = $(this).find("td[colspan='3']").get(0);
-            
-            new Dropzone(dropzoneElement, {
-                url: "/file-upload", // Set your upload URL
-                autoProcessQueue: false,
-                clickable: true,
-                previewsContainer: false,
-                dictDefaultMessage: "Drop files here to upload"
-            });
-        });
-        
-        // Handle tab persistence
-        if (location.hash) {
-            $('a[href="' + location.hash + '"]').tab('show');
-        }
-        
-        $('a[data-toggle="tab"]').on('click', function(e) {
-            history.pushState(null, null, $(this).attr('href'));
-        });
-        
-        // Handle back/forward navigation
-        $(window).on('popstate', function() {
-            var anchor = location.hash || $('a[data-toggle="tab"]').first().attr('href');
-            $('a[href="' + anchor + '"]').tab('show');
-        });
-        
-        // Toggle carrier summary sidebar
-        $('#toggle-carrier-summary').click(function(e){
-            e.preventDefault();
-            $('#carrier-summary').toggleClass('shown');
-            $('.main-content-wrapper').toggleClass('sidebar-shown');
-            
-            // For mobile view, handle the transform
-            if ($(window).width() <= 576) {
-                if ($('#carrier-summary').hasClass('shown')) {
-                    $('body').css('overflow-x', 'hidden');
-                } else {
-                    $('body').css('overflow-x', 'auto');
-                }
-            }
-        });
-        
-        // Close sidebar button
-        $('#close-sidebar').click(function(e){
-            e.preventDefault();
-            $('#carrier-summary').removeClass('shown');
-            $('.main-content-wrapper').removeClass('sidebar-shown');
-            
-            // For mobile view
-            if ($(window).width() <= 576) {
-                $('body').css('overflow-x', 'auto');
-            }
-        });
-       
-        // Close sidebar when clicking outside on mobile
-        $(document).click(function(e) {
-            if ($(window).width() <= 576 && $('#carrier-summary').hasClass('shown')) {
-                if (!$(e.target).closest('#carrier-summary').length && 
-                    !$(e.target).closest('#toggle-carrier-summary').length) {
-                    $('#carrier-summary').removeClass('shown');
-                    $('.main-content-wrapper').removeClass('sidebar-shown');
-                    $('body').css('overflow-x', 'auto');
-                }
-            }
-        });
+let currentStep = 1;
+const totalSteps = 3;
+
+function updateStepButtons() {
+  $('#prevStep').toggle(currentStep > 1);
+  $('#nextStep').text(currentStep === totalSteps ? 'Finish' : 'Next');
+}
+
+function showStep(step) {
+  $('.step-content').hide();
+  $('#step-' + step).show();
+
+  $('.step-number').css('background-color', '#2c7a2c');
+  $('.step-title').removeClass('text-primary').addClass('text-success');
+
+  // Highlight current step header
+  $('.step-header').removeClass('active-step');
+  $('#step-header-' + step).addClass('active-step');
+  $('#step-header-' + step).find('.step-number').css('background-color', '#007bff');
+  $('#step-header-' + step).find('.step-title').removeClass('text-success').addClass('text-primary');
+
+  currentStep = step;
+  updateStepButtons();
+}
+
+$('#nextStep').click(function () {
+  if (currentStep < totalSteps) {
+    showStep(currentStep + 1);
+  } else {
+    $('#activityForm').submit(); // Submit form on finish
+  }
+});
+
+$('#prevStep').click(function () {
+  if (currentStep > 1) {
+    showStep(currentStep - 1);
+  }
+});
+
+$('#activityModal').on('shown.bs.modal', function () {
+  showStep(1);
+});
+
+$(document).ready(function () {
+  var sortDirections = {};
+
+  $('.sortable').click(function () {
+    const column = $(this).data('column') || $(this).data('key');
+    const $icon = $(this).find('i');
+    const table = $(this).closest("table");
+    const rows = table.find("tbody > tr").toArray();
+    const index = $(this).index();
+
+    $(this).closest('thead').find('.sortable i')
+      .removeClass('fa-sort-up fa-sort-down fa-sort-asc fa-sort-desc')
+      .addClass('fa-sort');
+
+    sortDirections[column] = sortDirections[column] === 'asc' ? 'desc' : 'asc';
+    const sortOrder = sortDirections[column] === 'asc' ? 1 : -1;
+
+    $icon.removeClass('fa-sort')
+      .addClass(sortDirections[column] === 'asc' ? 'fa-sort-up' : 'fa-sort-down');
+
+    rows.sort(function (a, b) {
+      var A = $(a).children().eq(index).text().toUpperCase();
+      var B = $(b).children().eq(index).text().toUpperCase();
+      if (A < B) return -1 * sortOrder;
+      if (A > B) return 1 * sortOrder;
+      return 0;
     });
-    
-    $(document).ready(function(){
-        $('#addIndividualModal').modal({
-            backdrop: true, // Shows the dark backdrop
-            keyboard: true, // Allows closing with ESC key
-            show: false    // Don't show immediately
-        });
+
+    $.each(rows, function (i, row) {
+      table.children("tbody").append(row);
     });
+  });
+
+  // Activity
+  $('#showActivityForm').click(function () {
+    $('#emptyActivitiesState').hide();
+    $('#activityDetailsSection').show();
+  });
+
+  $('#cancelActivity').click(function () {
+    $('#activityDetailsSection').hide();
+    $('#emptyActivitiesState').show();
+  });
+
+  // Notes
+  $('#showNoteForm').click(function () {
+    $('#emptyNotesState').hide();
+    $('#noteDetailsSection').show();
+  });
+
+  $('#cancelNote').click(function () {
+    $('#noteDetailsSection').hide();
+    $('#emptyNotesState').show();
+  });
+
+  // Forms
+  $('#showFormCreate').click(function () {
+    $('#forms .panel-body > .row:not(#formCreateSection)').hide();
+    $('#forms .table-responsive').hide();
+    $('#formCreateSection').show();
+  });
+
+  $('#cancelFormCreate').click(function () {
+    $('#forms .panel-body > .row:not(#formCreateSection)').show();
+    $('#forms .table-responsive').show();
+    $('#formCreateSection').hide();
+  });
+
+  // Websites
+  $('#showWebsiteForm').click(function () {
+    $('#emptyWebsitesState').hide();
+    $('#websiteFormSection').show();
+  });
+
+  $('#cancelWebsiteCreate').click(function () {
+    $('#websiteFormSection').hide();
+    $('#emptyWebsitesState').show();
+  });
+
+  // Products
+  $('#createNewProduct').click(function () {
+    $('#products .panel-body > .row:not(#productFormContainer)').hide();
+    $('#products .table-responsive').hide();
+    $('#productFormContainer').show();
+  });
+
+  $('#cancelNewProduct').click(function () {
+    $('#products .panel-body > .row:not(#productFormContainer)').show();
+    $('#products .table-responsive').show();
+    $('#productFormContainer').hide();
+  });
+
+  // Fix tab switching issues
+  $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+    $('.panel-body > .row').show();
+    $('.table-responsive').show();
+    $('[id$="Section"]').hide();
+    $('[id$="State"]').show();
+    $('[id$="Container"]').hide();
+  });
+
+  // Toggle password
+  $('.input-group-btn button').click(function () {
+    var input = $(this).closest('.input-group').find('input');
+    var icon = $(this).find('i');
+    if (input.attr('type') === 'password') {
+      input.attr('type', 'text');
+      icon.removeClass('fa-eye').addClass('fa-eye-slash');
+    } else {
+      input.attr('type', 'password');
+      icon.removeClass('fa-eye-slash').addClass('fa-eye');
+    }
+  });
+
+  // File input UI
+  $(document).on('change', '.btn-file :file', function () {
+    var input = $(this),
+      numFiles = input.get(0).files ? input.get(0).files.length : 1,
+      label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+    input.trigger('fileselect', [numFiles, label]);
+  });
+
+  $('.btn-file :file').on('fileselect', function (event, numFiles, label) {
+    var input = $(this).parents('.input-group').find(':text'),
+      log = numFiles > 1 ? numFiles + ' files selected' : label;
+    if (input.length) {
+      input.val(log);
+    }
+  });
+
+  // Dropzone init
+  Dropzone.autoDiscover = false;
+  $(".attachment-block table").each(function () {
+    var dropzoneElement = $(this).find("td[colspan='3']").get(0);
+    new Dropzone(dropzoneElement, {
+      url: "/file-upload",
+      autoProcessQueue: false,
+      clickable: true,
+      previewsContainer: false,
+      dictDefaultMessage: "Drop files here to upload"
+    });
+  });
+
+  // Persist tab
+  if (location.hash) {
+    $('a[href="' + location.hash + '"]').tab('show');
+  }
+
+  $('a[data-toggle="tab"]').on('click', function (e) {
+    history.pushState(null, null, $(this).attr('href'));
+  });
+
+  $(window).on('popstate', function () {
+    var anchor = location.hash || $('a[data-toggle="tab"]').first().attr('href');
+    $('a[href="' + anchor + '"]').tab('show');
+  });
+
+  // Sidebar toggle
+  $('#toggle-carrier-summary').click(function (e) {
+    e.preventDefault();
+    $('#carrier-summary').toggleClass('shown');
+    $('.main-content-wrapper').toggleClass('sidebar-shown');
+
+    if ($(window).width() <= 576) {
+      $('body').css('overflow-x', $('#carrier-summary').hasClass('shown') ? 'hidden' : 'auto');
+    }
+  });
+
+  $('#close-sidebar').click(function (e) {
+    e.preventDefault();
+    $('#carrier-summary').removeClass('shown');
+    $('.main-content-wrapper').removeClass('sidebar-shown');
+    if ($(window).width() <= 576) {
+      $('body').css('overflow-x', 'auto');
+    }
+  });
+
+  $(document).click(function (e) {
+    if ($(window).width() <= 576 && $('#carrier-summary').hasClass('shown')) {
+      if (!$(e.target).closest('#carrier-summary').length &&
+        !$(e.target).closest('#toggle-carrier-summary').length) {
+        $('#carrier-summary').removeClass('shown');
+        $('.main-content-wrapper').removeClass('sidebar-shown');
+        $('body').css('overflow-x', 'auto');
+      }
+    }
+  });
+
+  $('#addIndividualModal').modal({
+    backdrop: true,
+    keyboard: true,
+    show: false
+  });
+});
 </script>
+
 {% endblock %}
