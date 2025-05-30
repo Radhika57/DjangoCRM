@@ -327,66 +327,6 @@
       </div>
       <br>
 
-<<<<<<< HEAD
-        <div class="modal-body">
-  <!-- Toggle Navigation -->
-  <div class="btn-group mb-3" role="group">
-    <button type="button" class="btn btn-default" id="show-individual">Individual Info</button>
-    <button type="button" class="btn btn-default" id="show-associate">Associate Individual</button>
-  </div>
-
-  <!-- Individual Info Section -->
-  <div id="individual-section">
-    <fieldset>
-      <legend><span class="label label-success">1</span> Individual Info <em class="text-muted">Please review the required fields.</em></legend>
-      <div class="row">
-        <div class="form-group col-md-4">
-          <label>First Name <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" name="first_name">
-        </div>
-        <div class="form-group col-md-4">
-          <label>Middle Name</label>
-          <input type="text" class="form-control" name="middle_name">
-        </div>
-        <div class="form-group col-md-4">
-          <label>Last Name <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" name="last_name">
-        </div>
-      </div>
-
-      <!-- Add the rest of individual info here -->
-    </fieldset>
-  </div>
-
-  <!-- Associate Individual Section -->
-  <div id="associate-section" style="display:none;">
-    <fieldset>
-      <legend><span class="label label-default">2</span> Associate Individual</legend>
-      <div class="form-group">
-        <label>Select Record Type <span class="text-danger">*</span></label>
-        <select class="form-control" name="record_type">
-          <option value="">-- Select --</option>
-          <option value="type1">Type 1</option>
-          <option value="type2">Type 2</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Association Notes</label>
-        <textarea class="form-control" rows="3" name="association_notes"></textarea>
-      </div>
-    </fieldset>
-  </div>
-</div>
-
-
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Save</button>
-          <button type="submit" class="btn btn-success">Save &amp; Add Another</button>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        </div>
-
-      </form>
-=======
       <div class="panel-body table-responsive">
         <table id="example8" class="table display">
           <thead>
@@ -411,7 +351,6 @@
               <td>Active</td>
               <td>uu</a></td>
               <td>Active</td>
->>>>>>> 6e98b04de32ffe36534d2a255b4a74acf2784be4
 
             </tr>
            {% endfor %}
@@ -443,35 +382,5 @@
         }
       });
     });
-<<<<<<< HEAD
-
-    // Form submission handler
-    $('#agentForm').on('submit', function(e) {
-        e.preventDefault();
-        $('#newAgentModal').modal('hide');
-        alert('Agent saved successfully!');
-        this.reset();
-    });
-});
-$(document).ready(function () {
-  $('#show-individual').click(function () {
-    $('#individual-section').show();
-    $('#associate-section').hide();
-    $(this).addClass('btn-primary').removeClass('btn-default');
-    $('#show-associate').addClass('btn-default').removeClass('btn-primary');
-  });
-
-  $('#show-associate').click(function () {
-    $('#associate-section').show();
-    $('#individual-section').hide();
-    $(this).addClass('btn-primary').removeClass('btn-default');
-    $('#show-individual').addClass('btn-default').removeClass('btn-primary');
-  });
-});
-
-</script>
-{% endblock %}
-=======
   </script>
   {% endblock %}
->>>>>>> 6e98b04de32ffe36534d2a255b4a74acf2784be4

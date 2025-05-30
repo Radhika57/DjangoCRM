@@ -268,87 +268,7 @@
     margin: 4px 0;
   }
 }
-   
-    .section-header {
-        display: flex;
-        align-items: center;
-        margin-bottom: 15px;
-        cursor: pointer;
-    }
-    
-    .section-number {
-        display: inline-block;
-        background-color: #333;
-        color: white;
-        width: 24px;
-        height: 24px;
-        text-align: center;
-        border-radius: 12px;
-        margin-right: 10px;
-        font-size: 14px;
-        line-height: 24px;
-    }
-    
-    .section-title {
-        font-size: 16px;
-        flex-grow: 1;
-    }
-    
-    .section-container {
-        margin-bottom: 20px;
-    }
-    
-    .section-content {
-        padding-left: 34px;
-    }
-    
-    .well {
-        background-color: #f5f5f5;
-        border-radius: 4px;
-        padding: 15px;
-        margin-bottom: 15px;
-    }
-    
-    .address-box {
-        border: 1px solid #ccc;
-        padding: 10px 12px;
-        border-radius: 3px;
-        background-color: #fff;
-        margin-bottom: 10px;
-    }
 
-    .address-box input[type="checkbox"] {
-        margin-right: 8px;
-        transform: scale(1.2);
-        cursor: pointer;
-    }
-    
-    /* Input group responsiveness */
-    .input-group {
-        flex-wrap: nowrap;
-    }
-    
-    @media (max-width: 767px) {
-        .input-group {
-            flex-wrap: wrap;
-        }
-        
-        .input-group input {
-            width: 100% !important;
-            border-radius: 4px !important;
-            margin-bottom: 5px;
-        }
-        
-        .input-group-append {
-            width: 100%;
-        }
-        
-        .input-group-append select {
-            width: 100% !important;
-            border-radius: 4px !important;
-            border-left: 1px solid #ced4da !important;
-        }
-    }
 
 </style>
 
@@ -358,7 +278,7 @@
         <div class="page-header-row">
             <h1 class="page-title">Search Individuals</h1>
             <div class="btn-group">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newAgentModal">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newIndividualModal">
                     New Individuals
                 </button>
                
@@ -420,129 +340,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="newAgentModal" tabindex="-1" role="dialog" aria-labelledby="newAgentModalLabel">
-  <div class="modal-dialog modal-md-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span>&times;</span>
-                </button>
-                <h4 class="modal-title" id="newIndividualModalLabel"><strong>New Individual</strong></h4>
-            </div>
-            <div class="modal-body">
-                <form id="individualForm">
-                    
-                    <!-- Section 1: Individual Info -->
-                    <div class="section-container">
-                        <div class="section-header" onclick="toggleSection(1)">
-                            <div class="section-number">1</div>
-                            <div class="section-title text-success">
-                                Individual Info <span class="text-danger">Please review the required fields.</span>
-                            </div>
-                        </div>
-                        <div class="section-content" id="section-1">
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label for="firstName">First Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="firstName" placeholder="">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="middleName">Middle Name</label>
-                                    <input type="text" class="form-control" id="middleName" placeholder="">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="lastName">Last Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="lastName" placeholder="">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label for="type">Type</label>
-                                    <select class="form-control" id="type">
-                                        <option value="">-- Select Type --</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="servicingAgent">Servicing Agent</label>
-                                    <input type="text" class="form-control" id="servicingAgent" placeholder="Type to search">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="email">Email</label>
-                                    <input type="email" class="form-control" id="email">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label for="businessPhone">Business Phone/Ext.</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="businessPhone">
-                                        <span class="input-group-addon">ext</span>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="homePhone">Home Phone/Ext.</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="homePhone">
-                                        <span class="input-group-addon">ext</span>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="cellPhone">Cell Phone/Ext.</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="cellPhone">
-                                        <span class="input-group-addon">ext</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <!-- Section 2: Associate Individual -->
-                    <div class="section-container">
-    <div class="section-header" onclick="toggleSection(2)">
-        <div class="section-number">2</div>
-        <div class="section-title text-success">Associate Individual</div>
-    </div>
-    <div class="section-content" id="section-2" style="display: none;">
-        <div class="form-group">
-            <label for="recordTypeDropdown">Select Record Type</label>
-            <select class="form-control" id="recordTypeDropdown" onchange="toggleCarrierField(this.value)">
-                <option value="">-- Select Record Type --</option>
-                <option value="carrier">New Carrier</option>
-                <option value="vendor">Existing Carrier</option>
-            </select>
-            <div class="well" style="background-color: #f5f5f5; padding: 15px; margin-top: 10px;">
-                <p style="margin-bottom: 0;">Track and manage carrier contacts. <a href="#">Learn more</a>.</p>
-            </div>
-        </div>
-        
-        <div id="carrierNameContainer" style="display: none;">
-            <div class="form-group">
-                <label for="carrierName">Carrier Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="carrierName" placeholder="">
-            </div>
-        </div>
-    </div>
-</div>
-
-
-                    <hr>
-
-                   
-
-                    <p class="text-muted">Fields marked with an <span class="text-danger">*</span> are required.</p>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
-    </div>
-</div>
-
+ {% include "Individuals/addindividualmodal.html" %}
 
 
 <script>
@@ -570,71 +368,6 @@ $(document).ready(function() {
         alert('Agent saved successfully!');
         this.reset();
     });
-});
- // Initialize when DOM is ready
-    $(document).ready(function() {
-        RelationshipsUI.init();
-    });
-
-function toggleSection(sectionNum) {
-    // Hide all other sections
-    $('.section-content').not('#section-' + sectionNum).slideUp();
-    
-    // Toggle the clicked section
-    $('#section-' + sectionNum).slideToggle();
-}
-
-// Initialize with first section open
-$(document).ready(function() {
-    $('#section-1').show();
-    $('#section-2').hide();
-    $('#section-3').hide();
-    
-    // Handle opening from different triggers
-    $('#newIndividualModal').on('show.bs.modal', function (e) {
-        var trigger = $(e.relatedTarget);
-        if(trigger.hasClass('address-info-trigger')) {
-            $('.section-content').hide();
-            $('#section-3').show();
-        } else if(trigger.hasClass('associate-individual-trigger')) {
-            $('.section-content').hide();
-            $('#section-2').show();
-        } else {
-            // Default behavior - show first section
-            $('.section-content').hide();
-            $('#section-1').show();
-        }
-    });
-});
-function toggleSection(sectionNum) {
-    $('.section-content').not('#section-' + sectionNum).slideUp();
-    $('#section-' + sectionNum).slideToggle();
-}
-
-function toggleCarrierField(recordType) {
-    const carrierContainer = $('#carrierNameContainer');
-    const carrierInput = $('#carrierName');
-    
-    if (recordType === 'carrier') {
-        carrierContainer.show();
-        carrierInput.attr('placeholder', 'Enter new carrier name');
-    } 
-    else if (recordType === 'vendor') {
-        carrierContainer.show();
-        carrierInput.attr('placeholder', 'Type to search existing carriers');
-    } 
-    else {
-        carrierContainer.hide();
-        carrierInput.val('');
-    }
-}
-
-// Initialize when DOM is ready
-$(document).ready(function() {
-    // Hide carrier name field by default
-    $('#carrierNameContainer').hide();
-    
-    // Rest of your initialization code...
 });
 </script>
 {% endblock %}
