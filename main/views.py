@@ -5,7 +5,16 @@ from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.db import IntegrityError
 from django.db.models import Count
+from django.views.decorators.csrf import csrf_exempt
+from datetime import date
+from django.db.models import Value
+from django.db.models.functions import Concat
 
+def calculate_age(dob):
+    if not dob:
+        return ''
+    today = date.today()
+    return today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
 
 def dashboard(request):
     return render(request, "dashboard/index.html")
@@ -582,8 +591,10 @@ def agent_detail(request, agent_id):
 
 def search_individuals(request):
     individual = Individuals.objects.all()
+    carriers = Carrier.objects.all()
     context = {
-        'individual':individual
+        'individual':individual,
+        'carriers':carriers
     }
     return render(request, 'Individuals/searchindividuals.html',context)
 
@@ -607,6 +618,16 @@ def create_individual(request):
         home_ext = request.POST.get('home_ext')
         cell_phone = clean_phone(request.POST.get('cell_phone'))
         cell_ext = request.POST.get('cell_ext')
+        record_type = request.POST.get('record_type')
+        carrier_name = request.POST.get('carrier_name')
+
+        carrier = None
+        if record_type == 'existing':
+            carrier = Carrier.objects.filter(name__iexact=carrier_name).first()
+        elif record_type == 'new':
+            if carrier_name:
+                carrier, created = Carrier.objects.get_or_create(name=carrier_name)
+
 
         servicing_agent = Agent.objects.filter(id=servicing_agent_id).first() if servicing_agent_id else None
 
@@ -623,11 +644,133 @@ def create_individual(request):
             home_ext=home_ext,
             cell_phone=cell_phone,
             cell_ext=cell_ext,
+            carrier=carrier
         )
 
         return JsonResponse({'success': True, 'message': 'Saved successfully'})
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=400)
 
+@csrf_exempt
+def create_relationshipindividual(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        middle_name = request.POST.get('middle_name')
+        last_name = request.POST.get('last_name')
+        individual_type = request.POST.get('type')
+        servicing_agent_id = request.POST.get('servicing_agent_ids')
+        email = request.POST.get('email')
+        business_phone = clean_phone(request.POST.get('business_phone'))
+        business_ext = request.POST.get('business_ext')
+        home_phone = clean_phone(request.POST.get('home_phone'))
+        home_ext = request.POST.get('home_ext')
+        cell_phone = clean_phone(request.POST.get('cell_phone'))
+        cell_ext = request.POST.get('cell_ext')
+        record_type = request.POST.get('record_type')
+        carrier_name = request.POST.get('carrier_name')
+        address_ids = request.POST.getlist('address_ids[]') or request.POST.getlist('address_ids')
+
+        carrier = None
+        if record_type == 'existing':
+            carrier = Carrier.objects.filter(name__iexact=carrier_name).first()
+        elif record_type == 'new':
+            if carrier_name:
+                carrier, created = Carrier.objects.get_or_create(name=carrier_name)
+
+        servicing_agent = Agent.objects.filter(id=servicing_agent_id).first() if servicing_agent_id else None
+
+        individual = Individuals.objects.create(
+            first_name=first_name,
+            middle_name=middle_name,
+            last_name=last_name,
+            individual_type=individual_type,
+            servicing_agent=servicing_agent,
+            email=email,
+            business_phone=business_phone,
+            business_ext=business_ext,
+            home_phone=home_phone,
+            home_ext=home_ext,
+            cell_phone=cell_phone,
+            cell_ext=cell_ext,
+            carrier=carrier
+        )
+        
+        for addr_id in address_ids:
+            try:
+                
+                base_address = IndividualAddress.objects.get(id=addr_id)
+
+        
+                IndividualAddress.objects.create(
+                    individual_name=individual,  
+                    address_type=base_address.address_type,
+                    address1=base_address.address1,
+                    address2=base_address.address2,
+                    city=base_address.city,
+                    state=base_address.state,
+                    zip_code=base_address.zip_code,
+                    description=base_address.description,
+                    primary=base_address.primary
+                )
+            except IndividualAddress.DoesNotExist:
+                continue
+
+        return JsonResponse({'success': True,
+            'id': individual.id,
+            'first_name': individual.first_name,
+            'last_name': individual.last_name})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=400)
+
+
+@csrf_exempt
+def save_basic_info(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        middle_name = request.POST.get('middle_name')
+        last_name = request.POST.get('last_name')
+        dob = request.POST.get('dob') or None
+        gender = request.POST.get('gender')
+        ssn = request.POST.get('ssn')
+        smoker_status = request.POST.get('smoker_status')
+        individual_id = request.POST.get('individual_id')
+
+        if not first_name or not last_name:
+            return JsonResponse({'success': False, 'error': 'First and last name are required'})
+
+        try:
+            individual = None
+            if individual_id:
+                individual = Individuals.objects.get(id=individual_id)
+
+            basic_info = RelationshipBasicInfo.objects.create(
+                individual_name=individual,
+                first_name=first_name,
+                middle_name=middle_name,
+                last_name=last_name,
+                dob=dob,
+                gender=gender,
+                ssn=ssn,
+                smoker_status=smoker_status
+            )
+            return JsonResponse({'success': True, 'id': basic_info.id})
+
+        except Individuals.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Individual not found'})
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+def search_relationshipindividuals(request):
+    term = request.GET.get('term', '')
+    results = list(Individuals.objects.filter(first_name__icontains=term).values('id', 'first_name', 'last_name')[:10])
+    return JsonResponse([{'id': r['id'], 'label': f"{r['first_name']} {r['last_name']}"} for r in results], safe=False)
+
+def search_carriers(request):
+    query = request.GET.get('q', '')
+    carriers = Carrier.objects.filter(name__icontains=query)[:10]
+    data = [{'id': c.id, 'name': c.name} for c in carriers]
+    return JsonResponse(data, safe=False)
 
 def agent_autocomplete(request):
     query = request.GET.get('term', '')
@@ -641,6 +784,66 @@ def agent_autocomplete(request):
     ]
     return JsonResponse(results, safe=False)
 
+def get_relationship_data(individual):
+    direct_relationships = IndividualRelationship.objects.filter(individual_name=individual)
+    basic_infos = RelationshipBasicInfo.objects.filter(individual_name=individual)
+
+    relationship_data = []
+
+    for rel in direct_relationships:
+        name_parts = rel.name.strip().split()
+        if len(name_parts) >= 2:
+            first_name = name_parts[0]
+            last_name = name_parts[-1]  
+        else:
+            first_name = name_parts[0]
+            last_name = ''
+
+        
+        related_individual = Individuals.objects.filter(
+            first_name__iexact=first_name,
+            last_name__iexact=last_name
+        ).first()
+
+        if related_individual:
+            details = IndividualDetails.objects.filter(individual_name=related_individual).first()
+            dob = details.dob if details else None
+
+            relationship_data.append({
+                'relationship': rel.relationship,
+                'name': rel.name,
+                'ssn': details.ssn if details else '',
+                'dob': dob.strftime('%m/%d/%Y') if dob else '',
+                'age': calculate_age(dob),
+                'gender': details.gender if details else '',
+                'smoker_status': details.smoker_status if details else '',
+            })
+        else:
+            relationship_data.append({
+                'relationship': rel.relationship,
+                'name': rel.name,
+                'ssn': '',
+                'dob': '',
+                'age': '',
+                'gender': '',
+                'smoker_status': '',
+            })
+
+    
+    for rel in basic_infos:
+        dob = rel.dob
+        full_name = f"{rel.first_name} {rel.middle_name or ''} {rel.last_name}".strip()
+        relationship_data.append({
+            'relationship': "Basic Info",
+            'name': full_name,
+            'ssn': rel.ssn or '',
+            'dob': dob.strftime('%m/%d/%Y') if dob else '',
+            'age': calculate_age(dob),
+            'gender': rel.gender or '',
+            'smoker_status': rel.smoker_status or '',
+        })
+
+    return relationship_data
 
 
 def individual_tab(request, individual_id):
@@ -649,6 +852,9 @@ def individual_tab(request, individual_id):
     individual_address = IndividualAddress.objects.filter(individual_name=individual)
     individual_activity = IndividualActivity.objects.filter(individual_name=individual)
     individual_notes = IndividualNotes.objects.filter(individual_name=individual)
+    relationship_data = get_relationship_data(individual)
+
+    
     agents = Agent.objects.all()
     if request.method == 'POST':
         if 'last_name' in request.POST:
@@ -760,7 +966,31 @@ def individual_tab(request, individual_id):
             if request.FILES.get('attachment'):
                 individual_note.attachment = request.FILES.get('attachment')
             individual_note.save()
+            
+        
+                # --- Relationship ---
+        if 'relation_name' in request.POST and request.POST.get('relation_name').strip():
+            relationship_name = request.POST.get('relation_name')
+            relationship_to = request.POST.get('relationship')
+            relation_notes = request.POST.get('relation_notes')
+            correspondence = request.POST.get('corresponding') or ''
+            corresponding_relationship = request.POST.get('corresponding_relationship')
+            corresponding_notes = request.POST.get('corresponding_notes')
 
+           
+
+            
+            IndividualRelationship.objects.create(
+                individual_name=individual,
+                name=relationship_name,
+                relationship=relationship_to,
+                notes=relation_notes,
+                correspondence=correspondence,
+                correspondence_relationship=corresponding_relationship,
+                correspondence_notes=corresponding_notes,
+            )
+
+        print(relationship_data,"relationship_data")
 
         return redirect('individual_tab', individual_id=individual.id)
     
@@ -771,6 +1001,7 @@ def individual_tab(request, individual_id):
         'individual_address': individual_address,
         'individual_activity': individual_activity,
         'individual_notes': individual_notes,     
+        'relationship_data': relationship_data,     
     })
 
 

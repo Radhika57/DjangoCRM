@@ -266,11 +266,11 @@
                 </small>
               </div>
 
-              <div class="form-group" id="carrier_name_group" style="display:none;">
+              <div class="form-group" id="carrier_name_group" style="display:none; position: relative;">
                 <label for="carrier_name">Carrier Name <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="carrier_name" id="carrier_name" placeholder="Type to search" autocomplete="off">
+                <div id="carrier_suggestions" class="list-group" style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 1000;"></div>
               </div>
-
               <p><small>Fields marked with an <span class="text-danger">*</span> are required.</small></p>
             </div>
           </fieldset>
@@ -406,8 +406,11 @@ $(document).ready(function () {
           alert("Saved successfully");
           clearFormFields();
           if (!clearAfter) {
-            $('#newIndividualModal').modal('hide');
-          }
+          $('#newIndividualModal').modal('hide');
+          setTimeout(() => {
+            location.reload(); 
+          }, 300); 
+        }
         } else {
           alert("Save failed.");
         }
@@ -428,14 +431,70 @@ $(document).ready(function () {
     field.parentElement.appendChild(warning);
     field.addEventListener('input', function () {
       const digitsOnly = field.value.replace(/\D/g, '');
-      warning.style.display = (digitsOnly.length > 0 && digitsOnly.length < 10) ? 'block' : 'none';
+            warning.style.display = (digitsOnly.length > 0 && digitsOnly.length !== 10) ? 'block' : 'none';
     });
   });
+
+  phoneFields.forEach(function (field) {
+    field.addEventListener('keypress', function (e) {
+      const char = String.fromCharCode(e.which);
+      if (!/[0-9]/.test(char)) {
+        e.preventDefault();
+      }
+    });
+  });
+
 
   $('.toggle-section').click(function () {
     const target = $(this).data('target');
     $('.toggle-content').hide();
     $(target).show();
   });
+});
+</script>
+
+<script>
+document.getElementById('record_type').addEventListener('change', function () {
+  const carrierGroup = document.getElementById('carrier_name_group');
+  carrierGroup.style.display = this.value ? 'block' : 'none';
+});
+
+document.getElementById('carrier_name').addEventListener('input', function () {
+  const input = this.value;
+  const dropdown = document.getElementById('carrier_suggestions');
+
+  if (input.length > 1) {
+    fetch(`/search-carriers/?q=${encodeURIComponent(input)}`)
+      .then(response => response.json())
+      .then(data => {
+        dropdown.innerHTML = '';
+        if (data.length > 0) {
+          data.forEach(carrier => {
+            const item = document.createElement('a');
+            item.className = 'list-group-item list-group-item-action';
+            item.textContent = carrier.name;
+            item.href = '#';
+            item.onclick = function (e) {
+              e.preventDefault();
+              document.getElementById('carrier_name').value = carrier.name;
+              dropdown.style.display = 'none';
+            };
+            dropdown.appendChild(item);
+          });
+          dropdown.style.display = 'block';
+        } else {
+          dropdown.style.display = 'none';
+        }
+      });
+  } else {
+    dropdown.style.display = 'none';
+  }
+});
+
+document.addEventListener('click', function (e) {
+  const dropdown = document.getElementById('carrier_suggestions');
+  if (!document.getElementById('carrier_name_group').contains(e.target)) {
+    dropdown.style.display = 'none';
+  }
 });
 </script>

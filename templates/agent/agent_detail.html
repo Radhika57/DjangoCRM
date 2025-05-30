@@ -399,11 +399,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         field.addEventListener('input', function () {
             const digitsOnly = field.value.replace(/\D/g, '');
-            if (digitsOnly.length > 0 && digitsOnly.length < 10) {
-                warning.style.display = 'block';
-            } else {
-                warning.style.display = 'none';
+            warning.style.display = (digitsOnly.length > 0 && digitsOnly.length !== 10) ? 'block' : 'none';
+        });
+        phoneFields.forEach(function (field) {
+            field.addEventListener('keypress', function (e) {
+            const char = String.fromCharCode(e.which);
+            if (!/[0-9]/.test(char)) {
+                e.preventDefault();
             }
+            });
         });
     });
 });
