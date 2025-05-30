@@ -637,7 +637,8 @@
         </div>
     </div>
 
-    <!-- New Agent Modal -->
+  
+<!-- New Policy Modal -->
 <div class="modal fade" id="newPolicyModal" tabindex="-1" role="dialog" aria-labelledby="newPolicyModalLabel">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
@@ -669,13 +670,14 @@
                                     </select>
                                 </div>
 
-                                 <div id="existingIndividualFields" style="display:none;">
+                                <!-- Existing Individual Fields -->
+                                <div id="existingIndividualFields" style="display:none;">
                                     <div class="form-group">
                                         <label for="existingClientSearch">Individual Name</label>
                                         <input type="text" class="form-control" id="existingClientSearch" placeholder="Type search">
                                     </div>
                                 </div>
-
+                                
                                 <!-- New Individual Fields -->
                                 <div id="newIndividualFields" style="display:none;">
                                     <div class="row">
@@ -692,6 +694,7 @@
                                             <input type="text" class="form-control" id="lastName" placeholder="Last Name">
                                         </div>
                                     </div>
+                                    
                                     <div class="row">
                                         <div class="form-group col-md-4">
                                             <label for="clientType">Type</label>
@@ -710,8 +713,10 @@
                                             <input type="email" class="form-control" id="email" placeholder="Enter email">
                                         </div>
                                     </div>
+                                    
+                                    <!-- Vertically Stacked Phone Fields -->
                                     <div class="row">
-                                        <div class="form-group col-md-4">
+                                        <div class="form-group col-md-12">
                                             <label for="businessPhone">Business Phone/Ext</label>
                                             <div class="input-group">
                                                 <input type="text" class="form-control" id="businessPhone" placeholder="Phone">
@@ -719,7 +724,8 @@
                                                 <input type="text" class="form-control" id="businessExt" placeholder="Ext">
                                             </div>
                                         </div>
-                                        <div class="form-group col-md-4">
+                                        
+                                        <div class="form-group col-md-12">
                                             <label for="homePhone">Home Phone/Ext</label>
                                             <div class="input-group">
                                                 <input type="text" class="form-control" id="homePhone" placeholder="Phone">
@@ -727,7 +733,8 @@
                                                 <input type="text" class="form-control" id="homeExt" placeholder="Ext">
                                             </div>
                                         </div>
-                                        <div class="form-group col-md-4">
+                                        
+                                        <div class="form-group col-md-12">
                                             <label for="cellPhone">Cell Phone/Ext</label>
                                             <div class="input-group">
                                                 <input type="text" class="form-control" id="cellPhone" placeholder="Phone">
@@ -755,17 +762,17 @@
                                         <label>Carrier</label>
                                         <select class="form-control">
                                             <option>AARP</option>
-            <option>Aetna</option>
-            <option>Anthem</option>
-            <option>Cigna</option>
-            <option>Highmark</option>
-            <option>Humana</option>
-            <option>Med Mutual PDP</option>
-            <option>Medico</option>
-            <option>Peak</option>
-            <option>United Healthcare</option>
-            <option>UPMC</option>
-            <option>Wellcare</option>
+                                            <option>Aetna</option>
+                                            <option>Anthem</option>
+                                            <option>Cigna</option>
+                                            <option>Highmark</option>
+                                            <option>Humana</option>
+                                            <option>Med Mutual PDP</option>
+                                            <option>Medico</option>
+                                            <option>Peak</option>
+                                            <option>United Healthcare</option>
+                                            <option>UPMC</option>
+                                            <option>Wellcare</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-4">
@@ -814,7 +821,6 @@
         </div>
     </div>
 </div>
-
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>

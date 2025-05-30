@@ -81,15 +81,296 @@
   text-transform: capitalize;
   
 }
+.page-header-row {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    gap: 15px;
+    margin-bottom: 35px;
+}
+
+.page-title {
+    margin: 0;
+    font-size: 26px;
+    font-weight: bold;
+    
+}
+.clickable-name {
+    text-decoration: underline;
+    cursor: pointer;
+    color: #000000; 
+}
+
+.clickable-name:hover {
+    color: #092248; 
+}
+
+
+.wellcare-link {
+    color: #0d6efd;
+    text-decoration: underline;
+    font-size: 16px;
+}
+
+.wellcare-color {
+    width: 14px;
+    height: 14px;
+    background-color: #b26fd7;
+    border-radius: 3px;
+    display: inline-block;
+    margin-right: 5px;
+}
+.PDP-color {
+    width: 14px;
+    height: 14px;
+    background-color: #2fa00c;
+    border-radius: 3px;
+    display: inline-block;
+    margin-right: 5px;
+    
+}
+.PDP-link {
+    color: #000000;
+    text-decoration: underline;
+    font-size: 16px;
+}
+
+
+.wellcare-tag {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+}
+
+/* Mobile view adjustments to match desktop */
+@media (max-width: 768px) {
+    .page-header-row {
+        flex-wrap: wrap;
+        white-space: normal;
+    }
+    
+    .nav-tabs-container {
+        overflow-x: auto;
+        white-space: nowrap;
+        flex-wrap: nowrap;
+        display: flex;
+    }
+    
+    .nav-tab-btn-group {
+        margin-bottom: 10px;
+    }
+}
+.client-info-section {
+        display: none;
+    }
+    .active-section {
+        display: block;
+    }
+    
+    .modal-footer-responsive {
+        padding: 15px;
+        overflow-x: auto;
+    }
+    
+    .btn-group-custom {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .curved-btn {
+        border-radius: 6px;
+        padding: 8px 16px;
+        font-size: 14px;
+        white-space: nowrap;
+        min-width: 120px;
+    }
+    
+    @media (max-width: 768px) {
+        .btn-group-custom {
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .curved-btn {
+            width: 100%;
+            margin: 2px 0 !important;
+        }
+    }
+    
+    .step-indicator {
+        display: flex;
+        align-items: center;
+    }
+    
+    .step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        background-color: #07408b;
+        color: white;
+        border-radius: 50%;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+    
+    .step-title {
+        font-weight: bold;
+    }
+    
+    .text-danger {
+        color: #d9534f;
+    }
+
 </style>
 
 <div class="container-default">
     <div class="content-wrapper">
         <div class="search-agents-container">
-            <!-- Page Header -->
-            <div class="page-header-row">
-                <h1 class="page-title">Alyson Gross</h1>
+            <!-- Page Header - Modified section -->
+<div class="page-header-row clearfix" style="margin-bottom: 20px;">
+
+    <div style="float: left;">
+       <h1 class="page-title" style="margin: 0;"><a href="#" class="clickable-name">Alyson Gross</a></h1>
+    </div>
+    <div style="float: left; margin-left: 15px; display: flex; align-items: center; gap: 10px;">
+        <button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#editModal">
+            <i class="fa fa-edit"></i> Edit
+        </button>
+        <div class="wellcare-tag" style="margin: 0;">
+            <span class="wellcare-color"></span>
+            <a href="#" class="wellcare-link">Wellcare</a>
+        </div>
+       <div class="PDP-tag" style="margin: 0;">
+            <span class="PDP-color"></span>
+            <span class="PDP-link">(not set)PDP</span>
+        </div>
+    </div>
+</div>
+
+
+<!-- Add this modal at the bottom of your content, before the closing main-content block -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h2 class="modal-title" id="newPolicyModalLabel">Change Policyholder</h2>
             </div>
+
+            <div class="modal-body">
+                <form id="policyForm">
+                    <div class="step-container">
+                        <!-- Step 1: Client Info -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <p class="text-muted" style="margin: 10px 0 0 0; font-size: 12px;">
+                                    Fields marked with an <span class="text-danger">*</span> are required
+                                </p>
+                                
+                            </div>
+                            <div class="panel-body client-info-section active-section">
+                                <div class="form-group">
+                                    <label for="recordType">Select Record Type</label>
+                                    <select id="recordType" class="form-control" required>
+                                        <option value="">-- Select --</option>
+                                        <option value="existing">Existing Individual</option>
+                                        <option value="new">New Individual</option>
+                                    </select>
+                                </div>
+
+                                <!-- Existing Individual Fields -->
+                                 <div id="existingIndividualFields" style="display:none;">
+                                    <div class="form-group">
+                                        <label for="existingClientSearch">Individual Name<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="existingClientSearch" placeholder="Type search">
+                                    </div>
+                                </div>
+                                <!-- New Individual Fields -->
+                                <div id="newIndividualFields" style="display:none;">
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label for="firstName">First Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="firstName" placeholder="First Name">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="middleName">Middle Name</label>
+                                            <input type="text" class="form-control" id="middleName" placeholder="Middle Name">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="lastName">Last Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="lastName" placeholder="Last Name">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label for="clientType">Type</label>
+                                            <select id="clientType" class="form-control">
+                                                <option value="">-- Select Type --</option>
+                                                <option value="individual">Individual</option>
+                                                <option value="business">Business</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="servicingAgent">Servicing Agent</label>
+                                            <input type="text" class="form-control" id="servicingAgent" placeholder="Type to search">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="email">Email</label>
+                                            <input type="email" class="form-control" id="email" placeholder="Enter email">
+                                        </div>
+                                    </div>
+                                  <div class="row">
+        <div class="form-group col-md-12">
+            <label for="businessPhone">Business Phone/Ext</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="businessPhone" placeholder="Phone">
+                <span class="input-group-addon">ext</span>
+                <input type="text" class="form-control" id="businessExt" placeholder="Ext">
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <label for="homePhone">Home Phone/Ext</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="homePhone" placeholder="Phone">
+                <span class="input-group-addon">ext</span>
+                <input type="text" class="form-control" id="homeExt" placeholder="Ext">
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <label for="cellPhone">Cell Phone/Ext</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="cellPhone" placeholder="Phone">
+                <span class="input-group-addon">ext</span>
+                <input type="text" class="form-control" id="cellExt" placeholder="Ext">
+            </div>
+        </div>
+    </div>
+</div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer modal-footer-responsive justify-content-center text-center">
+                <div class="btn-group-custom">
+                    <button type="submit" class="btn btn-success curved-btn" form="policyForm">Save</button>
+                    <button type="button" class="btn btn-default curved-btn" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
 
             <!-- Tab Navigation -->
         <div class="nav-tabs-container d-flex flex-wrap">
@@ -176,8 +457,42 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
 
+<script>
+    $(function () {
+        function toggleNewIndividualFields() {
+            var selectedType = $('#recordType').val();
+            if (selectedType === 'new') {
+                $('#newIndividualFields').slideDown(200);
+                $('#existingIndividualFields').slideUp(200);
+            } else if (selectedType === 'existing') {
+                $('#existingIndividualFields').slideDown(200);
+                $('#newIndividualFields').slideUp(200);
+            } else {
+                $('#existingIndividualFields, #newIndividualFields').slideUp(200);
+            }
+        }
 
+        $('#recordType').on('change', toggleNewIndividualFields);
 
+        $('#newPolicyModal').on('show.bs.modal', function () {
+            $('#policyForm')[0].reset();
+            $('#existingIndividualFields').hide();
+            $('#newIndividualFields').hide();
+            $('#recordType').val('');
+            $('.client-info-section').addClass('active-section');
+        });
+
+        // Handle form submission
+        $('#policyForm').on('submit', function(e) {
+            e.preventDefault();
+            // Add your form submission logic here
+            console.log('Form submitted');
+            $('#newPolicyModal').modal('hide');
+        });
+    });
+</script>
 
 {% endblock %}
