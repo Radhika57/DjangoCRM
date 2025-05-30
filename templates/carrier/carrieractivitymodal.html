@@ -1,0 +1,346 @@
+<!-- Modal CSS -->
+<style>
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Title left, close button right */
+  padding: 1rem 1rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-footer {
+  border-top: 1px solid #dee2e6;
+}
+
+.close {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  opacity: 0.5;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.close:hover {
+  color: #000;
+  opacity: 0.75;
+}
+
+.alert-danger {
+  font-size: 1rem;
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin: 15px 0 10px;
+  user-select: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  transition: background-color 0.3s ease;
+}
+.step-header:hover {
+  background-color: #e9ecef;
+}
+.step-header.active {
+  background-color: #b2ceec;
+  color: white;
+}
+.step-header .step-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #e5f3e5;
+  color: #fff;
+  text-align: center;
+  line-height: 28px;
+  margin-right: 10px;
+  font-weight: bold;
+  flex-shrink: 0;
+  transition: background-color 0.3s ease;
+}
+.step-header.active .step-number {
+  background-color: #fff;
+  color: #f2f2f3;
+  font-weight: 700;
+}
+.step-title {
+  font-size: 16px;
+  font-weight: 500;
+  flex-grow: 1;
+}
+.step-header.active .step-title {
+  color: #fff !important;
+}
+.step-content {
+  padding-left: 38px;
+  margin-bottom: 20px;
+  border-left: 3px solid #fbfbfb;
+  background-color: #f8f9fa;
+  border-radius: 0 4px 4px 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+</style>
+
+<!-- MODAL HTML -->
+<div class="modal fade" id="carrieractivityModal" tabindex="-1" role="dialog" aria-labelledby="carrieractivityModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md-sm" role="document">
+    <div class="modal-content">
+
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="carrieractivityModalLabel"><strong>New Activity</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form id="activityForm">
+
+          <!-- Step 1 -->
+         <!-- Step 1 -->
+<div class="step-header active" id="step-header-1" onclick="showStep(1)">
+  <div class="step-number">1</div>
+  <div class="step-title text-success">
+    Activity Details <span class="text-danger">Please review the required fields.</span>
+  </div>
+</div>
+<div class="step-content" id="step-1">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label>Select Record Type <span class="text-danger">*</span></label>
+      <input type="text" class="form-control" value="Existing Carrier" disabled>
+    </div>
+    <div class="form-group col-md-6">
+      <label>Carrier Name <span class="text-danger">*</span></label>
+      <input type="text" class="form-control" value="Highmark" disabled>
+    </div>
+  </div>
+  
+  <div class="form-row">
+    <div class="form-group col-md-12">
+      <label>Subject <span class="text-danger">*</span></label>
+      <input type="text" class="form-control" required>
+    </div>
+  </div>
+  
+  <div class="form-row">
+    <div class="form-group col-md-12">
+      <label>Notes</label>
+      <textarea class="form-control" rows="3"></textarea>
+    </div>
+  </div>
+  
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label>Status <span class="text-danger">*</span></label>
+      <select class="form-control" required>
+        <option value="">Select Status</option>
+        <option>In Progress</option>
+        <option>Waiting</option>
+        <option>Not Started</option>
+        <option>Completed</option>
+        <option>Deferred</option>
+      </select>
+    </div>
+    <div class="form-group col-md-4">
+      <label>Follow-up User</label>
+      <select class="form-control">
+        <option value="">Select User</option>
+        <option>Dhillon, Rohan</option>
+        <option>Smith, John</option>
+        <option>Doe, Jane</option>
+      </select>
+    </div>
+    <div class="form-group col-md-4">
+      <label>Follow-up Team</label>
+      <select class="form-control">
+        <option value="">Select Team</option>
+        <option>Team 1</option>
+        <option>Team 2</option>
+        <option>Your Sales Pipeline Team</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="dueDateCheck">
+        <label class="form-check-label" for="dueDateCheck">Due Date</label>
+      </div>
+      <input type="date" class="form-control mt-2" id="dueDateInput" disabled>
+    </div>
+    <div class="form-group col-md-6">
+      <label>Duration</label>
+      <div class="input-group">
+        <input type="number" class="form-control" placeholder="Duration">
+        <select class="form-control">
+          <option>Minutes</option>
+          <option>Hours</option>
+          <option>Days</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+          <!-- Step 2 -->
+          <div class="step-header" id="step-header-2" onclick="showStep(2)">
+            <div class="step-number">2</div>
+            <div class="step-title text-success">Additional Activity Details</div>
+          </div>
+          <div class="step-content" id="step-2" style="display: none;">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Activity Date <span class="text-danger">*</span></label>
+                <input type="date" class="form-control" >
+              </div>
+              <div class="form-group col-md-6">
+                <label>Priority</label>
+                <select class="form-control">
+                  <option>Medium</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label>Type</label>
+                <select class="form-control">
+                  <option>Initial contact</option>
+                  <option>Prospecting</option>
+                  <option>Quote Process</option>
+                  <option>Enrollment</option>
+                  <option>Renewal</option>
+                  <option>Service Issue</option>
+                  <option>Cross-sell</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Method</label>
+                <select class="form-control">
+                  <option>Email</option>
+                  <option>Mail</option>
+                  <option>Phone Call</option>
+                  <option>Fax</option>
+                  <option>Visit</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-header" id="step-header-3" onclick="showStep(3)">
+            <div class="step-number">3</div>
+            <div class="step-title text-success">Upload Attachments</div>
+          </div>
+          <div class="step-content" id="step-3" style="display: none;">
+            <div class="form-group">
+              <label for="fileAttachmentInput">File Attachments</label>
+              <input type="file" id="fileAttachmentInput" multiple class="form-control mb-2" />
+              <table class="table table-bordered table-sm">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Filename</th>
+                    <th style="width: 80px;">Size</th>
+                    <th style="width: 80px;">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="attachmentTableBody">
+                  <tr>
+                    <td colspan="3" class="text-muted text-center">No files uploaded</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="submit" form="activityForm" class="btn btn-success">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Dropzone CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
+<!-- Dropzone JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- Modal JavaScript -->
+<script>
+function showStep(step) {
+  // Hide all step contents
+  $('.step-content').hide();
+
+  // Remove active class from all step headers
+  $('.step-header').removeClass('active');
+  $('.step-header .step-number').css('background-color', '#2c7a2c');
+  $('.step-header .step-title').removeClass('text-primary').addClass('text-success');
+
+  // Show selected step content
+  $('#step-' + step).show();
+
+  // Mark selected step header as active and highlight
+  $('#step-header-' + step).addClass('active');
+  $('#step-header-' + step + ' .step-number').css('background-color', '#fff').css('color', '#007bff');
+  $('#step-header-' + step + ' .step-title').removeClass('text-success').addClass('text-primary');
+}
+
+// On modal shown, reset to step 1
+$(document).ready(function() {
+  $('#carrieractivityModal').on('shown.bs.modal', function () {
+    showStep(1);
+    clearAttachments();
+  });
+
+  // File input change handler for showing attachments
+  $('#fileAttachmentInput').on('change', function() {
+    updateAttachmentTable(this.files);
+  });
+});
+
+// Clear attachment table to default state
+function clearAttachments() {
+  $('#attachmentTableBody').html('<tr><td colspan="3" class="text-muted text-center">No files uploaded</td></tr>');
+  $('#fileAttachmentInput').val('');
+}
+
+// Update attachment table with selected files
+function updateAttachmentTable(files) {
+  if (files.length === 0) {
+    clearAttachments();
+    return;
+  }
+
+  let rows = '';
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    rows += `<tr>
+      <td>${file.name}</td>
+      <td>${(file.size / 1024).toFixed(2)} KB</td>
+      <td><span class="text-success">Ready</span></td>
+    </tr>`;
+  }
+  $('#attachmentTableBody').html(rows);
+}
+</script>

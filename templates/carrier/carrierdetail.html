@@ -70,12 +70,13 @@
         border-bottom: 1px solid #f5f5f5;
     }
     
-    .action-buttons {
-        position: fixed;
-        right: 20px;
-        top: 60px;
-        z-index: 1010;
-    }
+   .action-buttons {
+    position: fixed;
+    right: 20px;
+    top: 80px; /* Increased top to push it below topbar */
+    z-index: 1010;
+}
+
     
     .close-sidebar {
         position: absolute;
@@ -301,51 +302,58 @@
         cursor: inherit;
         display: block;
     }
- .step-header {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  margin: 15px 0 10px;
+ .summary-group {
+  position: relative;
 }
-.step-number {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background-color: #2c7a2c;
-  color: #fff;
-  text-align: center;
-  line-height: 28px;
-  margin-right: 10px;
-  font-weight: bold;
+
+.summary-group .hover-label {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  white-space: nowrap;
+  background: #fff;
+  padding: 2px 8px;
+  border: 1px solid #ccc;
+  font-size: 12px;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: none;
+  z-index: 10;
+  margin-top: 2px;
 }
-.step-title {
-  font-size: 16px;
-  font-weight: 500;
+
+.summary-group button:hover + .hover-label {
+  display: block;
 }
-.step-content {
-  padding-left: 40px;
-  margin-bottom: 20px;
-}
+
 </style>
 
 <!-- Action buttons -->
 <div class="action-buttons">
-    <div class="btn-group">
-        <button id="toggle-carrier-summary" class="btn btn-default btn-sm">
-            <i class="fa fa-list-alt"></i>
-        </button>
-        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right">
-            <li><a href="#"><i class="fa fa-plus"></i> Add Note</a></li>
-            <li><a href="#"><i class="fa fa-calendar"></i> Schedule Activity</a></li>
-            <li><a href="#"><i class="fa fa-print"></i> Print Summary</a></li>
-            <li class="divider"></li>
-            <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
-        </ul>
-    </div>
+  <div class="btn-group summary-group position-relative">
+    <!-- Summary Button -->
+    <button id="toggle-carrier-summary" class="btn btn-default btn-sm"">
+      <i class="fa fa-list-alt"></i>
+    </button>
+    <div class="hover-label">Summary</div>
+
+    <!-- Dropdown Button -->
+    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+      <span class="caret"></span>
+    </button>
+    <div class="hover-label">Action</div>
+
+    <!-- Dropdown Menu -->
+    <ul class="dropdown-menu dropdown-menu-right">
+     
+      <li><a href="#"><i class="fa fa-print"></i> Print Record</a></li>
+      <li class="divider"></li>
+      <li><a href="#"><i class="fa fa-cog"></i> Print Page</a></li>
+    </ul>
+  </div>
 </div>
+
+
 
 <!-- Main content -->
 <div class="main-content-wrapper">
@@ -432,7 +440,7 @@
         <h4><i class="fa fa-tasks"></i> Activities Due</h4>
         <p class="text-muted">No activities.</p>
        <!-- Trigger Button -->
-<a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#activityModal">
+<a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#carrieractivityModal">
   <i class="fa fa-plus"></i> Create new
 </a>
 
@@ -447,178 +455,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="activityModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      
-      <!-- Header -->
-      <div class="modal-header">
-        <h5 class="modal-title"><strong>New Activity</strong></h5>
-        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-      </div>
-
-      <!-- Body -->
-      <div class="modal-body">
-        <form id="activityForm">
-
-          <!-- Step 1 -->
-          <div class="step-header" onclick="showStep(1)">
-            <div class="step-number">1</div>
-            <div class="step-title text-success">
-              Activity Details <span class="text-danger">Please review the required fields.</span>
-            </div>
-          </div>
-          <div class="step-content" id="step-1">
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label>Select Record Type <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" value="Existing Carrier" disabled>
-              </div>
-              <div class="form-group col-md-6">
-                <label>Carrier Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" value="Highmark" disabled>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label>Subject <span class="text-danger">*</span></label>
-              <input type="text" class="form-control">
-            </div>
-
-            <div class="form-group">
-              <label>Notes</label>
-              <textarea class="form-control"></textarea>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group col-md-4">
-                <label>Status</label>
-                <select class="form-control">
-                  <option>In Progress</option>
-                  <option>Completed</option>
-                </select>
-              </div>
-              <div class="form-group col-md-4">
-                <label>Follow-up User</label>
-                <select class="form-control">
-                  <option>Dhillon, Rohan</option>
-                </select>
-              </div>
-              <div class="form-group col-md-4">
-                <label>Follow-up Team</label>
-                <select class="form-control">
-                  <option></option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-check mb-3">
-              <input class="form-check-input" type="checkbox" id="dueDateCheck">
-              <label class="form-check-label" for="dueDateCheck">Due Date</label>
-            </div>
-          </div>
-
-          <!-- Step 2 -->
-          <div class="step-header" onclick="showStep(2)">
-            <div class="step-number">2</div>
-            <div class="step-title text-success">Additional Activity Details</div>
-          </div>
-          <div class="step-content" id="step-2" style="display: none;">
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label>Activity Date <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" value="05/28/2025" readonly>
-              </div>
-              <div class="form-group col-md-6">
-                <label>Priority</label>
-                <select class="form-control">
-                  <option>Medium</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label>Type</label>
-                <select class="form-control">
-                  <option>Initial contact</option>
-                </select>
-              </div>
-              <div class="form-group col-md-6">
-                <label>Method</label>
-                <select class="form-control">
-                  <option>Email</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Added Upload Attachment section to Step 2 -->
-            <div class="form-group">
-              <label>Upload Attachments</label>
-              <div class="border p-3 mb-3" style="min-height: 120px; background-color: #f8f9fa; text-align: center;">
-                <p class="text-muted mb-2">Drag files here.</p>
-                <input type="file" multiple class="form-control-file d-block mx-auto" style="width: auto;">
-              </div>
-              <table class="table table-bordered table-sm">
-                <thead class="thead-light">
-                  <tr>
-                    <th>Filename</th>
-                    <th style="width: 80px;">Size</th>
-                    <th style="width: 80px;">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td colspan="3" class="text-muted text-center">No files uploaded</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Step 3 -->
-          <div class="step-header" onclick="showStep(3)">
-            <div class="step-number">3</div>
-            <div class="step-title text-success">Upload Attachments</div>
-          </div>
-          <div class="step-content" id="step-3" style="display: none;">
-            <div class="alert alert-info">
-              <h5><i class="fa fa-info-circle"></i> Review your activity details</h5>
-              <p>Please review all the information you've entered before submitting.</p>
-            </div>
-            
-            <div class="form-group">
-              <label>Summary</label>
-              <div class="border p-3 bg-light">
-                <!-- Summary of entered data would go here -->
-                <p><strong>Subject:</strong> <span id="review-subject"></span></p>
-                <p><strong>Activity Date:</strong> <span id="review-date"></span></p>
-                <p><strong>Type:</strong> <span id="review-type"></span></p>
-                <p><strong>Method:</strong> <span id="review-method"></span></p>
-                <p><strong>Attachments:</strong> <span id="review-attachments">0 files</span></p>
-              </div>
-            </div>
-          </div>
-
-          <small class="text-muted">
-            Fields marked with an <span class="text-danger">*</span> are required.
-          </small>
-        </form>
-      </div>
-
-      <!-- Footer -->
-      <div class="modal-footer justify-content-between">
-        <div>
-          <button type="button" class="btn btn-secondary" id="prevStep" style="display: none;">Previous</button>
-        </div>
-        <div>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-success" id="nextStep">Next</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+{% include "carrier/carrieractivitymodal.html" %}
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -631,48 +468,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <script>
-let currentStep = 1;
-const totalSteps = 3;
 
-function updateStepButtons() {
-  $('#prevStep').toggle(currentStep > 1);
-  $('#nextStep').text(currentStep === totalSteps ? 'Finish' : 'Next');
-}
-
-function showStep(step) {
-  $('.step-content').hide();
-  $('#step-' + step).show();
-
-  $('.step-number').css('background-color', '#2c7a2c');
-  $('.step-title').removeClass('text-primary').addClass('text-success');
-
-  // Highlight current step header
-  $('.step-header').removeClass('active-step');
-  $('#step-header-' + step).addClass('active-step');
-  $('#step-header-' + step).find('.step-number').css('background-color', '#007bff');
-  $('#step-header-' + step).find('.step-title').removeClass('text-success').addClass('text-primary');
-
-  currentStep = step;
-  updateStepButtons();
-}
-
-$('#nextStep').click(function () {
-  if (currentStep < totalSteps) {
-    showStep(currentStep + 1);
-  } else {
-    $('#activityForm').submit(); // Submit form on finish
-  }
-});
-
-$('#prevStep').click(function () {
-  if (currentStep > 1) {
-    showStep(currentStep - 1);
-  }
-});
-
-$('#activityModal').on('shown.bs.modal', function () {
-  showStep(1);
-});
 
 $(document).ready(function () {
   var sortDirections = {};
