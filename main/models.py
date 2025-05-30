@@ -333,6 +333,7 @@ class Individuals(models.Model):
     home_ext = models.CharField(max_length=10, blank=True, null=True)
     cell_phone = models.CharField(max_length=10, blank=True, null=True)
     cell_ext = models.CharField(max_length=10, blank=True, null=True)
+    carrier = models.ForeignKey(Carrier,on_delete=models.SET_NULL,null=True,blank=True)
 
 class IndividualDetails(models.Model):
     individual_name = models.ForeignKey(Individuals,on_delete=models.CASCADE,related_name="individual_detail")
@@ -402,4 +403,12 @@ class IndividualRelationship(models.Model):
     correspondence_notes = models.TextField(null=True,blank=True)
     
 
-    
+class RelationshipBasicInfo(models.Model):
+    individual_name = models.ForeignKey(Individuals, on_delete=models.SET_NULL,null=True,blank=True , related_name='individual_relationship_basic_info')
+    first_name = models.CharField(max_length=100)
+    middle_name = models.CharField(max_length=100,null=True,blank=True)
+    last_name = models.CharField(max_length=100)
+    gender = models.CharField(max_length=10,null=True,blank=True)
+    dob = models.DateField(null=True,blank=True)
+    ssn = models.CharField(max_length=100,null=True,blank=True)
+    smoker_status = models.CharField(max_length=100,null=True,blank=True)

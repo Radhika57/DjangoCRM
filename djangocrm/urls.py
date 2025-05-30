@@ -51,7 +51,11 @@ urlpatterns = [
     path('Individuals/saved-individuals/', views.saved_individuals, name='saved_individuals'),
     path('individuals/create/', views.create_individual, name='create_individual'),
     path('agents/search/', views.agent_autocomplete, name='agent_autocomplete'),
+    path('search-carriers/', views.search_carriers, name='search_carriers'),
     path('Individuals/detail/<int:individual_id>/', views.individual_tab, name='individual_tab'),
+    path('individuals/search/relationship/', views.search_relationshipindividuals, name='search_relationshipindividuals'),
+    path('individuals/create/relationship/', views.create_relationshipindividual, name='create_relationshipindividual'),
+    path('individuals/save/basicinfo/', views.save_basic_info, name='save_basic_info'),
     
     # Policy
     

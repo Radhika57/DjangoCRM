@@ -9,7 +9,7 @@
         text-transform: capitalize;
         margin: 5px 0 0 0;
     }
-    
+
     /* Ensure dropdown menus are responsive */
     .dropdown-menu {
         max-width: 100vw;
@@ -17,7 +17,7 @@
         right: 0 !important;
         font-size: 1.5rem;
     }
-    
+
     .dropdown-menu li a {
         white-space: normal;
         word-wrap: break-word;
@@ -28,14 +28,15 @@
         .agents-panel .panel-heading {
             display: block !important;
         }
-        
+
         .agents-panel .panel-heading h4 {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             margin: 0 0 10px 0;
             width: 100%;
-            font-size: 1.8rem; /* Reduced for mobile */
+            font-size: 1.8rem;
+            /* Reduced for mobile */
         }
 
         .mobile-btn-container {
@@ -48,7 +49,7 @@
         .agents-panel .panel-heading .btn-group.pull-right {
             display: none !important;
         }
-        
+
         /* Mobile-specific dropdown adjustments */
         .dropdown-menu {
             position: fixed !important;
@@ -59,13 +60,13 @@
             top: auto !important;
             bottom: 10px !important;
         }
-        
+
         .dropdown-menu.dropdown-menu-right {
             left: auto !important;
             right: 10px !important;
             transform: none !important;
         }
-        
+
         /* Ensure select dropdowns are responsive */
         select.form-control {
             max-width: 100%;
@@ -76,22 +77,22 @@
         .mobile-btn-container {
             display: none !important;
         }
-        
+
         /* Desktop dropdown positioning */
         .dropdown-menu-right {
             right: 0;
             left: auto;
         }
     }
-    
+
     /* General responsive adjustments */
     .edit-dropdown-wrapper {
         position: relative;
         display: inline-block;
-        margin-left: -1px; 
+        margin-left: -1px;
         max-width: 100%;
     }
-    
+
     .edit-dropdown-wrapper select {
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
@@ -99,7 +100,7 @@
         cursor: pointer;
         max-width: 100%;
     }
-    
+
     .edit-dropdown-wrapper .caret {
         position: absolute;
         right: 8px;
@@ -107,26 +108,26 @@
         transform: translateY(-50%);
         pointer-events: none;
     }
-    
+
     /* Modal responsiveness */
     @media (max-width: 767px) {
         .modal-dialog {
             margin: 10px;
             width: auto;
         }
-        
+
         .modal-content {
             width: 100%;
         }
     }
-    
+
     .section-header {
         display: flex;
         align-items: center;
         margin-bottom: 15px;
         cursor: pointer;
     }
-    
+
     .section-number {
         display: inline-block;
         background-color: #333;
@@ -139,27 +140,27 @@
         font-size: 14px;
         line-height: 24px;
     }
-    
+
     .section-title {
         font-size: 16px;
         flex-grow: 1;
     }
-    
+
     .section-container {
         margin-bottom: 20px;
     }
-    
+
     .section-content {
         padding-left: 34px;
     }
-    
+
     .well {
         background-color: #f5f5f5;
         border-radius: 4px;
         padding: 15px;
         margin-bottom: 15px;
     }
-    
+
     .address-box {
         border: 1px solid #ccc;
         padding: 10px 12px;
@@ -173,27 +174,27 @@
         transform: scale(1.2);
         cursor: pointer;
     }
-    
+
     /* Input group responsiveness */
     .input-group {
         flex-wrap: nowrap;
     }
-    
+
     @media (max-width: 767px) {
         .input-group {
             flex-wrap: wrap;
         }
-        
+
         .input-group input {
             width: 100% !important;
             border-radius: 4px !important;
             margin-bottom: 5px;
         }
-        
+
         .input-group-append {
             width: 100%;
         }
-        
+
         .input-group-append select {
             width: 100% !important;
             border-radius: 4px !important;
@@ -207,8 +208,8 @@
     <div id="RelationshipsMainContent">
         <div class="agents-panel panel panel-default">
             <div class="panel-heading clearfix">
-                <h4 class="section-title1 pull-left">Relationships for Judith Abel</h4>
-                
+                <h4 class="section-title1 pull-left">Relationships for {{individual.first_name}} {{individual.last_name}}</h4>
+
                 <!-- Desktop Buttons -->
                 <div class="btn-group pull-right d-none d-sm-inline-block">
                     <button type="button" class="btn btn-primary" onclick="RelationshipsUI.showCreateNew()">
@@ -221,7 +222,7 @@
                         <li><a href="{% url 'manage_agencies' %}" target="_blank">Mass Update</a></li>
                     </ul>
                 </div>
-                
+
                 <!-- Mobile Buttons -->
                 <div class="mobile-btn-container d-block d-sm-none">
                     <div class="btn-group">
@@ -244,7 +245,7 @@
                         <tr>
                             <th>Relationship</th>
                             <th>Name</th>
-                            <th>Preview</th>
+                            <th>Smoker Status</th>
                             <th>SSN</th>
                             <th>Date of Birth</th>
                             <th>Age</th>
@@ -252,15 +253,19 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for rel in relationship_data %}
                         <tr>
-                            <td>Spouse</td>
-                            <td><a href="{% url 'individual_tab' 1 %}">John Doe</a></td>
-                            <td><a href="mailto:john@example.com">john@example.com</a></td>
-                            <td>123-456-7890</td>
-                            <td>01/01/1980</td>
-                            <td>44</td>
-                            <td>Male</td>
+                            <td>{{ rel.relationship }}</td>
+                            <td>{{ rel.name }}</td>
+                            <td>{{ rel.smoker_status }}</td>
+                            <td>{{ rel.ssn }}</td>
+                            <td>{{ rel.dob }}</td>
+                            <td>{{ rel.age }}</td>
+                            <td>{{ rel.gender }}</td>
+                            
                         </tr>
+                        
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -277,77 +282,83 @@
             <div class="panel-body">
                 <form method="post" enctype="multipart/form-data" id="activityForm">
                     {% csrf_token %}
-                  <div class="form-group col-md-4">
-    <label>Name <span class="text-danger">*</span></label>
-    <div class="input-group" style="display: flex;">
-        <input type="text" class="form-control" placeholder="Type to search" style=" width: 190px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
-        
-        <div class="input-group-append">
-            <select class="form-control form-control-sm" id="editRelationshipDropdown" style="background-color: #e9ecef;width: 90px; border-top-left-radius: 0; border-bottom-left-radius: 0; border-left: 0;">
-                <option value="">Edit</option>
-                <option value="existing">Use Existing</option>
-                <option value="new">Create New Individual</option>
-                <option value="basic">Basic Info</option>
-            </select>
-        </div>
-    </div>
-</div>
+                    <div class="form-group col-md-4">
+                        <label>Name <span class="text-danger">*</span></label>
+                        <div class="input-group" style="display: flex;">
+                                <input type="text" class="form-control" id="relationshipNameInput" name="relation_name" placeholder="Type to search"
+                                style="width: 190px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+
+                            <input type="hidden" id="individualIdInput" name="individual_id"> 
+
+                            <div class="input-group-append">
+                                <select class="form-control form-control-sm" id="editRelationshipDropdown"
+                                    style="background-color: #e9ecef;width: 90px; border-top-left-radius: 0; border-bottom-left-radius: 0; border-left: 0;">
+                                    <option value="">Edit</option>
+                                    <option value="existing">Use Existing</option>
+                                    <option value="new">Create New Individual</option>
+                                    <option value="basic">Basic Info</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="existingSuggestions" class="dropdown-menu" style="display: none; max-height: 150px; overflow-y: auto;"></div>
+                    </div>
 
                     <div class="form-group col-md-4">
                         <label>Relationship to Individual <span class="text-danger">*</span></label>
-                        <select class="form-control">
+                        <select class="form-control" name="relationship">
                             <option disabled selected>Select relationship</option>
                             <optgroup label="Personal">
-                                <option>Common Law</option>
-                                <option>Domestic Partner</option>
-                                <option>Ex-Spouse</option>
-                                <option>Life Partner</option>
-                                <option>Significant Other</option>
-                                <option>Spouse</option>
-                                <option>Widow</option>
-                                <option>Widower</option>
+                                <option value="Common Law">Common Law</option>
+                                <option value="Domestic Partner">Domestic Partner</option>
+                                <option value="Ex-Spouse">Ex-Spouse</option>
+                                <option value="Life Partner">Life Partner</option>
+                                <option value="Significant Other">Significant Other</option>
+                                <option value="Spouse">Spouse</option>
+                                <option value="Widow">Widow</option>
+                                <option value="Widower">Widower</option>
                             </optgroup>
                             <optgroup label="Family">
-                                <option>Child</option>
-                                <option>Foster Child</option>
-                                <option>Foster Parent</option>
-                                <option>Grandchild</option>
-                                <option>Grandparent</option>
-                                <option>In-Law</option>
-                                <option>Parent</option>
-                                <option>Relative</option>
-                                <option>Sibling</option>
-                                <option>Step Grandparent</option>
-                                <option>Stepchild</option>
-                                <option>Stepsibling</option>
+                                <option value="Child">Child</option>
+                                <option value="Foster Child">Foster Child</option>
+                                <option value="Foster Parent">Foster Parent</option>
+                                <option value="Grandchild">Grandchild</option>
+                                <option value="Grandparent">Grandparent</option>
+                                <option value="In-Law">In-Law</option>
+                                <option value="Parent">Parent</option>
+                                <option value="Relative">Relative</option>
+                                <option value="Sibling">Sibling</option>
+                                <option value="Step Grandparent">Step Grandparent</option>
+                                <option value="Stepchild">Stepchild</option>
+                                <option value="Stepsibling">Stepsibling</option>
                             </optgroup>
                             <optgroup label="Legal">
-                                <option>Beneficiary</option>
-                                <option>Conservatee</option>
-                                <option>Conservator</option>
-                                <option>Dependent</option>
-                                <option>Fiduciary</option>
-                                <option>Fiduciary Principal</option>
-                                <option>Legal Guardian</option>
-                                <option>POA Principal</option>
-                                <option>Power of Attorney</option>
-                                <option>Trustee</option>
-                                <option>Ward</option>
+                                <option value="Beneficiary">Beneficiary</option>
+                                <option value="Conservatee">Conservatee</option>
+                                <option value="Conservator">Conservator</option>
+                                <option value="Dependent">Dependent</option>
+                                <option value="Fiduciary">Fiduciary</option>
+                                <option value="Fiduciary Principal">Fiduciary Principal</option>
+                                <option value="Legal Guardian">Legal Guardian</option>
+                                <option value="POA Principal">POA Principal</option>
+                                <option value="Power of Attorney">Power of Attorney</option>
+                                <option value="Trustee">Trustee</option>
+                                <option value="Ward">Ward</option>
                             </optgroup>
                             <optgroup label="Other">
-                                <option>Other</option>
+                                <option value="Other">Other</option>
                             </optgroup>
                         </select>
+
                     </div>
 
                     <div class="form-group col-md-4">
                         <label>Notes</label>
-                        <textarea class="form-control" rows="3"></textarea>
+                        <textarea class="form-control" rows="3" name="relation_notes"></textarea>
                     </div>
                     <hr>
                     <div class="form-group w-50">
                         <label for="correspondingToggle">Add Corresponding Relationship?</label>
-                        <select id="correspondingToggle" class="form-control form-control-sm">
+                        <select id="correspondingToggle" class="form-control form-control-sm" name="corresponding">
                             <option value="">--Select--</option>
                             <option value="yes">Yes</option>
                             <option value="no">No</option>
@@ -363,64 +374,66 @@
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label>Name</label>
-                                <p><strong>Judith Abel</strong></p>
+                                <p><strong>{{individual.first_name}} {{individual.last_name}}</strong></p>
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Corresponding Relationship <span class="text-danger">*</span></label>
-                                <select class="form-control">
+                                <select class="form-control" name="corresponding_relationship">
                                     <option disabled selected>Select relationship</option>
                                     <optgroup label="Personal">
-                                        <option>Common Law</option>
-                                        <option>Domestic Partner</option>
-                                        <option>Ex-Spouse</option>
-                                        <option>Life Partner</option>
-                                        <option>Significant Other</option>
-                                        <option>Spouse</option>
-                                        <option>Widow</option>
-                                        <option>Widower</option>
+                                        <option value="Common Law">Common Law</option>
+                                        <option value="Domestic Partner">Domestic Partner</option>
+                                        <option value="Ex-Spouse">Ex-Spouse</option>
+                                        <option value="Life Partner">Life Partner</option>
+                                        <option value="Significant Other">Significant Other</option>
+                                        <option value="Spouse">Spouse</option>
+                                        <option value="Widow">Widow</option>
+                                        <option value="Widower">Widower</option>
                                     </optgroup>
                                     <optgroup label="Family">
-                                        <option>Child</option>
-                                        <option>Foster Child</option>
-                                        <option>Foster Parent</option>
-                                        <option>Grandchild</option>
-                                        <option>Grandparent</option>
-                                        <option>In-Law</option>
-                                        <option>Parent</option>
-                                        <option>Relative</option>
-                                        <option>Sibling</option>
-                                        <option>Step Grandparent</option>
-                                        <option>Stepchild</option>
-                                        <option>Stepsibling</option>
+                                        <option value="Child">Child</option>
+                                        <option value="Foster Child">Foster Child</option>
+                                        <option value="Foster Parent">Foster Parent</option>
+                                        <option value="Grandchild">Grandchild</option>
+                                        <option value="Grandparent">Grandparent</option>
+                                        <option value="In-Law">In-Law</option>
+                                        <option value="Parent">Parent</option>
+                                        <option value="Relative">Relative</option>
+                                        <option value="Sibling">Sibling</option>
+                                        <option value="Step Grandparent">Step Grandparent</option>
+                                        <option value="Stepchild">Stepchild</option>
+                                        <option value="Stepsibling">Stepsibling</option>
                                     </optgroup>
                                     <optgroup label="Legal">
-                                        <option>Beneficiary</option>
-                                        <option>Conservatee</option>
-                                        <option>Conservator</option>
-                                        <option>Dependent</option>
-                                        <option>Fiduciary</option>
-                                        <option>Fiduciary Principal</option>
-                                        <option>Legal Guardian</option>
-                                        <option>POA Principal</option>
-                                        <option>Power of Attorney</option>
-                                        <option>Trustee</option>
-                                        <option>Ward</option>
+                                        <option value="Beneficiary">Beneficiary</option>
+                                        <option value="Conservatee">Conservatee</option>
+                                        <option value="Conservator">Conservator</option>
+                                        <option value="Dependent">Dependent</option>
+                                        <option value="Fiduciary">Fiduciary</option>
+                                        <option value="Fiduciary Principal">Fiduciary Principal</option>
+                                        <option value="Legal Guardian">Legal Guardian</option>
+                                        <option value="POA Principal">POA Principal</option>
+                                        <option value="Power of Attorney">Power of Attorney</option>
+                                        <option value="Trustee">Trustee</option>
+                                        <option value="Ward">Ward</option>
                                     </optgroup>
                                     <optgroup label="Other">
-                                        <option>Other</option>
+                                        <option value="Other">Other</option>
                                     </optgroup>
                                 </select>
+
                             </div>
 
                             <div class="form-group col-md-4">
                                 <label>Notes</label>
-                                <textarea class="form-control" rows="3"></textarea>
+                                <textarea class="form-control" rows="3" name="corresponding_notes"></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="text-right">
                         <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
-                        <button type="button" class="btn btn-default" onclick="RelationshipsUI.showNotesMain()">Cancel</button>
+                        <button type="button" class="btn btn-default"
+                            onclick="RelationshipsUI.showNotesMain()">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -440,7 +453,7 @@
             </div>
             <div class="modal-body">
                 <form id="individualForm">
-                    
+
                     <!-- Section 1: Individual Info -->
                     <div class="section-container">
                         <div class="section-header" onclick="toggleSection(1)">
@@ -451,56 +464,74 @@
                         </div>
                         <div class="section-content" id="section-1">
                             <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label for="firstName">First Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="firstName" placeholder="">
+                                <div class="form-group col-md-4 col-12">
+                                <label>First Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="first_name" id="firstName">
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label for="middleName">Middle Name</label>
-                                    <input type="text" class="form-control" id="middleName" placeholder="">
+                                <div class="form-group col-md-4 col-12">
+                                <label>Middle Name</label>
+                                <input type="text" class="form-control" name="middle_name" id="middleName">
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label for="lastName">Last Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="lastName" placeholder="">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label for="type">Type</label>
-                                    <select class="form-control" id="type">
-                                        <option value="">-- Select Type --</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="servicingAgent">Servicing Agent</label>
-                                    <input type="text" class="form-control" id="servicingAgent" placeholder="Type to search">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="email">Email</label>
-                                    <input type="email" class="form-control" id="email">
+                                <div class="form-group col-md-4 col-12">
+                                <label>Last Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="last_name" id="lastName">
                                 </div>
                             </div>
+
                             <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label for="businessPhone">Business Phone/Ext.</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="businessPhone">
-                                        <span class="input-group-addon">ext</span>
-                                    </div>
+                                <div class="form-group col-md-4 col-12">
+                                <label>Type</label>
+                                <select class="form-control" name="type" id="type">
+                                    <option value="">-- Select Type --</option>
+                                    <option value="Prospect">Prospect</option>
+                                    <option value="Client">Client</option>
+                                    <option value="Ex-Prospect">Ex-Prospect</option>
+                                    <option value="Ex-Client">Ex-Client</option>
+                                    <option value="Contact">Contact</option>
+                                </select>
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label for="homePhone">Home Phone/Ext.</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="homePhone">
-                                        <span class="input-group-addon">ext</span>
-                                    </div>
+                                <div class="form-group position-relative col-md-4 col-12">
+                                <label>Servicing Agent</label>
+                                <input type="text" class="form-control" id="servicing_agents" autocomplete="off">
+                                <input type="hidden" id="servicing_agent_ids" name="servicing_agent_ids">
+                                <div id="agentSuggestionss" class="list-group position-absolute w-100" style="z-index: 1000; display: none;"></div>
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label for="cellPhone">Cell Phone/Ext.</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="cellPhone">
-                                        <span class="input-group-addon">ext</span>
-                                    </div>
+                                <div class="form-group col-md-4 col-12">
+                                <label>Email</label>
+                                <input type="email" class="form-control" name="email" id="email">
+                                </div>
+                            </div>
+
+                            <!-- Business Phone -->
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-12 col-form-label">Business Phone/Ext.</label>
+                                <div class="col-sm-5 col-8">
+                                <input type="text" name="business_phone" id="businessPhone" class="form-control" placeholder="Phone">
+                                </div>
+                                <div class="col-sm-2 col-4">
+                                <input type="text" name="business_ext" id="businessex" class="form-control" placeholder="ext">
+                                </div>
+                            </div>
+
+                            <!-- Home Phone -->
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-12 col-form-label">Home Phone/Ext.</label>
+                                <div class="col-sm-5 col-8">
+                                <input type="text" name="home_phone" id="homePhone" class="form-control" placeholder="Phone">
+                                </div>
+                                <div class="col-sm-2 col-4">
+                                <input type="text" name="home_ext" id="homeex" class="form-control" placeholder="ext">
+                                </div>
+                            </div>
+
+                            <!-- Cell Phone -->
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-12 col-form-label">Cell Phone/Ext.</label>
+                                <div class="col-sm-5 col-8">
+                                <input type="text" name="cell_phone" id="cellPhone" class="form-control" placeholder="Phone">
+                                </div>
+                                <div class="col-sm-2 col-4">
+                                <input type="text" name="cell_ext" id="cellex" class="form-control" placeholder="ext">
                                 </div>
                             </div>
                         </div>
@@ -510,31 +541,32 @@
 
                     <!-- Section 2: Associate Individual -->
                     <div class="section-container">
-    <div class="section-header" onclick="toggleSection(2)">
-        <div class="section-number">2</div>
-        <div class="section-title text-success">Associate Individual</div>
-    </div>
-    <div class="section-content" id="section-2" style="display: none;">
-        <div class="form-group">
-            <label for="recordTypeDropdown">Select Record Type</label>
-            <select class="form-control" id="recordTypeDropdown" onchange="toggleCarrierField(this.value)">
-                <option value="">-- Select Record Type --</option>
-                <option value="carrier">New Carrier</option>
-                <option value="vendor">Existing Carrier</option>
-            </select>
-            <div class="well" style="background-color: #f5f5f5; padding: 15px; margin-top: 10px;">
-                <p style="margin-bottom: 0;">Track and manage carrier contacts. <a href="#">Learn more</a>.</p>
-            </div>
-        </div>
-        
-        <div id="carrierNameContainer" style="display: none;">
-            <div class="form-group">
-                <label for="carrierName">Carrier Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="carrierName" placeholder="">
-            </div>
-        </div>
-    </div>
-</div>
+                        <div class="section-header" onclick="toggleSection(2)">
+                            <div class="section-number">2</div>
+                            <div class="section-title text-success">Associate Individual</div>
+                        </div>
+                        <div class="section-content" id="section-2" style="display: none;">
+                            <div class="form-group">
+                                <label for="record_type">Select Record Type</label>
+                                <select class="form-control" id="record_type" name="record_type"
+                                    onchange="toggleCarrierField(this.value)">
+                                    <option value="">-- Select Record Type --</option>
+                                    <option value="existing">Existing Carrier</option>
+                                    <option value="new">New Carrier</option>  
+                                </select>
+                                <div class="well" style="background-color: #f5f5f5; padding: 15px; margin-top: 10px;">
+                                    <p style="margin-bottom: 0;">Track and manage carrier contacts. <a href="#">Learn
+                                            more</a>.</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="carrier_name_group" style="display:none; position: relative;">
+                                <label for="carrier_name">Carrier Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="carrier_name" id="carrier_name" placeholder="Type to search" autocomplete="off">
+                                <div id="carrier_suggestions" class="list-group" style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 1000;"></div>
+                            </div>
+                        </div>
+                    </div>
 
 
                     <hr>
@@ -548,11 +580,13 @@
                         <div class="section-content" id="section-3" style="display: none;">
                             <label class="mb-2">Addresses</label>
                             <div class="address-box">
-                                <label class="d-flex align-items-center m-0" style="width: 100%;">
-                                    <input type="checkbox" class="me-2">
-                                    <span>Home - 245 Leatherberry Rd Carrollton, Ohio 44615</span>
-                                </label>
-                            </div>
+                                {% for add in individual_address %}
+                                    <label class="d-flex align-items-center m-0" style="width: 100%;">
+                                        <input type="checkbox" class="me-2" name="address_ids" value="{{ add.id }}">
+                                        <span>{{ add.address_type }} - {{ add.address1 }} {{ add.address2 }} {{ add.city }} {{ add.state }} {{ add.zip_code }}</span>
+                                    </label>
+                                {% endfor %}
+                        </div>
                         </div>
                     </div>
 
@@ -560,7 +594,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
+                <button type="button" class="btn btn-success" id="saveNewIndividual"><i class="fa fa-save"></i> Save</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -572,105 +606,230 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal"
+                    aria-label="Close"><span>&times;</span></button>
                 <h4 class="modal-title" id="basicinfoModalLabel">Basic Information</h4>
             </div>
+            
             <div class="modal-body">
-               
+
                 <p class="text-danger"><strong>Please review the required fields.</strong></p>
-                <form>
+                
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label>First Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="">
+                            <input type="text" id="basicFirstName" name="first_name" class="form-control" placeholder="">
                         </div>
                         <div class="form-group col-md-4">
                             <label>Middle Name</label>
-                            <input type="text" class="form-control" placeholder="">
+                            <input type="text" id="basicMiddleName" name="middle_name" class="form-control" placeholder="">
                         </div>
                         <div class="form-group col-md-4">
                             <label>Last Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="">
+                            <input type="text" id="basicLastName" name="last_name" class="form-control" placeholder="">
                         </div>
-                         <div class="form-group col-md-4">
-                            <label>Date of Birth  <span class="text-danger"></span></label>
-                            <input type="date" class="form-control" placeholder="">
+                        <div class="form-group col-md-4">
+                            <label>Date of Birth <span class="text-danger"></span></label>
+                            <input type="date" id="basicDOB" name="dob" class="form-control" placeholder="">
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label>Gender</label>
-                            <select class="form-control">
+                            <select id="basicGender" name="gender" class="form-control">
                                 <option value="">-- Select Type --</option>
-                                <option value="">F</option>
-                                <option value="">M</option>
+                                <option value="F">F</option>
+                                <option value="M">M</option>
                             </select>
+
                         </div>
                         <div class="form-group col-md-4">
                             <label>SSN</label>
-                            <input type="text" class="form-control" placeholder="Type to search">
+                            <input type="text" id="basicSSN" name="ssn" class="form-control" placeholder="">
                         </div>
-                       <div class="form-group col-md-4">
+                        <div class="form-group col-md-4">
                             <label>Smoker Status</label>
-                            <select class="form-control">
+                            <select id="basicSmoker" name="smoker_status" class="form-control">
                                 <option value="">-- Select Type --</option>
-                                <option value="">Yes</option>
-                                <option value="">No</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
                             </select>
                         </div>
-                    
+
                     </div>
-                </form>
+                
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
+                <button type="submit" class="btn btn-success" id="saveBasicInfo"><i class="fa fa-save"></i> Save</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
+           
         </div>
     </div>
 </div>
 
-<!-- Load jQuery first -->
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Then load Bootstrap JS -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<script>
+$(document).ready(function () {
+  $("#servicing_agents").on("input", function () {
+    let query = $(this).val();
+    if (query.length >= 2) {
+      $.ajax({
+        url: "/agents/search/",
+        data: { term: query },
+        success: function (data) {
+          let suggestions = "";
+          if (data.length === 0) {
+            suggestions = '<a href="#" class="list-group-item list-group-item-action disabled">No results found</a>';
+          } else {
+            data.forEach(agent => {
+              suggestions += `<a href="#" class="list-group-item list-group-item-action" data-id="${agent.id}" data-label="${agent.label}">${agent.label}</a>`;
+            });
+          }
+          $("#agentSuggestionss").html(suggestions).show();
+        }
+      });
+    } else {
+      $("#agentSuggestionss").empty().hide();
+    }
+  });
+
+  $(document).on("click", "#agentSuggestionss a", function (e) {
+    e.preventDefault();
+    const name = $(this).data("label");
+    const id = $(this).data("id");
+    $("#servicing_agents").val(name);
+    $("#servicing_agent_ids").val(id);
+    $("#agentSuggestionss").empty().hide();
+  });
+
+  $("#servicing_agents").on("blur", function () {
+    setTimeout(() => {
+      $("#agentSuggestionss").fadeOut();
+    }, 150);
+  });
+});
+</script>
 
 <script>
-    // Namespace all functions to avoid conflicts
     var RelationshipsUI = {
-        init: function() {
-            // Form submission handler
-            $('#activityForm').on('submit', function(e) {
+        init: function () {
+            
+            $('#relationshipNameInput').autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/individuals/search/relationship/',  
+                        dataType: 'json',
+                        data: { term: request.term },
+                        success: function (data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    $('#relationshipNameInput').val(ui.item.label);
+                    $('#relationshipNameInput').data('individual-id', ui.item.id); 
+                }
+            });
+
+            // Form submission
+            $('#activityForm').on('submit', function (e) {
                 e.preventDefault();
                 RelationshipsUI.showNotesMain();
                 location.reload();
             });
 
-            // Corresponding relationship toggle
-            $('#correspondingToggle').change(function() {
+            // Toggle corresponding
+            $('#correspondingToggle').change(function () {
                 $('#correspondingSection').toggle($(this).val() === 'yes');
             });
-            
-            // Edit relationship dropdown handler
-            $('#editRelationshipDropdown').change(function() {
+
+            // Dropdown change handler
+            $('#editRelationshipDropdown').change(function () {
                 var action = $(this).val();
-                $(this).val(''); // Reset to "Edit" option
-                
-                switch(action) {
-                    case 'existing':
-                        RelationshipsUI.useExistingIndividual();
-                        break;
-                    case 'new':
-                        $('#newIndividualModal').modal('show');
-                        break;
-                    case 'basic':
-                        $('#basicinfoModal').modal('show');
-                        break;
+                $(this).val('');
+                if (action === 'existing') {
+                    $('#relationshipNameInput').focus();
+                } else if (action === 'new') {
+                    $('#newIndividualModal').modal('show');
+                } else if (action === 'basic') {
+                    $('#basicinfoModal').modal('show');
                 }
             });
+
+            // Save New Individual
+            $('#saveNewIndividual').on('click', function () {
+                var address_ids = [];
+                $('input[name="address_ids"]:checked').each(function () {
+                    address_ids.push($(this).val());
+                });
+                var data = {
+                    first_name: $('#firstName').val(),
+                    middle_name: $('#middleName').val(),
+                    last_name: $('#lastName').val(),
+                    individual_type: $('#type').val(),  
+                    email: $('#email').val(),
+                    servicing_agent_ids: $('#servicing_agent_ids').val(),
+                    business_phone: $('#businessPhone').val(),
+                    home_phone: $('#homePhone').val(),
+                    cell_phone: $('#cellPhone').val(),
+                    business_ext: $('#businessex').val(),
+                    home_ext: $('#homeex').val(),
+                    cell_ext: $('#cellex').val(),
+                    carrier_name: $('#carrier_name').val(),
+                    record_type: $('#record_type').val(),
+                    address_ids: address_ids, 
+
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                };
+
+
+                $.post('/individuals/create/relationship/', data, function (response) {
+                    if (response.success) {
+                        const fullName = response.first_name + ' ' + response.last_name;
+                        $('#relationshipNameInput').val(fullName);
+                        $('#relationshipNameInput').data('individual-id', response.id);
+                        $('#newIndividualModal').modal('hide');
+                    } else {
+                        alert('Failed to save individual.');
+                    }
+                });
+            });
+
+            // Save Basic Info (no DB save)
+            $('#saveBasicInfo').on('click', function () {
+                const data = {
+                    first_name: $('#basicFirstName').val(),
+                    middle_name: $('#basicMiddleName').val(),
+                    last_name: $('#basicLastName').val(),
+                    dob: $('#basicDOB').val(),
+                    gender: $('#basicGender').val(),
+                    ssn: $('#basicSSN').val(),
+                    smoker_status: $('#basicSmoker').val(),
+                    individual_id: $('#relationshipNameInput').data('individual-id') || '',  // Handle undefined
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                };
+
+                $.post('/individuals/save/basicinfo/', data, function (response) {
+                    if (response.success) {
+                        const fullName = data.first_name + ' ' + (data.middle_name ? data.middle_name + ' ' : '') + data.last_name;
+                        $('#relationshipNameInput').val(fullName);
+                        $('#basicinfoModal').modal('hide');
+                    } else {
+                        console.error("Error:", response.error);  
+                        alert('Failed to save basic info: ' + response.error);  
+                    }
+                });
+            });
+
+
         },
 
-        showCreateNew: function() {
+        showCreateNew: function () {
             $('#RelationshipsMainContent').hide();
             $('#createNewRelationshipsContainer').show();
             $('html, body').animate({
@@ -678,79 +837,97 @@
             }, 'smooth');
         },
 
-        showNotesMain: function() {
+        showNotesMain: function () {
             $('#RelationshipsMainContent').show();
             $('#createNewRelationshipsContainer').hide();
             $('#activityForm')[0].reset();
             $('#correspondingSection').hide();
         },
-
-       
     };
 
-    // Initialize when DOM is ready
-    $(document).ready(function() {
+    // Init and Section toggle
+    $(document).ready(function () {
         RelationshipsUI.init();
+
+        $('#section-1').show();
+        $('#section-2').hide();
+        $('#section-3').hide();
+
+        $('#newIndividualModal').on('show.bs.modal', function (e) {
+            const trigger = $(e.relatedTarget);
+            $('.section-content').hide();
+
+            if (trigger.hasClass('address-info-trigger')) $('#section-3').show();
+            else if (trigger.hasClass('associate-individual-trigger')) $('#section-2').show();
+            else $('#section-1').show();
+        });
+
+        $('#carrierNameContainer').hide();
     });
 
-function toggleSection(sectionNum) {
-    // Hide all other sections
-    $('.section-content').not('#section-' + sectionNum).slideUp();
-    
-    // Toggle the clicked section
-    $('#section-' + sectionNum).slideToggle();
-}
-
-// Initialize with first section open
-$(document).ready(function() {
-    $('#section-1').show();
-    $('#section-2').hide();
-    $('#section-3').hide();
-    
-    // Handle opening from different triggers
-    $('#newIndividualModal').on('show.bs.modal', function (e) {
-        var trigger = $(e.relatedTarget);
-        if(trigger.hasClass('address-info-trigger')) {
-            $('.section-content').hide();
-            $('#section-3').show();
-        } else if(trigger.hasClass('associate-individual-trigger')) {
-            $('.section-content').hide();
-            $('#section-2').show();
-        } else {
-            // Default behavior - show first section
-            $('.section-content').hide();
-            $('#section-1').show();
-        }
-    });
-});
-function toggleSection(sectionNum) {
-    $('.section-content').not('#section-' + sectionNum).slideUp();
-    $('#section-' + sectionNum).slideToggle();
-}
-
-function toggleCarrierField(recordType) {
-    const carrierContainer = $('#carrierNameContainer');
-    const carrierInput = $('#carrierName');
-    
-    if (recordType === 'carrier') {
-        carrierContainer.show();
-        carrierInput.attr('placeholder', 'Enter new carrier name');
-    } 
-    else if (recordType === 'vendor') {
-        carrierContainer.show();
-        carrierInput.attr('placeholder', 'Type to search existing carriers');
-    } 
-    else {
-        carrierContainer.hide();
-        carrierInput.val('');
+    function toggleSection(sectionNum) {
+        $('.section-content').not('#section-' + sectionNum).slideUp();
+        $('#section-' + sectionNum).slideToggle();
     }
-}
 
-// Initialize when DOM is ready
-$(document).ready(function() {
-    // Hide carrier name field by default
-    $('#carrierNameContainer').hide();
-    
-    // Rest of your initialization code...
+    function toggleCarrierField(recordType) {
+        const container = $('#carrierNameContainer');
+        const input = $('#carrierName');
+        if (recordType === 'carrier') {
+            container.show();
+            input.attr('placeholder', 'Enter new carrier name');
+        } else if (recordType === 'vendor') {
+            container.show();
+            input.attr('placeholder', 'Type to search existing carriers');
+        } else {
+            container.hide();
+            input.val('');
+        }
+    }
+</script>
+
+<script>
+document.getElementById('record_type').addEventListener('change', function () {
+  const carrierGroup = document.getElementById('carrier_name_group');
+  carrierGroup.style.display = this.value ? 'block' : 'none';
+});
+
+document.getElementById('carrier_name').addEventListener('input', function () {
+  const input = this.value;
+  const dropdown = document.getElementById('carrier_suggestions');
+
+  if (input.length > 1) {
+    fetch(`/search-carriers/?q=${encodeURIComponent(input)}`)
+      .then(response => response.json())
+      .then(data => {
+        dropdown.innerHTML = '';
+        if (data.length > 0) {
+          data.forEach(carrier => {
+            const item = document.createElement('a');
+            item.className = 'list-group-item list-group-item-action';
+            item.textContent = carrier.name;
+            item.href = '#';
+            item.onclick = function (e) {
+              e.preventDefault();
+              document.getElementById('carrier_name').value = carrier.name;
+              dropdown.style.display = 'none';
+            };
+            dropdown.appendChild(item);
+          });
+          dropdown.style.display = 'block';
+        } else {
+          dropdown.style.display = 'none';
+        }
+      });
+  } else {
+    dropdown.style.display = 'none';
+  }
+});
+
+document.addEventListener('click', function (e) {
+  const dropdown = document.getElementById('carrier_suggestions');
+  if (!document.getElementById('carrier_name_group').contains(e.target)) {
+    dropdown.style.display = 'none';
+  }
 });
 </script>
