@@ -1,3 +1,58 @@
+<style>
+
+    .input-group {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 5px;
+    }
+
+    
+    .input-group > input.form-control:first-child {
+        flex: 1 1 auto;
+    }
+
+    
+    .input-group > input.form-control:last-child {
+        width: 100px !important;
+        min-width: 100px;
+        max-width: 100px;
+        flex: 0 0 auto;
+    }
+
+   
+    .input-group-addon {
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        padding: 6px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        white-space: nowrap;
+    }
+
+   
+    @media (max-width: 576px) {
+        .input-group {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .input-group > input.form-control:last-child {
+            width: 100% !important;
+            min-width: auto;
+            max-width: none;
+        }
+    }
+        @media (max-width: 768px) {
+    .row .form-group.col-md-4 {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+}
+   
+</style>
+
 <div class="modal fade" id="newPolicyModal" tabindex="-1" role="dialog" aria-labelledby="newPolicyModalLabel">
     <div class="modal-dialog modal-md" role="document">
         <form id="policyForm" method="post">
@@ -62,32 +117,29 @@
                                         </div>
                                     </div>
 
-                                    <div class="row">
-                                        <div class="form-group col-md-4">
-                                            <label for="clientType">Type</label>
-                                            <select id="clientType" name="individual_type">
-                                                <option value="">Select Type</option>
-                                                <option value="Prospect">Prospect</option>
-                                                <option value="Client">Client</option>
-                                                <option value="Ex-Prospect">Ex-Prospect</option>
-                                                <option value="Ex-Client">Ex-Client</option>
-                                                <option value="Contact">Contact</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label for="servicingAgent">Servicing Agent</label>
-                                            <input type="text" class="form-control agent-autocomplete"
-                                                id="servicing_agent" autocomplete="off">
-                                            <input type="hidden" id="servicing_agent_id" name="servicing_agent_id">
-                                            <div id="servicingSuggestions" class="list-group position-absolute w-100"
-                                                style="z-index: 1000;"></div>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label for="email">Email</label>
-                                            <input type="email" class="form-control" id="email" name="email"
-                                                placeholder="Enter email">
-                                        </div>
-                                    </div>
+                                  <div class="row">
+    <div class="form-group col-md-4">
+        <label for="clientType">Type</label>
+        <select id="clientType" name="individual_type" class="form-control">
+            <option value="">Select Type</option>
+            <option value="Prospect">Prospect</option>
+            <option value="Client">Client</option>
+            <option value="Ex-Prospect">Ex-Prospect</option>
+            <option value="Ex-Client">Ex-Client</option>
+            <option value="Contact">Contact</option>
+        </select>
+    </div>
+    <div class="form-group col-md-4">
+        <label for="servicingAgent">Servicing Agent</label>
+        <input type="text" class="form-control agent-autocomplete" id="servicing_agent" autocomplete="off">
+        <input type="hidden" id="servicing_agent_id" name="servicing_agent_id">
+        <div id="servicingSuggestions" class="list-group position-absolute w-100" style="z-index: 1000;"></div>
+    </div>
+    <div class="form-group col-md-4">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+    </div>
+</div>
 
                                     <!-- Vertically Stacked Phone Fields -->
                                     <div class="row">
@@ -128,72 +180,67 @@
                             </div>
                         </div>
 
-                        <!-- Step 2: Policy Info -->
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="step-indicator" id="policyInfoTab">
-                                    <span class="step-number">2</span>
-                                    <span class="step-title">Policy Info</span>
-                                </div>
-                            </div>
-                            <div class="panel-body policy-info-section">
-                                <p>Fields marked with an <span class="text-danger">*</span> are required.</p>
-                                <div class="row">
-                                    <div class="form-group col-md-4">
-                                        <label>Carrier<span class="text-danger">*</span></label>
-                                        <select name="carrier" required>
-                                            <option value="">Select Carrier</option>
-                                            {% for carrier in carriers %}
-                                            <option value="{{ carrier.id }}">{{ carrier.name }}</option>
-                                            {% endfor %}
-                                        </select>
-
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="policyNumber">Policy Number</label>
-                                        <input type="text" class="form-control" name="policy_number"
-                                            placeholder="Policy Number">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="status">Status <span class="text-danger">*</span></label>
-                                        <select name="status" required>
-                                            <option value="Pending">Pending</option>
-                                            <option value="Active">Active</option>
-                                            <option value="Cancelled">Cancelled</option>
-                                            <option value="Replaced">Replaced</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-md-4">
-                                        <label>Coverage Type <span class="text-danger">*</span></label>
-                                        <select class="form-control" name="coverage_type" required>
-                                            <option value="">Select Coverage</option>
-                                            <option value="Dental">Dental</option>
-                                            <option value="Med Supp">Med Supp</option>
-                                            <option value="PDP">PDP</option>
-                                            <option value="MAPD">MAPD</option>
-                                            <option value="MA">MA</option>
-                                            <option value="Medical">Medical</option>
-
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="effectiveDate">Effective Date</label>
-                                        <input type="date" class="form-control" name="effective_date"
-                                            placeholder="mm/dd/yyyy">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="agentAgency">Agent/Agency</label>
-                                        <input type="text" class="form-control agent-autocomplete" id="affiliate_agent"
-                                            autocomplete="off">
-                                        <input type="hidden" id="affiliate_agent_id" name="affiliate_agent_id">
-                                        <div id="affiliateSuggestions" class="list-group position-absolute w-100"
-                                            style="z-index: 1000;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                       
+                     <!-- Step 2: Policy Info -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="step-indicator" id="policyInfoTab">
+            <span class="step-number">2</span>
+            <span class="step-title">Policy Info</span>
+        </div>
+    </div>
+    <div class="panel-body policy-info-section">
+        <p>Fields marked with an <span class="text-danger">*</span> are required.</p>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label>Carrier<span class="text-danger">*</span></label>
+                <select name="carrier" class="form-control" required>
+                    <option value="">Select Carrier</option>
+                    {% for carrier in carriers %}
+                    <option value="{{ carrier.id }}">{{ carrier.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="policyNumber">Policy Number</label>
+                <input type="text" class="form-control" name="policy_number" placeholder="Policy Number">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="status">Status <span class="text-danger">*</span></label>
+                <select name="status" class="form-control" required>
+                    <option value="Pending">Pending</option>
+                    <option value="Active">Active</option>
+                    <option value="Cancelled">Cancelled</option>
+                    <option value="Replaced">Replaced</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label>Coverage Type <span class="text-danger">*</span></label>
+                <select class="form-control" name="coverage_type" required>
+                    <option value="">Select Coverage</option>
+                    <option value="Dental">Dental</option>
+                    <option value="Med Supp">Med Supp</option>
+                    <option value="PDP">PDP</option>
+                    <option value="MAPD">MAPD</option>
+                    <option value="MA">MA</option>
+                    <option value="Medical">Medical</option>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="effectiveDate">Effective Date</label>
+                <input type="date" class="form-control" name="effective_date" placeholder="mm/dd/yyyy">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="agentAgency">Agent/Agency</label>
+                <input type="text" class="form-control agent-autocomplete" id="affiliate_agent" autocomplete="off">
+                <input type="hidden" id="affiliate_agent_id" name="affiliate_agent_id">
+                <div id="affiliateSuggestions" class="list-group position-absolute w-100" style="z-index: 1000;"></div>
+            </div>
+        </div>
+    </div>
+</div>
                     </div>
                 </div>
                 <div class="modal-footer modal-footer-responsive justify-content-center text-center">
