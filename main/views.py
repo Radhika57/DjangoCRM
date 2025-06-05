@@ -607,10 +607,10 @@ def agent_detail(request, agent_id):
         'servicing_individuals': servicing_individuals,
         'policies': policies,
     })
-<<<<<<< HEAD
+    
+    
 def edit_agent(request):
    return render(request, 'agent/agencyedituser.html')
-=======
 
 def delete_agent(request, agent_id):
     agent = get_object_or_404(Agent, id=agent_id)
@@ -618,7 +618,6 @@ def delete_agent(request, agent_id):
     return redirect('search_agents') 
 
 
->>>>>>> 96816f867819d7c2389ed6dea4d2e3744b9ac983
 # Individual
 
 
