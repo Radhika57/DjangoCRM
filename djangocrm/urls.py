@@ -44,11 +44,8 @@ urlpatterns = [
     path('agency/advanced-search/', views.advanced_search, name='advanced_search'),
     path('agency/saved-searches/', views.saved_searches, name='saved_searches'),
     path('agency/detail/<int:agent_id>/', views.agent_detail, name='agent_detail'),
-<<<<<<< HEAD
     path('agents/edit/', views.edit_agent, name='edit_agent'),
-=======
     path('agent/<int:agent_id>/delete/', views.delete_agent, name='delete_agent'),
->>>>>>> 96816f867819d7c2389ed6dea4d2e3744b9ac983
     
 
     # Individual
