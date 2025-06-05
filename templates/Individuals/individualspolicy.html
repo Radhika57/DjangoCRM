@@ -122,7 +122,7 @@
 <div class="tab-pane" id="policies-individuals">
     <div class="panel panel-default">
         <div class="panel-heading panel-heading-flex">
-            <strong>Policies for Judith Abel</strong>
+            <strong>Policies for {{individual.first_name}} {{individual.last_name}}</strong>
             <div class="btn-group btn-group-responsive">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newPolicyModal">
                     <span class="btn-text">Create new</span>
@@ -170,36 +170,26 @@
                             </tfoot>
 
                             <tbody>
-                                <tr>
-                                    <td><a href="#">POL123456</a></td>
-                                    <td>John Doe</td>
-                                    <td>2023-01-15</td>
-                                    <td>2024-01-15</td>
-                                    <td><span class="label label-success">Active</span></td>
-                                    <td>ABC Insurance</td>
-                                    <td>Health</td>
-                                    
-                                </tr>
-                                <tr>
-                                    <td><a href="#">POL789012</a></td>
-                                    <td>Jane Smith</td>
-                                    <td>2023-03-20</td>
-                                    <td>2024-03-20</td>
-                                    <td><span class="label label-warning">Pending</span></td>
-                                    <td>XYZ Insurance</td>
-                                    <td>Life</td>
-                                   
-                                </tr>
-                                <tr>
-                                    <td><a href="#">POL345678</a></td>
-                                    <td>Robert Brown</td>
-                                    <td>2022-11-05</td>
-                                    <td>2023-11-05</td>
-                                    <td><span class="label label-danger">Lapsed</span></td>
-                                    <td>DEF Insurance</td>
-                                    <td>Auto</td>
-                                   
-                                </tr>
+                                {% for policy in policies %}
+                                    {% with coverage=policy.policy_coverage.first details=policy.policy_details.first %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url "policy_tab" policy.id %}">{{ policy.policy_number }}</a>
+                                        </td>
+                                        <td>
+                                            <a href="{% url "individual_tab" policy.individual.id %}">
+                                                {{ policy.individual.first_name }} {{ policy.individual.middle_name }} {{ policy.individual.last_name }}
+                                            </a>
+                                        </td>
+                                        <td>{{ policy.effective_date|default:"—" }}</td>
+                                        <td>{{ details.renewal_date|default:"—" }}</td>
+                                        <td>{{ policy.status }}</td>
+                                        <td><a href="{% url 'carrier_detail' policy.carrier.id %}">{{ policy.carrier }}</a></td>
+                                        <td>{{ policy.coverage_type }}</td>
+                                        
+                                    </tr>
+                                    {% endwith %}
+                                {% endfor %}
                             </tbody>
                         </table>
 

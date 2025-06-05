@@ -212,7 +212,11 @@
 
     <div class="search-actions">
         <button type="submit" class="btn btn-secondary">Save</button>
-        <button type="button" class="btn btn-danger">Delete</button>
+        <a href="{% url 'delete_agency' agency.id %}" 
+        class="btn btn-danger"
+        onclick="return confirm('Are you sure you want to delete this agency? This action cannot be undone.');">
+        Delete
+    </a>
     </div>
 </form>
 </div>

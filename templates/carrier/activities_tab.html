@@ -110,10 +110,12 @@
                                         <tr>
                                             <td>
                                                 <select class="form-control" name="status">
-                                                    <option value="Not Started">Not Started</option>
+                                                    <option value="">--select--</option>
                                                     <option value="In Progress">In Progress</option>
-                                                    <option value="Completed">Completed</option>
-                                                    <option value="Cancelled">Cancelled</option>
+                                                    <option value="Waiting">Waiting</option>
+                                                    <option value="Not Started">Not Started</option>
+                                                    <option value="Complete">Complete</option>
+                                                    <option value="Deferred">Deferred</option>
                                                 </select>
                                             </td>
                                             <td>
@@ -126,10 +128,11 @@
                                             </td>
                                             <td>
                                                 <select class="form-control" name="follow_up_team">
-                                                    <option>Select Team</option>
-                                                    <option value="Sales">Sales</option>
-                                                    <option value="Support">Support</option>
-                                                    <option value="Marketing">Marketing</option>
+                                                    <option value="">Select Team</option>
+                                                    <option value="None">None</option>
+                                                    <option value="Team 1">Team 1</option>
+                                                    <option value="Team 2">Team 2</option>
+                                                    <option value="Your Sales Pipeline">Your Sales Pipeline</option>
                                                 </select>
                                             </td>
                                             <td>
@@ -153,10 +156,11 @@
                                     <div class="form-group">
                                         <label><strong>Priority</strong></label>
                                         <select class="form-control" name="priority">
-                                            <option value="Low">Low</option>
-                                            <option value="Medium">Medium</option>
+                                            <option value="">--Select--</option>
                                             <option value="High">High</option>
+                                            <option value="Medium">Medium</option>
                                             <option value="Urgent">Urgent</option>
+                                            <option value="Low">Low</option>
                                         </select>
                                     </div>
                                 </div>
@@ -164,11 +168,14 @@
                                     <div class="form-group">
                                         <label><strong>Type</strong></label>
                                         <select class="form-control" name="activity_type">
-                                            <option value="Initial contact">Initial contact</option>
-                                            <option value="Follow-up">Follow-up</option>
-                                            <option value="Meeting">Meeting</option>
-                                            <option value="Call">Call</option>
-                                            <option value="Email">Email</option>
+                                            <option value="">--Select--</option>
+                                            <option value="Initial Contact">Initial Contact</option>
+                                            <option value="Prospecting">Prospecting</option>
+                                            <option value="Quote Process">Quote Process</option>
+                                            <option value="Enrollement">Enrollement</option>
+                                            <option value="Renewal">Renewal</option>
+                                            <option value="Service Issue">Service Issue</option>
+                                            <option value="Cross-sell">Cross-sell</option>
                                         </select>
                                     </div>
                                 </div>
@@ -176,10 +183,12 @@
                                     <div class="form-group">
                                         <label><strong>Method</strong></label>
                                         <select class="form-control" name="method">
+                                            <option value="">--Select--</option>
                                             <option value="Email">Email</option>
-                                            <option value="Phone">Phone</option>
-                                            <option value="In-person">In-person</option>
-                                            <option value="Video Call">Video Call</option>
+                                            <option value="Mail">Mail</option>
+                                            <option value="Phone Call">Phone Call</option>
+                                            <option value="Fax">Fax</option>
+                                            <option value="Visit">Visit</option>
                                         </select>
                                     </div>
                                 </div>

@@ -32,10 +32,10 @@
                                 <label for="security_admin" style="margin:0;display:inline">Administrator</label>
                             </div>
                             <div style="padding:0;margin:0">
-                              <input type="checkbox" id="security_gem" name="security_groups[]" value="agent_gem" 
+                              <input type="checkbox" id="security_gem" name="security_groups[]" value="agent_crm" 
                                      style="margin:0 5px 0 0;vertical-align:middle"
-                                     {% if carrier_details and 'agent_gem' in carrier_details.security_groups %}checked{% endif %}>
-                              <label for="security_gem" style="margin:0;display:inline">Agent GEM</label>
+                                     {% if carrier_details and 'agent_crm' in carrier_details.security_groups %}checked{% endif %}>
+                              <label for="security_gem" style="margin:0;display:inline">Agent CRM</label>
                             </div>
                             <div style="padding:0;margin:0">
                               <input type="checkbox" id="security_statements" name="security_groups[]" value="agent_statements" 
@@ -47,7 +47,25 @@
                               <input type="checkbox" id="security_staff" name="security_groups[]" value="commission_staff" 
                                      style="margin:0 5px 0 0;vertical-align:middle"
                                      {% if carrier_details and 'commission_staff' in carrier_details.security_groups %}checked{% endif %}>
-                              <label for="security_staff" style="margin:0;display:inline">Commission Staff</label>
+                              <label for="security_staff" style="margin:0;display:inline">Commissions Staff</label>
+                            </div>
+                            <div style="padding:0;margin:0">
+                              <input type="checkbox" id="office_staff" name="security_groups[]" value="office_staff" 
+                                     style="margin:0 5px 0 0;vertical-align:middle"
+                                     {% if carrier_details and 'office_staff' in carrier_details.security_groups %}checked{% endif %}>
+                              <label for="office_staff" style="margin:0;display:inline">Office Staff</label>
+                            </div>
+                            <div style="padding:0;margin:0">
+                              <input type="checkbox" id="sales_manager" name="security_groups[]" value="sales_manager" 
+                                     style="margin:0 5px 0 0;vertical-align:middle"
+                                     {% if carrier_details and 'sales_manager' in carrier_details.security_groups %}checked{% endif %}>
+                              <label for="sales_manager" style="margin:0;display:inline">Sales Manager</label>
+                            </div>
+                            <div style="padding:0;margin:0">
+                              <input type="checkbox" id="sales_producer" name="security_groups[]" value="sales_producer" 
+                                     style="margin:0 5px 0 0;vertical-align:middle"
+                                     {% if carrier_details and 'sales_producer' in carrier_details.security_groups %}checked{% endif %}>
+                              <label for="sales_producer" style="margin:0;display:inline">Sales Producer</label>
                             </div>
                           </div>
                         </div>
@@ -231,7 +249,12 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-6">
                     <button type="submit" class="btn btn-success">Save</button>
-                    <button type="button" class="btn btn-danger">Delete</button>
+                    <a href="{% url 'delete_carrier' carrier.id %}" 
+                        class="btn btn-danger"
+                        onclick="return confirm('Are you sure you want to delete this carrier? This action cannot be undone.');">
+                        Delete
+                    </a>
+                    
                 </div>
                 <div class="col-xs-12 col-sm-6 text-right text-muted">
                     <small>Updated by Alyson Gross on 2/17/2024 at 12:39 PM Eastern Standard Time</small>

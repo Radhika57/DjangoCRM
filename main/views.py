@@ -1,14 +1,16 @@
-from django.shortcuts import render, redirect 
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.http import JsonResponse 
 from .models import *
-from django.shortcuts import get_object_or_404 
 from django.contrib import messages
 from django.db import IntegrityError
-from django.db.models import Count
+from django.db.models import Count , Value
 from django.views.decorators.csrf import csrf_exempt
 from datetime import date
-from django.db.models import Value
 from django.db.models.functions import Concat
+from django.views.decorators.http import require_http_methods , require_POST
+import json
+
 
 def calculate_age(dob):
     if not dob:
@@ -30,6 +32,7 @@ def carrier_list(request):
     carriers = Carrier.objects.all()
     return render(request, 'carrier/carrierlist.html', {'carriers': carriers})
 
+
 def save_carrier(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -49,6 +52,7 @@ def carrier_detail(request, carrier_id):
     notess = CarrierNotes.objects.filter(carrier=carrier)  
     products = CarrierProduct.objects.filter(carrier=carrier)
     websites = CarrierWebsite.objects.filter(carrier=carrier)
+    individuals = Individuals.objects.filter(carrier=carrier).prefetch_related('individual_detail')
 
     if request.method == 'POST':
 
@@ -179,8 +183,14 @@ def carrier_detail(request, carrier_id):
         'notess':notess,
         'products': products,
         'websites': websites,
+        'individuals': individuals,
     })
 
+
+def delete_carrier(request, carrier_id):
+    carrier = get_object_or_404(Carrier, id=carrier_id)
+    carrier.delete()
+    return redirect('carrier_list') 
 
 # Agency
 
@@ -304,6 +314,10 @@ def edit_agency_details(request, agency_id):
         'agency_address': agency_address,
     })
 
+def delete_agency(request, agency_id):
+    agency = get_object_or_404(Agency, id=agency_id)
+    agency.delete()
+    return redirect('manage_agencies') 
 
 # Agents
 
@@ -377,7 +391,14 @@ def agent_detail(request, agent_id):
     agent_personal, _ = Agent_personal.objects.get_or_create(agent=agent)
     agencies = Agency.objects.all()
     carriers = Carrier.objects.all()
+    servicing_individuals = Individuals.objects.filter(servicing_agent=agent).prefetch_related('individual_detail')
+    policies = Policy.objects.filter(agent=agent).prefetch_related(
+    'policy_coverage__carrier_product',
+    'policy_details',
+    'individual',
+    'carrier')
 
+    
     if request.method == 'POST':
         # --- Agent basic info ---
         if 'last_name' in request.POST:
@@ -582,14 +603,21 @@ def agent_detail(request, agent_id):
         'carriers': carriers,
         'contract': contract,
         'agent_personal':agent_personal,
-        'license':license
+        'license':license,
+        'servicing_individuals': servicing_individuals,
+        'policies': policies,
     })
 
+def delete_agent(request, agent_id):
+    agent = get_object_or_404(Agent, id=agent_id)
+    agent.delete()
+    return redirect('search_agents') 
 
 
 # Individual
 
-def search_individuals(request):
+
+def search_individuals_list(request):
     individual = Individuals.objects.all()
     carriers = Carrier.objects.all()
     context = {
@@ -853,7 +881,11 @@ def individual_tab(request, individual_id):
     individual_activity = IndividualActivity.objects.filter(individual_name=individual)
     individual_notes = IndividualNotes.objects.filter(individual_name=individual)
     relationship_data = get_relationship_data(individual)
-
+    policies = Policy.objects.filter(individual=individual).prefetch_related(
+    'policy_coverage__carrier_product',
+    'policy_details',
+    'individual',
+    'carrier')
     
     agents = Agent.objects.all()
     if request.method == 'POST':
@@ -990,8 +1022,6 @@ def individual_tab(request, individual_id):
                 correspondence_notes=corresponding_notes,
             )
 
-        print(relationship_data,"relationship_data")
-
         return redirect('individual_tab', individual_id=individual.id)
     
     return render(request, 'Individuals/individualtab.html', {
@@ -1002,23 +1032,281 @@ def individual_tab(request, individual_id):
         'individual_activity': individual_activity,
         'individual_notes': individual_notes,     
         'relationship_data': relationship_data,     
+        'policies': policies,     
     })
 
 
+def delete_individual(request, individual_id):
+    individual = get_object_or_404(Individuals, id=individual_id)
+    individual.delete()
+    return redirect('search_individuals_list') 
+
+# Policy
 
 
+@require_http_methods(["POST"])
+def save_policy(request):
+    record_type = request.POST.get('recordType')
+
+    if record_type == 'existing':
+        individual_id = request.POST.get('individual_id')
+        if not individual_id:
+            return JsonResponse({'error': 'Individual ID is required for existing type'}, status=400)
+        individual = get_object_or_404(Individuals, id=individual_id)
+    
+    elif record_type == 'new':
+        individual = Individuals.objects.create(
+            first_name=request.POST.get('first_name'),
+            middle_name=request.POST.get('middle_name', ''),
+            last_name=request.POST.get('last_name'),
+            individual_type=request.POST.get('individual_type'),
+            email=request.POST.get('email'),
+            servicing_agent_id=request.POST.get('servicing_agent_id') or None,
+            business_phone=request.POST.get('business_phone'),
+            business_ext=request.POST.get('business_ext'),
+            home_phone=request.POST.get('home_phone'),
+            home_ext=request.POST.get('home_ext'),
+            cell_phone=request.POST.get('cell_phone'),
+            cell_ext=request.POST.get('cell_ext')
+        )
+    else:
+        return JsonResponse({'error': 'Invalid record type'}, status=400)
 
 
+    policy = Policy.objects.create(
+        individual=individual,
+        carrier_id=request.POST.get('carrier'),
+        policy_number=request.POST.get('policy_number'),
+        status=request.POST.get('status'),
+        coverage_type=request.POST.get('coverage_type'),
+        effective_date=request.POST.get('effective_date') or None,
+        agent_id=request.POST.get('affiliate_agent_id') or None,
+    )
+
+    return JsonResponse({'success': True})
+
+def search_policy(request):
+    carriers = Carrier.objects.all()
+    policy = Policy.objects.all()
+    return render(request, 'policy/searchpolicy.html',{
+        'carriers': carriers,
+        'policy':policy
+    })
 
 
+def advanced_policy(request):
+    return render(request, 'policy/advancedpolicy.html')
+
+def saved_policy(request):
+    return render(request, 'policy/savedpolicy.html')
 
 
+def policy_tab(request, policy_id):
+    policy = get_object_or_404(Policy, id=policy_id)
+    carriers = Carrier.objects.all()
+    policy_details, _ = PolicyDetails.objects.get_or_create(policy_name=policy)
+    agents = Agent.objects.all()
+    policy_activity = PolicyActivity.objects.filter(policy_name=policy)
+    policy_notes = PolicyNotes.objects.filter(policy_name=policy)
+    policy_coverage, _ = PolicyCoverage.objects.get_or_create(policy_name=policy)
+    carrier_products = []
+    if policy.carrier:
+        carrier_products = CarrierProduct.objects.filter(carrier=policy.carrier)
+
+    if request.method == 'POST':
+        # --- Policy Details Form ---
+        if 'carrier' in request.POST:
+            carrier_id = request.POST.get('carrier')
+            if carrier_id:
+                policy.carrier = Carrier.objects.get(id=carrier_id)
+            policy.policy_number = request.POST.get('policy_number')
+            policy.status = request.POST.get('status')
+            policy.coverage_type = request.POST.get('coverage_type')
+            policy.effective_date = request.POST.get('effective_date') or None
+            agent_id = request.POST.get('affiliates_agent_id')
+            if agent_id:
+                policy.agent = Agent.objects.get(id=agent_id)
+            policy.save()
+
+            policy_details.project_code = request.POST.get('project_code')
+            policy_details.pay_frequency = request.POST.get('pay_frequency')  or ''
+            policy_details.lives = request.POST.get('lives')  or ''
+            policy_details.premium = request.POST.get('premium')  or ''
+            policy_details.app_submit_date = request.POST.get('app_submit_date') or None
+            policy_details.renewal_date = request.POST.get('renewal_date') or None
+            policy_details.term_date = request.POST.get('term_date') or None
+            policy_details.pay_method = request.POST.get('pay_method')  or ''
+            policy_details.notes = request.POST.get('notes')  or ''
+            policy_details.member_id = request.POST.get('member_id')  or ''
+            policy_details.election = request.POST.get('election')  or ''
+            policy_details.election_notes = request.POST.get('election_notes')  or ''
+            policy_details.who_is_covered = 'who_is_covered' in request.POST
+            signed_by_id = request.POST.get('signed_by_id')
+            if signed_by_id:
+                policy_details.signed_by = Agent.objects.get(id=signed_by_id)
+            additional_agent_id = request.POST.get('additional_agents_id')
+            if additional_agent_id:
+                policy_details.additional_agent = Agent.objects.get(id=additional_agent_id)
+            policy_details.save()
+
+            return redirect('policy_tab', policy_id=policy_id)
+
+        # --- Activity Form ---
+        if request.POST.get('activity_subject'):
+            activity_id = request.POST.get('activity_id')
+            if activity_id:
+                policy_activity_obj = PolicyActivity.objects.get(id=activity_id)
+            else:
+                policy_activity_obj = PolicyActivity(policy_name=policy)
+
+            policy_activity_obj.subject = request.POST.get('activity_subject')
+            policy_activity_obj.notes = request.POST.get('activity_notes')
+            policy_activity_obj.status = request.POST.get('activity_status')
+            policy_activity_obj.follow_up_team = request.POST.get('follow_up_team')
+            policy_activity_obj.due_date = request.POST.get('due_date') == 'on'
+            policy_activity_obj.activity_date = request.POST.get('activity_date') or None
+            policy_activity_obj.priority = request.POST.get('priority')
+            policy_activity_obj.type = request.POST.get('type')
+            policy_activity_obj.method = request.POST.get('method')
+            if request.FILES.get('attachment'):
+                policy_activity_obj.attachment = request.FILES.get('attachment')
+            policy_activity_obj.save()
+
+            return redirect('policy_tab', policy_id=policy_id)
+
+        # --- Notes Form ---
+        if request.POST.get('note_subject'):
+            note_id = request.POST.get('note_id')
+            if note_id:
+                policy_note = PolicyNotes.objects.get(id=note_id)
+            else:
+                policy_note = PolicyNotes(policy_name=policy)
+
+            policy_note.subject = request.POST.get('note_subject')
+            policy_note.notes = request.POST.get('note_notes')
+            policy_note.pin_note = request.POST.get('pin_note') == 'on'
+            if request.FILES.get('attachment'):
+                policy_note.attachment = request.FILES.get('attachment')
+            policy_note.save()
+
+            return redirect('policy_tab', policy_id=policy_id)
+        
+        # ----- Coverage -----
+        
+        if request.POST.get('coverage_status') or request.POST.get('carrier_product'):
+            policy_coverage.carrier_product_id = request.POST.get('carrier_product') or None
+            policy_coverage.coverage_status = request.POST.get('coverage_status') or ''
+            policy_coverage.coverage_effective_date = request.POST.get('coverage_effective_date') or None
+            policy_coverage.coverage_premium = request.POST.get('coverage_premium') or None
+            policy_coverage.coverage_renewal_date = request.POST.get('coverage_renewal_date') or None
+            policy_coverage.coverage_renewal = request.POST.get('coverage_renewal') or None
+            policy_coverage.coverage_lives = request.POST.get('coverage_lives') or None
+            policy_coverage.coverage_termination_policy = request.POST.get('coverage_termination_policy') or ''
+            policy_coverage.coinsurance = request.POST.get('coinsurance') or ''
+            policy_coverage.deductible = request.POST.get('deductible') or None
+            policy_coverage.deductible_family = request.POST.get('deductible_family') or None
+            policy_coverage.max_out_of_pocket = request.POST.get('max_out_of_pocket') or None
+            policy_coverage.max_out_of_pocket_family = request.POST.get('max_out_of_pocket_family') or None
+            policy_coverage.out_of_network_costs = request.POST.get('out_of_network_costs') or ''
+            policy_coverage.annual_maximum = request.POST.get('annual_maximum') or None
+            policy_coverage.lifetime_maximum = request.POST.get('lifetime_maximum') or None
+            policy_coverage.rx_tier1 = request.POST.get('rx_tier1') or ''
+            policy_coverage.rx_tier2 = request.POST.get('rx_tier2') or ''
+            policy_coverage.rx_tier3 = request.POST.get('rx_tier3') or ''
+            policy_coverage.rx_tier4 = request.POST.get('rx_tier4') or ''
+            policy_coverage.rx_tier5 = request.POST.get('rx_tier5') or ''
+            policy_coverage.single_rate = request.POST.get('single_rate') or None
+            policy_coverage.plus_spouse_rate = request.POST.get('plus_spouse_rate') or None
+            policy_coverage.plus_children_rate = request.POST.get('plus_children_rate') or None
+            policy_coverage.family_rate = request.POST.get('family_rate') or None
+            policy_coverage.pharmacy_network = request.POST.get('pharmacy_network') or ''
+            policy_coverage.provider_network = request.POST.get('provider_network') or ''
+            policy_coverage.coverage_notes = request.POST.get('coverage_notes') or ''
+            policy_coverage.fees = request.POST.get('fees') or ''
+            policy_coverage.save()
+
+            return redirect('policy_tab', policy_id=policy_id)
+
+    return render(request, 'policy/policytab.html', {
+        'policy_id': policy_id,
+        'policy': policy,
+        'policy_details': policy_details,
+        'carriers': carriers,
+        'agents': agents,
+        'policy_activity': policy_activity,
+        'policy_notes': policy_notes,
+        'policy_coverage':policy_coverage,
+        'carrier_products': carrier_products,
+    })
+
+@require_POST
+def update_policy(request):
+    policy_id = request.POST.get('policy_id')
+    record_type = request.POST.get('record_type')
+
+    policy = get_object_or_404(Policy, id=policy_id)
+
+    if record_type == 'existing':
+        individual_id = request.POST.get('individual_id')
+        individual = get_object_or_404(Individuals, id=individual_id)
+        policy.individual = individual
+        policy.save()
+        return redirect('policy_tab', policy_id=policy.id)
+
+    elif record_type == 'new':
+        individual = Individuals.objects.create(
+            first_name=request.POST.get('first_name'),
+            middle_name=request.POST.get('middle_name'),
+            last_name=request.POST.get('last_name'),
+            individual_type=request.POST.get('individual_type'),
+            email=request.POST.get('email'),
+            business_phone=request.POST.get('business_phone'),
+            business_ext=request.POST.get('business_ext'),
+            home_phone=request.POST.get('home_phone'),
+            home_ext=request.POST.get('home_ext'),
+            cell_phone=request.POST.get('cell_phone'),
+            cell_ext=request.POST.get('cell_ext'),
+            servicing_agent_id=request.POST.get('servicing_agent_id') or None
+        )
+        policy.individual = individual
+        policy.save()
+        return redirect('policy_tab', policy_id=policy.id)
+
+    return redirect('policy_tab', policy_id=policy.id)
 
 
+def add_carrier_product(request):
+    if request.method == 'POST':
+        carrier_id = request.POST.get('carrier')  
+        coverage_type = request.POST.get('coverage_type')
+        product_name = request.POST.get('product_name')
+        description = request.POST.get('product_description')
+        effective_date = request.POST.get('product_effective_date') or None
+        term_date = request.POST.get('product_term_date') or None
+
+        if carrier_id and product_name:
+            product = CarrierProduct.objects.create(
+                carrier_id=carrier_id,
+                coverage_type=coverage_type,
+                product_name=product_name,
+                description=description,
+                effective_date=effective_date,
+                term_date=term_date
+            )
+            return JsonResponse({
+                'success': True,
+                'product_id': product.id,
+                'product_name': product.product_name
+            })
+        else:
+            return JsonResponse({'success': False, 'error': 'Missing required fields.'})
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'})
 
 
-
-
+def delete_policy(request, policy_id):
+    policy = get_object_or_404(Policy, id=policy_id)
+    policy.delete()
+    return redirect('search_policy')  
 
 
 
@@ -1032,21 +1320,6 @@ def agent_column_settings(request):
 
     return render(request, 'agency/agentcolumnsettings.html')
 
-
-
-def policy_tab(request, policy_id):
-    
-    return render(request, 'policy/policytab.html', {'policy_id': policy_id})
-
-def search_policy(request):
-    return render(request, 'policy/searchpolicy.html')
-def advanced_policy(request):
-    return render(request, 'policy/advancedpolicy.html')
-
-def saved_policy(request):
-    return render(request, 'policy/savedpolicy.html')
-def senior_select(request):
-    return render(request, 'agency/seniorselect.html')
 
 
 

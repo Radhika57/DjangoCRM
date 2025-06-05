@@ -28,12 +28,14 @@ urlpatterns = [
     path('carriers/', views.carrier_list, name='carrier_list'),  
     path('save_carrier/', views.save_carrier, name='save_carrier'),
     path('carriers/detail/<int:carrier_id>/', views.carrier_detail, name='carrier_detail'),
+    path('carrier/<int:carrier_id>/delete/', views.delete_carrier, name='delete_carrier'),
     
     # Agency
     path('agency/manage-agencies/', views.manage_agencies, name='manage_agencies'),
     path('save-agency/', views.save_agency, name='save_agency'),
     path('agency/<int:agency_id>/edit-details/', views.edit_agency_details, name='edit_agency_details'),
-
+    path('agency/<int:agency_id>/delete/', views.delete_agency, name='delete_agency'),
+    
     
     
     # Agents
@@ -42,11 +44,12 @@ urlpatterns = [
     path('agency/advanced-search/', views.advanced_search, name='advanced_search'),
     path('agency/saved-searches/', views.saved_searches, name='saved_searches'),
     path('agency/detail/<int:agent_id>/', views.agent_detail, name='agent_detail'),
+    path('agent/<int:agent_id>/delete/', views.delete_agent, name='delete_agent'),
     
 
     # Individual
     
-    path('Individuals/search-individuals/', views.search_individuals, name='search_individuals'),
+    path('Individuals/search-individuals/', views.search_individuals_list, name='search_individuals_list'),
     path('Individuals/advanced-individuals/', views.advanced_individuals, name='advanced_individuals'),
     path('Individuals/saved-individuals/', views.saved_individuals, name='saved_individuals'),
     path('individuals/create/', views.create_individual, name='create_individual'),
@@ -56,6 +59,7 @@ urlpatterns = [
     path('individuals/search/relationship/', views.search_relationshipindividuals, name='search_relationshipindividuals'),
     path('individuals/create/relationship/', views.create_relationshipindividual, name='create_relationshipindividual'),
     path('individuals/save/basicinfo/', views.save_basic_info, name='save_basic_info'),
+    path('individual/<int:individual_id>/delete/', views.delete_individual, name='delete_individual'),
     
     # Policy
     
@@ -63,18 +67,14 @@ urlpatterns = [
     path('policy/search-policy/', views.search_policy, name='search_policy'),
     path('policy/advanced-policy/', views.advanced_policy, name='advanced_policy'),
     path('policy/saved-policy/', views.saved_policy, name='saved_policy'),
-    
+    path('save_policy/', views.save_policy, name='save_policy'),
+    path('update-policy/', views.update_policy, name='update_policy'),
+    path('add-carrier-product/', views.add_carrier_product, name='add_carrier_product'),
+    path('policy/<int:policy_id>/delete/', views.delete_policy, name='delete_policy'),
     
     path('customfields/', views.custom_fields, name='custom_fields'),
     path('agents/settings/', views.agent_column_settings, name='agent_column_settings'),
     
     
-    
-   
-
-    
-    
-
-
   
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
