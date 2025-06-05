@@ -3,6 +3,7 @@
 
 {% block main-content %}
 <style>
+    /* Your existing styles remain unchanged */
     /* Dropdown menu styles */
     .nav-tabs .dropdown-menu {
         position: absolute;
@@ -24,7 +25,7 @@
         box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
     }
 
-    .nav-tabs .dropdown-menu>li>a {
+     .nav-tabs .dropdown-menu>li>a {
         display: block;
         padding: 3px 20px;
         clear: both;
@@ -537,7 +538,6 @@
         }
     }
 
-    /* Utility classes */
     .required {
         color: red;
     }
@@ -546,157 +546,658 @@
         font-size: 0.9rem;
         color: #6c757d;
     }
+
+    .custom-updated-info {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+
+    
+    #agent-summary {
+        width: 300px;
+        background: #fff;
+        padding: 15px;
+        border-left: 1px solid #ddd;
+        position: fixed;
+        right: -300px; 
+        top: 50px; 
+        height: calc(100vh - 50px);
+        overflow-y: auto;
+        z-index: 1000;
+        box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        transition: right 0.3s ease;
+    }
+
+    #agent-summary.shown {
+        right: 0;
+    }
+
+    .main-content-wrapper {
+        transition: all 0.3s ease;
+        padding-right: 0;
+    }
+
+    .main-content-wrapper.sidebar-shown {
+        padding-right: 300px;
+    }
+
+    .summary-header {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+
+    .summary-item {
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #f5f5f5;
+    }
+
+    .summary-action-buttons {
+        position: fixed;
+        right: 30px;
+        top: 80px;
+        z-index: 1010;
+    }
+
+    .close-sidebar {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        cursor: pointer;
+        color: #999;
+    }
+
+    .close-sidebar:hover {
+        color: #333;
+    }
+
+    .summary-group {
+        position: relative;
+    }
+
+    .summary-group .hover-label {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        white-space: nowrap;
+        background: #fff;
+        padding: 2px 8px;
+        border: 1px solid #ccc;
+        font-size: 12px;
+        border-radius: 4px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        display: none;
+        z-index: 10;
+        margin-top: 2px;
+    }
+
+    .summary-group button:hover + .hover-label {
+        display: block;
+    }
+
+    /* Responsive adjustments for sidebar */
+    @media (max-width: 1199px) {
+        #agent-summary {
+            width: 280px;
+            right: -280px;
+        }
+        
+        .main-content-wrapper.sidebar-shown {
+            padding-right: 280px;
+        }
+    }
+
+    @media (max-width: 991px) {
+        .summary-action-buttons {
+            right: 15px;
+            top: 55px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        #agent-summary {
+            width: 250px;
+            right: -250px;
+        }
+        
+        .main-content-wrapper.sidebar-shown {
+            padding-right: 250px;
+        }
+        
+        .summary-action-buttons {
+            top: 50px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        #agent-summary {
+            width: 100%;
+            right: -100%;
+        }
+        
+        .main-content-wrapper.sidebar-shown {
+            padding-right: 0;
+            transform: translateX(-100%);
+        }
+        
+        .summary-action-buttons {
+            position: relative;
+            right: auto;
+            top: auto;
+            margin-bottom: 15px;
+            text-align: right;
+        }
+    }
+    
+.summary-item .rounded-circle {
+    border: 2px solid #dee2e6;
+}
+
+.summary-item h4 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.summary-item .btn-sm {
+    padding: 0.15rem 0.5rem;
+    font-size: 12px;
+}
+
+.summary-item .d-flex {
+    display: flex;
+}
+
+.summary-item .me-3 {
+    margin-right: 1rem;
+}
+
+.summary-item .flex-grow-1 {
+    flex-grow: 1;
+}
+
+.summary-item .mb-0 {
+    margin-bottom: 0;
+}
+
+.summary-item .mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.summary-item .align-items-center {
+    align-items: center;
+}
+
+.summary-item .justify-content-between {
+    justify-content: space-between;
+}
+/* User Profile Header Styles */
+.user-profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.user-photo-container {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 12px;
+    border: 2px solid #dee2e6;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.default-user-icon {
+    color: #6c757d;
+    font-size: 20px;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.name-edit-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.user-name {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.edit-btn {
+    padding: 0.15rem 0.5rem;
+    font-size: 12px;
+    margin-left: 8px;
+}
+
+.user-type {
+    color: #6c757d;
+    font-size: 12px;
+}
+.label-group {
+  margin-top: 5px;
+}
+.label-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 0;
+}
+.badge {
+  background-color: #444;
+  color: #fff;
+  border-radius: 5px;
+  padding: 2px 6px;
+  font-size: 0.8rem;
+}
+.toggle-link {
+  display: block;
+  margin-top: 5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
 </style>
 
-<div class="container-default">
-    <div class="content-wrapper">
-        <div class="search-agents-container">
-            <!-- Page Header -->
-            <div class="page-header-row">
-                <h1 class="page-title">{{agent.first_name}} {{agent.last_name}}</h1>
-            </div>
+<!-- Summary Action Buttons -->
+<div class="summary-action-buttons">
+  <div class="btn-group summary-group position-relative">
+    <button id="toggle-agent-summary" class="btn btn-default btn-sm">
+      <i class="fa fa-list-alt"></i>
+    </button>
+    <div class="hover-label">Summary</div>
 
-            <!-- Tab Navigation -->
+    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+      <span class="caret"></span>
+    </button>
+    <div class="hover-label">Action</div>
+
+    <ul class="dropdown-menu dropdown-menu-right">
+      <li><a href="#"><i class="fa fa-print"></i> Print Record</a></li>
+      <li class="divider"></li>
+      <li><a href="#"><i class="fa fa-cog"></i> Print Page</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="main-content-wrapper">
+    <div class="container-default">
+        <div class="content-wrapper">
+            <div class="search-agents-container">
+                <!-- Page Header -->
+                <div class="page-header-row">
+                    <h1 class="page-title">{{agent.first_name}} {{agent.last_name}}</h1>
+                </div>
+
+                <!-- Tab Navigation -->
                 <div class="nav-tabs-container">
-    <!-- Regular tabs as buttons -->
-    <div class="btn-group nav-tab-btn-group me-3 mb-2">
-        <a href="#detail-content" class="btn btn-secondary nav-tab-btn active" data-toggle="tab">Detail</a>
-    </div>
+                    <!-- Regular tabs as buttons -->
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <a href="#detail-content" class="btn btn-secondary nav-tab-btn active" data-toggle="tab">Detail</a>
+                    </div>
 
-    <div class="btn-group nav-tab-btn-group me-3 mb-2">
-        <a href="#agencies-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Agencies</a>
-    </div>
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <a href="#agencies-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Agencies</a>
+                    </div>
 
-    <div class="btn-group nav-tab-btn-group me-3 mb-2">
-        <a href="#clients-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Clients</a>
-    </div>
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <a href="#clients-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Clients</a>
+                    </div>
 
-   
-    <!-- Other single tabs -->
-    <div class="btn-group nav-tab-btn-group me-3 mb-2">
-        <a href="#policies-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Policies</a>
-    </div>
+                    <!-- Other single tabs -->
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <a href="#policies-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Policies</a>
+                    </div>
 
-    <div class="btn-group nav-tab-btn-group me-3 mb-2">
-        <a href="#activities-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Activities</a>
-    </div>
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <a href="#activities-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Activities</a>
+                    </div>
 
-    <div class="btn-group nav-tab-btn-group me-3 mb-2">
-        <a href="#notes-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Notes</a>
-    </div>
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <a href="#notes-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Notes</a>
+                    </div>
 
-    <div class="btn-group nav-tab-btn-group me-3 mb-2">
-        <a href="#eo-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">E&O</a>
-    </div>
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <a href="#eo-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">E&O</a>
+                    </div>
 
-    <div class="btn-group nav-tab-btn-group me-3 mb-2">
-        <a href="#contracts-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Contracts</a>
-    </div>
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <a href="#contracts-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Contracts</a>
+                    </div>
 
-    <div class="btn-group nav-tab-btn-group me-3 mb-2">
-        <a href="#licenses-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Licenses</a>
-    </div>
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <a href="#licenses-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Licenses</a>
+                    </div>
 
-    <div class="btn-group nav-tab-btn-group me-3 mb-2">
-        <a href="#personal-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Personal</a>
-    </div>
-    <!-- WorkFlow Dropdown -->
-<div class="btn-group nav-tab-btn-group me-3 mb-2">
-    <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        WorkFlow ▼
-    </button>
-    <ul class="dropdown-menu shadow p-2 border-0">
-        <li><a class="dropdown-item py-2" href="#agency-action" data-toggle="tab">Triggered Action</a></li>
-        <li><a class="dropdown-item py-2" href="#agency-detail" data-toggle="tab">Triggered Workflow</a></li>
-    </ul>
-</div>
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <a href="#personal-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Personal</a>
+                    </div>
+                    <!-- WorkFlow Dropdown -->
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            WorkFlow ▼
+                        </button>
+                        <ul class="dropdown-menu shadow p-2 border-0">
+                            <li><a class="dropdown-item py-2" href="#agency-action" data-toggle="tab">Triggered Action</a></li>
+                            <li><a class="dropdown-item py-2" href="#agency-detail" data-toggle="tab">Triggered Workflow</a></li>
+                        </ul>
+                    </div>
 
-<!-- Email Dropdown -->
-<div class="btn-group nav-tab-btn-group me-3 mb-2">
-    <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Email ▼
-    </button>
-    <ul class="dropdown-menu shadow p-2 border-0">
-        <li><a class="dropdown-item py-2" href="#incoming-agency" data-toggle="tab">Incoming Emails</a></li>
-        <li><a class="dropdown-item py-2" href="#outgoing-agency" data-toggle="tab">Outgoing Emails</a></li>
-        <li><a class="dropdown-item py-2" href="#Campaigns-agency" data-toggle="tab">Campaigns</a></li>
-    </ul>
-</div>
+                    <!-- Email Dropdown -->
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Email ▼
+                        </button>
+                        <ul class="dropdown-menu shadow p-2 border-0">
+                            <li><a class="dropdown-item py-2" href="#incoming-agency" data-toggle="tab">Incoming Emails</a></li>
+                            <li><a class="dropdown-item py-2" href="#outgoing-agency" data-toggle="tab">Outgoing Emails</a></li>
+                            <li><a class="dropdown-item py-2" href="#Campaigns-agency" data-toggle="tab">Campaigns</a></li>
+                        </ul>
+                    </div>
 
-<!-- Messages Dropdown -->
-<div class="btn-group nav-tab-btn-group me-3 mb-2">
-    <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Messages ▼
-    </button>
-    <ul class="dropdown-menu shadow p-2 border-0">
-        <li><a class="dropdown-item py-2" href="#Recordings-agency" data-toggle="tab">Call Recordings</a></li>
-        <li><a class="dropdown-item py-2" href="#SMS-agency" data-toggle="tab">SMS Messages History</a></li>
-    </ul>
-</div>
+                    <!-- Messages Dropdown -->
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Messages ▼
+                        </button>
+                        <ul class="dropdown-menu shadow p-2 border-0">
+                            <li><a class="dropdown-item py-2" href="#Recordings-agency" data-toggle="tab">Call Recordings</a></li>
+                            <li><a class="dropdown-item py-2" href="#SMS-agency" data-toggle="tab">SMS Messages History</a></li>
+                        </ul>
+                    </div>
+                </div>
 
-</div>
-
-
-            <!-- Tab Content Sections -->
-            <div class="tab-content">
-                <!-- Detail Tab -->
-                {% include "agent/agent_detail.html" %}   
-                {% include "agent/agencyagencies.html" %}
-                {% include "agent/agencyclient.html" %}
-                {% include "agent/agencypolicy.html" %}
-                {% include "agent/agencyactivity.html" %}
-                {% include "agent/agencynote.html" %}
-                {% include "agent/agencyeo.html" %}
-                {% include "agent/agencycontracts.html" %}
-                {% include "agent/agencylicenses.html" %}
-                {% include "agent/agencypersonal.html" %}
-                                 
+                <!-- Tab Content Sections -->
+                <div class="tab-content">
+                    <!-- Detail Tab -->
+                    {% include "agent/agent_detail.html" %}   
+                    {% include "agent/agencyagencies.html" %}
+                    {% include "agent/agencyclient.html" %}
+                    {% include "agent/agencypolicy.html" %}
+                    {% include "agent/agencyactivity.html" %}
+                    {% include "agent/agencynote.html" %}
+                    {% include "agent/agencyeo.html" %}
+                    {% include "agent/agencycontracts.html" %}
+                    {% include "agent/agencylicenses.html" %}
+                    {% include "agent/agencypersonal.html" %}
+                                    
                     {% include "agent/agencyworkflowaction.html" %}
-               
-                    {% include "agent/agencyworkflowdetail.html" %}
-               
-                    {% include "agent/agencyinemails.html" %}
-               
-                    {% include "agent/agencyoutemails.html" %}
-               
-                    {% include "agent/agencycampaigns.html" %}
-              
-                    {% include "agent/agencyRecordings.html" %}
-               
-                    {% include "agent/agencySMS.html" %}
-               
-
                 
+                    {% include "agent/agencyworkflowdetail.html" %}
+                
+                    {% include "agent/agencyinemails.html" %}
+                
+                    {% include "agent/agencyoutemails.html" %}
+                
+                    {% include "agent/agencycampaigns.html" %}
+                
+                    {% include "agent/agencyRecordings.html" %}
+                
+                    {% include "agent/agencySMS.html" %}
+                </div>
             </div>
         </div>
     </div>
+</div>
 
 
-    <script src="{% static " js/bootstrap/bootstrap.min.js" %}"></script>
+<!-- Agent Summary Sidebar -->
+<div id="agent-summary">
+    <span class="close-sidebar" id="close-sidebar">&times;</span>
+    
+    <div class="summary-header">
+        <h3><i class="fa fa-user"></i> Agent Summary</h3>
+    </div>
+    
+    <div class="summary-item">
+        <div class="user-profile-header">
+            <!-- User Circle Photo -->
+            <div class="user-photo-container">
+                {% if agent.photo %}
+                    <img src="{{ agent.photo.url }}" alt="{{ agent.first_name }} {{ agent.last_name }}" 
+                         class="user-photo">
+                {% else %}
+                    <div class="default-user-icon">
+                        <i class="fa fa-user"></i>
+                    </div>
+                {% endif %}
+            </div>
+            
+         
+            <div class="user-info">
+              
+<div class="name-edit-wrapper">
+    <h4 class="user-name">{{agent.first_name}} {{agent.last_name}}</h4>
+   <a href="{% url 'edit_agent' %}" class="btn btn-sm btn-outline-secondary edit-btn">
 
-    <script>
+        <i class="fa fa-edit"></i> Edit
+    </a>
+</div>
+                <small class="user-type">Linked User</small>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="summary-item">
+    <h4><i class="fa fa-user"></i> Contact Info</h4>
+    <p class="text-muted">
+        EMAIL:
+        <a href="mailto:seniorselectplans@gmail.com">seniorselectplans@gmail.com</a>
+    </p>
+    <p class="text-muted">BUSINESS: -</p>
+    <p class="text-muted">CELL: (330) 708-3385-</p>
+</div>
+<div class="agent-summary-section border-top pt-2 mt-2">
 
-        $(document).ready(function () {
-            // Initialize tabs
-            $('#mainTabs a[data-toggle="tab"]').click(function (e) {
-                e.preventDefault();
-                $(this).tab('show');
-            });
 
-            // Handle hash in URL
-            if (location.hash) {
-                $('a[href="' + location.hash + '"]').tab('show');
-            }
+  <div class="summary-item">
+    <h4><i class="fa fa-users"></i> Clients</h4>
+    <div class="label-group">
+      <span>Individuals</span>
+      <div class="label-item">Client <span class="badge">1386</span></div>
+      <div class="label-item">Ex-Client <span class="badge">341</span></div>
+      <div class="label-item">BP-MC11-658-06 MAIL <span class="badge">1</span></div>
+    </div>
+    <a href="javascript:void(0);" class="toggle-link text-primary show-more-link">Show More...</a>
+    <div class="additional-content" style="display: none;">
+      <div class="label-item">Special Category <span class="badge">27</span></div>
+      <div class="label-item">Sold Leads <span class="badge">45</span></div>
+      <a href="javascript:void(0);" class="toggle-link text-primary show-less-link">Show Less...</a>
+    </div>
+  </div>
 
-            // Update hash when tab changes
-            $('#mainTabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                window.location.hash = e.target.hash;
-            });
+  <hr class="my-3">
 
-            // Initialize dropdowns
-            $('.dropdown-toggle').dropdown();
+ 
+  <div class="summary-item">
+    <h4><i class="fa fa-file-medical"></i> In Force Policies</h4>
+    <div class="label-group">
+      <span>Individuals</span>
+      <div class="label-item">MAPD <span class="badge">1341</span></div>
+      <div class="label-item">Med Supp <span class="badge">32</span></div>
+      <div class="label-item">Medical <span class="badge">8</span></div>
+      <div class="label-item">PDP <span class="badge">28</span></div>
+    </div>
+    <a href="javascript:void(0);" class="toggle-link text-primary show-more-link">Show More...</a>
+    <div class="additional-content" style="display: none;">
+      <div class="label-item">Life Insurance <span class="badge">16</span></div>
+      <div class="label-item">Group Plans <span class="badge">4</span></div>
+      <a href="javascript:void(0);" class="toggle-link text-primary show-less-link">Show Less...</a>
+    </div>
+  </div>
+
+</div>
+
+
+    
+    <div class="summary-item">
+        <h4><i class="fa fa-tasks"></i> Activities Due</h4>
+        <p class="text-muted">No activities.</p>
+        <a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#carrieractivityModal">
+            <i class="fa fa-plus"></i> Create new
+        </a>
+    </div>
+    
+    <div class="summary-item">
+    <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
+    <p class="text-muted">No pinned note.</p>
+    <a href="#notes-content" class="btn btn-xs btn-info" id="create-pinnednote-from-sidebar" data-show-form="true">
+        <i class="fa fa-plus"></i> Create new
+    </a>
+</div>
+
+</div>
+<!-- Modal -->
+{% include "carrier/carrieractivitymodal.html" %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
+
+<script>
+    $(document).ready(function() {
+    // Handle Create New Pinned Note from sidebar
+    $('#create-pinnednote-from-sidebar').click(function(e) {
+        e.preventDefault();
+        
+        // Get the notes tab link
+        var notesTabLink = $('a[href="#notes-content"]');
+        
+        // Show the Notes tab
+        notesTabLink.tab('show');
+        
+        // After tab is shown, trigger the form display
+        notesTabLink.on('shown.bs.tab', function() {
+            $('#notesMainContent').hide();
+            $('#createNewnoteContainer').show();
+            $('#checkboxpin').prop('checked', true); // Check the pin checkbox
+            
+            // Scroll to the form for better UX
+            $('html, body').animate({
+                scrollTop: $('#createNewnoteContainer').offset().top - 20
+            }, 300);
+            
+            // Remove the event handler to prevent multiple bindings
+            notesTabLink.off('shown.bs.tab');
+        });
+    });
+
+    // Handle existing create note button
+    $('#showCreateNoteBtn').click(function(e) {
+        e.preventDefault();
+        $('#notesMainContent').hide();
+        $('#createNewnoteContainer').show();
+        $('#checkboxpin').prop('checked', false); // Ensure pin is unchecked for regular notes
+    });
+
+    // Handle back/cancel buttons
+    $('#backToNotesBtn, #cancelNoteBtn').click(function() {
+        $('#createNewnoteContainer').hide();
+        $('#notesMainContent').show();
+    });
+
+    // Reset form visibility when switching tabs
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+        if (e.target.hash !== '#notes-content') {
+            $('#createNewnoteContainer').hide();
+            $('#notesMainContent').show();
+        }
+    });
+
+    // Check URL hash on page load to show form if coming from sidebar
+    if (window.location.hash === '#notes-content' && $('#create-pinnednote-from-sidebar').data('show-form')) {
+        $('#notesMainContent').hide();
+        $('#createNewnoteContainer').show();
+        $('#checkboxpin').prop('checked', true);
+    }
+    
+    // Form submission handling (keep your existing form submission code)
+    $('#noteForm').submit(function(e) {
+        e.preventDefault();
+        // Your existing form submission logic here
+    });
+});
+   
+  $(document).ready(function () {
+    $('.show-more-link').click(function () {
+      var section = $(this).closest('.summary-item');
+      section.find('.additional-content').slideDown();
+      $(this).hide();
+    });
+
+    $('.show-less-link').click(function () {
+      var section = $(this).closest('.summary-item');
+      section.find('.additional-content').slideUp();
+      section.find('.show-more-link').show();
+    });
+  });
+
+
+    $(document).ready(function () {
+        // Initialize tabs
+        $('#mainTabs a[data-toggle="tab"]').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
         });
 
-    </script>
+        // Handle hash in URL
+        if (location.hash) {
+            $('a[href="' + location.hash + '"]').tab('show');
+        }
 
-    {% endblock %}
+        // Update hash when tab changes
+        $('#mainTabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            window.location.hash = e.target.hash;
+        });
+
+        // Initialize dropdowns
+        $('.dropdown-toggle').dropdown();
+
+        // Sidebar toggle functionality
+        $('#toggle-agent-summary').click(function (e) {
+            e.preventDefault();
+            $('#agent-summary').toggleClass('shown');
+            $('.main-content-wrapper').toggleClass('sidebar-shown');
+
+            if ($(window).width() <= 576) {
+                $('body').css('overflow-x', $('#agent-summary').hasClass('shown') ? 'hidden' : 'auto');
+            }
+        });
+
+        $('#close-sidebar').click(function (e) {
+            e.preventDefault();
+            $('#agent-summary').removeClass('shown');
+            $('.main-content-wrapper').removeClass('sidebar-shown');
+            if ($(window).width() <= 576) {
+                $('body').css('overflow-x', 'auto');
+            }
+        });
+
+        $(document).click(function (e) {
+            if ($(window).width() <= 576 && $('#agent-summary').hasClass('shown')) {
+                if (!$(e.target).closest('#agent-summary').length &&
+                    !$(e.target).closest('#toggle-agent-summary').length) {
+                    $('#agent-summary').removeClass('shown');
+                    $('.main-content-wrapper').removeClass('sidebar-shown');
+                    $('body').css('overflow-x', 'auto');
+                }
+            }
+        });
+    });
+</script>
+
+{% endblock %}

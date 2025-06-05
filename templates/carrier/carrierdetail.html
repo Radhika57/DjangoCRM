@@ -419,12 +419,13 @@
         <p class="text-muted">Business: -</p>
         
     </div>
-    
     <div class="summary-item">
-        <h4><i class="fa fa-globe"></i> Websites</h4>
-        <p class="text-muted">No websites.</p>
-        <a href="#" class="btn btn-xs btn-primary"><i class="fa fa-plus"></i> Create new</a>
-    </div>
+    <h4><i class="fa fa-globe"></i> Websites</h4>
+    <p class="text-muted">No websites.</p>
+    <a href="#websites" class="btn btn-xs btn-primary" id="create-website-from-sidebar" data-show-form="true">
+        <i class="fa fa-plus"></i> Create new
+    </a>
+</div>
     
     <div class="summary-item">
         <h4><i class="fa fa-file-text"></i> In Force Policies</h4>
@@ -447,10 +448,12 @@
     </div>
     
     <div class="summary-item">
-        <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
-        <p class="text-muted">No pinned note.</p>
-        <a href="#" class="btn btn-xs btn-info"><i class="fa fa-plus"></i> Create new</a>
-    </div>
+    <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
+    <p class="text-muted">No pinned note.</p>
+    <a href="#notes" class="btn btn-xs btn-info" id="create-note-from-sidebar" data-show-form="true">
+        <i class="fa fa-plus"></i> Create new
+    </a>
+</div>
 </div>
 
 
@@ -468,6 +471,105 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <script>
+  $(document).ready(function() {
+    // Handle Create New Website from sidebar
+    $('#create-website-from-sidebar').click(function(e) {
+        e.preventDefault();
+        
+        // Get the websites tab link
+        var websitesTabLink = $('a[href="#websites"]');
+        
+        // Show the Websites tab
+        websitesTabLink.tab('show');
+        
+        // After tab is shown, trigger the form display
+        websitesTabLink.on('shown.bs.tab', function() {
+            $('#emptyWebsitesState').hide();
+            $('#websiteFormSection').show();
+            
+            // Scroll to the form for better UX
+            $('html, body').animate({
+                scrollTop: $('#websiteFormSection').offset().top - 20
+            }, 300);
+            
+            // Remove the event handler to prevent multiple bindings
+            websitesTabLink.off('shown.bs.tab');
+        });
+    });
+
+    // Handle cancel button in website form
+    $('#cancelWebsiteCreate').click(function() {
+        $('#websiteFormSection').hide();
+        $('#emptyWebsitesState').show();
+    });
+
+    // Reset form visibility when switching tabs
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+        if (e.target.hash !== '#websites') {
+            $('#websiteFormSection').hide();
+            $('#emptyWebsitesState').show();
+        }
+    });
+
+    // Check URL hash on page load to show form if coming from sidebar
+    if (window.location.hash === '#websites' && $('#create-website-from-sidebar').data('show-form')) {
+        $('#emptyWebsitesState').hide();
+        $('#websiteFormSection').show();
+    }
+    
+    // Password visibility toggle
+    $('.input-group-btn button').click(function() {
+        var input = $(this).closest('.input-group').find('input');
+        var icon = $(this).find('i');
+        if (input.attr('type') === 'password') {
+            input.attr('type', 'text');
+            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            input.attr('type', 'password');
+            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    });
+});
+  $(document).ready(function() {
+    // Handle Create New Note from sidebar
+    $('#create-note-from-sidebar').click(function(e) {
+        e.preventDefault();
+        
+        // Get the notes tab link
+        var notesTabLink = $('a[href="#notes"]');
+        
+        // Show the Notes tab
+        notesTabLink.tab('show');
+        
+        // After tab is shown, trigger the form display
+        notesTabLink.on('shown.bs.tab', function() {
+            $('#emptyNotesState').hide();
+            $('#noteDetailsSection').show();
+            
+            // Scroll to the form for better UX
+            $('html, body').animate({
+                scrollTop: $('#noteDetailsSection').offset().top - 20
+            }, 300);
+            
+            // Remove the event handler to prevent multiple bindings
+            notesTabLink.off('shown.bs.tab');
+        });
+    });
+
+    // Reset form visibility when switching tabs
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+        if (e.target.hash !== '#notes') {
+            $('#noteDetailsSection').hide();
+            $('#emptyNotesState').show();
+        }
+    });
+
+    // Check URL hash on page load to show form if coming from sidebar
+    if (window.location.hash === '#notes' && $('#create-note-from-sidebar').data('show-form')) {
+        $('#emptyNotesState').hide();
+        $('#noteDetailsSection').show();
+    }
+});
 
 
 $(document).ready(function () {

@@ -1,12 +1,12 @@
 <div class="modal fade" id="newAddressModal" tabindex="-1" role="dialog" aria-labelledby="newAddressModalLabel">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-md-sm" role="document">
         <form action="" method="POST">
-        {% csrf_token %}
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">New Address</h4>
-            </div>
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header clearfix">
+                    <h4 class="modal-title pull-left" id="newAddressModalLabel">New Address</h4>
+                    <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close">&times;</button>
+                </div>
             <div class="modal-body">
                 
                 <div class="form-group">

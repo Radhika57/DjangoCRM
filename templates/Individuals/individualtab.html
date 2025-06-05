@@ -2,6 +2,7 @@
 {% load static %}
 {% block main-content %}
 <style>
+    
     .checkbox-container {
         border: 1px solid #ced4da;
         border-radius: .25rem;
@@ -89,176 +90,469 @@
         /* a subtle blue underline for emphasis */
         padding-bottom: 8px;
         text-transform: capitalize;
+    }
 
+    /* Summary Sidebar Styles */
+    #individual-summary {
+        width: 300px;
+        background: #fff;
+        padding: 15px;
+        border-left: 1px solid #ddd;
+        position: fixed;
+        right: -300px; 
+        top: 50px; 
+        height: calc(100vh - 50px);
+        overflow-y: auto;
+        z-index: 1000;
+        box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        transition: right 0.3s ease;
+    }
+
+    #individual-summary.shown {
+        right: 0;
+    }
+
+    .main-content-wrapper {
+        transition: all 0.3s ease;
+        padding-right: 0;
+    }
+
+    .main-content-wrapper.sidebar-shown {
+        padding-right: 300px;
+    }
+
+    .summary-header {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+
+    .summary-item {
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #f5f5f5;
+    }
+
+    .summary-action-buttons {
+        position: fixed;
+        right: 20px;
+        top: 80px;
+        z-index: 1010;
+    }
+
+    .close-sidebar {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        cursor: pointer;
+        color: #999;
+    }
+
+    .close-sidebar:hover {
+        color: #333;
+    }
+
+    .summary-group {
+        position: relative;
+    }
+
+    .summary-group .hover-label {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        white-space: nowrap;
+        background: #fff;
+        padding: 2px 8px;
+        border: 1px solid #ccc;
+        font-size: 12px;
+        border-radius: 4px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        display: none;
+        z-index: 10;
+        margin-top: 2px;
+    }
+
+    .summary-group button:hover + .hover-label {
+        display: block;
+    }
+
+    @media (max-width: 1199px) {
+        #individual-summary {
+            width: 280px;
+            right: -280px;
+        }
+        
+        .main-content-wrapper.sidebar-shown {
+            padding-right: 280px;
+        }
+    }
+
+    @media (max-width: 991px) {
+        .summary-action-buttons {
+            right: 15px;
+            top: 55px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        #individual-summary {
+            width: 250px;
+            right: -250px;
+        }
+        
+        .main-content-wrapper.sidebar-shown {
+            padding-right: 250px;
+        }
+        
+        .summary-action-buttons {
+            top: 50px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        #individual-summary {
+            width: 100%;
+            right: -100%;
+        }
+        
+        .main-content-wrapper.sidebar-shown {
+            padding-right: 0;
+            transform: translateX(-100%);
+        }
+        
+        .summary-action-buttons {
+            position: relative;
+            right: auto;
+            top: auto;
+            margin-bottom: 15px;
+            text-align: right;
+        }
+    }
+   .summary-item {
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #f5f5f5;
     }
 </style>
 
-<div class="container-default">
-    <div class="content-wrapper">
-        <div class="search-agents-container">
-            <!-- Page Header -->
-            <div class="page-header-row">
-                <h1 class="page-title">{{individual.first_name}} {{individual.last_name}}</h1>
-            </div>
+<!-- Summary Action Buttons -->
+<div class="summary-action-buttons">
+  <div class="btn-group summary-group position-relative">
+    <button id="toggle-individual-summary" class="btn btn-default btn-sm">
+      <i class="fa fa-list-alt"></i>
+    </button>
+    <div class="hover-label">Summary</div>
 
-            <!-- Tab Navigation -->
-            <div class="nav-tabs-container d-flex flex-wrap">
-                <!-- Detail Tab -->
-                <div class="btn-group nav-tab-btn-group me-3 mb-2">
-                    <a href="#detail-individuals" class="btn btn-secondary nav-tab-btn active"
-                        data-toggle="tab">Detail</a>
-                </div>
+    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+      <span class="caret"></span>
+    </button>
+    <div class="hover-label">Action</div>
 
-                <!-- Policies Tab -->
-                <div class="btn-group nav-tab-btn-group me-3 mb-2">
-                    <a href="#policies-individuals" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Policies</a>
-                </div>
+    <ul class="dropdown-menu dropdown-menu-right">
+      <li><a href="#"><i class="fa fa-print"></i> Print Record</a></li>
+      <li class="divider"></li>
+      <li><a href="#"><i class="fa fa-cog"></i> Print Page</a></li>
+    </ul>
+  </div>
+</div>
 
-                <!-- Rx Collect Dropdown -->
-                <!-- <div class="btn-group nav-tab-btn-group me-3 mb-2">
-                    <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        Rx Collect ▼
-                    </button>
-                    <ul class="dropdown-menu shadow p-2 border-0">
-                        <li><a class="dropdown-item py-2" href="#Prescriptions-individuals"
-                                data-toggle="tab">Prescriptions</a></li>
-                        <li><a class="dropdown-item py-2" href="#Provider-individuals" data-toggle="tab">Provider</a>
-                        </li>
-                    </ul>
-                </div> -->
-
-                <!-- Activities Tab -->
-                <div class="btn-group nav-tab-btn-group me-3 mb-2">
-                    <a href="#Activities-individuals" class="btn btn-secondary nav-tab-btn"
-                        data-toggle="tab">Activities</a>
+<div class="main-content-wrapper">
+    <div class="container-default">
+        <div class="content-wrapper">
+            <div class="search-agents-container">
+                <!-- Page Header -->
+                <div class="page-header-row">
+                    <h1 class="page-title">{{individual.first_name}} {{individual.last_name}}</h1>
                 </div>
 
-                <!-- Notes Tab -->
-                <div class="btn-group nav-tab-btn-group me-3 mb-2">
-                    <a href="#Notes-individuals" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Notes</a>
+                <!-- Tab Navigation -->
+                <div class="nav-tabs-container d-flex flex-wrap">
+                    <!-- Detail Tab -->
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <a href="#detail-individuals" class="btn btn-secondary nav-tab-btn active"
+                            data-toggle="tab">Detail</a>
+                    </div>
+
+                    <!-- Policies Tab -->
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <a href="#policies-individuals" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Policies</a>
+                    </div>
+
+                    <!-- Activities Tab -->
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <a href="#Activities-individuals" class="btn btn-secondary nav-tab-btn"
+                            data-toggle="tab">Activities</a>
+                    </div>
+
+                    <!-- Notes Tab -->
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <a href="#Notes-individuals" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Notes</a>
+                    </div>
+
+                    <!-- Relationships Tab -->
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <a href="#Relationships-individuals" class="btn btn-secondary nav-tab-btn"
+                            data-toggle="tab">Relationships</a>
+                    </div>
+
+                    <!-- WorkFlow Dropdown -->
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            WorkFlow ▼
+                        </button>
+                        <ul class="dropdown-menu shadow p-2 border-0">
+                            <li><a class="dropdown-item py-2" href="#individuals-action" data-toggle="tab">Triggered
+                                    Action</a></li>
+                            <li><a class="dropdown-item py-2" href="#individuals-detail" data-toggle="tab">Triggered
+                                    Workflow</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Email Dropdown -->
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            Email ▼
+                        </button>
+                        <ul class="dropdown-menu shadow p-2 border-0">
+                            <li><a class="dropdown-item py-2" href="#incoming-individuals" data-toggle="tab">Incoming
+                                    Emails</a></li>
+                            <li><a class="dropdown-item py-2" href="#outgoing-individuals" data-toggle="tab">Outcoming
+                                    Emails</a></li>
+                            <li><a class="dropdown-item py-2" href="#Campaigns-individuals" data-toggle="tab">Campaigns</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Messages Dropdown -->
+                    <div class="btn-group nav-tab-btn-group me-3 mb-2">
+                        <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            Messages ▼
+                        </button>
+                        <ul class="dropdown-menu shadow p-2 border-0">
+                            <li><a class="dropdown-item py-2" href="#Recordings-individuals" data-toggle="tab">Call
+                                    Recordings</a></li>
+                            <li><a class="dropdown-item py-2" href="#SMS-individuals" data-toggle="tab">SMS Messages
+                                    History</a></li>
+                        </ul>
+                    </div>
                 </div>
 
-                <!-- Relationships Tab -->
-                <div class="btn-group nav-tab-btn-group me-3 mb-2">
-                    <a href="#Relationships-individuals" class="btn btn-secondary nav-tab-btn"
-                        data-toggle="tab">Relationships</a>
-                </div>
+                <div class="tab-content">
+                    <!-- Detail Tab -->
+                    <div class="tab-pane active" id="detail-individuals">
+                        {% include "Individuals/individualdetail.html" %}
+                    </div>
 
-                <!-- WorkFlow Dropdown -->
-                <div class="btn-group nav-tab-btn-group me-3 mb-2">
-                    <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        WorkFlow ▼
-                    </button>
-                    <ul class="dropdown-menu shadow p-2 border-0">
-                        <li><a class="dropdown-item py-2" href="#individuals-action" data-toggle="tab">Triggered
-                                Action</a></li>
-                        <li><a class="dropdown-item py-2" href="#individuals-detail" data-toggle="tab">Triggered
-                                Workflow</a></li>
-                    </ul>
-                </div>
+                    <!-- Coverage Tab -->
+                    <div class="tab-pane" id="policies-individuals">
+                        {% include "Individuals/individualspolicy.html" %}
+                    </div>
+                    <div class="tab-pane" id="Prescriptions-individuals">
+                        {% include "Individuals/individualprescriptions.html" %}
+                    </div>
 
-                <!-- Email Dropdown -->
-                <div class="btn-group nav-tab-btn-group me-3 mb-2">
-                    <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        Email ▼
-                    </button>
-                    <ul class="dropdown-menu shadow p-2 border-0">
-                        <li><a class="dropdown-item py-2" href="#incoming-individuals" data-toggle="tab">Incoming
-                                Emails</a></li>
-                        <li><a class="dropdown-item py-2" href="#outgoing-individuals" data-toggle="tab">Outcoming
-                                Emails</a></li>
-                        <li><a class="dropdown-item py-2" href="#Campaigns-individuals" data-toggle="tab">Campaigns</a>
-                        </li>
-                    </ul>
-                </div>
+                    <div class="tab-pane" id="Provider-individuals">
+                        {% include "Individuals/individualprovider.html" %}
+                    </div>
 
-                <!-- Messages Dropdown -->
-                <div class="btn-group nav-tab-btn-group me-3 mb-2">
-                    <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        Messages ▼
-                    </button>
-                    <ul class="dropdown-menu shadow p-2 border-0">
-                        <li><a class="dropdown-item py-2" href="#Recordings-individuals" data-toggle="tab">Call
-                                Recordings</a></li>
-                        <li><a class="dropdown-item py-2" href="#SMS-individuals" data-toggle="tab">SMS Messages
-                                History</a></li>
-                    </ul>
-                </div>
-
-                <!-- Consent Tab -->
-                <!-- <div class="btn-group nav-tab-btn-group me-3 mb-2">
-                    <a href="#Consent-individuals" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Consent</a>
-                </div> -->
-            </div>
-
-
-
-
-
-            <div class="tab-content">
-                <!-- Detail Tab -->
-                <div class="tab-pane active" id="detail-individuals">
-                    {% include "Individuals/individualdetail.html" %}
-                </div>
-
-                <!-- Coverage Tab -->
-                <div class="tab-pane" id="policies-individuals">
-                    {% include "Individuals/individualspolicy.html" %}
-                </div>
-                <div class="tab-pane" id="Prescriptions-individuals">
-                    {% include "Individuals/individualprescriptions.html" %}
-                </div>
-
-                <div class="tab-pane" id="Provider-individuals">
-                    {% include "Individuals/individualprovider.html" %}
-                </div>
-
-
-
-                <!-- Other Tabs -->
-                <div class="tab-pane" id="Activities-individuals">
-                    {% include "Individuals/individualactivities.html" %}
-                </div>
-                <div class="tab-pane" id="Notes-individuals">
-                    {% include "Individuals/individualnotes.html" %}
-                </div>
-                <div class="tab-pane" id="Relationships-individuals">
-                    {% include "Individuals/individualrelationships.html" %}
-                </div>
-                <div class="tab-pane" id="individuals-action">
-                    {% include "Individuals/individualsworkflowaction.html" %}
-                </div>
-                <div class="tab-pane" id="individuals-detail">
-                    {% include "Individuals/individualsworkflowdetail.html" %}
-                </div>
-                <div class="tab-pane" id="incoming-individuals">
-                    {% include "Individuals/individualinemails.html" %}
-                </div>
-                <div class="tab-pane" id="outgoing-individuals">
-                    {% include "Individuals/individualoutemails.html" %}
-                </div>
-                <div class="tab-pane" id="Campaigns-individuals">
-                    {% include "Individuals/individualcampaigns.html" %}
-                </div>
-                <div class="tab-pane" id="Recordings-individuals">
-                    {% include "Individuals/individualRecordings.html" %}
-                </div>
-                <div class="tab-pane" id="SMS-individuals">
-                    {% include "Individuals/individualSMS.html" %}
-                </div>
-                <div class="tab-pane" id="Consent-individuals">
-                    {% include "Individuals/individualConsent.html" %}
+                    <!-- Other Tabs -->
+                    <div class="tab-pane" id="Activities-individuals">
+                        {% include "Individuals/individualactivities.html" %}
+                    </div>
+                    <div class="tab-pane" id="Notes-individuals">
+                        {% include "Individuals/individualnotes.html" %}
+                    </div>
+                    <div class="tab-pane" id="Relationships-individuals">
+                        {% include "Individuals/individualrelationships.html" %}
+                    </div>
+                    <div class="tab-pane" id="individuals-action">
+                        {% include "Individuals/individualsworkflowaction.html" %}
+                    </div>
+                    <div class="tab-pane" id="individuals-detail">
+                        {% include "Individuals/individualsworkflowdetail.html" %}
+                    </div>
+                    <div class="tab-pane" id="incoming-individuals">
+                        {% include "Individuals/individualinemails.html" %}
+                    </div>
+                    <div class="tab-pane" id="outgoing-individuals">
+                        {% include "Individuals/individualoutemails.html" %}
+                    </div>
+                    <div class="tab-pane" id="Campaigns-individuals">
+                        {% include "Individuals/individualcampaigns.html" %}
+                    </div>
+                    <div class="tab-pane" id="Recordings-individuals">
+                        {% include "Individuals/individualRecordings.html" %}
+                    </div>
+                    <div class="tab-pane" id="SMS-individuals">
+                        {% include "Individuals/individualSMS.html" %}
+                    </div>
+                    <div class="tab-pane" id="Consent-individuals">
+                        {% include "Individuals/individualConsent.html" %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Individual Summary Sidebar -->
+<div id="individual-summary">
+    <span class="close-sidebar" id="close-sidebar">&times;</span>
+    
+    <div class="summary-header">
+        <h3><i class="fa fa-user"></i> Individual Summary</h3>
+        <p>{{individual.first_name|title}} {{individual.last_name|title}}</p>
+    </div>
+    
+    <div class="summary-item">
+        <h4><i class="fa fa-user"></i> Contact Info</h4>
+        <div class="d-flex mb-2">
+            <div class="me-3"></div>
+            <div>
+                <small class="text-muted d-block">Email</small>
+                <a href="mailto:{{agent.email|default:'seniorselectplans@gmail.com'}}">
+                    {{agent.email|default:'seniorselectplans@gmail.com'}}
+                </a>
+            </div>
+        </div>
+        
+        <div class="d-flex mb-2">
+            <div class="me-3"></div>
+            <div>
+                <small class="text-muted d-block">Business</small>
+                {{agent.business_phone|default:'-'}}
+            </div>
+        </div>
+        
+        <div class="d-flex">
+            <div class="me-3"></div>
+            <div>
+                <small class="text-muted d-block">Cell</small>
+                {{agent.mobile_phone|default:'- (330) 708-3385'}}
+            </div>
+        </div>
+    </div>
+    
+    <div class="summary-item">
+    <h4><i class="fa fa-tasks"></i>In Force Policies</h4>
+    <a class="text">United Healthcare - 903411805 - MAPD.</a>
+    <a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#newPolicyModal2">
+        <i class="fa fa-plus"></i> Create New
+    </a>
+</div>
+    
+    <div class="summary-item">
+        <h4><i class="fa fa-tasks"></i> Relationships</h4>
+        <p class="text-muted">No Relationships</p>
+        <a href="#" class="btn btn-xs btn-success" 
+           data-toggle="tab" 
+           data-target="#Relationships-individuals"
+           onclick="showRelationshipsTab()">
+            <i class="fa fa-plus"></i> Create New
+        </a>
+    </div>
+    
+    <div class="summary-item">
+        <h4><i class="fa fa-tasks"></i> Activities Due</h4>
+        <p class="text-muted">No activities.</p>
+        <a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#carrieractivityModal">
+            <i class="fa fa-plus"></i> Create new
+        </a>
+    </div>
+    
+    <div class="summary-item">
+    <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
+    <p class="text-muted">No Pinned Note.</p>
+    <a href="#Notes-individuals" 
+       class="btn btn-xs btn-info" 
+       data-toggle="tab"
+       onclick="showNotesForm()">
+        <i class="fa fa-plus"></i> Create New
+    </a>
+</div>
+</div>
+
+<!-- Modal -->
+{% include "carrier/carrieractivitymodal.html" %}
+{% include "Individuals/individualnewpolicy.html" %}
 
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<script>
+    
+    function showNotesForm() {
+    // Show the Notes tab
+    $('[href="#Notes-individuals"]').tab('show');
+    
+    // Scroll to the tab content
+    $('html, body').animate({
+        scrollTop: $('#Notes-individuals').offset().top - 20
+    }, 'slow');
+    
+    // Show the create note form
+    setTimeout(function() {
+        document.getElementById('noteMainContent').style.display = 'none';
+        document.getElementById('createNewnoteContainer').style.display = 'block';
+        
+        // If you want to scroll to the form within the tab
+        $('html, body').animate({
+            scrollTop: $('#createNewnoteContainer').offset().top - 20
+        }, 'slow');
+    }, 500);
+}
+    
+    function showRelationshipsTab() {
+        // Show the Relationships tab
+        $('[href="#Relationships-individuals"]').tab('show');
+        
+        // Scroll to the tab content
+        $('html, body').animate({
+            scrollTop: $('#Relationships-individuals').offset().top - 20
+        }, 'slow');
+        
+        // Optionally trigger the "Add" button click to show the form
+        setTimeout(function() {
+            $('[onclick="RelationshipsUI.showCreateNew()"]').trigger('click');
+        }, 500);
+    }
+    
+    $(function () {
+        // Sidebar toggle functionality
+        $('#toggle-individual-summary').click(function (e) {
+            e.preventDefault();
+            $('#individual-summary').toggleClass('shown');
+            $('.main-content-wrapper').toggleClass('sidebar-shown');
+
+            if ($(window).width() <= 576) {
+                $('body').css('overflow-x', $('#individual-summary').hasClass('shown') ? 'hidden' : 'auto');
+            }
+        });
+
+        $('#close-sidebar').click(function (e) {
+            e.preventDefault();
+            $('#individual-summary').removeClass('shown');
+            $('.main-content-wrapper').removeClass('sidebar-shown');
+            if ($(window).width() <= 576) {
+                $('body').css('overflow-x', 'auto');
+            }
+        });
+
+        $(document).click(function (e) {
+            if ($(window).width() <= 576 && $('#individual-summary').hasClass('shown')) {
+                if (!$(e.target).closest('#individual-summary').length &&
+                    !$(e.target).closest('#toggle-individual-summary').length) {
+                    $('#individual-summary').removeClass('shown');
+                    $('.main-content-wrapper').removeClass('sidebar-shown');
+                    $('body').css('overflow-x', 'auto');
+                }
+            }
+        });
+    });
+</script>
 
 {% endblock %}

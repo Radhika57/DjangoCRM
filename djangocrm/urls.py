@@ -42,6 +42,7 @@ urlpatterns = [
     path('agency/advanced-search/', views.advanced_search, name='advanced_search'),
     path('agency/saved-searches/', views.saved_searches, name='saved_searches'),
     path('agency/detail/<int:agent_id>/', views.agent_detail, name='agent_detail'),
+    path('agents/edit/', views.edit_agent, name='edit_agent'),
     
 
     # Individual

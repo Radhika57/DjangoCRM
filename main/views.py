@@ -584,9 +584,8 @@ def agent_detail(request, agent_id):
         'agent_personal':agent_personal,
         'license':license
     })
-
-
-
+def edit_agent(request):
+   return render(request, 'agent/agencyedituser.html')
 # Individual
 
 def search_individuals(request):
@@ -1003,7 +1002,6 @@ def individual_tab(request, individual_id):
         'individual_notes': individual_notes,     
         'relationship_data': relationship_data,     
     })
-
 
 
 
