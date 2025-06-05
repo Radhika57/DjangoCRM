@@ -380,7 +380,11 @@
     </div>
     <div class="search-actions">
         <button type="submit" class="btn btn-secondary">Save</button>
-        <button type="button" class="btn btn-primary">Delete</button>
+        <a href="{% url 'delete_agent' agent.id %}" 
+        class="btn btn-danger"
+        onclick="return confirm('Are you sure you want to delete this agent? This action cannot be undone.');">
+        Delete
+    </a>
     </div>
 </form>
 </div>

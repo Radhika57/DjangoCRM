@@ -123,14 +123,9 @@ class CarrierFormName(models.Model):
     form_file = models.FileField(upload_to='carrier_notes_attachments/', null=True, blank=True)
     
 class CarrierProduct(models.Model):
-    COVERAGE_CHOICES = [
-        ('Medical', 'Medical'),
-        ('Dental', 'Dental'),
-        ('Vision', 'Vision'),
-    ]
 
     carrier = models.ForeignKey(Carrier, on_delete=models.CASCADE, related_name='products')
-    coverage_type = models.CharField(max_length=50, choices=COVERAGE_CHOICES)
+    coverage_type = models.CharField(max_length=50)
     product_name = models.CharField(max_length=255)
     effective_date = models.DateField(null=True, blank=True)
     term_date = models.DateField(null=True, blank=True)
@@ -412,3 +407,86 @@ class RelationshipBasicInfo(models.Model):
     dob = models.DateField(null=True,blank=True)
     ssn = models.CharField(max_length=100,null=True,blank=True)
     smoker_status = models.CharField(max_length=100,null=True,blank=True)
+    
+class Policy(models.Model):
+    individual = models.ForeignKey(Individuals, on_delete=models.CASCADE, related_name='policy_individual')
+    carrier = models.ForeignKey(Carrier, on_delete=models.CASCADE, related_name='policy_carrier')
+    policy_number = models.CharField(max_length=100,null=True , blank=True)
+    status = models.CharField(max_length=100)
+    coverage_type = models.CharField(max_length=100)
+    effective_date = models.DateField(null=True,blank=True)
+    agent =  models.ForeignKey(Agent,on_delete=models.SET_NULL,null=True,blank=True,related_name="policy_agent")
+    
+class PolicyDetails(models.Model):
+    policy_name = models.ForeignKey(Policy, on_delete=models.CASCADE , related_name='policy_details')
+    premium = models.CharField(max_length=20,null=True,blank=True)
+    pay_frequency = models.CharField(max_length=100,null=True,blank=True)
+    lives = models.CharField(max_length=20,null=True,blank=True)
+    project_code = models.CharField(max_length=100,null=True,blank=True)
+    app_submit_date = models.DateField(null=True,blank=True)
+    renewal_date = models.DateField(null=True,blank=True)
+    term_date = models.DateField(null=True,blank=True)
+    signed_by =  models.ForeignKey(Agent,on_delete=models.SET_NULL,null=True,blank=True,related_name="signed_by_agent")
+    additional_agent =  models.ForeignKey(Agent,on_delete=models.SET_NULL,null=True,blank=True,related_name="policy_additional_agent")
+    pay_method = models.CharField(max_length=100,null=True,blank=True)
+    notes = models.TextField(null=True,blank=True)
+    member_id = models.CharField(max_length=100,null=True,blank=True)
+    election = models.CharField(max_length=100,null=True,blank=True)
+    who_is_covered = models.BooleanField(default=False)
+    election_notes = models.TextField(null=True,blank=True)
+    
+    
+class PolicyActivity(models.Model):
+    policy_name = models.ForeignKey(Policy, on_delete=models.CASCADE , related_name='policy_activity')
+    subject = models.CharField(max_length=255)
+    notes = models.TextField(blank=True)
+    status = models.CharField(max_length=100,null=True,blank=True)
+    # follow_up_user = models.CharField(max_length=100,null=True,blank=True)
+    follow_up_team = models.CharField(max_length=100,null=True,blank=True)
+    due_date = models.BooleanField(default=False)
+    activity_date = models.DateField(null=True,blank=True)
+    priority = models.CharField(max_length=100,null=True,blank=True)
+    type = models.CharField(max_length=100,null=True,blank=True)
+    method = models.CharField(max_length=100,null=True,blank=True)
+    attachment = models.FileField(upload_to='policy_activity_attachments/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+class PolicyNotes(models.Model):
+    policy_name = models.ForeignKey(Policy, on_delete=models.CASCADE , related_name='policy_notes')
+    pin_note = models.BooleanField(default=False)
+    subject = models.CharField(max_length=255)
+    notes = models.TextField(null=True,blank=True)
+    attachment = models.FileField(upload_to='policy_notes_attachments/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+class PolicyCoverage(models.Model):
+    policy_name = models.ForeignKey(Policy, on_delete=models.CASCADE , related_name='policy_coverage')
+    carrier_product = models.ForeignKey(CarrierProduct, on_delete=models.SET_NULL, null=True)
+    coverage_status = models.CharField(max_length=50, choices=[("Active", "Active"), ("Inactive", "Inactive")], blank=True)
+    coverage_effective_date = models.DateField(null=True, blank=True)
+    coverage_premium = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    coverage_renewal_date = models.DateField(null=True, blank=True)
+    coverage_renewal = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    coverage_lives = models.CharField(max_length=20,null=True, blank=True)
+    coverage_termination_policy = models.CharField(max_length=255, blank=True)
+    coinsurance = models.CharField(max_length=50, blank=True)
+    deductible = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    deductible_family = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    max_out_of_pocket = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    max_out_of_pocket_family = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    out_of_network_costs = models.TextField(blank=True)
+    annual_maximum = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    lifetime_maximum = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    rx_tier1 = models.CharField(max_length=255, blank=True)
+    rx_tier2 = models.CharField(max_length=255, blank=True)
+    rx_tier3 = models.CharField(max_length=255, blank=True)
+    rx_tier4 = models.CharField(max_length=255, blank=True)
+    rx_tier5 = models.CharField(max_length=255, blank=True)
+    single_rate = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    plus_spouse_rate = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    plus_children_rate = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    family_rate = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    pharmacy_network = models.CharField(max_length=255, blank=True)
+    provider_network = models.CharField(max_length=255, blank=True)
+    coverage_notes = models.TextField(blank=True)
+    fees = models.TextField(blank=True)

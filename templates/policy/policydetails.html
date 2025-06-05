@@ -1,79 +1,79 @@
 
 <!-- Policy Info Container -->
+<form action="" method="post">
+    {% csrf_token %}
 <div class="agent-info-container mt-4">
     <h1 class="section-title">Policy Info</h1>
     <div class="row">
         <div class="col-md-3">
             <label>Carrier</label>
-            <select class="form-control">
-            <option>AARP</option>
-            <option>Aetna</option>
-            <option>Anthem</option>
-            <option>Cigna</option>
-            <option>Highmark</option>
-            <option>Humana</option>
-            <option>Med Mutual PDP</option>
-            <option>Medico</option>
-            <option>Peak</option>
-            <option>United Healthcare</option>
-            <option>UPMC</option>
-            <option>Wellcare</option>
+            <select name="carrier" class="form-control">
+                <option value="">Select Carrier</option>
+                {% for carrier in carriers %}
+                    <option value="{{ carrier.id }}" {% if policy.carrier.id == carrier.id %}selected{% endif %}>
+                        {{ carrier.name }}
+                    </option>
+                {% endfor %}
             </select>
+
         </div>
         <div class="col-md-3">
             <label>Policy Number</label>
-            <input type="number" class="form-control" value="20718431">
+            <input type="text" class="form-control" name="policy_number" placeholder="Policy Number" value="{{policy.policy_number|default:""}}">
         </div>
         <div class="col-md-3">
             <label>Status</label>
-            <select class="form-control">
-                <option>Pending</option>
-                <option>Active</option>
-                 <option>Cancelled</option>
-                  <option>Replaced</option>
+            <select name="status" class="form-control">
+                <option value="Pending" {% if policy.status == "Pending" %}selected{% endif %}>Pending</option>
+                <option value="Active" {% if policy.status == "Active" %}selected{% endif %}>Active</option>
+                <option value="Cancelled" {% if policy.status == "Cancelled" %}selected{% endif %}>Cancelled</option>
+                <option value="Replaced" {% if policy.status == "Replaced" %}selected{% endif %}>Replaced</option>
             </select>
+
         </div>
         <div class="col-md-3">
             <label>Coverage Type</label>
-            <select class="form-control">
-               <option>- select -</option>
-                <option>Dental</option>
-                <option>Med Supp</option>
-                <option>PDP</option>
-                <option>MaPD</option>
-                <option>MA</option>
-                <option>Medical</option>
+            <select class="form-control" name="coverage_type">
+                <option value="">Select Coverage</option>
+                <option value="Dental" {% if policy.coverage_type == "Dental" %}selected{% endif %}>Dental</option>
+                <option value="Med Supp" {% if policy.coverage_type == "Med Supp" %}selected{% endif %}>Med Supp</option>
+                <option value="PDP" {% if policy.coverage_type == "PDP" %}selected{% endif %}>PDP</option>
+                <option value="MAPD" {% if policy.coverage_type == "MAPD" %}selected{% endif %}>MAPD</option>
+                <option value="MA" {% if policy.coverage_type == "MA" %}selected{% endif %}>MA</option>
+                <option value="Medical" {% if policy.coverage_type == "Medical" %}selected{% endif %}>Medical</option>
             </select>
+
         </div>
         <div class="col-md-3">
             <label>Project Code</label>
-            <select class="form-control">
-                <option>- select -</option>
-                 <option>Project-XYZ</option>
+            <select class="form-control" name="project_code">
+                <option value="">- select -</option>
+                <option value="Project-XYZ" {% if policy_details.project_code == "Project-XYZ" %}selected{% endif %}>Project-XYZ</option>
             </select>
         </div>
         <div class="col-md-3">
             <label>Pay Frequency</label>
-            <select class="form-control">
-                <option>- select -</option>
-                <option>Monthly</option>
-                <option>Weekly</option>
-                <option>Bi-Weekly</option>
-                <option>Bi-Monthly</option>
-                <option>Quarterly</option>
-                <option>Semi-Annually</option>
-                <option>Annually</option>
-                <option>One-Time</option>
+            <select class="form-control" name="pay_frequency">
+                <option value="">- select -</option>
+                <option value="Monthly" {% if policy_details.pay_frequency == "Monthly" %}selected{% endif %}>Monthly</option>
+                <option value="Weekly" {% if policy_details.pay_frequency == "Weekly" %}selected{% endif %}>Weekly</option>
+                <option value="Bi-Weekly" {% if policy_details.pay_frequency == "Bi-Weekly" %}selected{% endif %}>Bi-Weekly</option>
+                <option value="Bi-Monthly" {% if policy_details.pay_frequency == "Bi-Monthly" %}selected{% endif %}>Bi-Monthly</option>
+                <option value="Quarterly" {% if policy_details.pay_frequency == "Quarterly" %}selected{% endif %}>Quarterly</option>
+                <option value="Semi-Annually" {% if policy_details.pay_frequency == "Semi-Annually" %}selected{% endif %}>Semi-Annually</option>
+                <option value="Annually" {% if policy_details.pay_frequency == "Annually" %}selected{% endif %}>Annually</option>
+                <option value="One-Time" {% if policy_details.pay_frequency == "One-Time" %}selected{% endif %}>One-Time</option>
             </select>
+
         </div>
         <div class="col-md-3">
             <label>Lives</label>
-            <input type="number" class="form-control" value="1" step="1" min="-100">
+            <input type="text" class="form-control" name="lives" value="{{policy_details.lives|default:""}}">
         </div>
         <div class="col-md-3">
             <label>Premium</label>
             <div class="dollar-input-wrapper">
-                <input type="number" class="form-control dollar-input" value="0.00" step="0.01">
+                <input type="text" class="form-control dollar-input" name="premium" value="{{policy_details.premium|default:""}}">
             </div>
         </div>
     </div>
@@ -85,19 +85,19 @@
     <div class="row">
         <div class="col-md-3">
             <label>App Submit Date</label>
-            <input type="date" class="form-control">
+            <input type="date" class="form-control" name="app_submit_date" value="{{ policy_details.app_submit_date|date:'Y-m-d'|default:""  }}">
         </div>
         <div class="col-md-3">
             <label>Effective Date</label>
-            <input type="date" class="form-control">
+            <input type="date" class="form-control" name="effective_date" value="{{policy.effective_date|date:'Y-m-d'|default:"" }}">
         </div>
         <div class="col-md-3">
             <label>Renewal Date</label>
-            <input type="date" class="form-control">
+            <input type="date" class="form-control" name="renewal_date" value="{{policy_details.renewal_date|date:'Y-m-d'|default:"" }}">
         </div>
         <div class="col-md-3">
             <label>Term Date</label>
-            <input type="date" class="form-control">
+            <input type="date" class="form-control" name="term_date" value="{{policy_details.term_date|date:'Y-m-d'|default:"" }}">
         </div>
     </div>
 </div>
@@ -108,7 +108,9 @@
     <div class="row">
          <div class="col-md-3">
             <label>Signed By</label>
-            <input type="text" class="form-control" value="Type to Search">
+            <input type="text" class="form-control agent-autocomplete" id="signed_by" autocomplete="off" value="{{policy_details.signed_by.first_name}} {{policy_details.signed_by.last_name}}">
+            <input type="hidden" id="signed_by_id" name="signed_by_id" value="{{ policy_details.signed_by.id }}">
+            <div id="signedSuggestion" class="list-group position-absolute w-100" style="z-index: 1000;"></div>
         </div>
         <div class="col-md-3">
             <label>Account Manager</label>
@@ -121,11 +123,16 @@
         </div>
        <div class="col-md-3">
             <label>Servicing Agent</label>
-            <input type="text" class="form-control" value="">
+            <input type="text" class="form-control agent-autocomplete" id="affiliates_agent"
+                autocomplete="off" value="{{policy.agent.first_name}} {{policy.agent.last_name}}">
+            <input type="hidden" id="affiliates_agent_id" name="affiliates_agent_id">
+            <div id="affiliateSuggestion" class="list-group position-absolute w-100"
+                style="z-index: 1000;"></div>
         </div>
         <div class="col-md-3">
-            <label>Additional Agent</label>
-            <input type="text" class="form-control" value="Type to Search">
+            <label>Additional Agent</label><input type="text" class="form-control agent-autocomplete" id="additional_agents" autocomplete="off" value="{{policy_details.additional_agent.first_name}} {{policy_details.additional_agent.last_name}}">
+                <input type="hidden" id="additional_agents_id" name="additional_agents_id">
+                <div id="additionalSuggestion" class="list-group position-absolute w-100" style="z-index: 1000;"></div>
         </div>
     </div>
 </div>
@@ -136,18 +143,19 @@
     <div class="row">
         <div class="col-md-3">
             <label>Pay Method</label>
-            <select class="form-control">
-                <option>- select -</option>
-                <option>Direct Bill</option>
-                <option>Credit Card</option>
-                <option>SS Deduction</option>
+            <select class="form-control" name="pay_method">
+                <option value="">- select -</option>
+                <option value="Direct Bill" {% if policy_details.pay_method == "Direct Bill" %}selected{% endif %}>Direct Bill</option>
+                <option value="Electronic Fund Transfer" {% if policy_details.pay_method == "Electronic Fund Transfer" %}selected{% endif %}>Electronic Fund Transfer</option>
+                <option value="SS Deduction" {% if policy_details.pay_method == "SS Deduction" %}selected{% endif %}>SS Deduction</option>
+                <option value="Credit Card" {% if policy_details.pay_method == "Credit Card" %}selected{% endif %}>Credit Card</option>
             </select>
         </div>
         <div class="col-md-3">
             <label>Notes</label>
             <textarea class="form-control"
                       style="min-height: 120px; padding: 10px; resize: vertical; width: 250px;"
-                      placeholder="Enter notes here..."></textarea>
+                      placeholder="Enter notes here..." name="notes">{{policy_details.notes|default:''}}</textarea>
         </div>
     </div>
 </div>
@@ -158,54 +166,47 @@
     <div class="row">
         <div class="col-md-3">
             <label>Member ID</label>
-            <input type="number" class="form-control" value="20718431">
+            <input type="number" class="form-control" name="member_id" value="{{policy_details.member_id|default:''}}">
         </div>
         <div class="col-md-3">
             <label>Election</label>
-            <select class="form-control">
-                <option>- select -</option>
-                <option>Self + Spouse</option>
-                <option>Self + Children</option>
-                <option>Self </option>
-                <option>Self + family</option>
-                <option>Employee + Children</option>
-                <option>Employee Only</option>
-                <option>Employee + Spouse</option>
-                <option>Employee + family</option>
-                <option>Spouse Only</option>
-                <option>Child Only</option>
-                
-                <option></option>
+            <select class="form-control" name="election">
+                <option value="">- select -</option>
+                <option value="Self + Spouse" {% if policy_details.election == "Self + Spouse" %}selected{% endif %}>Self + Spouse</option>
+                <option value="Self + Children" {% if policy_details.election == "Self + Children" %}selected{% endif %}>Self + Children</option>
+                <option value="Self" {% if policy_details.election == "Self" %}selected{% endif %}>Self</option>
+                <option value="Self + family" {% if policy_details.election == "Self + family" %}selected{% endif %}>Self + family</option>
+                <option value="Employee + Children" {% if policy_details.election == "Employee + Children" %}selected{% endif %}>Employee + Children</option>
+                <option value="Employee Only" {% if policy_details.election == "Employee Only" %}selected{% endif %}>Employee Only</option>
+                <option value="Employee + Spouse" {% if policy_details.election == "Employee + Spouse" %}selected{% endif %}>Employee + Spouse</option>
+                <option value="Employee + family" {% if policy_details.election == "Employee + family" %}selected{% endif %}>Employee + family</option>
+                <option value="Spouse Only" {% if policy_details.election == "Spouse Only" %}selected{% endif %}>Spouse Only</option>
+                <option value="Child Only" {% if policy_details.election == "Child Only" %}selected{% endif %}>Child Only</option>
             </select>
+
         </div>
-        <div class="col-md-3">
-            <label>Notes</label>
-            <textarea class="form-control"
-                      style="min-height: 120px; padding: 10px; resize: vertical;"
-                      placeholder="Enter notes here..."></textarea>
-        </div>
+        
         <div class="col-md-3">
             <label>Who Is Covered</label>
             <div class="checkbox-container" style="max-height: 120px; overflow-y: auto;">
                 <div class="checkbox-item">
-                    <input type="checkbox" id="team1" name="team[]" value="north">
-                    <label for="team1"> 1</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="team2" name="team[]" value="south">
-                    <label for="team2"> 2</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="team3" name="team[]" value="east">
-                    <label for="team3">3</label>
+                    <input type="checkbox" name="who_is_covered" id="covered_self"
+                        {% if policy_details.who_is_covered %}checked{% endif %}>
+                    <label for="covered_self">{{ policy.individual.first_name }} {{ policy.individual.middle_name }} {{ policy.individual.last_name }} (Self)</label>
                 </div>
             </div>
+        </div>
+        <div class="col-md-3">
+            <label>Notes</label>
+            <textarea class="form-control" name="election_notes"
+                      style="min-height: 120px; padding: 10px; resize: vertical;"
+                      placeholder="Enter notes here...">{{policy_details.election_notes|default:''}}</textarea>
         </div>
     </div>
 </div>
 
 <!-- Custom Fields Panel -->
-<div class="custom-updated-info custom-fields-panel mt-4">
+{% comment %} <div class="custom-updated-info custom-fields-panel mt-4">
     <div class="section-header">
         <h1 class="section-title">Custom Fields</h1>
         <div class="custom-fields-edit">
@@ -219,11 +220,73 @@
         <div style="font-size: 14px;">Use custom fields to track and report on data unique to your agency.</div>
         <a href="#" style="font-size: 14px;">How do I use custom fields?</a>
     </div>
-</div>
+</div> {% endcomment %}
 
 <!-- Actions: buttons right aligned -->
 <div class="d-flex justify-content-end mt-4">
-    <button class="btn btn-success me-2" id="save">Save</button>
-    <button class="btn btn-success me-2" id="saveadd">Save & Add Changes</button>
-    <a href="#" class="btn btn-primary">Delete</a>
+    <button class="btn btn-success me-2" type="submit">Save</button>
+    <a href="{% url 'delete_policy' policy.id %}" 
+        class="btn btn-danger"
+        onclick="return confirm('Are you sure you want to delete this policy? This action cannot be undone.');">
+        Delete
+    </a>
 </div>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<script>
+$(document).ready(function () {
+  function setupAutocomplete(inputId, hiddenInputId, suggestionBoxId) {
+    $("#" + inputId).on("input", function () {
+    let input = $(this);
+    setTimeout(function () {
+        let query = input.val().trim();
+        if (query.length >= 2) {
+        $.ajax({
+            url: "/agents/search/",
+            data: { term: query },
+            success: function (data) {
+            let suggestions = "";
+            if (data.length === 0) {
+                suggestions = '<a href="#" class="list-group-item list-group-item-action disabled">No results found</a>';
+            } else {
+                data.forEach(agent => {
+                suggestions += `<a href="#" class="list-group-item list-group-item-action" data-id="${agent.id}" data-label="${agent.label}">${agent.label}</a>`;
+                });
+            }
+            $("#" + suggestionBoxId).html(suggestions).show();
+            }
+        });
+        } else {
+        $("#" + suggestionBoxId).empty().hide();
+        }
+    }, 10); 
+    });
+
+
+    // Handle selection
+    $(document).on("click", "#" + suggestionBoxId + " a", function (e) {
+      e.preventDefault();
+      const name = $(this).data("label");
+      const id = $(this).data("id");
+      $("#" + inputId).val(name);
+      $("#" + hiddenInputId).val(id);
+      $("#" + suggestionBoxId).empty().hide();
+    });
+
+    // Hide on blur
+    $("#" + inputId).on("blur", function () {
+      setTimeout(() => {
+        $("#" + suggestionBoxId).fadeOut();
+      }, 150);
+    });
+  }
+
+  // Apply to all fields
+  setupAutocomplete("signed_by", "signed_by_id", "signedSuggestion");
+  setupAutocomplete("affiliates_agent", "affiliates_agent_id", "affiliateSuggestion");
+  setupAutocomplete("additional_agents", "additional_agents_id", "additionalSuggestion");
+});
+</script>

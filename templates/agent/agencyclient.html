@@ -1,7 +1,7 @@
 <div id="clients-content" class="tab-pane">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <strong>Clients for Alyson Gross</strong>
+            <strong>Clients for {{agent.first_name}} {{agent.last_name}}</strong>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -18,39 +18,18 @@
                                     <th>Phone</th>
                                 </tr>
                             </thead>
-
-                            <tfoot>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Type</th>
-                                    <th>Status</th>
-                                    <th>Lead Source</th>
-                                    <th>Phone</th>
-                                </tr>
-                            </tfoot>
-
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>2</td>
-                                    <td>3</td>
-                                    <td>4</td>
-                                    <td>5</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>2</td>
-                                    <td>3</td>
-                                    <td>4</td>
-                                    <td>5</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>2</td>
-                                    <td>3</td>
-                                    <td>4</td>
-                                    <td>5</td>
-                                </tr>
+                                {% for individual in servicing_individuals %}
+                                   {% with detail=individual.individual_detail.first %}
+                                    <tr>
+                                    <td><a href="{% url "individual_tab" individual.id %}">{{ individual.first_name }} {{ individual.middle_name }} {{ individual.last_name }}</a></td>
+                                    <td>{{ individual.individual_type|default:"—" }}</td>
+                                    <td>{{ detail.status|default:"—" }}</td>
+                                    <td>{{ detail.lead_source|default:"—" }}</td>
+                                    <td>{{individual.home_phone|default:"—" }}</td> 
+                                    </tr>
+                                    {% endwith %}
+                                {% endfor %}
                             </tbody>
                         </table>
 

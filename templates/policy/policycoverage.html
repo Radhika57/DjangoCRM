@@ -4,6 +4,7 @@
     padding-bottom: 10px;
     margin-bottom: 20px;
   }
+
   .section-title1 {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: 700;
@@ -14,6 +15,7 @@
     text-transform: capitalize;
     margin: 0;
   }
+
   .text-muted {
     font-weight: 400;
     color: #777;
@@ -21,26 +23,33 @@
     font-size: 1.5rem;
     text-transform: uppercase;
   }
+
   .flex-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 15px;
-    position: relative; /* needed for dropdown container */
+    position: relative;
+    /* needed for dropdown container */
   }
+
   /* Dropdown container */
   #carrierDropdowns {
     position: absolute;
-    top: 40px; /* below the button */
-    right: 0; /* align right side */
+    top: 40px;
+    /* below the button */
+    right: 0;
+    /* align right side */
     background: white;
     border: 1px solid #ccc;
-    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
     padding: 10px;
-    display: none; /* hidden by default */
+    display: none;
+    /* hidden by default */
     z-index: 1000;
     width: 220px;
   }
+
   /* Each dropdown list */
   #carrierDropdowns ul {
     list-style: none;
@@ -48,9 +57,11 @@
     margin: 0 0 10px 0;
     border-bottom: 1px solid #eee;
   }
+
   #carrierDropdowns ul:last-child {
     border-bottom: none;
   }
+
   #carrierDropdowns ul li a {
     display: block;
     padding: 5px 10px;
@@ -58,17 +69,20 @@
     text-decoration: none;
     cursor: pointer;
   }
+
   #carrierDropdowns ul li a:hover {
     background-color: #f5f5f5;
   }
 </style>
+<form method="POST">
+  {% csrf_token %}
 
 <div class="tab-pane" id="Coverage-policy">
   <div class="Coverage-updated-info Coverage-fields-panel mt-4">
     <div class="section-header with-divider">
       <h1 class="section-title1">Edit Coverage <span class="text-muted">(Using Drug Fields)</span></h1>
       <div class="Coverage-fields-edit">
-        <a href="#" target="_blank" class="btn btn-primary btn-sm">
+        <a href="#" class="btn btn-primary btn-sm">
           <i class=""></i>Add New Coverage
         </a>
       </div>
@@ -86,7 +100,6 @@
 
       <div id="carrierDropdowns" aria-labelledby="addCarrierBtn">
         <ul>
-          <li><a href="#">Use Existing Carrier Product</a></li>
           <li><a id="addNewCarrierProduct" href="#">+Add new Carrier Product</a></li>
         </ul>
       </div>
@@ -94,45 +107,20 @@
   </div>
 
   <div class="row">
-    <div class="col-md-3">
-      <label>Carrier Product</label>
-      <select class="form-control">
-        <option>- select -</option>
-       <option>Wellcare Assist (HMO) (pa)</option>
-      <option>Wellcare Assist (HMO-POS)</option>
-      <option>Wellcare Classic (PDP)</option>
-      <option>Wellcare Classic (PDP) (pa)</option>
-      <option>Wellcare Classic (PDP) (wv)</option>
-      <option>Wellcare Dual Access (HMO D-SNP) (pa)</option>
-      <option>Wellcare Dual Access (HMO-POS D-SNP) (pa)</option>
-      <option>Wellcare Dual Access Open (PPO D-SNP)</option>
-      <option>Wellcare Dual Access Open (PPO D-SNP) (pa)</option>
-      <option>Wellcare Dual Reserve (HMO-POS D-SNP)</option>
-      <option>Wellcare Dual Reserve Open (PPO D-SNP) (pa)</option>
-      <option>Wellcare Giveback (HMO-POS)</option>
-      <option>Wellcare Giveback Open (PPO) (pa)</option>
-      <option>Wellcare Medicare Rx Value Plus (PDP)</option>
-      <option>Wellcare Medicare Rx Value Plus (PDP) (pa)</option>
-      <option>Wellcare Medicare Rx Value Plus (PDP) (wv)</option>
-      <option>Wellcare Patriot Giveback (HMO)</option>
-      <option>Wellcare Simple (HMO) (pa)</option>
-      <option>Wellcare Value (HMO)</option>
-      <option>Wellcare Value (HMO) (pa)</option>
-      <option>Wellcare Value Plus (HMO)</option>
-      <option>Wellcare Value Plus (HMO) (pa)</option>
-      <option>Wellcare Value Script (PDP)</option>
-      <option>Wellcare Value Script (PDP) (pa)</option>
-      <option>Wellcare Value Script (PDP) (wv)</option>
-      <option>Wellcare Value (HMO)</option>
-<option>Wellcare Value (HMO) (pa)</option>
-<option>Wellcare Value Plus (HMO)</option>
-<option>Wellcare Value Plus (HMO) (pa)</option>
-<option>Wellcare Value Script (PDP)</option>
-<option>Wellcare Value Script (PDP) (pa)</option>
-<option>Wellcare Value Script (PDP) (wv)</option>
-      </select>
-    </div>
+  <div class="col-md-3">
+    <label>Carrier Product</label>
+    <select class="form-control" name="carrier_product">
+      <option value="">- select -</option>
+      {% for product in carrier_products %}
+        <option value="{{ product.id }}"
+          {% if product.id == policy_coverage.carrier_product_id %}selected{% endif %}>
+          {{ product.product_name }}
+        </option>
+      {% endfor %}
+    </select>
   </div>
+</div>
+
 </div>
 
 
@@ -149,43 +137,36 @@
 
   <div class="row">
     <div class="col-md-3">
-      <label>Coverage Status</label>
-      <select class="form-control">
-        <option>- select -</option>
-        <option>Active</option>
-        <option>Inactive</option>
-        <option>Pending</option>
+      <label>Coverage Status <span style="color: red;">*</span></label>
+      <select class="form-control" name="coverage_status" required>
+        <option value="">- select -</option>
+        <option value="Active" {% if policy_coverage.coverage_status == "Active" %}selected{% endif %}>Active</option>
+        <option value="Inactive" {% if policy_coverage.coverage_status == "Inactive" %}selected{% endif %}>Inactive</option>
       </select>
     </div>
-
-    <div class="col-md-3">
-      <label>Coverage Lives</label>
-      <input type="text" class="form-control" placeholder="Enter number of lives">
-    </div>
-     <div class="col-md-3">
-      <label>Coverage Termination Policy</label>
-      <input type="text" class="form-control" placeholder="Enter number of lives">
-    </div>
-
-   <div class="col-md-3">
-      <label>Coverage Premium</label>
-      <input type="text" class="form-control" placeholder="$">
-    </div>
-
-
-    <div class="col-md-3">
-      <label>Coverage Renewal %</label>
-      <input type="text" class="form-control" placeholder="%">
-    </div>
-
-    <div class="col-md-3">
-      <label>Coverage Renewal Date</label>
-      <input type="date" class="form-control">
-    </div>
-
     <div class="col-md-3">
       <label>Coverage Effective Date</label>
-      <input type="date" class="form-control">
+      <input type="date" class="form-control" name="coverage_effective_date" value="{{ policy_coverage.coverage_effective_date|date:'Y-m-d'|default:'' }}">
+    </div>
+    <div class="col-md-3">
+      <label>Coverage Premium</label>
+      <input type="text" class="form-control" placeholder="$" name="coverage_premium" value="{{ policy_coverage.coverage_premium|default:''}}">
+    </div>
+    <div class="col-md-3">
+      <label>Coverage Renewal Date</label>
+      <input type="date" class="form-control" name="coverage_renewal_date" value="{{ policy_coverage.coverage_renewal_date|date:'Y-m-d'|default:''}}">
+    </div>
+    <div class="col-md-3">
+      <label>Coverage Renewal %</label>
+      <input type="text" class="form-control" placeholder="%" name="coverage_renewal" value="{{ policy_coverage.coverage_renewal|default:''}}">
+    </div>
+    <div class="col-md-3">
+      <label>Coverage Lives</label>
+      <input type="text" class="form-control" name="coverage_lives" value="{{ policy_coverage.coverage_lives|default:''}}">
+    </div>
+    <div class="col-md-3">
+      <label>Coverage Termination Policy</label>
+      <input type="text" class="form-control" name="coverage_termination_policy" value="{{ policy_coverage.coverage_termination_policy|default:''}}">
     </div>
   </div>
 </div>
@@ -195,72 +176,70 @@
   <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
     <h1 class="section-title1" style="margin-bottom: 0;">
       Benefits & Costs
-      
+
     </h1>
   </div>
 
   <div class="row">
     <div class="col-md-3">
-      <label>Coverage Renewal %</label>
-      <input type="text" class="form-control" placeholder="%">
+      <label>Co-insurance</label>
+      <input type="text" class="form-control" placeholder="%" name="coinsurance" value="{{ policy_coverage.coinsurance|default:''}}">
     </div>
 
 
     <div class="col-md-3">
       <label>Deductible</label>
-      <input type="text" class="form-control" placeholder="$">
+      <input type="text" class="form-control" placeholder="$" name="deductible" value="{{ policy_coverage.deductible|default:''}}">
     </div>
     <div class="col-md-3">
       <label>Deductible (Family)</label>
-      <input type="text" class="form-control" placeholder="$">
+      <input type="text" class="form-control" placeholder="$" name="deductible_family" value="{{ policy_coverage.deductible_family|default:''}}">
     </div>
 
     <div class="col-md-3">
       <label>Max Out of Pocket</label>
-      <input type="text" class="form-control" placeholder="Enter number of lives">
+      <input type="text" class="form-control" name="max_out_of_pocket" value="{{ policy_coverage.max_out_of_pocket|default:''}}">
     </div>
 
 
     <div class="col-md-3">
       <label>Max Out of Pocket (Family)</label>
-      <input type="text" class="form-control" placeholder="Enter number of lives">
-    </div>
-     <div class="col-md-3">
-      <label>RX Tier 1 (Generic Drugs)</label>
-      <input type="text" class="form-control" placeholder="Enter number of lives">
-    </div>
-
-     <div class="col-md-3">
-      <label>RX Tier 2 (Preferred Brand)</label>
-      <input type="text" class="form-control" placeholder="Enter number of lives">
-    </div>
-     <div class="col-md-3">
-      <label>RX Tier 3 (Non-Preferred Brand)</label>
-      <input type="text" class="form-control" placeholder="Enter number of lives">
-    </div>
-     <div class="col-md-3">
-      <label>RX Tier 4 (Specialty)</label>
-      <input type="text" class="form-control" placeholder="Enter number of lives">
-    </div>
-     <div class="col-md-3">
-      <label>RX Tier 5 (Non-Preferred Specialty)</label>
-      <input type="text" class="form-control" placeholder="Enter number of lives">
-    </div>
-    
-    
-     <div class="col-md-3">
-      <label>Annual Maximum</label>
-      <input type="text" class="form-control" placeholder="Enter number of lives">
-    </div>
-     <div class="col-md-3">
-      <label>Lifetime Maximum</label>
-      <input type="text" class="form-control" placeholder="Enter number of lives">
+      <input type="text" class="form-control" name="max_out_of_pocket_family" value="{{ policy_coverage.max_out_of_pocket_family|default:''}}">
     </div>
     <div class="col-md-3">
-            <label>Out Of Network Costs</label>
-            <textarea class="form-control"
-                      style="min-height: 120px; padding: 10px; resize: vertical; width: 250px;"
-                      placeholder="Enter notes here..."></textarea>
+      <label>Out Of Network Costs</label>
+      <textarea class="form-control" style="min-height: 120px; padding: 10px; resize: vertical; width: 250px;"
+        placeholder="Enter notes here..." name="out_of_network_costs">{{policy_coverage.out_of_network_costs|default:''}}</textarea>
+    </div>
+    <div class="col-md-3">
+      <label>Annual Maximum</label>
+      <input type="text" class="form-control" name="annual_maximum" value="{{ policy_coverage.annual_maximum|default:''}}">
+    </div>
+    <div class="col-md-3">
+      <label>Lifetime Maximum</label>
+      <input type="text" class="form-control" name="lifetime_maximum" value="{{ policy_coverage.lifetime_maximum|default:''}}">
+    </div>
+    
+    <div class="col-md-3">
+      <label>RX Tier 1 (Generic Drugs)</label>
+      <input type="text" class="form-control" name="rx_tier1" value="{{ policy_coverage.rx_tier1|default:''}}">
+    </div>
+
+    <div class="col-md-3">
+      <label>RX Tier 2 (Preferred Brand)</label>
+      <input type="text" class="form-control" name="rx_tier2" value="{{ policy_coverage.rx_tier2|default:''}}">
+    </div>
+    <div class="col-md-3">
+      <label>RX Tier 3 (Non-Preferred Brand)</label>
+      <input type="text" class="form-control" name="rx_tier3" value="{{ policy_coverage.rx_tier3|default:''}}">
+    </div>
+    <div class="col-md-3">
+      <label>RX Tier 4 (Specialty)</label>
+      <input type="text" class="form-control" name="rx_tier4" value="{{ policy_coverage.rx_tier4|default:''}}">
+    </div>
+    <div class="col-md-3">
+      <label>RX Tier 5 (Non-Preferred Specialty)</label>
+      <input type="text" class="form-control" name="rx_tier5" value="{{ policy_coverage.rx_tier5|default:''}}">
     </div>
   </div>
 </div>
@@ -268,31 +247,31 @@
   <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
     <h1 class="section-title1" style="margin-bottom: 0;">
       Rates
-      
+
     </h1>
   </div>
 
   <div class="row">
     <div class="col-md-3">
       <label>Single Rate</label>
-      <input type="text" class="form-control" placeholder="$">
+      <input type="text" class="form-control" placeholder="$" name="single_rate" value="{{ policy_coverage.single_rate|default:''}}">
     </div>
 
 
     <div class="col-md-3">
       <label>Plus Spouse Rate</label>
-      <input type="text" class="form-control" placeholder="$">
+      <input type="text" class="form-control" placeholder="$" name="plus_spouse_rate" value="{{ policy_coverage.plus_spouse_rate|default:''}}">
     </div>
     <div class="col-md-3">
       <label>Plus Child(ren) Rate</label>
-      <input type="text" class="form-control" placeholder="$">
+      <input type="text" class="form-control" placeholder="$" name="plus_children_rate" value="{{ policy_coverage.plus_children_rate|default:''}}">
     </div>
 
     <div class="col-md-3">
       <label>Family Rate</label>
-      <input type="text" class="form-control" placeholder="$">
+      <input type="text" class="form-control" placeholder="$" name="family_rate" value="{{ policy_coverage.family_rate|default:''}}">
     </div>
-</div>
+  </div>
 </div>
 <div class="agent-info-container mt-4">
   <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
@@ -303,197 +282,51 @@
   <div class="row">
     <div class="col-md-3">
       <label>Pharmacy Network</label>
-      <input type="text" class="form-control" placeholder="$">
+      <input type="text" class="form-control" name="pharmacy_network" value="{{ policy_coverage.pharmacy_network|default:''}}">
     </div>
     <div class="col-md-3">
       <label>Provider Network
-</label>
-      <input type="text" class="form-control" placeholder="$">
+      </label>
+      <input type="text" class="form-control" name="provider_network" value="{{ policy_coverage.provider_network|default:''}}">
     </div>
-</div>
+  </div>
 </div>
 <div class="agent-info-container mt-4">
   <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
     <h1 class="section-title1" style="margin-bottom: 0;">
       Additional Info
-      
+
     </h1>
   </div>
 
   <div class="row">
     <div class="col-md-3">
-      <label>Single Rate</label>
-      <input type="text" class="form-control" placeholder="$">
-    </div>
-
-
-    <div class="col-md-3">
-      <label>Plus Spouse Rate</label>
-      <input type="text" class="form-control" placeholder="$">
+      <label>Coverage Notes</label>
+      <textarea class="form-control" style="min-height: 120px; padding: 10px; resize: vertical; width: 250px;"
+        placeholder="Enter notes here..." name="coverage_notes">{{ policy_coverage.coverage_notes|default:''}}</textarea>
     </div>
     <div class="col-md-3">
-      <label>Plus Child(ren) Rate</label>
-      <input type="text" class="form-control" placeholder="$">
-    </div>
-
-    <div class="col-md-3">
-      <label>Family Rate</label>
-      <input type="text" class="form-control" placeholder="$">
-    </div>
-</div>
-</div>
-<div class="agent-info-container mt-4">
-  <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
-    <h1 class="section-title1" style="margin-bottom: 0;">
-      Providers</h1>
-  </div>
-
-  <div class="row">
-    <div class="col-md-3">
-            <label>Coverage Notes</label>
-            <textarea class="form-control"
-                      style="min-height: 120px; padding: 10px; resize: vertical; width: 250px;"
-                      placeholder="Enter notes here..."></textarea>
-    </div>
-    <div class="col-md-3">
-            <label>Fees</label>
-            <textarea class="form-control"
-                      style="min-height: 120px; padding: 10px; resize: vertical; width: 250px;"
-                      placeholder="Enter notes here..."></textarea>
-    </div>
-</div>
-</div>
-<div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
-  <label>
-    Need a different field set?
-    <a href="#" data-toggle="modal" data-target="#changeFieldsetModal">Change the field set for this coverage.</a>
-  </label>
-</div>
-
-
-    <div class="search-actions">
-                        <button class="btn btn-secondary" id="resetCriteria">Save</button>
-                        <a href="#" class="btn btn-primary">Cancel </a>
-                    </div>
-
-
-
-
-
-
-
-<!-- Bootstrap 3 Modal -->
-<div id="addCarrierModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addCarrierModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="addCarrierModalLabel">New Product for Wellcare</h4>
-      </div>
-      <div class="modal-body">
-        <!-- Red message on top -->
-        <p style="color: red; font-weight: bold;">Please review the required fields</p>
-
-        <form>
-          <div class="form-group">
-            <label>Coverage Type</label>
-            <select class="form-control">
-               <option>- select -</option>
-                <option>Dental</option>
-                <option>Med Supp</option>
-                <option>PDP</option>
-                <option>MaPD</option>
-                <option>MA</option>
-                <option>Medical</option>
-            </select>  
-          </div>
-          <div class="form-group">
-            <label for="productDetails">Product Name <span style="color: red;">*</span></label>
-            <textarea class="form-control" id="productDetails" rows="3" placeholder="Enter product details"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="productDescription">Product Description</label>
-            <textarea class="form-control" id="productDescription" rows="3" placeholder="Enter product details"></textarea>
-          </div>
-
-          <!-- Dates in same row -->
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="effectiveDate">Product Effective Date</label>
-              <input type="date" class="form-control" id="effectiveDate" placeholder="Enter effective date">
-            </div>
-            <div class="form-group col-md-6">
-              <label for="termDate">Product Term Date</label>
-              <input type="date" class="form-control" id="termDate" placeholder="Enter term date">
-            </div>
-          </div>
-
-          <!-- Required fields message -->
-          <p>Fields marked with an <span style="color: red;">*</span> are required.</p>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+      <label>Fees</label>
+      <textarea class="form-control" style="min-height: 120px; padding: 10px; resize: vertical; width: 250px;"
+        placeholder="Enter notes here..." name="fees">{{ policy_coverage.fees|default:''}}</textarea>
     </div>
   </div>
 </div>
 
-
-<!-- Modal -->
-<div class="modal fade" id="changeFieldsetModal" tabindex="-1" role="dialog" aria-labelledby="changeFieldsetModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="changeFieldsetModalLabel">Select A New Field Set</h4>
-      </div>
-
-      <div class="modal-body">
-       
-        <div class="form-group">
-          <label for="fieldsetDropdown">Changing the field set on a Coverage only keeps data shared between field sets. Data in fields NOT shared between field sets will be lost.</label>
-          <select class="form-control" id="fieldsetDropdown">
-            <option>AB Default</option>
-            <option>AD&D</option>
-            <option>Dental </option>
-            <option>Drug</option>
-            <option>Health</option>
-            <option>Life</option>
-            <option>Long Term Care</option>
-            <option>LTD</option>
-            <option>Senior Health / RX</option>
-            <option>STD</option>
-            <option>Vision</option>
-            <option>Worksite Benefits</option>
-          </select>
-        </div>
-       <a href="#" class="text-muted" style="margin-top: 10px; display: inline-block; text-transform: uppercase; text-decoration: underline; text-decoration-color: #007bff; color: #007bff;">
-  View Help Information
-</a>
-
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary">Preview Changes</button>
-      </div>
-
-    </div>
-  </div>
+<div class="search-actions">
+  <button class="btn btn-secondary" type="submit" >Save</button>
+  <a href="#" class="btn btn-primary" id="resetCriteria">Cancel </a>
 </div>
+</form>
 
+{% include "policy/addnewcarrierproduct.html" %}
 
 <script>
   const addCarrierBtn = document.getElementById('addCarrierBtn');
   const carrierDropdowns = document.getElementById('carrierDropdowns');
   const addNewCarrierLink = document.getElementById('addNewCarrierProduct');
 
-  addCarrierBtn.addEventListener('click', function(event) {
+  addCarrierBtn.addEventListener('click', function (event) {
     event.stopPropagation(); // prevent event bubbling
     if (carrierDropdowns.style.display === 'block') {
       carrierDropdowns.style.display = 'none';
@@ -503,16 +336,17 @@
   });
 
   // Open modal when +Add new Carrier Product clicked
-  addNewCarrierLink.addEventListener('click', function(event) {
+  addNewCarrierLink.addEventListener('click', function (event) {
     event.preventDefault();
-    carrierDropdowns.style.display = 'none'; // hide dropdown
-    $('#addCarrierModal').modal('show'); // show Bootstrap modal
+    carrierDropdowns.style.display = 'none';
+    // Set the hidden carrier input with selected carrier_product value
+    $('input[name="carrier"]').val($('select[name="carrier"]').val());
+    $('#addCarrierModal').modal('show');
   });
 
   // Close dropdown if clicking outside
-  document.addEventListener('click', function() {
+  document.addEventListener('click', function () {
     carrierDropdowns.style.display = 'none';
   });
+  
 </script>
-
-

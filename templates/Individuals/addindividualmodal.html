@@ -293,7 +293,7 @@
 
 <script>
 $(document).ready(function () {
-  // Servicing agent autocomplete logic
+  
   $("#servicing_agent").on("input", function () {
     let query = $(this).val();
     if (query.length >= 2) {
@@ -332,7 +332,7 @@ $(document).ready(function () {
     }, 150);
   });
 
-  // Handle Associate Individual: record_type select change
+  
   function enableCarrierAutocomplete() {
     var carriers = ["Carrier A", "Carrier B", "Carrier C", "Carrier D"];
     $("#carrier_name").autocomplete({
