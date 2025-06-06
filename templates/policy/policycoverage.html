@@ -176,7 +176,6 @@
   <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
     <h1 class="section-title1" style="margin-bottom: 0;">
       Benefits & Costs
-
     </h1>
   </div>
 
@@ -186,11 +185,11 @@
       <input type="text" class="form-control" placeholder="%" name="coinsurance" value="{{ policy_coverage.coinsurance|default:''}}">
     </div>
 
-
     <div class="col-md-3">
       <label>Deductible</label>
       <input type="text" class="form-control" placeholder="$" name="deductible" value="{{ policy_coverage.deductible|default:''}}">
     </div>
+
     <div class="col-md-3">
       <label>Deductible (Family)</label>
       <input type="text" class="form-control" placeholder="$" name="deductible_family" value="{{ policy_coverage.deductible_family|default:''}}">
@@ -201,25 +200,23 @@
       <input type="text" class="form-control" name="max_out_of_pocket" value="{{ policy_coverage.max_out_of_pocket|default:''}}">
     </div>
 
-
     <div class="col-md-3">
       <label>Max Out of Pocket (Family)</label>
       <input type="text" class="form-control" name="max_out_of_pocket_family" value="{{ policy_coverage.max_out_of_pocket_family|default:''}}">
     </div>
-    <div class="col-md-3">
-      <label>Out Of Network Costs</label>
-      <textarea class="form-control" style="min-height: 120px; padding: 10px; resize: vertical; width: 250px;"
-        placeholder="Enter notes here..." name="out_of_network_costs">{{policy_coverage.out_of_network_costs|default:''}}</textarea>
-    </div>
+
+  
+
     <div class="col-md-3">
       <label>Annual Maximum</label>
       <input type="text" class="form-control" name="annual_maximum" value="{{ policy_coverage.annual_maximum|default:''}}">
     </div>
+
     <div class="col-md-3">
       <label>Lifetime Maximum</label>
       <input type="text" class="form-control" name="lifetime_maximum" value="{{ policy_coverage.lifetime_maximum|default:''}}">
     </div>
-    
+
     <div class="col-md-3">
       <label>RX Tier 1 (Generic Drugs)</label>
       <input type="text" class="form-control" name="rx_tier1" value="{{ policy_coverage.rx_tier1|default:''}}">
@@ -229,20 +226,30 @@
       <label>RX Tier 2 (Preferred Brand)</label>
       <input type="text" class="form-control" name="rx_tier2" value="{{ policy_coverage.rx_tier2|default:''}}">
     </div>
+
     <div class="col-md-3">
       <label>RX Tier 3 (Non-Preferred Brand)</label>
       <input type="text" class="form-control" name="rx_tier3" value="{{ policy_coverage.rx_tier3|default:''}}">
     </div>
+
     <div class="col-md-3">
       <label>RX Tier 4 (Specialty)</label>
       <input type="text" class="form-control" name="rx_tier4" value="{{ policy_coverage.rx_tier4|default:''}}">
     </div>
+
     <div class="col-md-3">
       <label>RX Tier 5 (Non-Preferred Specialty)</label>
       <input type="text" class="form-control" name="rx_tier5" value="{{ policy_coverage.rx_tier5|default:''}}">
     </div>
+      <div class="col-md-3">
+      <label>Out Of Network Costs</label>
+      <textarea class="form-control" style="min-height: 120px; padding: 10px; resize: vertical;"
+        placeholder="Enter notes here..." name="out_of_network_costs">{{ policy_coverage.out_of_network_costs|default:'' }}</textarea>
+    </div>
   </div>
 </div>
+
+
 <div class="agent-info-container mt-4">
   <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 15px;">
     <h1 class="section-title1" style="margin-bottom: 0;">
