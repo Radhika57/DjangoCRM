@@ -454,6 +454,9 @@ $(document).ready(function () {
                         $('#newPolicyModal').modal('hide');
                         $('#policyForm')[0].reset();
                     }
+                    setTimeout(function () {
+                        location.reload();  
+                    }, 500);
                 } else {
                     alert('Error: ' + (response.error || 'Unknown error'));
                 }
