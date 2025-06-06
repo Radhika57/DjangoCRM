@@ -1,3 +1,58 @@
+<style>
+
+    .input-group {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 5px;
+    }
+
+    
+    .input-group > input.form-control:first-child {
+        flex: 1 1 auto;
+    }
+
+    
+    .input-group > input.form-control:last-child {
+        width: 100px !important;
+        min-width: 100px;
+        max-width: 100px;
+        flex: 0 0 auto;
+    }
+
+   
+    .input-group-addon {
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        padding: 6px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        white-space: nowrap;
+    }
+
+   
+    @media (max-width: 576px) {
+        .input-group {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .input-group > input.form-control:last-child {
+            width: 100% !important;
+            min-width: auto;
+            max-width: none;
+        }
+    }
+        @media (max-width: 768px) {
+    .row .form-group.col-md-4 {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+}
+   
+</style>
+
 <div class="modal fade" id="newPolicyModal" tabindex="-1" role="dialog" aria-labelledby="newPolicyModalLabel">
     <div class="modal-dialog modal-md" role="document">
         <form id="policyForm" method="post">
@@ -18,7 +73,7 @@
                             <div class="panel-heading">
                                 <div class="step-indicator" id="clientInfoTab">
                                     <span class="step-number">1</span>
-                                    <span class="step-title">Client Info</span>
+                                    <span class="step-title">Client Info <span class="text-danger">*</span></span>
                                 </div>
                             </div>
                             <div class="panel-body client-info-section active-section">
@@ -133,7 +188,7 @@
                             <div class="panel-heading">
                                 <div class="step-indicator" id="policyInfoTab">
                                     <span class="step-number">2</span>
-                                    <span class="step-title">Policy Info</span>
+                                    <span class="step-title">Policy Info <span class="text-danger">*</span></span>
                                 </div>
                             </div>
                             <div class="panel-body policy-info-section">
@@ -339,85 +394,87 @@
 
 
 <script>
-$(document).ready(function () {
-    $("#existingClientSearch").on("input", function () {
-        let query = $(this).val();
-        if (query.length >= 2) {
-            $.ajax({
-                url: "/individuals/search/relationship/",
-                data: { term: query },
-                success: function (data) {
-                    let suggestions = "";
-                    if (data.length === 0) {
-                        suggestions = '<a href="#" class="list-group-item list-group-item-action disabled">No results found</a>';
-                    } else {
-                        data.forEach(individual => {
-                            suggestions += `<a href="#" class="list-group-item list-group-item-action" data-id="${individual.id}" data-label="${individual.label}">${individual.label}</a>`;
-                        });
+    $(document).ready(function () {
+        $("#existingClientSearch").on("input", function () {
+            let query = $(this).val();
+            if (query.length >= 2) {
+                $.ajax({
+                    url: "/individuals/search/relationship/",
+                    data: { term: query },
+                    success: function (data) {
+                        let suggestions = "";
+                        if (data.length === 0) {
+                            suggestions = '<a href="#" class="list-group-item list-group-item-action disabled">No results found</a>';
+                        } else {
+                            data.forEach(individual => {
+                                suggestions += `<a href="#" class="list-group-item list-group-item-action" data-id="${individual.id}" data-label="${individual.label}">${individual.label}</a>`;
+                            });
+                        }
+                        $("#individualSuggestions").html(suggestions).show();
                     }
-                    $("#individualSuggestions").html(suggestions).show();
-                }
-            });
-        } else {
-            $("#individualSuggestions").empty().hide();
-        }
-    });
-
-    $(document).on("click", "#individualSuggestions a", function (e) {
-        e.preventDefault();
-        const name = $(this).data("label");
-        const id = $(this).data("id");
-        $("#existingClientSearch").val(name);
-        $("#individualId").val(id);
-        $("#individualSuggestions").empty().hide();
-    });
-
-    $("#existingClientSearch").on("blur", function () {
-        setTimeout(() => {
-            $("#individualSuggestions").fadeOut();
-        }, 150);
-    });
-
-    $('#policyForm').on('submit', function (e) {
-        e.preventDefault();
-
-        const recordType = $('#recordType').val();
-
-        if (recordType === 'existing' && !$('#individualId').val()) {
-            alert('Please select an existing individual.');
-            return;
-        }
-
-        const formData = $(this).serialize();  
-
-        $.ajax({
-            url: '/save_policy/',
-            method: 'POST',
-            data: formData,
-            success: function (response) {
-                if (response.success) {
-                    alert('Policy saved successfully!');
-                    const isAddAnother = $('#saveAndAddAnotherBtn').is(':focus');
-
-                    if (isAddAnother) {
-                        $('#policyForm')[0].reset();
-                        $('#individualId').val('');
-                        $('#existingClientSearch').val('');
-                    } else {
-                        $('#newPolicyModal').modal('hide');
-                        $('#policyForm')[0].reset();
-                    }
-                    setTimeout(function () {
-                        location.reload();  
-                    }, 500);
-                } else {
-                    alert('Error: ' + (response.error || 'Unknown error'));
-                }
-            },
-            error: function (xhr) {
-                alert('Failed to save policy: ' + (xhr.responseJSON?.error || 'Unknown error'));
+                });
+            } else {
+                $("#individualSuggestions").empty().hide();
             }
         });
+
+        $(document).on("click", "#individualSuggestions a", function (e) {
+            e.preventDefault();
+            const name = $(this).data("label");
+            const id = $(this).data("id");
+            $("#existingClientSearch").val(name);
+            $("#individualId").val(id);
+            $("#individualSuggestions").empty().hide();
+        });
+
+        $("#existingClientSearch").on("blur", function () {
+            setTimeout(() => {
+                $("#individualSuggestions").fadeOut();
+            }, 150);
+        });
+
+        $('#policyForm').on('submit', function (e) {
+            e.preventDefault();
+
+            const recordType = $('#recordType').val();
+
+            if (recordType === 'existing' && !$('#individualId').val()) {
+                alert('Please select an existing individual.');
+                return;
+            }
+
+            const formData = $(this).serialize();  
+
+            $.ajax({
+                url: '/save_policy/',
+                method: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        alert('Policy saved successfully!');
+                        const isAddAnother = $('#saveAndAddAnotherBtn').is(':focus');
+
+                        if (isAddAnother) {
+                            $('#policyForm')[0].reset();
+                            $('#individualId').val('');
+                            $('#existingClientSearch').val('');
+                        } else {
+                            $('#newPolicyModal').modal('hide');
+                            $('#policyForm')[0].reset();
+
+                            setTimeout(function () {
+                                location.reload();  
+                            }, 500);
+                        }
+                    } else {
+                        alert('Error: ' + (response.error || 'Unknown error'));
+                    }
+                },
+                error: function (xhr) {
+                    alert('Failed to save policy: ' + (xhr.responseJSON?.error || 'Unknown error'));
+                }
+            });
+
+        });
     });
-});
 </script>
