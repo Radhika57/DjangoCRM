@@ -1138,6 +1138,8 @@ def policy_tab(request, policy_id):
     agents = Agent.objects.all()
     policy_activity = PolicyActivity.objects.filter(policy_name=policy)
     policy_notes = PolicyNotes.objects.filter(policy_name=policy)
+    due_activities = PolicyActivity.objects.filter(policy_name=policy , due_date__isnull=False)  
+    pin_notess = PolicyNotes.objects.filter(policy_name=policy, pin_note=True)
     policy_coverage, _ = PolicyCoverage.objects.get_or_create(policy_name=policy)
     carrier_products = []
     if policy.carrier:
@@ -1267,6 +1269,8 @@ def policy_tab(request, policy_id):
         'policy_notes': policy_notes,
         'policy_coverage':policy_coverage,
         'carrier_products': carrier_products,
+        'due_activities': due_activities,
+        'pin_notess': pin_notess,
     })
 
 @require_POST

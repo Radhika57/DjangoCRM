@@ -725,29 +725,35 @@
         <h4><i class="fa fa-calendar"></i> Dates</h4>
 
         <div class="d-flex justify-content-between">
-            <span>App Submit Date</span>
-            <span class="text-muted">—</span>
+            <span>App Submit Date </span>
+            <span class="text-muted">{{ policy_details.app_submit_date|date:'Y-m-d'|default:"-"}}</span>
         </div>
 
         <div class="d-flex justify-content-between">
-            <span>Effective Date —</span>
-            <span>01/01/2024</span>
+            <span>Effective Date </span>
+            <span>{{policy.effective_date|date:'Y-m-d'|default:"-"}}</span>
         </div>
 
         <div class="d-flex justify-content-between">
             <span>Renewal Date</span>
-            <span class="text-muted">—</span>
+            <span class="text-muted">{{policy_details.renewal_date|date:'Y-m-d'|default:"-"}}</span>
         </div>
 
         <div class="d-flex justify-content-between">
             <span>Term Date</span>
-            <span class="text-muted">—</span>
+            <span class="text-muted">{{policy_details.term_date|date:'Y-m-d'|default:"-"}}</span>
         </div>
     </div>
 
     <div class="summary-item">
         <h4><i class="fa fa-tasks"></i> Activities Due</h4>
-        <p class="text-muted">No activities.</p>
+        {% if due_activities %}
+          {% for act in due_activities %}
+          <p class="text-muted">{{ act.subject }}</p>
+          {% endfor %}
+          {% else %}
+          <p class="text-muted">No Activities.</p>
+        {% endif %}
         <a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#carrieractivityModal">
             <i class="fa fa-plus"></i> Create new
         </a>
@@ -755,7 +761,13 @@
     
     <div class="summary-item">
         <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
-        <p class="text-muted">No pinned note.</p>
+        {% if pin_notess %}
+            {% for note in pin_notess %}
+            <p class="text-muted">{{ note.subject }}</p>
+            {% endfor %}
+            {% else %}
+            <p class="text-muted">No pinned note.</p>
+        {% endif %}
         <a href="#Notes-policy" class="btn btn-xs btn-info" id="create-pinnednote-from-sidebar">
             <i class="fa fa-plus"></i> Create new
         </a>
@@ -815,18 +827,7 @@
             $('#noteForm')[0].reset();
         });
 
-        // Form submission
-        $('#noteForm').submit(function(e) {
-            e.preventDefault();
-            
-            // Here you would typically submit the form via AJAX
-            // For demonstration, we'll simulate a successful submission
-            alert('Note saved successfully!');
-            $('#createNewnoteContainer').hide();
-            $('#notesMainContent').show();
-            this.reset();
-            location.reload();
-        });
+        
     });
     
     // Sidebar toggle functionality
