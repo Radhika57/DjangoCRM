@@ -630,15 +630,14 @@ def agent_detail(request, agent_id):
         'due_activities': due_activities,
         'pin_notess': pin_notess,
     })
-    
-    
+
 def edit_agent(request):
-   return render(request, 'agent/agencyedituser.html')
+    return render(request, 'agent/agencyedituser.html')
 
 def delete_agent(request, agent_id):
     agent = get_object_or_404(Agent, id=agent_id)
     agent.delete()
-    return redirect('search_agents') 
+    return redirect('search_agents')
 
 
 # Individual

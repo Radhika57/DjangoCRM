@@ -117,32 +117,29 @@
                                         </div>
                                     </div>
 
-                                    <div class="row">
-                                        <div class="form-group col-md-4">
-                                            <label for="clientType">Type</label>
-                                            <select id="clientType" name="individual_type">
-                                                <option value="">Select Type</option>
-                                                <option value="Prospect">Prospect</option>
-                                                <option value="Client">Client</option>
-                                                <option value="Ex-Prospect">Ex-Prospect</option>
-                                                <option value="Ex-Client">Ex-Client</option>
-                                                <option value="Contact">Contact</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label for="servicingAgent">Servicing Agent</label>
-                                            <input type="text" class="form-control agent-autocomplete"
-                                                id="servicing_agent" autocomplete="off">
-                                            <input type="hidden" id="servicing_agent_id" name="servicing_agent_id">
-                                            <div id="servicingSuggestions" class="list-group position-absolute w-100"
-                                                style="z-index: 1000;"></div>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label for="email">Email</label>
-                                            <input type="email" class="form-control" id="email" name="email"
-                                                placeholder="Enter email">
-                                        </div>
-                                    </div>
+                                  <div class="row">
+    <div class="form-group col-md-4">
+        <label for="clientType">Type</label>
+        <select id="clientType" name="individual_type" class="form-control">
+            <option value="">Select Type</option>
+            <option value="Prospect">Prospect</option>
+            <option value="Client">Client</option>
+            <option value="Ex-Prospect">Ex-Prospect</option>
+            <option value="Ex-Client">Ex-Client</option>
+            <option value="Contact">Contact</option>
+        </select>
+    </div>
+    <div class="form-group col-md-4">
+        <label for="servicingAgent">Servicing Agent</label>
+        <input type="text" class="form-control agent-autocomplete" id="servicing_agent" autocomplete="off">
+        <input type="hidden" id="servicing_agent_id" name="servicing_agent_id">
+        <div id="servicingSuggestions" class="list-group position-absolute w-100" style="z-index: 1000;"></div>
+    </div>
+    <div class="form-group col-md-4">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+    </div>
+</div>
 
                                     <!-- Vertically Stacked Phone Fields -->
                                     <div class="row">
@@ -188,7 +185,7 @@
                             <div class="panel-heading">
                                 <div class="step-indicator" id="policyInfoTab">
                                     <span class="step-number">2</span>
-                                    <span class="step-title">Policy Info <span class="text-danger">*</span></span>
+                                    <span class="step-title">Policy Info</span>
                                 </div>
                             </div>
                             <div class="panel-body policy-info-section">
