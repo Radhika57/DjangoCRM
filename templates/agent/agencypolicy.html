@@ -64,7 +64,7 @@
                                     {% with coverage=policy.policy_coverage.first details=policy.policy_details.first %}
                                     <tr>
                                         <td>
-                                            <a href="{% url "policy_tab" policy.id %}">{{ policy.policy_number }}</a>
+                                            <a href="{% url "policy_tab" policy.id %}">{{ policy.policy_number  |default:"(not set)" }}</a>
                                         </td>
                                         <td>
                                             <a href="{% url "individual_tab" policy.individual.id %}">

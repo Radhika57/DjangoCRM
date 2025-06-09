@@ -1,6 +1,6 @@
 {% extends "dashboard/base.html" %}
 {% load static %}
-
+{% load phone_filters %}
 {% block main-content %}
 <style>
     /* Your existing styles remain unchanged */
@@ -25,7 +25,7 @@
         box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
     }
 
-     .nav-tabs .dropdown-menu>li>a {
+    .nav-tabs .dropdown-menu>li>a {
         display: block;
         padding: 3px 20px;
         clear: both;
@@ -552,19 +552,19 @@
         color: #6c757d;
     }
 
-    
+
     #agent-summary {
         width: 300px;
         background: #fff;
         padding: 15px;
         border-left: 1px solid #ddd;
         position: fixed;
-        right: -300px; 
-        top: 50px; 
+        right: -300px;
+        top: 50px;
         height: calc(100vh - 50px);
         overflow-y: auto;
         z-index: 1000;
-        box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
         transition: right 0.3s ease;
     }
 
@@ -626,13 +626,13 @@
         border: 1px solid #ccc;
         font-size: 12px;
         border-radius: 4px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         display: none;
         z-index: 10;
         margin-top: 2px;
     }
 
-    .summary-group button:hover + .hover-label {
+    .summary-group button:hover+.hover-label {
         display: block;
     }
 
@@ -642,7 +642,7 @@
             width: 280px;
             right: -280px;
         }
-        
+
         .main-content-wrapper.sidebar-shown {
             padding-right: 280px;
         }
@@ -660,11 +660,11 @@
             width: 250px;
             right: -250px;
         }
-        
+
         .main-content-wrapper.sidebar-shown {
             padding-right: 250px;
         }
-        
+
         .summary-action-buttons {
             top: 50px;
         }
@@ -675,12 +675,12 @@
             width: 100%;
             right: -100%;
         }
-        
+
         .main-content-wrapper.sidebar-shown {
             padding-right: 0;
             transform: translateX(-100%);
         }
-        
+
         .summary-action-buttons {
             position: relative;
             right: auto;
@@ -689,149 +689,153 @@
             text-align: right;
         }
     }
-    
-.summary-item .rounded-circle {
-    border: 2px solid #dee2e6;
-}
 
-.summary-item h4 {
-    font-size: 16px;
-    margin-bottom: 5px;
-}
+    .summary-item .rounded-circle {
+        border: 2px solid #dee2e6;
+    }
 
-.summary-item .btn-sm {
-    padding: 0.15rem 0.5rem;
-    font-size: 12px;
-}
+    .summary-item h4 {
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
 
-.summary-item .d-flex {
-    display: flex;
-}
+    .summary-item .btn-sm {
+        padding: 0.15rem 0.5rem;
+        font-size: 12px;
+    }
 
-.summary-item .me-3 {
-    margin-right: 1rem;
-}
+    .summary-item .d-flex {
+        display: flex;
+    }
 
-.summary-item .flex-grow-1 {
-    flex-grow: 1;
-}
+    .summary-item .me-3 {
+        margin-right: 1rem;
+    }
 
-.summary-item .mb-0 {
-    margin-bottom: 0;
-}
+    .summary-item .flex-grow-1 {
+        flex-grow: 1;
+    }
 
-.summary-item .mb-2 {
-    margin-bottom: 0.5rem;
-}
+    .summary-item .mb-0 {
+        margin-bottom: 0;
+    }
 
-.summary-item .align-items-center {
-    align-items: center;
-}
+    .summary-item .mb-2 {
+        margin-bottom: 0.5rem;
+    }
 
-.summary-item .justify-content-between {
-    justify-content: space-between;
-}
-/* User Profile Header Styles */
-.user-profile-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-}
+    .summary-item .align-items-center {
+        align-items: center;
+    }
 
-.user-photo-container {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-right: 12px;
-    border: 2px solid #dee2e6;
-    background-color: #f8f9fa;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+    .summary-item .justify-content-between {
+        justify-content: space-between;
+    }
 
-.user-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+    /* User Profile Header Styles */
+    .user-profile-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
 
-.default-user-icon {
-    color: #6c757d;
-    font-size: 20px;
-}
+    .user-photo-container {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 12px;
+        border: 2px solid #dee2e6;
+        background-color: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-.user-info {
-    flex: 1;
-}
+    .user-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
-.name-edit-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2px;
-}
+    .default-user-icon {
+        color: #6c757d;
+        font-size: 20px;
+    }
 
-.user-name {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-}
+    .user-info {
+        flex: 1;
+    }
 
-.edit-btn {
-    padding: 0.15rem 0.5rem;
-    font-size: 12px;
-    margin-left: 8px;
-}
+    .name-edit-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2px;
+    }
 
-.user-type {
-    color: #6c757d;
-    font-size: 12px;
-}
-.label-group {
-  margin-top: 5px;
-}
-.label-item {
-  display: flex;
-  justify-content: space-between;
-  margin: 2px 0;
-}
-.badge {
-  background-color: #444;
-  color: #fff;
-  border-radius: 5px;
-  padding: 2px 6px;
-  font-size: 0.8rem;
-}
-.toggle-link {
-  display: block;
-  margin-top: 5px;
-  font-weight: 500;
-  cursor: pointer;
-}
+    .user-name {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
 
+    .edit-btn {
+        padding: 0.15rem 0.5rem;
+        font-size: 12px;
+        margin-left: 8px;
+    }
+
+    .user-type {
+        color: #6c757d;
+        font-size: 12px;
+    }
+
+    .label-group {
+        margin-top: 5px;
+    }
+
+    .label-item {
+        display: flex;
+        justify-content: space-between;
+        margin: 2px 0;
+    }
+
+    .badge {
+        background-color: #444;
+        color: #fff;
+        border-radius: 5px;
+        padding: 2px 6px;
+        font-size: 0.8rem;
+    }
+
+    .toggle-link {
+        display: block;
+        margin-top: 5px;
+        font-weight: 500;
+        cursor: pointer;
+    }
 </style>
 
 <!-- Summary Action Buttons -->
 <div class="summary-action-buttons">
-  <div class="btn-group summary-group position-relative">
-    <button id="toggle-agent-summary" class="btn btn-default btn-sm">
-      <i class="fa fa-list-alt"></i>
-    </button>
-    <div class="hover-label">Summary</div>
+    <div class="btn-group summary-group position-relative">
+        <button id="toggle-agent-summary" class="btn btn-default btn-sm">
+            <i class="fa fa-list-alt"></i>
+        </button>
+        <div class="hover-label">Summary</div>
 
-    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-      <span class="caret"></span>
-    </button>
-    <div class="hover-label">Action</div>
+        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <div class="hover-label">Action</div>
 
-    <ul class="dropdown-menu dropdown-menu-right">
-      <li><a href="#"><i class="fa fa-print"></i> Print Record</a></li>
-      <li class="divider"></li>
-      <li><a href="#"><i class="fa fa-cog"></i> Print Page</a></li>
-    </ul>
-  </div>
+        <ul class="dropdown-menu dropdown-menu-right">
+            <li><a href="#"><i class="fa fa-print"></i> Print Record</a></li>
+            <li class="divider"></li>
+            <li><a href="#"><i class="fa fa-cog"></i> Print Page</a></li>
+        </ul>
+    </div>
 </div>
 
 <div class="main-content-wrapper">
@@ -847,7 +851,8 @@
                 <div class="nav-tabs-container">
                     <!-- Regular tabs as buttons -->
                     <div class="btn-group nav-tab-btn-group me-3 mb-2">
-                        <a href="#detail-content" class="btn btn-secondary nav-tab-btn active" data-toggle="tab">Detail</a>
+                        <a href="#detail-content" class="btn btn-secondary nav-tab-btn active"
+                            data-toggle="tab">Detail</a>
                     </div>
 
                     <div class="btn-group nav-tab-btn-group me-3 mb-2">
@@ -864,7 +869,8 @@
                     </div>
 
                     <div class="btn-group nav-tab-btn-group me-3 mb-2">
-                        <a href="#activities-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Activities</a>
+                        <a href="#activities-content" class="btn btn-secondary nav-tab-btn"
+                            data-toggle="tab">Activities</a>
                     </div>
 
                     <div class="btn-group nav-tab-btn-group me-3 mb-2">
@@ -876,7 +882,8 @@
                     </div>
 
                     <div class="btn-group nav-tab-btn-group me-3 mb-2">
-                        <a href="#contracts-content" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Contracts</a>
+                        <a href="#contracts-content" class="btn btn-secondary nav-tab-btn"
+                            data-toggle="tab">Contracts</a>
                     </div>
 
                     <div class="btn-group nav-tab-btn-group me-3 mb-2">
@@ -888,35 +895,45 @@
                     </div>
                     <!-- WorkFlow Dropdown -->
                     <div class="btn-group nav-tab-btn-group me-3 mb-2">
-                        <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             WorkFlow ▼
                         </button>
                         <ul class="dropdown-menu shadow p-2 border-0">
-                            <li><a class="dropdown-item py-2" href="#agency-action" data-toggle="tab">Triggered Action</a></li>
-                            <li><a class="dropdown-item py-2" href="#agency-detail" data-toggle="tab">Triggered Workflow</a></li>
+                            <li><a class="dropdown-item py-2" href="#agency-action" data-toggle="tab">Triggered
+                                    Action</a></li>
+                            <li><a class="dropdown-item py-2" href="#agency-detail" data-toggle="tab">Triggered
+                                    Workflow</a></li>
                         </ul>
                     </div>
 
                     <!-- Email Dropdown -->
                     <div class="btn-group nav-tab-btn-group me-3 mb-2">
-                        <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Email ▼
                         </button>
                         <ul class="dropdown-menu shadow p-2 border-0">
-                            <li><a class="dropdown-item py-2" href="#incoming-agency" data-toggle="tab">Incoming Emails</a></li>
-                            <li><a class="dropdown-item py-2" href="#outgoing-agency" data-toggle="tab">Outgoing Emails</a></li>
-                            <li><a class="dropdown-item py-2" href="#Campaigns-agency" data-toggle="tab">Campaigns</a></li>
+                            <li><a class="dropdown-item py-2" href="#incoming-agency" data-toggle="tab">Incoming
+                                    Emails</a></li>
+                            <li><a class="dropdown-item py-2" href="#outgoing-agency" data-toggle="tab">Outgoing
+                                    Emails</a></li>
+                            <li><a class="dropdown-item py-2" href="#Campaigns-agency" data-toggle="tab">Campaigns</a>
+                            </li>
                         </ul>
                     </div>
 
                     <!-- Messages Dropdown -->
                     <div class="btn-group nav-tab-btn-group me-3 mb-2">
-                        <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button type="button" class="btn btn-secondary nav-tab-btn dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Messages ▼
                         </button>
                         <ul class="dropdown-menu shadow p-2 border-0">
-                            <li><a class="dropdown-item py-2" href="#Recordings-agency" data-toggle="tab">Call Recordings</a></li>
-                            <li><a class="dropdown-item py-2" href="#SMS-agency" data-toggle="tab">SMS Messages History</a></li>
+                            <li><a class="dropdown-item py-2" href="#Recordings-agency" data-toggle="tab">Call
+                                    Recordings</a></li>
+                            <li><a class="dropdown-item py-2" href="#SMS-agency" data-toggle="tab">SMS Messages
+                                    History</a></li>
                         </ul>
                     </div>
                 </div>
@@ -924,7 +941,7 @@
                 <!-- Tab Content Sections -->
                 <div class="tab-content">
                     <!-- Detail Tab -->
-                    {% include "agent/agent_detail.html" %}   
+                    {% include "agent/agent_detail.html" %}
                     {% include "agent/agencyagencies.html" %}
                     {% include "agent/agencyclient.html" %}
                     {% include "agent/agencypolicy.html" %}
@@ -934,19 +951,19 @@
                     {% include "agent/agencycontracts.html" %}
                     {% include "agent/agencylicenses.html" %}
                     {% include "agent/agencypersonal.html" %}
-                                    
+
                     {% include "agent/agencyworkflowaction.html" %}
-                
+
                     {% include "agent/agencyworkflowdetail.html" %}
-                
+
                     {% include "agent/agencyinemails.html" %}
-                
+
                     {% include "agent/agencyoutemails.html" %}
-                
+
                     {% include "agent/agencycampaigns.html" %}
-                
+
                     {% include "agent/agencyRecordings.html" %}
-                
+
                     {% include "agent/agencySMS.html" %}
                 </div>
             </div>
@@ -958,108 +975,158 @@
 <!-- Agent Summary Sidebar -->
 <div id="agent-summary">
     <span class="close-sidebar" id="close-sidebar">&times;</span>
-    
+
     <div class="summary-header">
         <h3><i class="fa fa-user"></i> Agent Summary</h3>
     </div>
-    
+
     <div class="summary-item">
         <div class="user-profile-header">
             <!-- User Circle Photo -->
-            <div class="user-photo-container">
+            {% comment %} <div class="user-photo-container">
                 {% if agent.photo %}
-                    <img src="{{ agent.photo.url }}" alt="{{ agent.first_name }} {{ agent.last_name }}" 
-                         class="user-photo">
+                <img src="{{ agent.photo.url }}" alt="{{ agent.first_name }} {{ agent.last_name }}" class="user-photo">
                 {% else %}
-                    <div class="default-user-icon">
-                        <i class="fa fa-user"></i>
-                    </div>
+                <div class="default-user-icon">
+                    <i class="fa fa-user"></i>
+                </div>
                 {% endif %}
             </div>
-            
-         
-            <div class="user-info">
-              
-<div class="name-edit-wrapper">
-    <h4 class="user-name">{{agent.first_name}} {{agent.last_name}}</h4>
-   <a href="{% url 'edit_agent' %}" class="btn btn-sm btn-outline-secondary edit-btn">
 
-        <i class="fa fa-edit"></i> Edit
-    </a>
-</div>
+
+            <div class="user-info">
+
+                <div class="name-edit-wrapper">
+                    <h4 class="user-name">{{agent.first_name}} {{agent.last_name}}</h4>
+                    <a href="{% url 'edit_agent' %}" class="btn btn-sm btn-outline-secondary edit-btn">
+
+                        <i class="fa fa-edit"></i> Edit
+                    </a>
+                </div>
                 <small class="user-type">Linked User</small>
-            </div>
+            </div> {% endcomment %}
+            No linked User .
         </div>
     </div>
-    
-    
+
+
     <div class="summary-item">
-    <h4><i class="fa fa-user"></i> Contact Info</h4>
-    <p class="text-muted">
-        EMAIL:
-        <a href="mailto:seniorselectplans@gmail.com">seniorselectplans@gmail.com</a>
-    </p>
-    <p class="text-muted">BUSINESS: -</p>
-    <p class="text-muted">CELL: (330) 708-3385-</p>
-</div>
-<div class="agent-summary-section border-top pt-2 mt-2">
-
-
-  <div class="summary-item">
-    <h4><i class="fa fa-users"></i> Clients</h4>
-    <div class="label-group">
-      <span>Individuals</span>
-      <div class="label-item">Client <span class="badge">1386</span></div>
-      <div class="label-item">Ex-Client <span class="badge">341</span></div>
-      <div class="label-item">BP-MC11-658-06 MAIL <span class="badge">1</span></div>
+        <h4><i class="fa fa-user"></i> Contact Info</h4>
+        <p class="text-muted">
+            EMAIL:
+            <a href="mailto:{{agent.email}}">{{agent.email}}</a>
+        </p>
+        {% for phone in agent_phones %}
+        <p class="text-muted">{{phone.phone_type}}: {{phone.number|format_phone}}</p>
+        {% endfor %}
     </div>
-    <a href="javascript:void(0);" class="toggle-link text-primary show-more-link">Show More...</a>
-    <div class="additional-content" style="display: none;">
-      <div class="label-item">Special Category <span class="badge">27</span></div>
-      <div class="label-item">Sold Leads <span class="badge">45</span></div>
-      <a href="javascript:void(0);" class="toggle-link text-primary show-less-link">Show Less...</a>
-    </div>
-  </div>
+    <div class="agent-summary-section border-top pt-2 mt-2">
 
-  <hr class="my-3">
 
- 
-  <div class="summary-item">
+        <div class="summary-item">
+            <h4><i class="fa fa-users"></i> Clients</h4>
+            <div class="label-group">
+                <span>Individuals</span>
+
+                {% for item in individual_type_counts %}
+                    {% if forloop.counter <= 3 %}
+                        <div class="label-item">
+                            {{ item.individual_type|default:"Unknown" }}
+                            <span class="badge">{{ item.count }}</span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                {% if individual_type_counts|length > 3 %}
+                    <a href="javascript:void(0);" class="toggle-link text-primary show-more-link">Show More...</a>
+                {% endif %}
+            </div>
+
+            {% if individual_type_counts|length > 3 %}
+                <div class="additional-content" style="display: none;">
+                    {% for item in individual_type_counts %}
+                        {% if forloop.counter > 3 %}
+                            <div class="label-item">
+                                {{ item.individual_type|default:"Unknown" }}
+                                <span class="badge">{{ item.count }}</span>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    <a href="javascript:void(0);" class="toggle-link text-primary show-less-link">Show Less...</a>
+                </div>
+            {% endif %}
+        </div>
+
+
+        <hr class="my-3">
+
+
+        <div class="summary-item">
     <h4><i class="fa fa-file-medical"></i> In Force Policies</h4>
     <div class="label-group">
-      <span>Individuals</span>
-      <div class="label-item">MAPD <span class="badge">1341</span></div>
-      <div class="label-item">Med Supp <span class="badge">32</span></div>
-      <div class="label-item">Medical <span class="badge">8</span></div>
-      <div class="label-item">PDP <span class="badge">28</span></div>
-    </div>
-    <a href="javascript:void(0);" class="toggle-link text-primary show-more-link">Show More...</a>
-    <div class="additional-content" style="display: none;">
-      <div class="label-item">Life Insurance <span class="badge">16</span></div>
-      <div class="label-item">Group Plans <span class="badge">4</span></div>
-      <a href="javascript:void(0);" class="toggle-link text-primary show-less-link">Show Less...</a>
-    </div>
-  </div>
+        <span>Individuals</span>
 
+        {% for item in policy_coverage_counts %}
+            {% if forloop.counter <= 4 %}
+                <div class="label-item">
+                    {{ item.coverage_type|default:"Unknown" }}
+                    <span class="badge">{{ item.count }}</span>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        {% if policy_coverage_counts|length > 4 %}
+            <a href="javascript:void(0);" class="toggle-link text-primary show-more-link">Show More...</a>
+        {% endif %}
+    </div>
+
+    {% if policy_coverage_counts|length > 4 %}
+        <div class="additional-content" style="display: none;">
+            {% for item in policy_coverage_counts %}
+                {% if forloop.counter > 4 %}
+                    <div class="label-item">
+                        {{ item.coverage_type|default:"Unknown" }}
+                        <span class="badge">{{ item.count }}</span>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <a href="javascript:void(0);" class="toggle-link text-primary show-less-link">Show Less...</a>
+        </div>
+    {% endif %}
 </div>
 
 
-    
+    </div>
+
+
+
     <div class="summary-item">
         <h4><i class="fa fa-tasks"></i> Activities Due</h4>
-        <p class="text-muted">No activities.</p>
+        {% if due_activities %}
+          {% for act in due_activities %}
+          <p class="text-muted">{{ act.subject }}</p>
+          {% endfor %}
+          {% else %}
+          <p class="text-muted">No Activities.</p>
+        {% endif %}
         <a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#carrieractivityModal">
             <i class="fa fa-plus"></i> Create new
         </a>
     </div>
-    
+
     <div class="summary-item">
-    <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
-    <p class="text-muted">No pinned note.</p>
-    <a href="#notes-content" class="btn btn-xs btn-info" id="create-pinnednote-from-sidebar" data-show-form="true">
-        <i class="fa fa-plus"></i> Create new
-    </a>
-</div>
+        <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
+        {% if pin_notess %}
+      {% for note in pin_notess %}
+      <p class="text-muted">{{ note.subject }}</p>
+      {% endfor %}
+      {% else %}
+      <p class="text-muted">No pinned note.</p>
+    {% endif %}
+        <a href="#notes-content" class="btn btn-xs btn-info" id="create-pinnednote-from-sidebar" data-show-form="true">
+            <i class="fa fa-plus"></i> Create new
+        </a>
+    </div>
 
 </div>
 <!-- Modal -->
@@ -1069,82 +1136,82 @@
 <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
 
 <script>
-    $(document).ready(function() {
-    // Handle Create New Pinned Note from sidebar
-    $('#create-pinnednote-from-sidebar').click(function(e) {
-        e.preventDefault();
-        
-        // Get the notes tab link
-        var notesTabLink = $('a[href="#notes-content"]');
-        
-        // Show the Notes tab
-        notesTabLink.tab('show');
-        
-        // After tab is shown, trigger the form display
-        notesTabLink.on('shown.bs.tab', function() {
+    $(document).ready(function () {
+        // Handle Create New Pinned Note from sidebar
+        $('#create-pinnednote-from-sidebar').click(function (e) {
+            e.preventDefault();
+
+            // Get the notes tab link
+            var notesTabLink = $('a[href="#notes-content"]');
+
+            // Show the Notes tab
+            notesTabLink.tab('show');
+
+            // After tab is shown, trigger the form display
+            notesTabLink.on('shown.bs.tab', function () {
+                $('#notesMainContent').hide();
+                $('#createNewnoteContainer').show();
+                $('#checkboxpin').prop('checked', true); // Check the pin checkbox
+
+                // Scroll to the form for better UX
+                $('html, body').animate({
+                    scrollTop: $('#createNewnoteContainer').offset().top - 20
+                }, 300);
+
+                // Remove the event handler to prevent multiple bindings
+                notesTabLink.off('shown.bs.tab');
+            });
+        });
+
+        // Handle existing create note button
+        $('#showCreateNoteBtn').click(function (e) {
+            e.preventDefault();
             $('#notesMainContent').hide();
             $('#createNewnoteContainer').show();
-            $('#checkboxpin').prop('checked', true); // Check the pin checkbox
-            
-            // Scroll to the form for better UX
-            $('html, body').animate({
-                scrollTop: $('#createNewnoteContainer').offset().top - 20
-            }, 300);
-            
-            // Remove the event handler to prevent multiple bindings
-            notesTabLink.off('shown.bs.tab');
+            $('#checkboxpin').prop('checked', false); // Ensure pin is unchecked for regular notes
+        });
+
+        // Handle back/cancel buttons
+        $('#backToNotesBtn, #cancelNoteBtn').click(function () {
+            $('#createNewnoteContainer').hide();
+            $('#notesMainContent').show();
+        });
+
+        // Reset form visibility when switching tabs
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            if (e.target.hash !== '#notes-content') {
+                $('#createNewnoteContainer').hide();
+                $('#notesMainContent').show();
+            }
+        });
+
+        // Check URL hash on page load to show form if coming from sidebar
+        if (window.location.hash === '#notes-content' && $('#create-pinnednote-from-sidebar').data('show-form')) {
+            $('#notesMainContent').hide();
+            $('#createNewnoteContainer').show();
+            $('#checkboxpin').prop('checked', true);
+        }
+
+        // Form submission handling (keep your existing form submission code)
+        $('#noteForm').submit(function (e) {
+            e.preventDefault();
+            // Your existing form submission logic here
         });
     });
 
-    // Handle existing create note button
-    $('#showCreateNoteBtn').click(function(e) {
-        e.preventDefault();
-        $('#notesMainContent').hide();
-        $('#createNewnoteContainer').show();
-        $('#checkboxpin').prop('checked', false); // Ensure pin is unchecked for regular notes
-    });
+    $(document).ready(function () {
+        $('.show-more-link').click(function () {
+            var section = $(this).closest('.summary-item');
+            section.find('.additional-content').slideDown();
+            $(this).hide();
+        });
 
-    // Handle back/cancel buttons
-    $('#backToNotesBtn, #cancelNoteBtn').click(function() {
-        $('#createNewnoteContainer').hide();
-        $('#notesMainContent').show();
+        $('.show-less-link').click(function () {
+            var section = $(this).closest('.summary-item');
+            section.find('.additional-content').slideUp();
+            section.find('.show-more-link').show();
+        });
     });
-
-    // Reset form visibility when switching tabs
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-        if (e.target.hash !== '#notes-content') {
-            $('#createNewnoteContainer').hide();
-            $('#notesMainContent').show();
-        }
-    });
-
-    // Check URL hash on page load to show form if coming from sidebar
-    if (window.location.hash === '#notes-content' && $('#create-pinnednote-from-sidebar').data('show-form')) {
-        $('#notesMainContent').hide();
-        $('#createNewnoteContainer').show();
-        $('#checkboxpin').prop('checked', true);
-    }
-    
-    // Form submission handling (keep your existing form submission code)
-    $('#noteForm').submit(function(e) {
-        e.preventDefault();
-        // Your existing form submission logic here
-    });
-});
-   
-  $(document).ready(function () {
-    $('.show-more-link').click(function () {
-      var section = $(this).closest('.summary-item');
-      section.find('.additional-content').slideDown();
-      $(this).hide();
-    });
-
-    $('.show-less-link').click(function () {
-      var section = $(this).closest('.summary-item');
-      section.find('.additional-content').slideUp();
-      section.find('.show-more-link').show();
-    });
-  });
 
 
     $(document).ready(function () {

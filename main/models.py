@@ -110,6 +110,7 @@ class CarrierActivity(models.Model):
 class CarrierNotes(models.Model):
     carrier = models.ForeignKey(Carrier, on_delete=models.CASCADE , related_name='carriernotes')
     subject = models.CharField(max_length=255)
+    pin_note = models.BooleanField(default=False)
     notes = models.TextField(blank=True)
     attachment = models.FileField(upload_to='carrier_notes_attachments/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

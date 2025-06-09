@@ -1,5 +1,6 @@
 {% extends "dashboard/base.html" %}
 {% load static %}
+{% load phone_filters %}
 {% block main-content %}
 
 <style>
@@ -416,12 +417,23 @@
     
     <div class="summary-item">
         <h4><i class="fa fa-user"></i> Contact Info</h4>
-        <p class="text-muted">Business: -</p>
-        
+        {% if carrier_phones %}
+        {% for phone in carrier_phones %}
+        <p class="text-muted">{{phone.phone_type}}: {{phone.number|format_phone}} </p>
+        {% endfor %}
+        {% else %}
+        <p class="text-muted">No Contact Info.</p>
+        {% endif %}
     </div>
     <div class="summary-item">
     <h4><i class="fa fa-globe"></i> Websites</h4>
+    {% if websites %}
+    {% for web in websites %}
+    <p class="text-muted"><a href="{{ web.url }}" target="_blank">{{ web.website_name }}</a></p>
+    {% endfor %}
+    {% else %}
     <p class="text-muted">No websites.</p>
+    {% endif %}
     <a href="#websites" class="btn btn-xs btn-primary" id="create-website-from-sidebar" data-show-form="true">
         <i class="fa fa-plus"></i> Create new
     </a>
@@ -432,24 +444,32 @@
         <p>Med Supp</p>
     </div>
     
-    <div class="summary-item">
-        <h4><i class="fa fa-money"></i> 2025 Commissions</h4>
-        <p class="text-muted">No commissions received.</p>
-    </div>
     
     <div class="summary-item">
         <h4><i class="fa fa-tasks"></i> Activities Due</h4>
-        <p class="text-muted">No activities.</p>
+        {% if due_activities %}
+          {% for act in due_activities %}
+          <p class="text-muted">{{ act.subject }}</p>
+          {% endfor %}
+          {% else %}
+          <p class="text-muted">No Activities.</p>
+        {% endif %}
        <!-- Trigger Button -->
-<a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#carrieractivityModal">
-  <i class="fa fa-plus"></i> Create new
-</a>
+      <a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#carrieractivityModal">
+        <i class="fa fa-plus"></i> Create new
+      </a>
 
     </div>
     
     <div class="summary-item">
     <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
-    <p class="text-muted">No pinned note.</p>
+    {% if pin_notess %}
+      {% for note in pin_notess %}
+      <p class="text-muted">{{ note.subject }}</p>
+      {% endfor %}
+      {% else %}
+      <p class="text-muted">No pinned note.</p>
+    {% endif %}
     <a href="#notes" class="btn btn-xs btn-info" id="create-note-from-sidebar" data-show-form="true">
         <i class="fa fa-plus"></i> Create new
     </a>

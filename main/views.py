@@ -53,6 +53,8 @@ def carrier_detail(request, carrier_id):
     products = CarrierProduct.objects.filter(carrier=carrier)
     websites = CarrierWebsite.objects.filter(carrier=carrier)
     individuals = Individuals.objects.filter(carrier=carrier).prefetch_related('individual_detail')
+    due_activities = CarrierActivity.objects.filter(carrier=carrier , due_date__isnull=False)  
+    pin_notess = CarrierNotes.objects.filter(carrier=carrier, pin_note=True)
 
     if request.method == 'POST':
 
@@ -162,6 +164,7 @@ def carrier_detail(request, carrier_id):
                 carrier=carrier,
                 subject=request.POST.get('subject'),
                 notes=request.POST.get('notes'),
+                pin_note=request.POST.get('pin_note') == 'on',
                 attachment=request.FILES.get('attachment')
             )
 
@@ -184,6 +187,8 @@ def carrier_detail(request, carrier_id):
         'products': products,
         'websites': websites,
         'individuals': individuals,
+        'due_activities': due_activities,
+        'pin_notess': pin_notess,
     })
 
 
@@ -191,6 +196,7 @@ def delete_carrier(request, carrier_id):
     carrier = get_object_or_404(Carrier, id=carrier_id)
     carrier.delete()
     return redirect('carrier_list') 
+
 
 # Agency
 
@@ -385,6 +391,8 @@ def agent_detail(request, agent_id):
     agent_agencies = AgentAgencies.objects.filter(agent=agent)
     activities = Agent_Activity.objects.filter(agent=agent)
     notes = AgentNotes.objects.filter(agent=agent)
+    due_activities = Agent_Activity.objects.filter(agent=agent , due_date__isnull=False)  
+    pin_notess = AgentNotes.objects.filter(agent=agent, pin_note=True)
     contract = Agents_contract.objects.filter(agent=agent)
     license = Agent_license.objects.filter(agent=agent)
     agent_eo, _ = Agent_EO.objects.get_or_create(agent=agent)
@@ -397,7 +405,18 @@ def agent_detail(request, agent_id):
     'policy_details',
     'individual',
     'carrier')
-
+    individual_type_counts = (
+        servicing_individuals
+        .values('individual_type')
+        .annotate(count=Count('id'))
+        .order_by('individual_type')
+    )
+    policy_coverage_counts = (
+        Policy.objects.filter(agent=agent)
+        .values('coverage_type')
+        .annotate(count=Count('id'))
+        .order_by('coverage_type')
+    )
     
     if request.method == 'POST':
         # --- Agent basic info ---
@@ -606,6 +625,10 @@ def agent_detail(request, agent_id):
         'license':license,
         'servicing_individuals': servicing_individuals,
         'policies': policies,
+        'individual_type_counts': individual_type_counts,
+        'policy_coverage_counts': policy_coverage_counts,
+        'due_activities': due_activities,
+        'pin_notess': pin_notess,
     })
     
     
@@ -890,6 +913,8 @@ def individual_tab(request, individual_id):
     'policy_details',
     'individual',
     'carrier')
+    due_activities = IndividualActivity.objects.filter(individual_name=individual , due_date__isnull=False)  
+    pin_notess = IndividualNotes.objects.filter(individual_name=individual, pin_note=True)
     
     agents = Agent.objects.all()
     if request.method == 'POST':
@@ -1037,6 +1062,8 @@ def individual_tab(request, individual_id):
         'individual_notes': individual_notes,     
         'relationship_data': relationship_data,     
         'policies': policies,     
+        'due_activities': due_activities,     
+        'pin_notess': pin_notess,     
     })
 
 
