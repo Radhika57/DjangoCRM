@@ -220,7 +220,7 @@
 </div>
 {% include "carrier/editactivity.html" %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
     // Handle click on edit activity links
     const editLinks = document.querySelectorAll('.edit-activity');
     editLinks.forEach(link => {
@@ -241,9 +241,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Scroll to the edit section
             document.getElementById('activityeditSection').scrollIntoView({ behavior: 'smooth' });
-            
-            // Here you would typically fetch the activity data and populate the form
-            // For this example, we'll just show the section
         });
     });
     
@@ -253,11 +250,15 @@ document.addEventListener('DOMContentLoaded', function() {
         closeEditBtn.addEventListener('click', function() {
             document.getElementById('activityeditSection').style.display = 'none';
             
-            // Show the activities panel again
+            // Show the activities panel again and ensure table is visible
             const activitiesPanel = document.getElementById('activitiesPanel');
             if (activitiesPanel) {
                 activitiesPanel.style.display = 'block';
             }
+            
+            // Make sure the activities table is visible
+            document.getElementById('emptyActivitiesState').style.display = 'block';
+            document.getElementById('activityDetailsSection').style.display = 'none';
         });
     }
     
@@ -290,6 +291,23 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Show the empty state or table again
             document.getElementById('emptyActivitiesState').style.display = 'block';
+        });
+    }
+    
+    // Add event listener for tab changes to ensure activities table is shown when tab is clicked
+    const activityTab = document.querySelector('a[href="#activities"]');
+    if (activityTab) {
+        activityTab.addEventListener('click', function() {
+            // Ensure activities panel is visible
+            const activitiesPanel = document.getElementById('activitiesPanel');
+            if (activitiesPanel) {
+                activitiesPanel.style.display = 'block';
+            }
+            
+            // Ensure the table is shown (not the form)
+            document.getElementById('emptyActivitiesState').style.display = 'block';
+            document.getElementById('activityDetailsSection').style.display = 'none';
+            document.getElementById('activityeditSection').style.display = 'none';
         });
     }
 });
