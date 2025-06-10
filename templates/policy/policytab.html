@@ -722,42 +722,43 @@
     </div>
    
     <div class="summary-item">
-        <h4><i class="fa fa-calendar"></i> Dates</h4>
+    <h4><i class="fa fa-calendar"></i> Dates</h4>
 
-        <div class="d-flex justify-content-between">
-            <span>App Submit Date </span>
-            <span class="text-muted">{{ policy_details.app_submit_date|date:'Y-m-d'|default:"-"}}</span>
-        </div>
-
-        <div class="d-flex justify-content-between">
-            <span>Effective Date </span>
-            <span>{{policy.effective_date|date:'Y-m-d'|default:"-"}}</span>
-        </div>
-
-        <div class="d-flex justify-content-between">
-            <span>Renewal Date</span>
-            <span class="text-muted">{{policy_details.renewal_date|date:'Y-m-d'|default:"-"}}</span>
-        </div>
-
-        <div class="d-flex justify-content-between">
-            <span>Term Date</span>
-            <span class="text-muted">{{policy_details.term_date|date:'Y-m-d'|default:"-"}}</span>
-        </div>
+    <div class="d-flex justify-content-between">
+        <span style="color: black;">App Submit Date</span>
+        <span style="color: blue;">{{ policy_details.app_submit_date|date:'Y-m-d'|default:"-"}}</span>
     </div>
 
-    <div class="summary-item">
-        <h4><i class="fa fa-tasks"></i> Activities Due</h4>
-        {% if due_activities %}
-          {% for act in due_activities %}
-          <p class="text-muted">{{ act.subject }}</p>
-          {% endfor %}
-          {% else %}
-          <p class="text-muted">No Activities.</p>
-        {% endif %}
-        <a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#carrieractivityModal">
-            <i class="fa fa-plus"></i> Create new
-        </a>
+    <div class="d-flex justify-content-between">
+        <span style="color: black;">Effective Date</span>
+        <span style="color: blue;">{{ policy.effective_date|date:'Y-m-d'|default:"-"}}</span>
     </div>
+
+    <div class="d-flex justify-content-between">
+        <span style="color: black;">Renewal Date</span>
+        <span style="color: blue;">{{ policy_details.renewal_date|date:'Y-m-d'|default:"-"}}</span>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <span style="color: black;">Term Date</span>
+        <span style="color: blue;">{{ policy_details.term_date|date:'Y-m-d'|default:"-"}}</span>
+    </div>
+</div>
+
+
+  <div class="summary-item">
+    <h4><i class="fa fa-tasks"></i> Activities Due</h4>
+    {% if due_activities %}
+      {% for act in due_activities %}
+      <p class="text-muted">{{ act.subject }}</p>
+      {% endfor %}
+      {% else %}
+      <p class="text-muted">No Activities.</p>
+    {% endif %}
+    <a href="#Activities-policy" class="btn btn-xs btn-success" id="create-activity-from-sidebar">
+        <i class="fa fa-plus"></i> Create new
+    </a>
+</div>
     
     <div class="summary-item">
         <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
@@ -775,7 +776,7 @@
 </div>
 
 <!-- Modal -->
-{% include "carrier/carrieractivitymodal.html" %}
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
@@ -829,6 +830,26 @@
 
         
     });
+    // Handle Create New Activity from sidebar
+$('#create-activity-from-sidebar').click(function(e) {
+    e.preventDefault();
+    
+    // Show the Activities tab if not already active
+    if (!$('#Activities-policy').hasClass('active')) {
+        $('a[href="#Activities-policy"]').tab('show');
+    }
+    
+    // Directly show the activity form container
+    $('#createNewactivityContainer').show();
+    
+    // Hide the main content
+    $('#activityMainContent').hide();
+    
+    // Scroll to the form for better UX
+    $('html, body').animate({
+        scrollTop: $('#createNewactivityContainer').offset().top - 20
+    }, 300);
+});
     
     // Sidebar toggle functionality
     $(document).ready(function() {

@@ -326,7 +326,59 @@
 .summary-group button:hover + .hover-label {
   display: block;
 }
+#clients-summary .badge {
+    background-color: #444;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: 11px;
+    margin-left: 5px;
+}
 
+#clients-summary .extra-client {
+    display: none;
+}
+
+.clickable-toggle {
+    display: inline-block;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 13px;
+    margin-top: 5px;
+}
+.client-list {
+    padding-left: 15px;
+    list-style: none;
+    margin: 0;
+}
+
+.client-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 1.4; /* ensures tight vertical spacing */
+    margin: 0; /* removes gap between list items */
+    padding: 2px 0; /* slight vertical padding */
+}
+
+.client-list .badge {
+    background-color: #444;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: 11px;
+    margin-left: 10px;
+}
+
+.clickable-toggle {
+    display: inline-block;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 13px;
+    margin-top: 5px;
+}
 </style>
 
 <!-- Action buttons -->
@@ -415,16 +467,24 @@
         <h3><i class="fa fa-building-o"></i> Carrier Summary</h3>
     </div>
     
-    <div class="summary-item">
-        <h4><i class="fa fa-user"></i> Contact Info</h4>
-        {% if carrier_phones %}
+<div class="summary-item">
+    <h4><i class="fa fa-user"></i> Contact Info</h4>
+    {% if carrier_phones %}
         {% for phone in carrier_phones %}
-        <p class="text-muted">{{phone.phone_type}}: {{phone.number|format_phone}} </p>
+        <p class="text">
+            <span style="color: black; font-weight: 600; ">
+                {{ phone.phone_type }}:
+            </span>
+            <span style="color: blue;">
+                {{ phone.number|format_phone }}
+            </span>
+        </p>
         {% endfor %}
-        {% else %}
-        <p class="text-muted">No Contact Info.</p>
-        {% endif %}
-    </div>
+    {% else %}
+        <p class="text">No Contact Info.</p>
+    {% endif %}
+</div>
+
     <div class="summary-item">
     <h4><i class="fa fa-globe"></i> Websites</h4>
     {% if websites %}
@@ -444,24 +504,35 @@
         <p>Med Supp</p>
     </div>
     
-    
-    <div class="summary-item">
-        <h4><i class="fa fa-tasks"></i> Activities Due</h4>
-        {% if due_activities %}
-          {% for act in due_activities %}
-          <p class="text-muted">{{ act.subject }}</p>
-          {% endfor %}
-          {% else %}
-          <p class="text-muted">No Activities.</p>
-        {% endif %}
-       <!-- Trigger Button -->
-      <a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#carrieractivityModal">
-        <i class="fa fa-plus"></i> Create new
-      </a>
-
+    <div class="summary-item" id="clients-summary">
+    <h4><i class="fa fa-users"></i> Clients</h4>
+    <div class="client-wrapper">
+        <ul class="client-list">
+            <li>Individuals <span class="badge">3</span></li>
+            <li>Client <span class="badge">3</span></li>
+            <li>Contact <span class="badge">1</span></li>
+            <li class="client-extra-item" style="display: none;">Ex-Client <span class="badge">1</span></li>
+            <li class="client-extra-item" style="display: none;">Prospect <span class="badge">1</span></li>
+        </ul>
+        <span class="client-toggle clickable-toggle">Show More...</span>
     </div>
-    
-    <div class="summary-item">
+</div>
+
+
+   <div class="summary-item">
+    <h4><i class="fa fa-tasks"></i> Activities Due</h4>
+    {% if due_activities %}
+      {% for act in due_activities %}
+      <p class="text-muted">{{ act.subject }}</p>
+      {% endfor %}
+      {% else %}
+      <p class="text-muted">No Activities.</p>
+    {% endif %}
+    <a href="#" class="btn btn-xs btn-success" id="create-activity-from-sidebar">
+        <i class="fa fa-plus"></i> Create new
+    </a>
+</div>
+<div class="summary-item">
     <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
     {% if pin_notess %}
       {% for note in pin_notess %}
@@ -472,13 +543,11 @@
     {% endif %}
     <a href="#notes" class="btn btn-xs btn-info" id="create-note-from-sidebar" data-show-form="true">
         <i class="fa fa-plus"></i> Create new
-    </a>
+    </a>
 </div>
 </div>
 
 
-<!-- Modal -->
-{% include "carrier/carrieractivitymodal.html" %}
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -492,51 +561,192 @@
 
 <script>
   $(document).ready(function() {
-    // Handle Create New Website from sidebar
-    $('#create-website-from-sidebar').click(function(e) {
-        e.preventDefault();
-        
-        // Get the websites tab link
-        var websitesTabLink = $('a[href="#websites"]');
-        
-        // Show the Websites tab
-        websitesTabLink.tab('show');
-        
-        // After tab is shown, trigger the form display
-        websitesTabLink.on('shown.bs.tab', function() {
-            $('#emptyWebsitesState').hide();
-            $('#websiteFormSection').show();
-            
-            // Scroll to the form for better UX
-            $('html, body').animate({
-                scrollTop: $('#websiteFormSection').offset().top - 20
-            }, 300);
-            
-            // Remove the event handler to prevent multiple bindings
-            websitesTabLink.off('shown.bs.tab');
+    // Sorting functionality
+    var sortDirections = {};
+    $('.sortable').click(function() {
+        const column = $(this).data('column') || $(this).data('key');
+        const $icon = $(this).find('i');
+        const table = $(this).closest("table");
+        const rows = table.find("tbody > tr").toArray();
+        const index = $(this).index();
+
+        $(this).closest('thead').find('.sortable i')
+            .removeClass('fa-sort-up fa-sort-down fa-sort-asc fa-sort-desc')
+            .addClass('fa-sort');
+
+        sortDirections[column] = sortDirections[column] === 'asc' ? 'desc' : 'asc';
+        const sortOrder = sortDirections[column] === 'asc' ? 1 : -1;
+
+        $icon.removeClass('fa-sort')
+            .addClass(sortDirections[column] === 'asc' ? 'fa-sort-up' : 'fa-sort-down');
+
+        rows.sort(function(a, b) {
+            var A = $(a).children().eq(index).text().toUpperCase();
+            var B = $(b).children().eq(index).text().toUpperCase();
+            if (A < B) return -1 * sortOrder;
+            if (A > B) return 1 * sortOrder;
+            return 0;
+        });
+
+        $.each(rows, function(i, row) {
+            table.children("tbody").append(row);
         });
     });
 
-    // Handle cancel button in website form
+$(document).on('click', '.client-toggle', function(e) {
+    e.preventDefault();
+    var $extraItems = $(this).closest('#clients-summary').find('.client-extra-item');
+    var $toggle = $(this);
+    
+    $extraItems.slideToggle(200, function() {
+        // This callback runs after animation completes
+        $toggle.text($extraItems.is(':visible') ? 'Show Less...' : 'Show More...');
+    });
+});
+
+    // ACTIVITIES SECTION
+    // Handle Create New Activity from activities tab button
+    $('#showActivityForm').click(function(e) {
+        e.preventDefault();
+        $('#emptyActivitiesState').hide();
+        $('#activityDetailsSection').show();
+        
+        // Scroll to the form for better UX
+        $('html, body').animate({
+            scrollTop: $('#activityDetailsSection').offset().top - 20
+        }, 300);
+    });
+
+    // Handle cancel button in activity form
+    $('#cancelActivity').click(function() {
+        $('#activityDetailsSection').hide();
+        $('#emptyActivitiesState').show();
+    });
+
+    // Handle Create New Activity from sidebar
+    $('#create-activity-from-sidebar').click(function(e) {
+        e.preventDefault();
+        
+        // Get the activities tab link
+        var activitiesTabLink = $('a[href="#activities"]');
+        
+        // Show the Activities tab
+        activitiesTabLink.tab('show');
+        
+        // After tab is shown, trigger the form display
+        activitiesTabLink.on('shown.bs.tab', function() {
+            $('#emptyActivitiesState').hide();
+            $('#activityDetailsSection').show();
+            
+            // Scroll to the form for better UX
+            $('html, body').animate({
+                scrollTop: $('#activityDetailsSection').offset().top - 20
+            }, 300);
+            
+            // Remove the event handler to prevent multiple bindings
+            activitiesTabLink.off('shown.bs.tab');
+        });
+    });
+    
+
+
+    // NOTES SECTION
+    $('#showNoteForm').click(function() {
+        $('#emptyNotesState').hide();
+        $('#noteDetailsSection').show();
+    });
+
+    $('#cancelNote').click(function() {
+        $('#noteDetailsSection').hide();
+        $('#emptyNotesState').show();
+    });
+
+    // Handle Create New Note from sidebar
+    $('#create-note-from-sidebar').click(function(e) {
+        e.preventDefault();
+        var notesTabLink = $('a[href="#notes"]');
+        notesTabLink.tab('show');
+        notesTabLink.on('shown.bs.tab', function() {
+            $('#emptyNotesState').hide();
+            $('#noteDetailsSection').show();
+            $('html, body').animate({
+                scrollTop: $('#noteDetailsSection').offset().top - 20
+            }, 300);
+            notesTabLink.off('shown.bs.tab');
+        });
+    });
+
+    // FORMS SECTION
+    $('#showFormCreate').click(function() {
+        $('#forms .panel-body > .row:not(#formCreateSection)').hide();
+        $('#forms .table-responsive').hide();
+        $('#formCreateSection').show();
+    });
+
+    $('#cancelFormCreate').click(function() {
+        $('#forms .panel-body > .row:not(#formCreateSection)').show();
+        $('#forms .table-responsive').show();
+        $('#formCreateSection').hide();
+    });
+
+    // WEBSITES SECTION
+    $('#showWebsiteForm').click(function() {
+        $('#emptyWebsitesState').hide();
+        $('#websiteFormSection').show();
+    });
+
     $('#cancelWebsiteCreate').click(function() {
         $('#websiteFormSection').hide();
         $('#emptyWebsitesState').show();
     });
 
+    // Handle Create New Website from sidebar
+    $('#create-website-from-sidebar').click(function(e) {
+        e.preventDefault();
+        var websitesTabLink = $('a[href="#websites"]');
+        websitesTabLink.tab('show');
+        websitesTabLink.on('shown.bs.tab', function() {
+            $('#emptyWebsitesState').hide();
+            $('#websiteFormSection').show();
+            $('html, body').animate({
+                scrollTop: $('#websiteFormSection').offset().top - 20
+            }, 300);
+            websitesTabLink.off('shown.bs.tab');
+        });
+    });
+
+    // PRODUCTS SECTION
+    $('#createNewProduct').click(function() {
+        $('#products .panel-body > .row:not(#productFormContainer)').hide();
+        $('#products .table-responsive').hide();
+        $('#productFormContainer').show();
+    });
+
+    $('#cancelNewProduct').click(function() {
+        $('#products .panel-body > .row:not(#productFormContainer)').show();
+        $('#products .table-responsive').show();
+        $('#productFormContainer').hide();
+    });
+
     // Reset form visibility when switching tabs
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-        if (e.target.hash !== '#websites') {
-            $('#websiteFormSection').hide();
-            $('#emptyWebsitesState').show();
+        var target = e.target.hash;
+        
+        // Hide all form sections and show empty states
+        $('[id$="Section"]').hide();
+        $('[id$="State"]').show();
+        $('[id$="Container"]').hide();
+        
+        // Show regular content for the active tab
+        if (target === '#forms') {
+            $('#forms .panel-body > .row:not(#formCreateSection)').show();
+            $('#forms .table-responsive').show();
+        } else if (target === '#products') {
+            $('#products .panel-body > .row:not(#productFormContainer)').show();
+            $('#products .table-responsive').show();
         }
     });
 
-    // Check URL hash on page load to show form if coming from sidebar
-    if (window.location.hash === '#websites' && $('#create-website-from-sidebar').data('show-form')) {
-        $('#emptyWebsitesState').hide();
-        $('#websiteFormSection').show();
-    }
-    
     // Password visibility toggle
     $('.input-group-btn button').click(function() {
         var input = $(this).closest('.input-group').find('input');
@@ -549,242 +759,87 @@
             icon.removeClass('fa-eye-slash').addClass('fa-eye');
         }
     });
-});
-  $(document).ready(function() {
-    // Handle Create New Note from sidebar
-    $('#create-note-from-sidebar').click(function(e) {
-        e.preventDefault();
-        
-        // Get the notes tab link
-        var notesTabLink = $('a[href="#notes"]');
-        
-        // Show the Notes tab
-        notesTabLink.tab('show');
-        
-        // After tab is shown, trigger the form display
-        notesTabLink.on('shown.bs.tab', function() {
-            $('#emptyNotesState').hide();
-            $('#noteDetailsSection').show();
-            
-            // Scroll to the form for better UX
-            $('html, body').animate({
-                scrollTop: $('#noteDetailsSection').offset().top - 20
-            }, 300);
-            
-            // Remove the event handler to prevent multiple bindings
-            notesTabLink.off('shown.bs.tab');
-        });
+
+    // File input UI
+    $(document).on('change', '.btn-file :file', function() {
+        var input = $(this),
+            numFiles = input.get(0).files ? input.get(0).files.length : 1,
+            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+        input.trigger('fileselect', [numFiles, label]);
     });
 
-    // Reset form visibility when switching tabs
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-        if (e.target.hash !== '#notes') {
-            $('#noteDetailsSection').hide();
-            $('#emptyNotesState').show();
+    $('.btn-file :file').on('fileselect', function(event, numFiles, label) {
+        var input = $(this).parents('.input-group').find(':text'),
+            log = numFiles > 1 ? numFiles + ' files selected' : label;
+        if (input.length) {
+            input.val(log);
         }
     });
 
-    // Check URL hash on page load to show form if coming from sidebar
-    if (window.location.hash === '#notes' && $('#create-note-from-sidebar').data('show-form')) {
-        $('#emptyNotesState').hide();
-        $('#noteDetailsSection').show();
-    }
-});
-
-
-$(document).ready(function () {
-  var sortDirections = {};
-
-  $('.sortable').click(function () {
-    const column = $(this).data('column') || $(this).data('key');
-    const $icon = $(this).find('i');
-    const table = $(this).closest("table");
-    const rows = table.find("tbody > tr").toArray();
-    const index = $(this).index();
-
-    $(this).closest('thead').find('.sortable i')
-      .removeClass('fa-sort-up fa-sort-down fa-sort-asc fa-sort-desc')
-      .addClass('fa-sort');
-
-    sortDirections[column] = sortDirections[column] === 'asc' ? 'desc' : 'asc';
-    const sortOrder = sortDirections[column] === 'asc' ? 1 : -1;
-
-    $icon.removeClass('fa-sort')
-      .addClass(sortDirections[column] === 'asc' ? 'fa-sort-up' : 'fa-sort-down');
-
-    rows.sort(function (a, b) {
-      var A = $(a).children().eq(index).text().toUpperCase();
-      var B = $(b).children().eq(index).text().toUpperCase();
-      if (A < B) return -1 * sortOrder;
-      if (A > B) return 1 * sortOrder;
-      return 0;
+    // Dropzone init
+    Dropzone.autoDiscover = false;
+    $(".attachment-block table").each(function() {
+        var dropzoneElement = $(this).find("td[colspan='3']").get(0);
+        new Dropzone(dropzoneElement, {
+            url: "/file-upload",
+            autoProcessQueue: false,
+            clickable: true,
+            previewsContainer: false,
+            dictDefaultMessage: "Drop files here to upload"
+        });
     });
 
-    $.each(rows, function (i, row) {
-      table.children("tbody").append(row);
+    // Persist tab
+    if (location.hash) {
+        $('a[href="' + location.hash + '"]').tab('show');
+    }
+
+    $('a[data-toggle="tab"]').on('click', function(e) {
+        history.pushState(null, null, $(this).attr('href'));
     });
-  });
 
-  // Activity
-  $('#showActivityForm').click(function () {
-    $('#emptyActivitiesState').hide();
-    $('#activityDetailsSection').show();
-  });
-
-  $('#cancelActivity').click(function () {
-    $('#activityDetailsSection').hide();
-    $('#emptyActivitiesState').show();
-  });
-
-  // Notes
-  $('#showNoteForm').click(function () {
-    $('#emptyNotesState').hide();
-    $('#noteDetailsSection').show();
-  });
-
-  $('#cancelNote').click(function () {
-    $('#noteDetailsSection').hide();
-    $('#emptyNotesState').show();
-  });
-
-  // Forms
-  $('#showFormCreate').click(function () {
-    $('#forms .panel-body > .row:not(#formCreateSection)').hide();
-    $('#forms .table-responsive').hide();
-    $('#formCreateSection').show();
-  });
-
-  $('#cancelFormCreate').click(function () {
-    $('#forms .panel-body > .row:not(#formCreateSection)').show();
-    $('#forms .table-responsive').show();
-    $('#formCreateSection').hide();
-  });
-
-  // Websites
-  $('#showWebsiteForm').click(function () {
-    $('#emptyWebsitesState').hide();
-    $('#websiteFormSection').show();
-  });
-
-  $('#cancelWebsiteCreate').click(function () {
-    $('#websiteFormSection').hide();
-    $('#emptyWebsitesState').show();
-  });
-
-  // Products
-  $('#createNewProduct').click(function () {
-    $('#products .panel-body > .row:not(#productFormContainer)').hide();
-    $('#products .table-responsive').hide();
-    $('#productFormContainer').show();
-  });
-
-  $('#cancelNewProduct').click(function () {
-    $('#products .panel-body > .row:not(#productFormContainer)').show();
-    $('#products .table-responsive').show();
-    $('#productFormContainer').hide();
-  });
-
-  // Fix tab switching issues
-  $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-    $('.panel-body > .row').show();
-    $('.table-responsive').show();
-    $('[id$="Section"]').hide();
-    $('[id$="State"]').show();
-    $('[id$="Container"]').hide();
-  });
-
-  // Toggle password
-  $('.input-group-btn button').click(function () {
-    var input = $(this).closest('.input-group').find('input');
-    var icon = $(this).find('i');
-    if (input.attr('type') === 'password') {
-      input.attr('type', 'text');
-      icon.removeClass('fa-eye').addClass('fa-eye-slash');
-    } else {
-      input.attr('type', 'password');
-      icon.removeClass('fa-eye-slash').addClass('fa-eye');
-    }
-  });
-
-  // File input UI
-  $(document).on('change', '.btn-file :file', function () {
-    var input = $(this),
-      numFiles = input.get(0).files ? input.get(0).files.length : 1,
-      label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-    input.trigger('fileselect', [numFiles, label]);
-  });
-
-  $('.btn-file :file').on('fileselect', function (event, numFiles, label) {
-    var input = $(this).parents('.input-group').find(':text'),
-      log = numFiles > 1 ? numFiles + ' files selected' : label;
-    if (input.length) {
-      input.val(log);
-    }
-  });
-
-  // Dropzone init
-  Dropzone.autoDiscover = false;
-  $(".attachment-block table").each(function () {
-    var dropzoneElement = $(this).find("td[colspan='3']").get(0);
-    new Dropzone(dropzoneElement, {
-      url: "/file-upload",
-      autoProcessQueue: false,
-      clickable: true,
-      previewsContainer: false,
-      dictDefaultMessage: "Drop files here to upload"
+    $(window).on('popstate', function() {
+        var anchor = location.hash || $('a[data-toggle="tab"]').first().attr('href');
+        $('a[href="' + anchor + '"]').tab('show');
     });
-  });
 
-  // Persist tab
-  if (location.hash) {
-    $('a[href="' + location.hash + '"]').tab('show');
-  }
+    // Sidebar toggle
+    $('#toggle-carrier-summary').click(function(e) {
+        e.preventDefault();
+        $('#carrier-summary').toggleClass('shown');
+        $('.main-content-wrapper').toggleClass('sidebar-shown');
 
-  $('a[data-toggle="tab"]').on('click', function (e) {
-    history.pushState(null, null, $(this).attr('href'));
-  });
+        if ($(window).width() <= 576) {
+            $('body').css('overflow-x', $('#carrier-summary').hasClass('shown') ? 'hidden' : 'auto');
+        }
+    });
 
-  $(window).on('popstate', function () {
-    var anchor = location.hash || $('a[data-toggle="tab"]').first().attr('href');
-    $('a[href="' + anchor + '"]').tab('show');
-  });
-
-  // Sidebar toggle
-  $('#toggle-carrier-summary').click(function (e) {
-    e.preventDefault();
-    $('#carrier-summary').toggleClass('shown');
-    $('.main-content-wrapper').toggleClass('sidebar-shown');
-
-    if ($(window).width() <= 576) {
-      $('body').css('overflow-x', $('#carrier-summary').hasClass('shown') ? 'hidden' : 'auto');
-    }
-  });
-
-  $('#close-sidebar').click(function (e) {
-    e.preventDefault();
-    $('#carrier-summary').removeClass('shown');
-    $('.main-content-wrapper').removeClass('sidebar-shown');
-    if ($(window).width() <= 576) {
-      $('body').css('overflow-x', 'auto');
-    }
-  });
-
-  $(document).click(function (e) {
-    if ($(window).width() <= 576 && $('#carrier-summary').hasClass('shown')) {
-      if (!$(e.target).closest('#carrier-summary').length &&
-        !$(e.target).closest('#toggle-carrier-summary').length) {
+    $('#close-sidebar').click(function(e) {
+        e.preventDefault();
         $('#carrier-summary').removeClass('shown');
         $('.main-content-wrapper').removeClass('sidebar-shown');
-        $('body').css('overflow-x', 'auto');
-      }
-    }
-  });
+        if ($(window).width() <= 576) {
+            $('body').css('overflow-x', 'auto');
+        }
+    });
 
-  $('#addIndividualModal').modal({
-    backdrop: true,
-    keyboard: true,
-    show: false
-  });
+    $(document).click(function(e) {
+        if ($(window).width() <= 576 && $('#carrier-summary').hasClass('shown')) {
+            if (!$(e.target).closest('#carrier-summary').length &&
+                !$(e.target).closest('#toggle-carrier-summary').length) {
+                $('#carrier-summary').removeClass('shown');
+                $('.main-content-wrapper').removeClass('sidebar-shown');
+                $('body').css('overflow-x', 'auto');
+            }
+        }
+    });
+
+    // Modal initialization
+    $('#addIndividualModal').modal({
+        backdrop: true,
+        keyboard: true,
+        show: false
+    });
 });
 </script>
 

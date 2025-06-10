@@ -1011,15 +1011,23 @@
 
 
     <div class="summary-item">
-        <h4><i class="fa fa-user"></i> Contact Info</h4>
-        <p class="text-muted">
-            EMAIL:
-            <a href="mailto:{{agent.email}}">{{agent.email}}</a>
-        </p>
-        {% for phone in agent_phones %}
-        <p class="text-muted">{{phone.phone_type}}: {{phone.number|format_phone}}</p>
-        {% endfor %}
-    </div>
+    <h4><i class="fa fa-user"></i> Contact Info</h4>
+
+    <p class="text" style="color: black;">
+        Email:
+        <span style="color: blue;">
+            <a href="mailto:{{agent.email}}" style="color: blue;">{{agent.email}}</a>
+        </span>
+    </p>
+
+    {% for phone in agent_phones %}
+    <p class="text" style="color: black;">
+        {{phone.phone_type}}:
+        <span style="color: blue;">{{phone.number|format_phone}}</span>
+    </p>
+    {% endfor %}
+</div>
+
     <div class="agent-summary-section border-top pt-2 mt-2">
 
 
@@ -1099,20 +1107,19 @@
     </div>
 
 
-
-    <div class="summary-item">
-        <h4><i class="fa fa-tasks"></i> Activities Due</h4>
-        {% if due_activities %}
-          {% for act in due_activities %}
-          <p class="text-muted">{{ act.subject }}</p>
-          {% endfor %}
-          {% else %}
-          <p class="text-muted">No Activities.</p>
-        {% endif %}
-        <a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#carrieractivityModal">
-            <i class="fa fa-plus"></i> Create new
-        </a>
-    </div>
+<div class="summary-item">
+    <h4><i class="fa fa-tasks"></i> Activities Due</h4>
+    {% if due_activities %}
+      {% for act in due_activities %}
+      <p class="text-muted">{{ act.subject }}</p>
+      {% endfor %}
+    {% else %}
+      <p class="text-muted">No Activities.</p>
+    {% endif %}
+    <a href="#" class="btn btn-xs btn-success" id="createActivityBtn" data-toggle="modal" data-target="#">
+        <i class="fa fa-plus"></i> Create new
+    </a>
+</div>
 
     <div class="summary-item">
         <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
@@ -1129,13 +1136,31 @@
     </div>
 
 </div>
-<!-- Modal -->
-{% include "carrier/carrieractivitymodal.html" %}
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
 
 <script>
+ document.getElementById('createActivityBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    // First, switch to the Activities tab if not already there
+    const activitiesTabLink = document.querySelector('a[href="#activities-content"]');
+    if (activitiesTabLink && !activitiesTabLink.classList.contains('active')) {
+        // Show the Activities tab
+        $(activitiesTabLink).tab('show');
+        
+        // After tab is shown, show the form
+        $(activitiesTabLink).on('shown.bs.tab', function() {
+            showCreateNew();
+            $(activitiesTabLink).off('shown.bs.tab'); // Remove the handler after it runs
+        });
+    } else {
+        // If already on activities tab, just show the form
+        showCreateNew();
+    }
+});
     $(document).ready(function () {
         // Handle Create New Pinned Note from sidebar
         $('#create-pinnednote-from-sidebar').click(function (e) {
@@ -1195,7 +1220,7 @@
         // Form submission handling (keep your existing form submission code)
         $('#noteForm').submit(function (e) {
             e.preventDefault();
-            // Your existing form submission logic here
+           
         });
     });
 

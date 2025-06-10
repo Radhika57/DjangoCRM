@@ -201,6 +201,64 @@
             border-left: 1px solid #ced4da !important;
         }
     }
+     /* Add these styles to your existing CSS */
+    #createNewRelationshipsContainer .form-group {
+        margin-bottom: 15px;
+    }
+    
+    #createNewRelationshipsContainer .input-group {
+        display: flex;
+        flex-wrap: nowrap;
+    }
+    
+    #createNewRelationshipsContainer .input-group input {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    #createNewRelationshipsContainer .input-group-append {
+        flex-shrink: 0;
+    }
+    
+    @media (max-width: 767px) {
+        #createNewRelationshipsContainer .form-row > .form-group {
+            width: 100%;
+            padding-right: 0;
+            padding-left: 0;
+        }
+        
+        #createNewRelationshipsContainer .input-group {
+            flex-wrap: wrap;
+        }
+        
+        #createNewRelationshipsContainer .input-group input {
+            width: 100% !important;
+            border-radius: 4px !important;
+            margin-bottom: 5px;
+        }
+        
+        #createNewRelationshipsContainer .input-group-append {
+            width: 100%;
+        }
+        
+        #createNewRelationshipsContainer .input-group-append select {
+            width: 100% !important;
+            border-radius: 4px !important;
+            border-left: 1px solid #ced4da !important;
+        }
+        
+        #createNewRelationshipsContainer .form-group.col-md-4 {
+            width: 100%;
+            padding-right: 0;
+            padding-left: 0;
+        }
+    }
+    
+    @media (min-width: 768px) and (max-width: 991px) {
+        #createNewRelationshipsContainer .form-group.col-md-4 {
+            width: 50%;
+        }
+    }
 </style>
 
 <div class="tab-pane" id="Relationships-individuals">
