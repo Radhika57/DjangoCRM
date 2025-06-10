@@ -55,6 +55,13 @@ def carrier_detail(request, carrier_id):
     individuals = Individuals.objects.filter(carrier=carrier).prefetch_related('individual_detail')
     due_activities = CarrierActivity.objects.filter(carrier=carrier , due_date__isnull=False)  
     pin_notess = CarrierNotes.objects.filter(carrier=carrier, pin_note=True)
+    policy_summary = (
+        Policy.objects
+        .filter(carrier=carrier)
+        .values('coverage_type')
+        .annotate(count=Count('id'))
+        .order_by('coverage_type')
+    )
 
     if request.method == 'POST':
 
@@ -189,6 +196,7 @@ def carrier_detail(request, carrier_id):
         'individuals': individuals,
         'due_activities': due_activities,
         'pin_notess': pin_notess,
+        'policy_summary': policy_summary,
     })
 
 

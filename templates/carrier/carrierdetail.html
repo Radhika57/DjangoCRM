@@ -498,25 +498,29 @@
         <i class="fa fa-plus"></i> Create new
     </a>
 </div>
-    
-    <div class="summary-item">
-        <h4><i class="fa fa-file-text"></i> In Force Policies</h4>
-        <p>Med Supp</p>
-    </div>
+  
     
     <div class="summary-item" id="clients-summary">
-    <h4><i class="fa fa-users"></i> Clients</h4>
+    <h4><i class="fa fa-file-text"></i> In Force Policies</h4>
     <div class="client-wrapper">
         <ul class="client-list">
-            <li>Individuals <span class="badge">3</span></li>
-            <li>Client <span class="badge">3</span></li>
-            <li>Contact <span class="badge">1</span></li>
-            <li class="client-extra-item" style="display: none;">Ex-Client <span class="badge">1</span></li>
-            <li class="client-extra-item" style="display: none;">Prospect <span class="badge">1</span></li>
+            <li>Individuals</li>
+            {% for item in policy_summary %}
+                {% if forloop.counter <= 3 %}
+                    <li>{{ item.coverage_type }} <span class="badge">{{ item.count }}</span></li>
+                {% else %}
+                    <li class="client-extra-item" style="display: none;">
+                        {{ item.coverage_type }} <span class="badge">{{ item.count }}</span>
+                    </li>
+                {% endif %}
+            {% endfor %}
         </ul>
-        <span class="client-toggle clickable-toggle">Show More...</span>
+        {% if policy_summary|length > 3 %}
+            <span class="client-toggle clickable-toggle">Show More...</span>
+        {% endif %}
     </div>
 </div>
+
 
 
    <div class="summary-item">
@@ -543,7 +547,7 @@
     {% endif %}
     <a href="#notes" class="btn btn-xs btn-info" id="create-note-from-sidebar" data-show-form="true">
         <i class="fa fa-plus"></i> Create new
-    </a>
+    </a>
 </div>
 </div>
 
