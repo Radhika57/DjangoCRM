@@ -265,21 +265,31 @@ document.addEventListener('DOMContentLoaded', function() {
     const showFormBtn = document.getElementById('showActivityForm');
     if (showFormBtn) {
         showFormBtn.addEventListener('click', function() {
-            // Reset form fields (if needed)
-            const form = document.querySelector('#activityeditSection form');
-            if (form) form.reset();
+            // Hide the empty state and table (if visible)
+            document.getElementById('emptyActivitiesState').style.display = 'none';
             
-            // Hide the activities panel if it exists
-            const activitiesPanel = document.getElementById('activitiesPanel');
-            if (activitiesPanel) {
-                activitiesPanel.style.display = 'none';
-            }
+            // Show only the activity details section
+            document.getElementById('activityDetailsSection').style.display = 'block';
             
-            // Show the edit section
-            document.getElementById('activityeditSection').style.display = 'block';
+            // Reset form fields
+            document.getElementById('activityForm').reset();
+            document.getElementById('activityIdField').value = '';
+            document.getElementById('activityFormTitle').textContent = 'Create New Activity';
             
-            // Scroll to the edit section
-            document.getElementById('activityeditSection').scrollIntoView({ behavior: 'smooth' });
+            // Scroll to the form
+            document.getElementById('activityDetailsSection').scrollIntoView({ behavior: 'smooth' });
+        });
+    }
+    
+    // Handle cancel button in activity form
+    const cancelActivityBtn = document.getElementById('cancelActivity');
+    if (cancelActivityBtn) {
+        cancelActivityBtn.addEventListener('click', function() {
+            // Hide the activity details section
+            document.getElementById('activityDetailsSection').style.display = 'none';
+            
+            // Show the empty state or table again
+            document.getElementById('emptyActivitiesState').style.display = 'block';
         });
     }
 });
