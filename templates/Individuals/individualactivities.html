@@ -8,7 +8,6 @@
         padding-bottom: 8px;
         text-transform: capitalize;
         margin: 5px 0 0 0;
-        /* top margin 5px */
     }
 
     .dropdown-menu li a {
@@ -16,14 +15,10 @@
     }
 
     @media (max-width: 767px) {
-
-        /* Make panel heading a flex container on mobile only */
         .agents-panel .panel-heading {
             display: block !important;
         }
 
-
-        /* Ensure heading text doesn't wrap and shrinks if needed */
         .agents-panel .panel-heading h4 {
             white-space: nowrap;
             overflow: hidden;
@@ -32,7 +27,6 @@
             width: 100%;
         }
 
-        /* Mobile button container */
         .mobile-btn-container {
             display: flex;
             justify-content: flex-start;
@@ -40,15 +34,12 @@
             margin-top: 10px;
         }
 
-        /* Hide desktop buttons in mobile */
         .agents-panel .panel-heading .btn-group.pull-right {
             display: none !important;
         }
     }
 
     @media (min-width: 768px) {
-
-        /* Hide mobile buttons on desktop */
         .mobile-btn-container {
             display: none !important;
         }
@@ -63,7 +54,7 @@
             <div class="panel-heading clearfix">
                 <h4 class="section-title1 pull-left" style="margin-top: 5px;">Associated Activities</h4>
 
-                <!-- Desktop Button Group -->
+               
                 <div class="btn-group pull-right">
                     <button type="button" class="btn btn-primary" onclick="showCreateNew()">
                         <i class="fa fa-plus"></i> Create new
@@ -77,7 +68,7 @@
                     </ul>
                 </div>
 
-                <!-- Mobile Button Group (hidden on desktop) -->
+               
                 <div class="mobile-btn-container">
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary" onclick="showCreateNew()">
@@ -117,7 +108,11 @@
                         <tbody>
                             {% for act in individual_activity %}
                             <tr>
-                                <td>{{ act.subject }}</td>
+                                <td>
+                                    <a href="#" class="edit-activity" data-id="{{ act.id }}">
+                                        {{ act.subject }}
+                                    </a>
+                                </td>
                                 <td>{{ act.notes }}</td>
                                 <td>{{ act.status }}</td>
                                 <td>test</td>
@@ -153,7 +148,6 @@
                     </div>
                     {% endif %}
                 </div>
-
             </div>
         </div>
     </div>
@@ -171,11 +165,11 @@
             </div>
 
             <div class="panel-body">
-                <form method="POST" enctype="multipart/form-data" >
+                <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="subject">Subject <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="activity_subject"  required>
+                        <input type="text" class="form-control" name="activity_subject" required>
                     </div>
 
                     <div class="form-group">
@@ -192,13 +186,12 @@
                                 <option value="Not Started">Not Started</option>
                                 <option value="Completed">Completed</option>
                                 <option value="Deferred">Deferred</option>
-
                             </select>
                         </div>
                         
                         <div class="form-group col-md-4">
                             <label for="follow_team">Follow-up Team</label>
-                            <select class="form-control" name="follow_up_team" >
+                            <select class="form-control" name="follow_up_team">
                                 <option value="">select</option>
                                 <option value="(None)">(None)</option>
                                 <option value="Team 1">Team 1</option>
@@ -210,7 +203,7 @@
 
                     <div class="form-group col-md-4">
                         <label for="activity_date">Due Date</label>
-                        <input type="date" class="form-control" name="due_date" >
+                        <input type="date" class="form-control" name="due_date">
                     </div>
                     <!-- Additional Activity Details -->
                     <h5><strong>Additional Activity Details</strong></h5>
@@ -221,7 +214,7 @@
                         </div>
                         <div class="form-group col-md-3">
                             <label for="priority">Priority</label>
-                            <select class="form-control" name="priority" >
+                            <select class="form-control" name="priority">
                                 <option value="">select</option>
                                 <option value="High">High</option>
                                 <option value="Medium">Medium</option>
@@ -231,7 +224,7 @@
                         </div>
                         <div class="form-group col-md-3">
                             <label for="type">Type</label>
-                            <select class="form-control" name="type" >
+                            <select class="form-control" name="type">
                                 <option value="">select</option>
                                 <option value="Initial contact">Initial contact</option>
                                 <option value="Prospecting">Prospecting</option>
@@ -244,7 +237,7 @@
                         </div>
                         <div class="form-group col-md-3">
                             <label for="method">Method</label>
-                            <select class="form-control" name="method" >
+                            <select class="form-control" name="method">
                                 <option value="">select</option>
                                 <option value="Email">Email</option>
                                 <option value="Mail">Mail</option>
@@ -264,16 +257,19 @@
                         <button type="button" class="btn btn-default" onclick="showNotesMain()">Cancel</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
+
+  
+    {% include "Individuals/individualeditactivity.html" %}
 </div>
 
 <script>
     function showCreateNew() {
         document.getElementById('activityMainContent').style.display = 'none';
         document.getElementById('createNewactivityContainer').style.display = 'block';
+        document.getElementById('individualeditSection').style.display = 'none';
         window.scrollTo({
             top: document.getElementById('createNewactivityContainer').offsetTop - 20,
             behavior: 'smooth'
@@ -283,7 +279,35 @@
     function showNotesMain() {
         document.getElementById('activityMainContent').style.display = 'block';
         document.getElementById('createNewactivityContainer').style.display = 'none';
+        document.getElementById('individualeditSection').style.display = 'none';
         document.getElementById('activityForm').reset();
-    }
+    }
 
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle click on edit activity links
+        const editLinks = document.querySelectorAll('.edit-activity');
+        editLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const activityId = this.dataset.id;
+                document.getElementById('activityMainContent').style.display = 'none';
+                document.getElementById('createNewactivityContainer').style.display = 'none';
+                document.getElementById('individualeditSection').style.display = 'block';
+                
+                window.scrollTo({
+                    top: document.getElementById('individualeditSection').offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        const closeEditBtn = document.getElementById('closeActivityEdit');
+        if (closeEditBtn) {
+            closeEditBtn.addEventListener('click', function() {
+                document.getElementById('individualeditSection').style.display = 'none';
+                document.getElementById('activityMainContent').style.display = 'block';
+            });
+        }
+    });
 </script>
