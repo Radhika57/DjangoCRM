@@ -30,6 +30,7 @@ urlpatterns = [
     path('carriers/detail/<int:carrier_id>/', views.carrier_detail, name='carrier_detail'),
     path('carrier/<int:carrier_id>/delete/', views.delete_carrier, name='delete_carrier'),
     
+    
     # Agency
     path('agency/manage-agencies/', views.manage_agencies, name='manage_agencies'),
     path('save-agency/', views.save_agency, name='save_agency'),
@@ -72,6 +73,12 @@ urlpatterns = [
     path('update-policy/', views.update_policy, name='update_policy'),
     path('add-carrier-product/', views.add_carrier_product, name='add_carrier_product'),
     path('policy/<int:policy_id>/delete/', views.delete_policy, name='delete_policy'),
+    
+    path('prescription/', views.prescription_form, name='prescription_form'),
+    path('query-drug/', views.query_drug, name='query_drug'),
+    path('get-dosage-options/', views.get_dosage_options, name='get_dosage_options'),
+    path('save-prescription/', views.save_prescription, name='save_prescription'),
+    
     
     path('customfields/', views.custom_fields, name='custom_fields'),
     path('agents/settings/', views.agent_column_settings, name='agent_column_settings'),

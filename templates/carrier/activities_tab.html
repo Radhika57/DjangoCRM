@@ -38,19 +38,33 @@
                                 {% for act in activities %}
                                 <tr>
                                     <td>
-                                        <a href="#" class="edit-activity" data-id="{{ act.id }}">
+                                        <a href="#" class="edit-activity"
+                                            data-id="{{ act.id }}"
+                                            data-subject="{{ act.subject|escapejs }}"
+                                            data-notes="{{ act.notes|escapejs }}"
+                                            data-status="{{ act.status }}"
+                                            data-user="{{ act.follow_up_user }}"
+                                            data-team="{{ act.follow_up_team }}"
+                                            data-due="{{ act.due_date|date:"Y-m-d" }}"
+                                            data-activity-date="{{ act.activity_date|date:"Y-m-d" }}"
+                                            data-priority="{{ act.priority }}"
+                                            data-type="{{ act.activity_type }}"
+                                            data-method="{{ act.method }}"
+                                            {% if act.attachment %}
+                                            data-attachment="{{ act.attachment.url }}"
+                                            {% endif %}>
                                             {{ act.subject }}
                                         </a>
                                     </td>
-                                    <td>{{ act.notes }}</td>
-                                    <td>{{ act.status }}</td>
-                                    <td>{{ act.follow_up_user }}</td>
-                                    <td>{{ act.follow_up_team }}</td>
-                                    <td>{{ act.due_date }}</td>
-                                    <td>{{ act.activity_date }}</td>
-                                    <td>{{ act.priority }}</td>
-                                    <td>{{ act.activity_type }}</td>
-                                    <td>{{ act.method }}</td>
+                                    <td>{{ act.notes|default:"" }}</td>
+                                    <td>{{ act.status|default:"" }}</td>
+                                    <td>{{ act.follow_up_user|default:"" }}</td>
+                                    <td>{{ act.follow_up_team|default:"" }}</td>
+                                    <td>{{ act.due_date|default:"" }}</td>
+                                    <td>{{ act.activity_date|default:"" }}</td>
+                                    <td>{{ act.priority|default:"" }}</td>
+                                    <td>{{ act.activity_type|default:"" }}</td>
+                                    <td>{{ act.method|default:"" }}</td>
                                     <td>
                                         {% if act.attachment %}
                                             <a href="{{ act.attachment.url }}" download>

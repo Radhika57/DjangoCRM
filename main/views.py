@@ -149,7 +149,26 @@ def carrier_detail(request, carrier_id):
             )
 
         # --- Activity ---
-        if request.POST.get('activity_type') and request.POST.get('subject'):
+        if request.POST.get('activity_id'):
+            act_id = request.POST.get('activity_id')
+            activity = CarrierActivity.objects.get(id=act_id)
+            activity.subject = request.POST.get('subject')
+            activity.notes = request.POST.get('notes') 
+            activity.status = request.POST.get('status')
+            activity.follow_up_user = request.POST.get('follow_up_user')
+            activity.follow_up_team = request.POST.get('follow_up_team')
+            activity.due_date = request.POST.get('due_date') or None
+            activity.activity_date = request.POST.get('activity_date')
+            activity.priority = request.POST.get('priority')
+            activity.activity_type = request.POST.get('activity_type')
+            activity.method = request.POST.get('method')
+            
+            if request.FILES.get('attachment'):
+                activity.attachment = request.FILES.get('attachment')
+            
+            activity.save()
+
+        elif request.POST.get('activity_type') and request.POST.get('subject'):
             CarrierActivity.objects.create(
                 carrier=carrier,
                 subject=request.POST.get('subject'),
@@ -158,12 +177,14 @@ def carrier_detail(request, carrier_id):
                 follow_up_user=request.POST.get('follow_up_user'),
                 follow_up_team=request.POST.get('follow_up_team'),
                 due_date=request.POST.get('due_date') or None,
-                activity_date=request.POST.get('activity_date') ,
+                activity_date=request.POST.get('activity_date'),
                 priority=request.POST.get('priority'),
                 activity_type=request.POST.get('activity_type'),
                 method=request.POST.get('method'),
                 attachment=request.FILES.get('attachment')
             )
+
+
 
         # --- Notes ---
         if request.POST.get('notes') and request.POST.get('subject'):
@@ -528,7 +549,7 @@ def agent_detail(request, agent_id):
             agent_activity.notes = request.POST.get('activity_notes')
             agent_activity.status = request.POST.get('activity_status')
             agent_activity.follow_up_team = request.POST.get('follow_up_team')
-            agent_activity.due_date = request.POST.get('due_date') == 'on'
+            agent_activity.due_date = request.POST.get('due_date') or None
             agent_activity.activity_date = request.POST.get('activity_date') or None
             agent_activity.priority = request.POST.get('priority')
             agent_activity.type = request.POST.get('type')
@@ -920,7 +941,10 @@ def individual_tab(request, individual_id):
     'policy_details',
     'individual',
     'carrier')
-    due_activities = IndividualActivity.objects.filter(individual_name=individual , due_date__isnull=False)  
+    due_activities = IndividualActivity.objects.filter(
+            individual_name=individual,
+            due_date__isnull=False
+        ) 
     pin_notess = IndividualNotes.objects.filter(individual_name=individual, pin_note=True)
     
     agents = Agent.objects.all()
@@ -1002,6 +1026,7 @@ def individual_tab(request, individual_id):
         # --- Activity ---
         if request.POST.get('activity_subject'):
             activity_id = request.POST.get('activity_id')
+            
             if activity_id:
                 individual_activity = IndividualActivity.objects.get(id=activity_id)
             else:
@@ -1011,13 +1036,13 @@ def individual_tab(request, individual_id):
             individual_activity.notes = request.POST.get('activity_notes')
             individual_activity.status = request.POST.get('activity_status')
             individual_activity.follow_up_team = request.POST.get('follow_up_team')
-            individual_activity.due_date = request.POST.get('due_date') == 'on'
+            individual_activity.due_date = request.POST.get('due_date') or None
             individual_activity.activity_date = request.POST.get('activity_date') or None
             individual_activity.priority = request.POST.get('priority')
             individual_activity.type = request.POST.get('type')
             individual_activity.method = request.POST.get('method')
-            if request.FILES.get('attachment'):
-                individual_activity.attachment = request.FILES.get('attachment')
+            if request.FILES.get('activity_attachment'):
+                individual_activity.attachment = request.FILES.get('activity_attachment')
             individual_activity.save()
 
         # --- Notes ---
@@ -1203,7 +1228,7 @@ def policy_tab(request, policy_id):
             policy_activity_obj.notes = request.POST.get('activity_notes')
             policy_activity_obj.status = request.POST.get('activity_status')
             policy_activity_obj.follow_up_team = request.POST.get('follow_up_team')
-            policy_activity_obj.due_date = request.POST.get('due_date') == 'on'
+            policy_activity_obj.due_date = request.POST.get('due_date') or None
             policy_activity_obj.activity_date = request.POST.get('activity_date') or None
             policy_activity_obj.priority = request.POST.get('priority')
             policy_activity_obj.type = request.POST.get('type')
@@ -1350,6 +1375,133 @@ def delete_policy(request, policy_id):
     policy.delete()
     return redirect('search_policy')  
 
+
+
+import json
+import time
+import requests
+from django.shortcuts import render
+from django.http import JsonResponse
+
+
+
+CLIENT_ID = "184"
+CLIENT_SECRET = "9EUUXUKXA1KW"
+TOKEN_URL = "https://api-gateway.rxsense.com/account/token"
+QUERY_URL = "https://api-gateway.rxsense.com/drug/query-ordered"
+DRUG_STRUCTURE_URL = "https://api-gateway.rxsense.com/drug/get-drug-structure-data-v2"
+TIERED_PRICING_URL = "https://api-gateway.rxsense.com/pricing/get-tiered-pricing"
+
+token_cache = {'token': None, 'expires_at': 0}
+
+def get_token():
+    current_time = time.time()
+    if token_cache['token'] and current_time < token_cache['expires_at']:
+        return token_cache['token']
+    try:
+        payload = json.dumps({
+            "client_id": CLIENT_ID,
+            "client_secret": CLIENT_SECRET,
+            "grant_type": "client_credentials"
+        })
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(TOKEN_URL, headers=headers, data=payload)
+        response.raise_for_status()
+        response_data = response.json()
+        token_cache['token'] = response_data.get('Token')
+        token_cache['expires_at'] = current_time + 600
+        return token_cache['token']
+    except:
+        return None
+
+def query_drug(request):
+    token = get_token()
+    drug_name = request.GET.get('q', '')
+    if not token or not drug_name:
+        return JsonResponse([], safe=False)
+
+    headers = {'Authorizer': token, 'Content-Type': 'application/json'}
+    payload = json.dumps({"Query": drug_name, "MaxResults": 5})
+
+    try:
+        response = requests.post(QUERY_URL, headers=headers, data=payload)
+        response.raise_for_status()
+        results = response.json()
+
+        suggestions = []
+        for item in results:  
+            suggestions.append({
+                "display_name": item.get("display_name", ""),
+                "seo_name": item.get("seo_name", "")
+            })
+
+        return JsonResponse(suggestions, safe=False)
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+def get_dosage_options(request):
+    token = get_token()
+    seo_name = request.GET.get('seo_name', '').strip()
+
+    if not token or not seo_name:
+        return JsonResponse([], safe=False)
+
+    headers = {'Authorizer': token, 'Content-Type': 'application/json'}
+    payload = json.dumps({"SEOName": seo_name})
+
+    try:
+        response = requests.post(DRUG_STRUCTURE_URL, headers=headers, data=payload)
+        response.raise_for_status()
+        api_data = response.json()
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+    drug_data = api_data.get("Value", [])
+    dosages = []
+    seen = set()
+
+    for drug_entry in drug_data:
+        drug_name = drug_entry.get("Key", "")
+        for form_entry in drug_entry.get("Value", []):
+            form = form_entry.get("Key", "")
+            for dosage_entry in form_entry.get("Value", []):
+                dosage = dosage_entry.get("Key", "")
+                display = f"{drug_name} {form} {dosage}".strip()
+
+                if display not in seen:
+                    seen.add(display)
+                    quantity_entries = dosage_entry.get("Value", [])
+                    quantity = ""
+                    if quantity_entries:
+                        quantity = quantity_entries[0].get("Value", {}).get("Quantity", "")
+
+                    dosages.append({
+                        'display': display,
+                        'dosage': display,
+                        'quantity': quantity
+                    })
+
+    return JsonResponse(dosages, safe=False)
+
+
+def save_prescription(request):
+    if request.method == "POST":
+        data = request.POST
+        Prescription.objects.create(
+            medication=data.get('medication'),
+            dosage=data.get('dosage'),
+            quantity=data.get('quantity'),
+            refill_frequency=data.get('refill_frequency'),
+            generic=data.get('generic'),
+            zipcode=data.get('zipcode')
+        )
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'invalid'}, status=400)
+
+def prescription_form(request):
+    return render(request, 'rx.html')
 
 
 def custom_fields(request):
