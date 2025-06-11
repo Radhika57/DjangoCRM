@@ -4,6 +4,7 @@
         <div class="panel panel-default">
             <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center;">
                 <strong>Associated Activities</strong>
+                
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary" onclick="showCreateNew()">
                         <i class="fa fa-plus"></i> Create new
@@ -37,7 +38,11 @@
                             <tbody>
                                 {% for act in activities %}
                                 <tr>
-                                    <td>{{ act.subject }}</td>
+                                    <td>
+                                        <a href="#" class="edit-activity" data-id="{{ act.id }}">
+                                            {{ act.subject }}
+                                        </a>
+                                    </td>
                                     <td>{{ act.notes }}</td>
                                     <td>{{ act.status }}</td>
                                     <td>test</td>
@@ -79,15 +84,17 @@
     <!-- Create New Activity Container (hidden by default) -->
     <div id="createNewactivityContainer" style="display: none;">
         <div class="panel panel-default">
-            <div class="panel-heading">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <strong>Activity Details</strong>
-                    <button class="btn btn-default btn-sm" onclick="showNotesMain()">
-                        <i class="fa fa-arrow-left"></i> Back to Activities
-                    </button>
-                </div>
-            </div>
-            
+      <div class="panel-heading">
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <h6 style="font-weight: 600; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 0;">
+            Activity Details
+        </h6>
+        <button class="btn btn-default btn-sm" onclick="showNotesMain()">
+            <i class="fa fa-arrow-left"></i> Back to Activities
+        </button>
+    </div>
+</div>
+
             <div class="panel-body">
                 <form method="post" enctype="multipart/form-data" id="activityForm">
                     {% csrf_token %}
@@ -143,7 +150,16 @@
                         </div>
         
                         <!-- Additional Activity Details -->
-                        <h5><strong>Additional Activity Details</strong></h5>
+                       <div class="row" style="margin-top: 20px;">
+   <div class="col-md-12">
+    <h6 style="font-weight: 1000; font-size: 1.9rem; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 15px;">
+        Additional Activity Details
+    </h6>
+</div>
+</div>
+
+
+
                         <div class="form-row">
                             <div class="form-group col-md-3">
                                 <label for="activity_date">Activity Date <span class="text-danger">*</span></label>
@@ -200,12 +216,16 @@
             </div>
         </div>
     </div>
+
+    <!-- Include the Edit Activity Section from separate file -->
+    {% include "agent/agenteditactivity.html" %}
 </div>
 
 <script>
 function showCreateNew() {
     document.getElementById('activityMainContent').style.display = 'none';
     document.getElementById('createNewactivityContainer').style.display = 'block';
+    document.getElementById('agencyeditSection').style.display = 'none';
     // Scroll to the form section
     window.scrollTo({
         top: document.getElementById('createNewactivityContainer').offsetTop - 20,
@@ -216,8 +236,57 @@ function showCreateNew() {
 function showNotesMain() {
     document.getElementById('activityMainContent').style.display = 'block';
     document.getElementById('createNewactivityContainer').style.display = 'none';
+    document.getElementById('agencyeditSection').style.display = 'none';
     // Reset form if needed
     document.getElementById('activityForm').reset();
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle click on edit activity links
+    const editLinks = document.querySelectorAll('.edit-activity');
+    editLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Get the activity ID from data attribute
+            const activityId = this.dataset.id;
+            
+            // Hide the main content and create form
+            document.getElementById('activityMainContent').style.display = 'none';
+            document.getElementById('createNewactivityContainer').style.display = 'none';
+            
+            // Show the edit section (using agencyeditSection as requested)
+            document.getElementById('agencyeditSection').style.display = 'block';
+            
+            // Here you would typically fetch the activity data and populate the form
+            // For this example, we'll just show the section
+            
+            // Scroll to the edit section
+            window.scrollTo({
+                top: document.getElementById('agencyeditSection').offsetTop - 20,
+                behavior: 'smooth'
+            });
+        });
+    });
+    
+    // Handle close button click for edit section
+    const closeEditBtn = document.getElementById('closeActivityEdit');
+    if (closeEditBtn) {
+        closeEditBtn.addEventListener('click', function() {
+            document.getElementById('agencyeditSection').style.display = 'none';
+            document.getElementById('activityMainContent').style.display = 'block';
+        });
+    }
+});
+
+// Add event listener for tab changes to ensure activities table is shown when tab is clicked
+const activityTab = document.querySelector('a[href="#activities-content"]');
+if (activityTab) {
+    activityTab.addEventListener('click', function() {
+        // Show main content and hide other sections
+        document.getElementById('activityMainContent').style.display = 'block';
+        document.getElementById('createNewactivityContainer').style.display = 'none';
+        document.getElementById('agencyeditSection').style.display = 'none';
+    });
+}
 </script>

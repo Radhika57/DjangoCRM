@@ -153,14 +153,17 @@
     <!-- Create New Activity Container (Initially Hidden) -->
     <div id="createNewactivityContainer" style="display: none;">
         <div class="panel panel-default">
-            <div class="panel-heading">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <strong>Activity Details</strong>
-                    <button class="btn btn-default btn-sm" onclick="showNotesMain()">
-                        <i class="fa fa-arrow-left"></i> Back to Activities
-                    </button>
-                </div>
-            </div>
+                       <div class="panel-heading">
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <h6 style="font-weight: 600; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 0;">
+            Activity Details
+        </h6>
+        <button class="btn btn-default btn-sm" onclick="showNotesMain()">
+            <i class="fa fa-arrow-left"></i> Back to Activities
+        </button>
+    </div>
+</div>
+          
 
             <div class="panel-body">
                 <form method="post" enctype="multipart/form-data" id="activityForm">
@@ -212,7 +215,12 @@
                         </div>
         
                         <!-- Additional Activity Details -->
-                        <h5><strong>Additional Activity Details</strong></h5>
+                        <h5>
+                             <div class="col-md-12">
+    <h6 style="font-weight: 1000; font-size: 1.9rem; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 15px;">
+        Additional Activity Details
+    </h6>
+</div>
                         <div class="form-row">
                             <div class="form-group col-md-3">
                                 <label for="activity_date">Activity Date <span class="text-danger">*</span></label>

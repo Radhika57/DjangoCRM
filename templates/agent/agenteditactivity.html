@@ -1,0 +1,141 @@
+<div id="agencyeditSection" style="display: none;">
+    <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="well">
+        <h4>Edit Activity Details</h4>
+        
+        <!-- Subject Section -->
+        <div class="form-group">
+            <label><strong>Subject *</strong></label>
+            <input type="text" class="form-control" name="subject" placeholder="Enter subject" value="{{activities.subject}}" required>
+        </div>
+        
+        <!-- Notes Section -->
+        <div class="form-group">
+            <label><strong>Notes</strong></label>
+            <textarea class="form-control" name="notes" rows="3">{{activities.notes}}</textarea>
+        </div>
+        
+        <!-- Status Table with Dropdowns -->
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Follow-up User</th>
+                        <th>Follow-up Team</th>
+                        <th>Due Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <select class="form-control" name="status">
+                                <option value="">--select--</option>
+                                <option value="In Progress" {% if activities.status == "In Progress" %}selected{% endif %}>In Progress</option>
+                                <option value="Waiting" {% if activities.status == "Waiting" %}selected{% endif %}>Waiting</option>
+                                <option value="Not Started" {% if activities.status == "Not Started" %}selected{% endif %}>Not Started</option>
+                                <option value="Complete" {% if activities.status == "Complete" %}selected{% endif %}>Complete</option>
+                                <option value="Deferred" {% if activities.status == "Deferred" %}selected{% endif %}>Deferred</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control" name="follow_up_user">
+                                <option>Select User</option>
+                                <option value="John Smith">John Smith</option>
+                                <option value="Jane Doe">Jane Doe</option>
+                                <option value="Mike Johnson">Mike Johnson</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control" name="follow_up_team">
+                                <option value="">Select Team</option>
+                                <option value="None" {% if activities.follow_up_team == "None" %}selected{% endif %}>None</option>
+                                <option value="Team 1" {% if activities.follow_up_team == "Team 1" %}selected{% endif %}>Team 1</option>
+                                <option value="Team 2" {% if activities.follow_up_team == "Team 2" %}selected{% endif %}>Team 2</option>
+                                <option value="Your Sales Pipeline" {% if activities.follow_up_team == "Your Sales Pipeline" %}selected{% endif %}>Your Sales Pipeline</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="date" class="form-control" name="due_date" value="{{ activities.due_date|date:'Y-m-d' }}">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <hr>
+        
+        <!-- Additional Activity Details with Dropdowns -->
+        <h5>Additional Activity Details</h5>
+        <div class="row">
+            <div class="col-md-4 col-sm-6">
+                <div class="form-group">
+                    <label><strong>Activity Date *</strong></label>
+                    <input type="date" class="form-control" name="activity_date" value="{{ activities.activity_date|date:'Y-m-d' }}" required>
+                </div>
+                <div class="form-group">
+                    <label><strong>Priority</strong></label>
+                    <select class="form-control" name="priority">
+                        <option value="">--Select--</option>
+                        <option value="High" {% if activities.priority == "High" %}selected{% endif %}>High</option>
+                        <option value="Medium" {% if activities.priority == "Medium" %}selected{% endif %}>Medium</option>
+                        <option value="Urgent" {% if activities.priority == "Urgent" %}selected{% endif %}>Urgent</option>
+                        <option value="Low" {% if activities.priority == "Low" %}selected{% endif %}>Low</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="form-group">
+                    <label><strong>Type</strong></label>
+                    <select class="form-control" name="activity_type">
+                        <option value="">--Select--</option>
+                        <option value="Initial Contact" {% if activities.activity_type == "Initial Contact" %}selected{% endif %}>Initial Contact</option>
+                        <option value="Prospecting" {% if activities.activity_type == "Prospecting" %}selected{% endif %}>Prospecting</option>
+                        <option value="Quote Process" {% if activities.activity_type == "Quote Process" %}selected{% endif %}>Quote Process</option>
+                        <option value="Enrollement" {% if activities.activity_type == "Enrollement" %}selected{% endif %}>Enrollement</option>
+                        <option value="Renewal" {% if activities.activity_type == "Renewal" %}selected{% endif %}>Renewal</option>
+                        <option value="Service Issue" {% if activities.activity_type == "Service Issue" %}selected{% endif %}>Service Issue</option>
+                        <option value="Cross-sell" {% if activities.activity_type == "Cross-sell" %}selected{% endif %}>Cross-sell</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="form-group">
+                    <label><strong>Method</strong></label>
+                    <select class="form-control" name="method">
+                        <option value="">--Select--</option>
+                        <option value="Email" {% if activities.method == "Email" %}selected{% endif %}>Email</option>
+                        <option value="Mail" {% if activities.method == "Mail" %}selected{% endif %}>Mail</option>
+                        <option value="Phone Call" {% if activities.method == "Phone Call" %}selected{% endif %}>Phone Call</option>
+                        <option value="Fax" {% if activities.method == "Fax" %}selected{% endif %}>Fax</option>
+                        <option value="Visit" {% if activities.method == "Visit" %}selected{% endif %}>Visit</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <hr>
+        
+        <!-- Attachments Section -->
+        <div class="attachment-block">
+            <label><b>📎Attachment</b></label>
+
+            {% if activities.attachment %}
+                <div class="mb-2">
+                    <a href="{{ activities.attachment.url }}" target="_blank">📄 View Existing Attachment</a>
+                </div>
+            {% endif %}
+
+            <input type="file" class="form-control" name="attachment" id="attachment" />
+        </div>
+        <br>
+        
+        <!-- Action Buttons -->
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-default" id="closeActivityEdit">Cancel</button>
+        </div>
+    </div>
+    </form>
+</div>

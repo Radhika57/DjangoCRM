@@ -1,5 +1,4 @@
 <div class="tab-pane active" id="Activities-policy">
- 
     <div id="activityMainContent">
         <div class="panel panel-default">
             <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center;">
@@ -37,7 +36,11 @@
                             <tbody>
                                 {% for act in policy_activity %}
                                 <tr>
-                                    <td>{{ act.subject }}</td>
+                                    <td>
+                                        <a href="#" class="edit-activity" data-id="{{ act.id }}">
+                                            {{ act.subject }}
+                                        </a>
+                                    </td>
                                     <td>{{ act.notes }}</td>
                                     <td>{{ act.status }}</td>
                                     <td>-</td>
@@ -79,14 +82,16 @@
     <!-- Create New Activity Container (hidden by default) -->
     <div id="createNewactivityContainer" style="display: none;">
         <div class="panel panel-default">
-            <div class="panel-heading">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <strong>Activity Details</strong>
-                    <button class="btn btn-default btn-sm" onclick="showNotesMain()">
-                        <i class="fa fa-arrow-left"></i> Back to Activities
-                    </button>
-                </div>
-            </div>
+              <div class="panel-heading">
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <h6 style="font-weight: 600; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 0;">
+            Activity Details
+        </h6>
+        <button class="btn btn-default btn-sm" onclick="showNotesMain()">
+            <i class="fa fa-arrow-left"></i> Back to Activities
+        </button>
+    </div>
+</div>
             
             <div class="panel-body">
                 <form method="post" enctype="multipart/form-data" id="activityForm">
@@ -138,7 +143,14 @@
                         </div>
         
                         <!-- Additional Activity Details -->
-                        <h5><strong>Additional Activity Details</strong></h5>
+                        <h5>
+                               <div class="col-md-12">
+    <h6 style="font-weight: 1000; font-size: 1.9rem; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 15px;">
+        Additional Activity Details
+    </h6>
+</div>
+
+
                         <div class="form-row">
                             <div class="form-group col-md-3">
                                 <label for="activity_date">Activity Date <span class="text-danger">*</span></label>
@@ -195,12 +207,16 @@
             </div>
         </div>
     </div>
+
+    <!-- Include the Edit Activity Section from separate file -->
+    {% include "policy/policyeditactivity.html" %}
 </div>
 
 <script>
 function showCreateNew() {
     document.getElementById('activityMainContent').style.display = 'none';
     document.getElementById('createNewactivityContainer').style.display = 'block';
+    document.getElementById('policyeditSection').style.display = 'none';
     // Scroll to the form section
     window.scrollTo({
         top: document.getElementById('createNewactivityContainer').offsetTop - 20,
@@ -211,7 +227,46 @@ function showCreateNew() {
 function showNotesMain() {
     document.getElementById('activityMainContent').style.display = 'block';
     document.getElementById('createNewactivityContainer').style.display = 'none';
+    document.getElementById('policyeditSection').style.display = 'none';
     // Reset form if needed
     document.getElementById('activityForm').reset();
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle click on edit activity links
+    const editLinks = document.querySelectorAll('.edit-activity');
+    editLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Get the activity ID from data attribute
+            const activityId = this.dataset.id;
+            
+            // Hide the main content and create form
+            document.getElementById('activityMainContent').style.display = 'none';
+            document.getElementById('createNewactivityContainer').style.display = 'none';
+            
+            // Show the edit section
+            document.getElementById('policyeditSection').style.display = 'block';
+            
+            // Here you would typically fetch the activity data and populate the form
+            // For this example, we'll just show the section
+            
+            // Scroll to the edit section
+            window.scrollTo({
+                top: document.getElementById('policyeditSection').offsetTop - 20,
+                behavior: 'smooth'
+            });
+        });
+    });
+    
+    // Handle close button click for edit section
+    const closeEditBtn = document.getElementById('closeActivityEdit');
+    if (closeEditBtn) {
+        closeEditBtn.addEventListener('click', function() {
+            document.getElementById('policyeditSection').style.display = 'none';
+            document.getElementById('activityMainContent').style.display = 'block';
+        });
+    }
+});
 </script>
