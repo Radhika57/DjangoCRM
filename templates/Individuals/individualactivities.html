@@ -161,17 +161,14 @@
     <!-- Create New Activity Container (Initially Hidden) -->
     <div id="createNewactivityContainer" style="display: none;">
         <div class="panel panel-default">
-                       <div class="panel-heading">
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-        <h6 style="font-weight: 600; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 0;">
-            Activity Details
-        </h6>
-        <button class="btn btn-default btn-sm" onclick="showNotesMain()">
-            <i class="fa fa-arrow-left"></i> Back to Activities
-        </button>
-    </div>
-</div>
-          
+            <div class="panel-heading">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong>Activity Details</strong>
+                    <button class="btn btn-default btn-sm" onclick="showNotesMain()">
+                        <i class="fa fa-arrow-left"></i> Back to Activities
+                    </button>
+                </div>
+            </div>
 
             <div class="panel-body">
                 <form method="POST" enctype="multipart/form-data" >
@@ -181,96 +178,6 @@
                         <input type="text" class="form-control" name="activity_subject"  required>
                     </div>
 
-                        <div class="form-group">
-                            <label>Notes</label>
-                            <textarea class="form-control" name="activity_notes" rows="5"></textarea>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label for="status">Status</label>
-                                <select class="form-control" name="activity_status" id="status">
-                                    <option value="">select</option>
-                                    <option value="In Progress">In Progress</option>
-                                    <option value="Waiting">Waiting</option>
-                                    <option value="Not Started">Not Started</option>
-                                    <option value="Completed">Completed</option>
-                                    <option value="Deferred">Deferred</option>
-                                    
-                                </select>
-                            </div>
-                            {% comment %} <div class="form-group col-md-4">
-                                <label for="follow_user">Follow-up User</label>
-                                <select class="form-control" name="follow_user" id="follow_user">
-                                    <option>Rohan Dhillon</option>
-                                    <option>John Doe</option>
-                                    <option>Jane Smith</option>
-                                </select>
-                            </div> {% endcomment %}
-                            <div class="form-group col-md-4">
-                                <label for="follow_team">Follow-up Team</label>
-                                <select class="form-control" name="follow_up_team" id="follow_team">
-                                    <option value="">select</option>
-                                    <option value="(None)">(None)</option>
-                                    <option value="Team 1">Team 1</option>
-                                    <option value="Team 2">Team 2</option>
-                                    <option value="Your Sales Pipeline Team">Your Sales Pipeline Team</option>
-                                </select>
-                            </div>
-                        </div>
-        
-                        <div class="form-group">
-                            <label><input type="checkbox" name="due_date"> Due Date</label>
-                        </div>
-        
-                        <!-- Additional Activity Details -->
-                        <h5>
-                             <div class="col-md-12">
-    <h6 style="font-weight: 1000; font-size: 1.9rem; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 15px;">
-        Additional Activity Details
-    </h6>
-</div>
-                        <div class="form-row">
-                            <div class="form-group col-md-3">
-                                <label for="activity_date">Activity Date <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" name="activity_date" id="activity_date" required>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="priority">Priority</label>
-                                <select class="form-control" name="priority" id="priority">
-                                    <option value="">select</option>
-                                    <option value="High">High</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="Urgent">Urgent</option>
-                                    <option value="Low">Low</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="type">Type</label>
-                                <select class="form-control" name="type" id="type">
-                                    <option value="">select</option>
-                                    <option value="Initial contact">Initial contact</option>
-                                    <option value="Prospecting">Prospecting</option>
-                                    <option value="Quote Process">Quote Process</option>
-                                    <option value="Enrollement">Enrollement</option>
-                                    <option value="Renewal">Renewal</option>
-                                    <option value="Service Issue">Service Issue</option>
-                                    <option value="Cross-sell">Cross-sell</option>
-                                    
-                                </select>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="method">Method</label>
-                                <select class="form-control" name="method" id="method">
-                                    <option value="">select</option>
-                                    <option value="Email">Email</option>
-                                    <option value="Mail">Mail</option>
-                                    <option value="Phone Call">Phone Call</option>
-                                    <option value="Fax">Fax</option>
-                                    <option value="Visit">Visit</option>
-                                </select>
-                            </div>
-                        </div>
-        
                     <div class="form-group">
                         <label>Notes</label>
                         <textarea class="form-control" name="activity_notes" rows="5"></textarea>
@@ -377,6 +284,6 @@
         document.getElementById('activityMainContent').style.display = 'block';
         document.getElementById('createNewactivityContainer').style.display = 'none';
         document.getElementById('activityForm').reset();
-    }
+    }
 
 </script>
