@@ -1,5 +1,5 @@
 <div class="tab-pane active" id="Activities-policy">
-    <div id="activityMainContent">
+    <div id="activityMainContent" style="display: none;">
         <div class="panel panel-default">
             <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center;">
                 <strong>Associated Activities</strong>
@@ -214,10 +214,39 @@
 </div>
 
 <script>
+// Store the current state of the activities tab
+let activitiesTabState = {
+    showMain: true,
+    showCreate: false,
+    showEdit: false
+};
+
+// Initialize the tab when first loaded
+function initActivitiesTab() {
+    document.getElementById('activityMainContent').style.display = 'block';
+    document.getElementById('createNewactivityContainer').style.display = 'none';
+    document.getElementById('policyeditSection').style.display = 'none';
+    
+    // Set initial state
+    activitiesTabState = {
+        showMain: true,
+        showCreate: false,
+        showEdit: false
+    };
+}
+
 function showCreateNew() {
     document.getElementById('activityMainContent').style.display = 'none';
     document.getElementById('createNewactivityContainer').style.display = 'block';
     document.getElementById('policyeditSection').style.display = 'none';
+    
+    // Update state
+    activitiesTabState = {
+        showMain: false,
+        showCreate: true,
+        showEdit: false
+    };
+    
     // Scroll to the form section
     window.scrollTo({
         top: document.getElementById('createNewactivityContainer').offsetTop - 20,
@@ -229,11 +258,29 @@ function showNotesMain() {
     document.getElementById('activityMainContent').style.display = 'block';
     document.getElementById('createNewactivityContainer').style.display = 'none';
     document.getElementById('policyeditSection').style.display = 'none';
+    
+    // Update state
+    activitiesTabState = {
+        showMain: true,
+        showCreate: false,
+        showEdit: false
+    };
+    
     // Reset form if needed
     document.getElementById('activityForm').reset();
 }
 
+// Function to restore the tab state when switching back
+function restoreActivitiesTabState() {
+    document.getElementById('activityMainContent').style.display = activitiesTabState.showMain ? 'block' : 'none';
+    document.getElementById('createNewactivityContainer').style.display = activitiesTabState.showCreate ? 'block' : 'none';
+    document.getElementById('policyeditSection').style.display = activitiesTabState.showEdit ? 'block' : 'none';
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize the tab
+    initActivitiesTab();
+    
     // Handle click on edit activity links
     const editLinks = document.querySelectorAll('.edit-activity');
     editLinks.forEach(link => {
@@ -249,6 +296,13 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Show the edit section
             document.getElementById('policyeditSection').style.display = 'block';
+            
+            // Update state
+            activitiesTabState = {
+                showMain: false,
+                showCreate: false,
+                showEdit: true
+            };
             
             // Here you would typically fetch the activity data and populate the form
             // For this example, we'll just show the section
@@ -267,7 +321,22 @@ document.addEventListener('DOMContentLoaded', function() {
         closeEditBtn.addEventListener('click', function() {
             document.getElementById('policyeditSection').style.display = 'none';
             document.getElementById('activityMainContent').style.display = 'block';
+            
+            // Update state
+            activitiesTabState = {
+                showMain: true,
+                showCreate: false,
+                showEdit: false
+            };
         });
     }
+    
+   
+$('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+    if (e.target.getAttribute('href') === '#Activities-policy') {
+        initActivitiesTab();  
+    }
+});
+
 });
 </script>
