@@ -7,18 +7,21 @@
         letter-spacing: 0.05em;
         padding-bottom: 8px;
         text-transform: capitalize;
-        margin: 5px 0 0 0; /* top margin 5px */
+        margin: 5px 0 0 0;
+        /* top margin 5px */
     }
+
     .dropdown-menu li a {
         font-size: 1.5rem;
     }
 
     @media (max-width: 767px) {
+
         /* Make panel heading a flex container on mobile only */
         .agents-panel .panel-heading {
             display: block !important;
         }
-        
+
 
         /* Ensure heading text doesn't wrap and shrinks if needed */
         .agents-panel .panel-heading h4 {
@@ -44,6 +47,7 @@
     }
 
     @media (min-width: 768px) {
+
         /* Hide mobile buttons on desktop */
         .mobile-btn-container {
             display: none !important;
@@ -58,27 +62,29 @@
             <!-- Panel Heading -->
             <div class="panel-heading clearfix">
                 <h4 class="section-title1 pull-left" style="margin-top: 5px;">Associated Activities</h4>
-                
+
                 <!-- Desktop Button Group -->
                 <div class="btn-group pull-right">
                     <button type="button" class="btn btn-primary" onclick="showCreateNew()">
                         <i class="fa fa-plus"></i> Create new
                     </button>
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-angle-down"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li><a href="{% url 'manage_agencies' %}" target="_blank">Mass Update</a></li>
                     </ul>
                 </div>
-                
+
                 <!-- Mobile Button Group (hidden on desktop) -->
                 <div class="mobile-btn-container">
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary" onclick="showCreateNew()">
                             <i class="fa fa-plus"></i> Create new
                         </button>
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-angle-down"></i>
                         </button>
                         <ul class="dropdown-menu">
@@ -92,55 +98,57 @@
             <div class="panel-body table-responsive">
                 <div id="emptyActivitiesState" class="text-center">
                     {% if individual_activity %}
-                        <table id="example10" class="table table-bordered table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Subject</th>
-                                    <th>Notes</th>
-                                    <th>Status</th>
-                                    <th>FollowUp User</th>
-                                    <th>FollowUp Team</th>
-                                    <th>Due Date</th>
-                                    <th>Activity Date</th>
-                                    <th>Priority</th>
-                                    <th>Activity Type</th>
-                                    <th>Method</th>
-                                    <th>Attachment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for act in individual_activity %}
-                                <tr>
-                                    <td>{{ act.subject }}</td>
-                                    <td>{{ act.notes }}</td>
-                                    <td>{{ act.status }}</td>
-                                    <td>test</td>
-                                    <td>{{ act.follow_up_team }}</td>
-                                    <td>{{ act.due_date }}</td>
-                                    <td>{{ act.activity_date }}</td>
-                                    <td>{{ act.priority }}</td>
-                                    <td>{{ act.type }}</td>
-                                    <td>{{ act.method }}</td>
-                                    <td>
-                                        {% if act.attachment %}
-                                            <a href="{{ act.attachment.url }}" download>
-                                                <img src="{{ act.attachment.url }}" alt="Attachment" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
-                                            </a>
-                                        {% else %}
-                                            No File
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    
+                    <table id="example10" class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Notes</th>
+                                <th>Status</th>
+                                <th>FollowUp User</th>
+                                <th>FollowUp Team</th>
+                                <th>Due Date</th>
+                                <th>Activity Date</th>
+                                <th>Priority</th>
+                                <th>Activity Type</th>
+                                <th>Method</th>
+                                <th>Attachment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for act in individual_activity %}
+                            <tr>
+                                <td>{{ act.subject }}</td>
+                                <td>{{ act.notes }}</td>
+                                <td>{{ act.status }}</td>
+                                <td>test</td>
+                                <td>{{ act.follow_up_team }}</td>
+                                <td>{{ act.due_date }}</td>
+                                <td>{{ act.activity_date }}</td>
+                                <td>{{ act.priority }}</td>
+                                <td>{{ act.type }}</td>
+                                <td>{{ act.method }}</td>
+                                <td>
+                                    {% if act.attachment %}
+                                    <a href="{{ act.attachment.url }}" download>
+                                        <img src="{{ act.attachment.url }}" alt="Attachment"
+                                            style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                    </a>
+                                    {% else %}
+                                    No File
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
                     {% else %}
                     <div class="well" style="padding: 40px;">
                         <i class="fa fa-tasks fa-3x text-muted mb-3"></i>
                         <h4>There are no Notes & Attachments for {{individual.first_name}} {{individual.last_name}}</h4>
                         <p class="text-muted">
-                            This data is not available because it hasn't been created yet or you don't have permission.<br>
+                            This data is not available because it hasn't been created yet or you don't have
+                            permission.<br>
                         </p>
                     </div>
                     {% endif %}
@@ -166,12 +174,12 @@
           
 
             <div class="panel-body">
-                <form method="post" enctype="multipart/form-data" id="activityForm">
+                <form method="POST" enctype="multipart/form-data" >
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="subject">Subject <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="activity_subject" id="subject" required>
-            
+                        <input type="text" class="form-control" name="activity_subject"  required>
+                    </div>
 
                         <div class="form-group">
                             <label>Notes</label>
@@ -263,10 +271,93 @@
                             </div>
                         </div>
         
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <textarea class="form-control" name="activity_notes" rows="5"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="status">Status</label>
+                            <select class="form-control" name="activity_status">
+                                <option value="">select</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Waiting">Waiting</option>
+                                <option value="Not Started">Not Started</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Deferred">Deferred</option>
+
+                            </select>
+                        </div>
+                        {% comment %} <div class="form-group col-md-4">
+                            <label for="follow_user">Follow-up User</label>
+                            <select class="form-control" name="follow_user">
+                                <option>Rohan Dhillon</option>
+                                <option>John Doe</option>
+                                <option>Jane Smith</option>
+                            </select>
+                        </div> {% endcomment %}
+                        <div class="form-group col-md-4">
+                            <label for="follow_team">Follow-up Team</label>
+                            <select class="form-control" name="follow_up_team" >
+                                <option value="">select</option>
+                                <option value="(None)">(None)</option>
+                                <option value="Team 1">Team 1</option>
+                                <option value="Team 2">Team 2</option>
+                                <option value="Your Sales Pipeline Team">Your Sales Pipeline Team</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                            <label for="activity_date">Due Date</label>
+                            <input type="date" class="form-control" name="due_date" >
+                    </div>
+                    <!-- Additional Activity Details -->
+                    <h5><strong>Additional Activity Details</strong></h5>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="activity_date">Activity Date <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" name="activity_date" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="priority">Priority</label>
+                            <select class="form-control" name="priority" >
+                                <option value="">select</option>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Urgent">Urgent</option>
+                                <option value="Low">Low</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="type">Type</label>
+                            <select class="form-control" name="type" >
+                                <option value="">select</option>
+                                <option value="Initial contact">Initial contact</option>
+                                <option value="Prospecting">Prospecting</option>
+                                <option value="Quote Process">Quote Process</option>
+                                <option value="Enrollement">Enrollement</option>
+                                <option value="Renewal">Renewal</option>
+                                <option value="Service Issue">Service Issue</option>
+                                <option value="Cross-sell">Cross-sell</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="method">Method</label>
+                            <select class="form-control" name="method" >
+                                <option value="">select</option>
+                                <option value="Email">Email</option>
+                                <option value="Mail">Mail</option>
+                                <option value="Phone Call">Phone Call</option>
+                                <option value="Fax">Fax</option>
+                                <option value="Visit">Visit</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Attachment</label>
-                        <input type="file" name="attachment" class="form-control" style="margin-top: 10px;">
+                        <input type="file" name="activity_attachment" class="form-control" style="margin-top: 10px;">
                     </div>
 
                     <div class="text-right">
@@ -281,19 +372,19 @@
 </div>
 
 <script>
-function showCreateNew() {
-    document.getElementById('activityMainContent').style.display = 'none';
-    document.getElementById('createNewactivityContainer').style.display = 'block';
-    window.scrollTo({
-        top: document.getElementById('createNewactivityContainer').offsetTop - 20,
-        behavior: 'smooth'
-    });
-}
+    function showCreateNew() {
+        document.getElementById('activityMainContent').style.display = 'none';
+        document.getElementById('createNewactivityContainer').style.display = 'block';
+        window.scrollTo({
+            top: document.getElementById('createNewactivityContainer').offsetTop - 20,
+            behavior: 'smooth'
+        });
+    }
 
-function showNotesMain() {
-    document.getElementById('activityMainContent').style.display = 'block';
-    document.getElementById('createNewactivityContainer').style.display = 'none';
-    document.getElementById('activityForm').reset();
-}
+    function showNotesMain() {
+        document.getElementById('activityMainContent').style.display = 'block';
+        document.getElementById('createNewactivityContainer').style.display = 'none';
+        document.getElementById('activityForm').reset();
+    }
 
 </script>
