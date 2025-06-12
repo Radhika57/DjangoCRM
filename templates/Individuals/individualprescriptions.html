@@ -635,7 +635,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
 <script>
-  // Initialize accordion functionality for a specific table
+  
   function initAccordionForTable(tableId) {
     const table = document.getElementById(tableId);
     if (!table) return;
@@ -684,16 +684,16 @@
     });
   }
 
-  // Count medication entries in a table
+  
   function countMedications(tableId) {
     const table = document.getElementById(tableId);
     if (!table) return 0;
     
-    // Count only the medication rows (not the expanded content rows)
+   
     return table.querySelectorAll('tbody tr.accordion-toggle').length;
   }
 
-  // Update entries display
+  
   function updateEntriesDisplay() {
     const activeTab = document.querySelector('.custom-nav-tab-btn.active');
     if (!activeTab) return;
@@ -705,7 +705,7 @@
     document.getElementById('totalEntries').textContent = `${count} entries`;
   }
 
-  // Initialize all accordions
+  
   function initAllAccordions() {
     initAccordionForTable('saveonrx-table');
     initAccordionForTable('s4rx-table');
@@ -718,11 +718,11 @@
       document.querySelectorAll('.custom-nav-tab-btn').forEach(btn => btn.classList.remove('active'));
       tabBtn.classList.add('active');
       
-      // Hide all tables first
+      
       document.getElementById('saveonrx-table').style.display = 'none';
       document.getElementById('s4rx-table').style.display = 'none';
       
-      // Collapse all accordions when switching tabs
+     
       collapseAllAccordions('saveonrx-table');
       collapseAllAccordions('s4rx-table');
       
@@ -731,20 +731,20 @@
       const searchContainer = document.getElementById('searchContainer');
       
       if (tabToShow === 'table3') {
-        // Show prescription section when Drug tab is clicked
+        
         prescriptionSection.style.display = 'block';
-        // Hide search container for Drug tab
+       
         searchContainer.style.display = 'none';
       } else {
-        // Hide prescription section for other tabs
+       
         prescriptionSection.style.display = 'none';
-        // Show search container for SaveonRx and S4rx tabs
+        
         searchContainer.style.display = 'flex';
         
         if (tabToShow) {
           document.getElementById(tabToShow).style.display = 'table';
-          updateEntriesDisplay(); // Update entries count when switching tabs
-          updateSearchResults(); // Update search results when switching tabs
+          updateEntriesDisplay(); 
+          updateSearchResults(); 
         }
       }
     });
@@ -999,11 +999,11 @@
     }
   });
 
-  // Initialize everything when the page loads
+  
   document.addEventListener('DOMContentLoaded', function() {
-    // Show the first table by default
+   
     document.getElementById('saveonrx-table').style.display = 'table';
     initAllAccordions();
-    updateEntriesDisplay(); // Initialize entries count display
+    updateEntriesDisplay(); 
   });
 </script>
