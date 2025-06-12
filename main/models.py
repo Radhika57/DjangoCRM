@@ -64,6 +64,9 @@ class Carrier(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        app_label = "main"
 
 
 class CarrierDetails(models.Model):
@@ -72,6 +75,8 @@ class CarrierDetails(models.Model):
     security_groups = MultiSelectField(choices=CARRIER_SECURITY_GROUP_CHOICES, null=True,blank=True)
     carrier_status = models.CharField(max_length=100,choices=CARRIER_STATUS_CHOICES,null=True,blank=True)
     
+    class Meta:
+        app_label = "main"
 
 class CarrierPhone(models.Model):
     carrier = models.ForeignKey(Carrier, on_delete=models.CASCADE, related_name='phones')
@@ -250,7 +255,6 @@ class AgentAgencies(models.Model):
     
 class Agent_Activity(models.Model):
     agent = models.ForeignKey(Agent, on_delete=models.CASCADE , related_name='agent_activity')
-    pin_note = models.BooleanField(default=False)
     subject = models.CharField(max_length=255)
     notes = models.TextField(blank=True)
     status = models.CharField(max_length=100,null=True,blank=True)
@@ -500,3 +504,5 @@ class Prescription(models.Model):
     zipcode = models.CharField(max_length=6)
     refill_frequency = models.CharField(max_length=100)
     generic = models.CharField(max_length=100)
+    
+

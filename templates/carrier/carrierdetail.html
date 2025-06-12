@@ -527,23 +527,7 @@
     <h4><i class="fa fa-tasks"></i> Activities Due</h4>
     {% if due_activities %}
       {% for act in due_activities %}
-      <p class="text-muted"><a href="#" class="edit-activity"
-                                            data-id="{{ act.id }}"
-                                            data-subject="{{ act.subject|escapejs }}"
-                                            data-notes="{{ act.notes|escapejs }}"
-                                            data-status="{{ act.status }}"
-                                            data-user="{{ act.follow_up_user }}"
-                                            data-team="{{ act.follow_up_team }}"
-                                            data-due="{{ act.due_date|date:"Y-m-d" }}"
-                                            data-activity-date="{{ act.activity_date|date:"Y-m-d" }}"
-                                            data-priority="{{ act.priority }}"
-                                            data-type="{{ act.activity_type }}"
-                                            data-method="{{ act.method }}"
-                                            {% if act.attachment %}
-                                            data-attachment="{{ act.attachment.url }}"
-                                            {% endif %}>
-                                            {{ act.subject }}
-                                        </a></p>
+      <p class="text-muted">{{ act.subject }}</p>
       {% endfor %}
       {% else %}
       <p class="text-muted">No Activities.</p>
@@ -566,7 +550,6 @@
     </a>
 </div>
 </div>
-
 
 
 <!-- jQuery -->

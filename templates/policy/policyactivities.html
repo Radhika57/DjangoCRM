@@ -9,9 +9,9 @@
                     </button>
                 </div>
             </div>
-            
+
             <br>
-          
+
             <div class="panel-body">
                 <!-- Empty state content -->
                 <div id="emptyActivitiesState" class="text-center">
@@ -37,7 +37,15 @@
                                 {% for act in policy_activity %}
                                 <tr>
                                     <td>
-                                        <a href="#" class="edit-activity" data-id="{{ act.id }}">
+                                        <a href="#" class="edit-activity" data-id="{{ act.id }}"
+                                            data-subject="{{ act.subject|escapejs }}"
+                                            data-notes="{{ act.notes|escapejs }}" data-status="{{ act.status }}"
+                                            data-user="{{ act.follow_up_user }}" data-team="{{ act.follow_up_team }}"
+                                            data-due="{{ act.due_date|date:"Y-m-d" }}"
+                                            data-activity-date="{{ act.activity_date|date:"Y-m-d" }}"
+                                            data-priority="{{ act.priority }}" data-type="{{ act.type }}"
+                                            data-method="{{ act.method }}" {% if act.attachment %}
+                                            data-attachment="{{ act.attachment.url }}" {% endif %}>
                                             {{ act.subject }}
                                         </a>
                                     </td>
@@ -45,18 +53,19 @@
                                     <td>{{ act.status }}</td>
                                     <td>-</td>
                                     <td>{{ act.follow_up_team }}</td>
-                                    <td>{{ act.due_date }}</td>
+                                    <td>{{ act.due_date|default:"-"}}</td>
                                     <td>{{ act.activity_date }}</td>
                                     <td>{{ act.priority }}</td>
-                                    <td>{{ act.activity_type }}</td>
+                                    <td>{{ act.type }}</td>
                                     <td>{{ act.method }}</td>
                                     <td>
                                         {% if act.attachment %}
-                                            <a href="{{ act.attachment.url }}" download>
-                                                <img src="{{ act.attachment.url }}" alt="Attachment" style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
-                                            </a>
+                                        <a href="{{ act.attachment.url }}" download>
+                                            <img src="{{ act.attachment.url }}" alt="Attachment"
+                                                style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                        </a>
                                         {% else %}
-                                            No File
+                                        No File
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -64,13 +73,14 @@
                             </tbody>
                         </table>
                     </div>
-                    
+
                     {% else %}
                     <div class="well" style="padding: 40px;">
                         <i class="fa fa-tasks fa-3x text-muted mb-3"></i>
                         <h4>No activities have been related yet</h4>
                         <p class="text-muted">
-                        When creating or appending an activity on the policyholder, you have the option to relate it to the policy as well.<br>
+                            When creating or appending an activity on the policyholder, you have the option to relate it
+                            to the policy as well.<br>
                         </p>
                     </div>
                     {% endif %}
@@ -78,28 +88,28 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Create New Activity Container (hidden by default) -->
     <div id="createNewactivityContainer" style="display: none;">
         <div class="panel panel-default">
-              <div class="panel-heading">
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-        <h6 style="font-weight: 600; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 0;">
-            Activity Details
-        </h6>
-        <button class="btn btn-default btn-sm" onclick="showNotesMain()">
-            <i class="fa fa-arrow-left"></i> Back to Activities
-        </button>
-    </div>
-</div>
-            
+            <div class="panel-heading">
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <h6 style="font-weight: 600; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 0;">
+                        Activity Details
+                    </h6>
+                    <button class="btn btn-default btn-sm" onclick="showNotesMain()">
+                        <i class="fa fa-arrow-left"></i> Back to Activities
+                    </button>
+                </div>
+            </div>
+
             <div class="panel-body">
                 <form method="post" enctype="multipart/form-data" id="activityForm">
                     {% csrf_token %}
-                    <div class="form-group">
-                        <label for="subject">Subject <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="activity_subject" id="subject" required>
-            
+                        <div class="form-group">
+                            <label for="subject">Subject <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="activity_subject" id="subject" required>
+                        </div>
 
                         <div class="form-group">
                             <label>Notes</label>
@@ -115,7 +125,7 @@
                                     <option value="Not Started">Not Started</option>
                                     <option value="Completed">Completed</option>
                                     <option value="Deferred">Deferred</option>
-                                    
+
                                 </select>
                             </div>
                             {% comment %} <div class="form-group col-md-4">
@@ -137,25 +147,27 @@
                                 </select>
                             </div>
                         </div>
-        
+
                         <div class="form-group col-md-4">
                             <label for="activity_date">Due Date</label>
-                            <input type="date" class="form-control" name="due_date" >
+                            <input type="date" class="form-control" name="due_date">
                         </div>
-        
+
                         <!-- Additional Activity Details -->
                         <h5>
-                               <div class="col-md-12">
-    <h6 style="font-weight: 1000; font-size: 1.9rem; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 15px;">
-        Additional Activity Details
-    </h6>
-</div>
+                        <div class="col-md-12">
+                            <h6
+                                style="font-weight: 1000; font-size: 1.9rem; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 15px;">
+                                Additional Activity Details
+                            </h6>
+                        </div>
 
 
                         <div class="form-row">
                             <div class="form-group col-md-3">
                                 <label for="activity_date">Activity Date <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" name="activity_date" id="activity_date" required>
+                                <input type="date" class="form-control" name="activity_date" id="activity_date"
+                                    required>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="priority">Priority</label>
@@ -178,7 +190,7 @@
                                     <option value="Renewal">Renewal</option>
                                     <option value="Service Issue">Service Issue</option>
                                     <option value="Cross-sell">Cross-sell</option>
-                                    
+
                                 </select>
                             </div>
                             <div class="form-group col-md-3">
@@ -193,150 +205,147 @@
                                 </select>
                             </div>
                         </div>
-        
-                    </div>
-                    <div class="form-group">
-                        <label>Attachment</label>
-                        <input type="file" name="attachment" class="form-control" style="margin-top: 10px;">
-                    </div>
 
-                    <div class="text-right">
-                        <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
-                        <button type="button" class="btn btn-default" onclick="showNotesMain()">Cancel</button>
-                    </div>
+                        <div class="form-group">
+                            <label>Attachment</label>
+                            <input type="file" name="attachment" class="form-control" style="margin-top: 10px;">
+                        </div>
+
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-default" onclick="showNotesMain()">Cancel</button>
+                        </div>
                 </form>
             </div>
         </div>
     </div>
-
-   
-    {% include "policy/policyeditactivity.html" %}
 </div>
+{% include "policy/policyeditactivity.html" %}
 
 <script>
-// Store the current state of the activities tab
-let activitiesTabState = {
-    showMain: true,
-    showCreate: false,
-    showEdit: false
-};
-
-// Initialize the tab when first loaded
-function initActivitiesTab() {
-    document.getElementById('activityMainContent').style.display = 'block';
-    document.getElementById('createNewactivityContainer').style.display = 'none';
-    document.getElementById('policyeditSection').style.display = 'none';
-    
-    // Set initial state
-    activitiesTabState = {
+    // Store the current state of the activities tab
+    let activitiesTabState = {
         showMain: true,
         showCreate: false,
         showEdit: false
     };
-}
 
-function showCreateNew() {
-    document.getElementById('activityMainContent').style.display = 'none';
-    document.getElementById('createNewactivityContainer').style.display = 'block';
-    document.getElementById('policyeditSection').style.display = 'none';
-    
-    // Update state
-    activitiesTabState = {
-        showMain: false,
-        showCreate: true,
-        showEdit: false
-    };
-    
-    // Scroll to the form section
-    window.scrollTo({
-        top: document.getElementById('createNewactivityContainer').offsetTop - 20,
-        behavior: 'smooth'
-    });
-}
+    // Initialize the tab when first loaded
+    function initActivitiesTab() {
+        document.getElementById('activityMainContent').style.display = 'block';
+        document.getElementById('createNewactivityContainer').style.display = 'none';
+        document.getElementById('policyeditSection').style.display = 'none';
 
-function showNotesMain() {
-    document.getElementById('activityMainContent').style.display = 'block';
-    document.getElementById('createNewactivityContainer').style.display = 'none';
-    document.getElementById('policyeditSection').style.display = 'none';
-    
-    // Update state
-    activitiesTabState = {
-        showMain: true,
-        showCreate: false,
-        showEdit: false
-    };
-    
-    // Reset form if needed
-    document.getElementById('activityForm').reset();
-}
+        // Set initial state
+        activitiesTabState = {
+            showMain: true,
+            showCreate: false,
+            showEdit: false
+        };
+    }
 
-// Function to restore the tab state when switching back
-function restoreActivitiesTabState() {
-    document.getElementById('activityMainContent').style.display = activitiesTabState.showMain ? 'block' : 'none';
-    document.getElementById('createNewactivityContainer').style.display = activitiesTabState.showCreate ? 'block' : 'none';
-    document.getElementById('policyeditSection').style.display = activitiesTabState.showEdit ? 'block' : 'none';
-}
+    function showCreateNew() {
+        document.getElementById('activityMainContent').style.display = 'none';
+        document.getElementById('createNewactivityContainer').style.display = 'block';
+        document.getElementById('policyeditSection').style.display = 'none';
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize the tab
-    initActivitiesTab();
-    
-    // Handle click on edit activity links
-    const editLinks = document.querySelectorAll('.edit-activity');
-    editLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Get the activity ID from data attribute
-            const activityId = this.dataset.id;
-            
-            // Hide the main content and create form
-            document.getElementById('activityMainContent').style.display = 'none';
-            document.getElementById('createNewactivityContainer').style.display = 'none';
-            
-            // Show the edit section
-            document.getElementById('policyeditSection').style.display = 'block';
-            
-            // Update state
-            activitiesTabState = {
-                showMain: false,
-                showCreate: false,
-                showEdit: true
-            };
-            
-            // Here you would typically fetch the activity data and populate the form
-            // For this example, we'll just show the section
-            
-            // Scroll to the edit section
-            window.scrollTo({
-                top: document.getElementById('policyeditSection').offsetTop - 20,
-                behavior: 'smooth'
+        // Update state
+        activitiesTabState = {
+            showMain: false,
+            showCreate: true,
+            showEdit: false
+        };
+
+        // Scroll to the form section
+        window.scrollTo({
+            top: document.getElementById('createNewactivityContainer').offsetTop - 20,
+            behavior: 'smooth'
+        });
+    }
+
+    function showNotesMain() {
+        document.getElementById('activityMainContent').style.display = 'block';
+        document.getElementById('createNewactivityContainer').style.display = 'none';
+        document.getElementById('policyeditSection').style.display = 'none';
+
+        // Update state
+        activitiesTabState = {
+            showMain: true,
+            showCreate: false,
+            showEdit: false
+        };
+
+        // Reset form if needed
+        document.getElementById('activityForm').reset();
+    }
+
+    // Function to restore the tab state when switching back
+    function restoreActivitiesTabState() {
+        document.getElementById('activityMainContent').style.display = activitiesTabState.showMain ? 'block' : 'none';
+        document.getElementById('createNewactivityContainer').style.display = activitiesTabState.showCreate ? 'block' : 'none';
+        document.getElementById('policyeditSection').style.display = activitiesTabState.showEdit ? 'block' : 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize the tab
+        initActivitiesTab();
+
+        // Handle click on edit activity links
+        const editLinks = document.querySelectorAll('.edit-activity');
+        editLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Get the activity ID from data attribute
+                const activityId = this.dataset.id;
+
+                // Hide the main content and create form
+                document.getElementById('activityMainContent').style.display = 'none';
+                document.getElementById('createNewactivityContainer').style.display = 'none';
+
+                // Show the edit section
+                document.getElementById('policyeditSection').style.display = 'block';
+
+                // Update state
+                activitiesTabState = {
+                    showMain: false,
+                    showCreate: false,
+                    showEdit: true
+                };
+
+                // Here you would typically fetch the activity data and populate the form
+                // For this example, we'll just show the section
+
+                // Scroll to the edit section
+                window.scrollTo({
+                    top: document.getElementById('policyeditSection').offsetTop - 20,
+                    behavior: 'smooth'
+                });
             });
         });
-    });
-    
-    // Handle close button click for edit section
-    const closeEditBtn = document.getElementById('closeActivityEdit');
-    if (closeEditBtn) {
-        closeEditBtn.addEventListener('click', function() {
-            document.getElementById('policyeditSection').style.display = 'none';
-            document.getElementById('activityMainContent').style.display = 'block';
-            
-            // Update state
-            activitiesTabState = {
-                showMain: true,
-                showCreate: false,
-                showEdit: false
-            };
-        });
-    }
-    
-   
-$('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-    if (e.target.getAttribute('href') === '#Activities-policy') {
-        initActivitiesTab();  
-    }
-});
 
-});
+        // Handle close button click for edit section
+        const closeEditBtn = document.getElementById('closeActivityEdit');
+        if (closeEditBtn) {
+            closeEditBtn.addEventListener('click', function () {
+                document.getElementById('policyeditSection').style.display = 'none';
+                document.getElementById('activityMainContent').style.display = 'block';
+
+                // Update state
+                activitiesTabState = {
+                    showMain: true,
+                    showCreate: false,
+                    showEdit: false
+                };
+            });
+        }
+
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            if (e.target.getAttribute('href') === '#Activities-policy') {
+                initActivitiesTab();
+            }
+        });
+
+    });
 </script>
