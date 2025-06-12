@@ -538,26 +538,43 @@ def agent_detail(request, agent_id):
                 agent_agency.save()
 
         # --- Activity ---
-        if request.POST.get('activity_subject'):
-            activity_id = request.POST.get('activity_id')
-            if activity_id:
-                agent_activity = Agent_Activity.objects.get(id=activity_id)
-            else:
-                agent_activity = Agent_Activity(agent=agent)
-
-            agent_activity.subject = request.POST.get('activity_subject')
-            agent_activity.notes = request.POST.get('activity_notes')
-            agent_activity.status = request.POST.get('activity_status')
+        
+        
+        if request.POST.get('activity_id'):
+            act_id = request.POST.get('activity_id')
+            agent_activity = Agent_Activity.objects.get(id=act_id)
+            agent_activity.subject = request.POST.get('subject')
+            agent_activity.notes = request.POST.get('notes') 
+            agent_activity.status = request.POST.get('status')
+            # agent_activity.follow_up_user = request.POST.get('follow_up_user')
             agent_activity.follow_up_team = request.POST.get('follow_up_team')
             agent_activity.due_date = request.POST.get('due_date') or None
-            agent_activity.activity_date = request.POST.get('activity_date') or None
+            agent_activity.activity_date = request.POST.get('activity_date')
             agent_activity.priority = request.POST.get('priority')
-            agent_activity.type = request.POST.get('type')
+            agent_activity.type = request.POST.get('activity_type')
             agent_activity.method = request.POST.get('method')
-            agent_activity.pin_note = request.POST.get('pin_note') == 'on'
+            
             if request.FILES.get('attachment'):
                 agent_activity.attachment = request.FILES.get('attachment')
+            
             agent_activity.save()
+
+        elif request.POST.get('type') and request.POST.get('activity_subject'):
+            Agent_Activity.objects.create(
+                agent=agent,
+                subject=request.POST.get('activity_subject'),
+                notes=request.POST.get('activity_notes'),
+                status=request.POST.get('activity_status'),
+                # follow_up_user=request.POST.get('follow_up_user'),
+                follow_up_team=request.POST.get('follow_up_team'),
+                due_date=request.POST.get('due_date') or None,
+                activity_date=request.POST.get('activity_date'),
+                priority=request.POST.get('priority'),
+                type=request.POST.get('type'),
+                method=request.POST.get('method'),
+                attachment=request.FILES.get('attachment')
+            )
+        
 
         # --- Notes ---
         if request.POST.get('note_subject'):
@@ -1024,26 +1041,42 @@ def individual_tab(request, individual_id):
                 )
                 
         # --- Activity ---
-        if request.POST.get('activity_subject'):
-            activity_id = request.POST.get('activity_id')
-            
-            if activity_id:
-                individual_activity = IndividualActivity.objects.get(id=activity_id)
-            else:
-                individual_activity = IndividualActivity(individual_name=individual)
-
-            individual_activity.subject = request.POST.get('activity_subject')
-            individual_activity.notes = request.POST.get('activity_notes')
-            individual_activity.status = request.POST.get('activity_status')
+        
+        if request.POST.get('activity_id'):
+            act_id = request.POST.get('activity_id')
+            individual_activity = IndividualActivity.objects.get(id=act_id)
+            individual_activity.subject = request.POST.get('subject')
+            individual_activity.notes = request.POST.get('notes') 
+            individual_activity.status = request.POST.get('status')
+            # individual_activity.follow_up_user = request.POST.get('follow_up_user')
             individual_activity.follow_up_team = request.POST.get('follow_up_team')
             individual_activity.due_date = request.POST.get('due_date') or None
-            individual_activity.activity_date = request.POST.get('activity_date') or None
+            individual_activity.activity_date = request.POST.get('activity_date')
             individual_activity.priority = request.POST.get('priority')
-            individual_activity.type = request.POST.get('type')
+            individual_activity.type = request.POST.get('activity_type')
             individual_activity.method = request.POST.get('method')
+            
             if request.FILES.get('activity_attachment'):
                 individual_activity.attachment = request.FILES.get('activity_attachment')
+            
             individual_activity.save()
+
+        elif request.POST.get('activity_subject') and request.POST.get('activity_date'):
+            IndividualActivity.objects.create(
+                individual_name=individual,
+                subject=request.POST.get('activity_subject'),
+                notes=request.POST.get('activity_notes'),
+                status=request.POST.get('activity_status'),
+                # follow_up_user=request.POST.get('follow_up_user'),
+                follow_up_team=request.POST.get('follow_up_team'),
+                due_date=request.POST.get('due_date') or None,
+                activity_date=request.POST.get('activity_date'),
+                priority=request.POST.get('priority'),
+                type=request.POST.get('type'),
+                method=request.POST.get('method'),
+                attachment=request.FILES.get('activity_attachment')
+            )
+        
 
         # --- Notes ---
         if request.POST.get('note_subject'):
@@ -1217,27 +1250,65 @@ def policy_tab(request, policy_id):
             return redirect('policy_tab', policy_id=policy_id)
 
         # --- Activity Form ---
-        if request.POST.get('activity_subject'):
-            activity_id = request.POST.get('activity_id')
-            if activity_id:
-                policy_activity_obj = PolicyActivity.objects.get(id=activity_id)
-            else:
-                policy_activity_obj = PolicyActivity(policy_name=policy)
-
-            policy_activity_obj.subject = request.POST.get('activity_subject')
-            policy_activity_obj.notes = request.POST.get('activity_notes')
-            policy_activity_obj.status = request.POST.get('activity_status')
+        
+        if request.POST.get('activity_id'):
+            act_id = request.POST.get('activity_id')
+            policy_activity_obj = PolicyActivity.objects.get(id=act_id)
+            policy_activity_obj.subject = request.POST.get('subject')
+            policy_activity_obj.notes = request.POST.get('notes') 
+            policy_activity_obj.status = request.POST.get('status')
+            # policy_activity_obj.follow_up_user = request.POST.get('follow_up_user')
             policy_activity_obj.follow_up_team = request.POST.get('follow_up_team')
             policy_activity_obj.due_date = request.POST.get('due_date') or None
-            policy_activity_obj.activity_date = request.POST.get('activity_date') or None
+            policy_activity_obj.activity_date = request.POST.get('activity_date')
             policy_activity_obj.priority = request.POST.get('priority')
-            policy_activity_obj.type = request.POST.get('type')
+            policy_activity_obj.type = request.POST.get('activity_type')
             policy_activity_obj.method = request.POST.get('method')
-            if request.FILES.get('attachment'):
-                policy_activity_obj.attachment = request.FILES.get('attachment')
+            
+            if request.FILES.get('activity_attachment'):
+                policy_activity_obj.attachment = request.FILES.get('activity_attachment')
+            
             policy_activity_obj.save()
-
             return redirect('policy_tab', policy_id=policy_id)
+
+        elif request.POST.get('activity_subject') and request.POST.get('activity_date'):
+            PolicyActivity.objects.create(
+                policy_name=policy,
+                subject=request.POST.get('activity_subject'),
+                notes=request.POST.get('activity_notes'),
+                status=request.POST.get('activity_status'),
+                # follow_up_user=request.POST.get('follow_up_user'),
+                follow_up_team=request.POST.get('follow_up_team'),
+                due_date=request.POST.get('due_date') or None,
+                activity_date=request.POST.get('activity_date'),
+                priority=request.POST.get('priority'),
+                type=request.POST.get('type'),
+                method=request.POST.get('method'),
+                attachment=request.FILES.get('attachment')
+            )
+            return redirect('policy_tab', policy_id=policy_id)
+        
+        # if request.POST.get('activity_subject'):
+        #     activity_id = request.POST.get('activity_id')
+        #     if activity_id:
+        #         policy_activity_obj = PolicyActivity.objects.get(id=activity_id)
+        #     else:
+        #         policy_activity_obj = PolicyActivity(policy_name=policy)
+
+        #     policy_activity_obj.subject = request.POST.get('activity_subject')
+        #     policy_activity_obj.notes = request.POST.get('activity_notes')
+        #     policy_activity_obj.status = request.POST.get('activity_status')
+        #     policy_activity_obj.follow_up_team = request.POST.get('follow_up_team')
+        #     policy_activity_obj.due_date = request.POST.get('due_date') or None
+        #     policy_activity_obj.activity_date = request.POST.get('activity_date') or None
+        #     policy_activity_obj.priority = request.POST.get('priority')
+        #     policy_activity_obj.type = request.POST.get('type')
+        #     policy_activity_obj.method = request.POST.get('method')
+        #     if request.FILES.get('attachment'):
+        #         policy_activity_obj.attachment = request.FILES.get('attachment')
+        #     policy_activity_obj.save()
+
+        #     return redirect('policy_tab', policy_id=policy_id)
 
         # --- Notes Form ---
         if request.POST.get('note_subject'):
@@ -1474,14 +1545,21 @@ def get_dosage_options(request):
                     seen.add(display)
                     quantity_entries = dosage_entry.get("Value", [])
                     quantity = ""
+                    ndc = ""
                     if quantity_entries:
-                        quantity = quantity_entries[0].get("Value", {}).get("Quantity", "")
+                        quantity_data = quantity_entries[0].get("Value", {})
+                        quantity = quantity_data.get("Quantity", "")
+                        ndc = quantity_data.get("NDC", "")
 
                     dosages.append({
                         'display': display,
                         'dosage': display,
-                        'quantity': quantity
+                        'quantity': quantity_data.get("Quantity", ""),
+                        'ndc': quantity_data.get("NDC", ""),
+                        'display_quantity': quantity_data.get("DisplayQuantity", ""),
+                        'actual_quantity': quantity_data.get("Quantity", "")
                     })
+
 
     return JsonResponse(dosages, safe=False)
 
@@ -1495,13 +1573,88 @@ def save_prescription(request):
             quantity=data.get('quantity'),
             refill_frequency=data.get('refill_frequency'),
             generic=data.get('generic'),
-            zipcode=data.get('zipcode')
+            zipcode=data.get('zipcode'),
+            ndc=data.get('ndc'),
+            display_quantity=data.get('display_quantity'),
+            actual_quantity=data.get('actual_quantity')
         )
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'invalid'}, status=400)
 
 def prescription_form(request):
     return render(request, 'rx.html')
+
+
+def prescription_table(request):
+    return render(request, 'rxtable.html')
+
+
+
+def get_prescription_data(request):
+    token = get_token()
+    if not token:
+        return JsonResponse({'error': 'Token error'}, status=500)
+
+    prescriptions = Prescription.objects.all()
+    results = []
+
+    for p in prescriptions:
+        pricing = []
+
+
+        try:
+            user_quantity = float(p.quantity or 0)
+            display_quantity = float(p.display_quantity or 1)
+            actual_quantity = float(p.actual_quantity or 1)
+
+            if display_quantity == actual_quantity:
+                actual_quantity_for_pricing = user_quantity
+            else:
+                dosage_ratio = actual_quantity / display_quantity
+                actual_quantity_for_pricing = user_quantity * dosage_ratio
+        except:
+            actual_quantity_for_pricing = p.quantity  
+
+        headers = {
+            'Authorizer': token,
+            'Content-Type': 'application/json'
+        }
+        payload = {
+            "NDC": p.ndc,
+            "Quantity": actual_quantity_for_pricing,
+            "ZipCode": p.zipcode
+        }
+
+        try:
+            response = requests.post(TIERED_PRICING_URL, headers=headers, json=payload)
+            if response.status_code == 200:
+                pricing_data = response.json().get("Value", {})
+                pharmacies = pricing_data.get("PharmacyPricings", [])
+
+                for pharmacy in pharmacies:
+                    if pharmacy.get("Prices"):
+                        price_info = pharmacy["Prices"][0]
+                        pricing.append({
+                            "pharmacy": pharmacy["Pharmacy"]["Name"],
+                            "logo": pharmacy["Pharmacy"]["LogoUrl"],
+                            "distance": round(pharmacy["Pharmacy"]["Distance"], 2),
+                            "price": price_info["FormattedPrice"]
+                        })
+        except Exception:
+            pricing = []
+
+        results.append({
+            "medication": p.medication,
+            "dosage": p.dosage,
+            "quantity": p.quantity,
+            "zipcode": p.zipcode,
+            "refill_frequency": p.refill_frequency,
+            "generic": p.generic,
+            "pricing": pricing
+        })
+
+    return JsonResponse(results, safe=False)
+
 
 
 def custom_fields(request):

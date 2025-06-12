@@ -136,3 +136,7 @@ JAZZMIN_UI_TWEAKS = {
     
     "theme": "flatly",
 }
+
+
+
+

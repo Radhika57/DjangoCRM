@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Prescription Table</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+  <style>
+    .details-control {
+      cursor: pointer;
+    }
+    .shown td .glyphicon {
+      transform: rotate(180deg);
+    }
+    #loading {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h3>Collapsible DataTable </h3>
+
+  <div id="loading">Loading pricing data, please wait...</div>
+
+  <table id="main-table" class="table table-bordered table-striped" style="display:none;">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Medication</th>
+        <th>Dosage</th>
+        <th>Quantity</th>
+        <th>Zipcode</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+<script>
+function formatNestedTable(pharmacies) {
+  if (!pharmacies || pharmacies.length === 0) {
+    return "<div>No pharmacy pricing available.</div>";
+  }
+
+  let rows = pharmacies.map(p => `
+    <tr>
+      <td><img src="${p.logo}" width="50" /></td>
+      <td>${p.pharmacy}</td>
+      <td>${p.price}</td>
+      <td>${p.distance} mi</td>
+    </tr>
+  `).join('');
+
+  return `
+    <div class="nested-table">
+      <strong>Pharmacy Prices</strong>
+      <table class="table table-bordered">
+        <thead>
+          <tr><th>Logo</th><th>Pharmacy</th><th>Price</th><th>Distance</th></tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+$(document).ready(function () {
+  const table = $('#main-table').DataTable({
+    data: [],
+    columns: [
+      {
+        className: 'details-control',
+        orderable: false,
+        data: null,
+        defaultContent: '<span class="glyphicon glyphicon-chevron-down"></span>',
+        width: "40px"
+      },
+      { data: "medication" },
+      { data: "dosage" },
+      { data: "quantity" },
+      { data: "zipcode" }
+    ],
+    order: [[1, 'asc']]
+  });
+
+  let currentlyOpenRow = null;
+
+  $('#main-table tbody').on('click', 'td.details-control', function () {
+    const tr = $(this).closest('tr');
+    const row = table.row(tr);
+    const icon = $(this).find('.glyphicon');
+
+    if (row.child.isShown()) {
+      row.child.hide();
+      tr.removeClass('shown');
+      icon.removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+      currentlyOpenRow = null;
+    } else {
+      if (currentlyOpenRow) {
+        const prevRow = table.row(currentlyOpenRow);
+        prevRow.child.hide();
+        currentlyOpenRow.removeClass('shown');
+        currentlyOpenRow.find('.glyphicon').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+      }
+
+      row.child(formatNestedTable(row.data().pricing)).show();
+      tr.addClass('shown');
+      icon.removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+      currentlyOpenRow = tr;
+    }
+  });
+
+  $.getJSON('/get-prescription-data/', function (data) {
+    $('#loading').hide();
+    $('#main-table').show();
+    table.clear().rows.add(data).draw();
+  }).fail(function () {
+    $('#loading').text('Failed to load data. Please try again later.');
+  });
+});
+</script>
+</body>
+</html>

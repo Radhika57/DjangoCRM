@@ -39,7 +39,20 @@
                                 {% for act in activities %}
                                 <tr>
                                     <td>
-                                        <a href="#" class="edit-activity" data-id="{{ act.id }}">
+                                        <a href="#" class="edit-activity" data-id="{{ act.id }}"
+                                            data-subject="{{ act.subject|escapejs }}"
+                                            data-notes="{{ act.notes|escapejs }}"
+                                            data-status="{{ act.status }}"
+                                            data-user="{{ act.follow_up_user }}"
+                                            data-team="{{ act.follow_up_team }}"
+                                            data-due="{{ act.due_date|date:"Y-m-d" }}"
+                                            data-activity-date="{{ act.activity_date|date:"Y-m-d" }}"
+                                            data-priority="{{ act.priority }}"
+                                            data-type="{{ act.type }}"
+                                            data-method="{{ act.method }}"
+                                            {% if act.attachment %}
+                                            data-attachment="{{ act.attachment.url }}"
+                                            {% endif %}>
                                             {{ act.subject }}
                                         </a>
                                     </td>
@@ -47,7 +60,7 @@
                                     <td>{{ act.status }}</td>
                                     <td>test</td>
                                     <td>{{ act.follow_up_team }}</td>
-                                    <td>{{ act.due_date }}</td>
+                                    <td>{{ act.due_date|default:"-" }}</td>
                                     <td>{{ act.activity_date }}</td>
                                     <td>{{ act.priority }}</td>
                                     <td>{{ act.type }}</td>
@@ -101,12 +114,7 @@
                     <div class="form-group">
                         <label for="subject">Subject <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" name="activity_subject" id="subject" required>
-                        <div class="checkbox checkbox-primary">
-                            <input id="checkbox10" type="checkbox" name="pin_note">
-                            <label for="checkbox10">
-                                Pin Note
-                            </label>
-                        </div>
+                        
 
                         <div class="form-group">
                             <label>Notes</label>
