@@ -1545,14 +1545,21 @@ def get_dosage_options(request):
                     seen.add(display)
                     quantity_entries = dosage_entry.get("Value", [])
                     quantity = ""
+                    ndc = ""
                     if quantity_entries:
-                        quantity = quantity_entries[0].get("Value", {}).get("Quantity", "")
+                        quantity_data = quantity_entries[0].get("Value", {})
+                        quantity = quantity_data.get("Quantity", "")
+                        ndc = quantity_data.get("NDC", "")
 
                     dosages.append({
                         'display': display,
                         'dosage': display,
-                        'quantity': quantity
+                        'quantity': quantity_data.get("Quantity", ""),
+                        'ndc': quantity_data.get("NDC", ""),
+                        'display_quantity': quantity_data.get("DisplayQuantity", ""),
+                        'actual_quantity': quantity_data.get("Quantity", "")
                     })
+
 
     return JsonResponse(dosages, safe=False)
 
@@ -1566,13 +1573,88 @@ def save_prescription(request):
             quantity=data.get('quantity'),
             refill_frequency=data.get('refill_frequency'),
             generic=data.get('generic'),
-            zipcode=data.get('zipcode')
+            zipcode=data.get('zipcode'),
+            ndc=data.get('ndc'),
+            display_quantity=data.get('display_quantity'),
+            actual_quantity=data.get('actual_quantity')
         )
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'invalid'}, status=400)
 
 def prescription_form(request):
     return render(request, 'rx.html')
+
+
+def prescription_table(request):
+    return render(request, 'rxtable.html')
+
+
+
+def get_prescription_data(request):
+    token = get_token()
+    if not token:
+        return JsonResponse({'error': 'Token error'}, status=500)
+
+    prescriptions = Prescription.objects.all()
+    results = []
+
+    for p in prescriptions:
+        pricing = []
+
+
+        try:
+            user_quantity = float(p.quantity or 0)
+            display_quantity = float(p.display_quantity or 1)
+            actual_quantity = float(p.actual_quantity or 1)
+
+            if display_quantity == actual_quantity:
+                actual_quantity_for_pricing = user_quantity
+            else:
+                dosage_ratio = actual_quantity / display_quantity
+                actual_quantity_for_pricing = user_quantity * dosage_ratio
+        except:
+            actual_quantity_for_pricing = p.quantity  
+
+        headers = {
+            'Authorizer': token,
+            'Content-Type': 'application/json'
+        }
+        payload = {
+            "NDC": p.ndc,
+            "Quantity": actual_quantity_for_pricing,
+            "ZipCode": p.zipcode
+        }
+
+        try:
+            response = requests.post(TIERED_PRICING_URL, headers=headers, json=payload)
+            if response.status_code == 200:
+                pricing_data = response.json().get("Value", {})
+                pharmacies = pricing_data.get("PharmacyPricings", [])
+
+                for pharmacy in pharmacies:
+                    if pharmacy.get("Prices"):
+                        price_info = pharmacy["Prices"][0]
+                        pricing.append({
+                            "pharmacy": pharmacy["Pharmacy"]["Name"],
+                            "logo": pharmacy["Pharmacy"]["LogoUrl"],
+                            "distance": round(pharmacy["Pharmacy"]["Distance"], 2),
+                            "price": price_info["FormattedPrice"]
+                        })
+        except Exception:
+            pricing = []
+
+        results.append({
+            "medication": p.medication,
+            "dosage": p.dosage,
+            "quantity": p.quantity,
+            "zipcode": p.zipcode,
+            "refill_frequency": p.refill_frequency,
+            "generic": p.generic,
+            "pricing": pricing
+        })
+
+    return JsonResponse(results, safe=False)
+
 
 
 def custom_fields(request):

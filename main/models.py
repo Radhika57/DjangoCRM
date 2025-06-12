@@ -504,5 +504,8 @@ class Prescription(models.Model):
     zipcode = models.CharField(max_length=6)
     refill_frequency = models.CharField(max_length=100)
     generic = models.CharField(max_length=100)
+    ndc = models.CharField(max_length=20, blank=True, null=True)
+    display_quantity = models.FloatField(null=True, blank=True)
+    actual_quantity = models.FloatField(null=True, blank=True)
     
 
