@@ -1,5 +1,4 @@
 <style>
-  
   /* Tab Styles */
   .custom-nav-tabs-container {
     margin-bottom: 15px;
@@ -40,41 +39,19 @@
       flex-direction: column;
       align-items: flex-start;
     }
-    
   }
 </style>
 
 <div class="custom-nav-tabs-container">
   <div class="btn-group nav-tab-btn-group me-3 mb-2">
-    <a href="#" class="btn btn-secondary custom-nav-tab-btn" data-toggle="tab" data-tab="table3">Drug</a>
-    <a href="#" class="btn btn-secondary custom-nav-tab-btn active" data-toggle="tab" data-tab="saveonrx-table">SaveonRx</a>
+    <a href="#" class="btn btn-secondary custom-nav-tab-btn active" data-toggle="tab" data-tab="drug">Drug</a>
+    <a href="#" class="btn btn-secondary custom-nav-tab-btn" data-toggle="tab" data-tab="saveonrx-table">SaveonRx</a>
     <a href="#" class="btn btn-secondary custom-nav-tab-btn" data-toggle="tab" data-tab="s4rx-table">S4rx</a>
   </div>
 </div>
-<div class="table-responsive text-center">
-  <div id="loading" class="p-4">
-    <img src="/static/img/spinner.gif" alt="Loading..." width="100">
-    <div>Loading pricing data, please wait...</div>
-  </div>
 
-  <table id="saveonrx-table" class="table table-striped table-hover" style="display:none;">
-    <thead>
-      <tr>
-        <th></th>
-        <th>Medication</th>
-        <th>Dosage</th>
-        <th>Quantity</th>
-        
-      </tr>
-    </thead>
-    <tbody>
-      
-      
-    </tbody>
-  </table>
-</div>
-
-  <div class="prescription-updated-info prescription-fields-panel mt-4" style="display: none;">
+<div id="drug-content">
+  <div class="prescription-updated-info prescription-fields-panel mt-4">
     <div class="section-header with-divider">
       <h1 class="section-title">Current Prescriptions</h1>
       <div class="prescription-fields-edit">
@@ -106,7 +83,6 @@
                               <td>{{ pres.refill_frequency }}</td>
                               <td>
                                <button class="btn btn-danger btn-xs" onclick="confirmDeletePrescription('{{ pres.id }}')"> Delete</button>
-
                               </td>
                             </tr>
                             {% endfor %}
@@ -122,9 +98,33 @@
       <div style="font-size: 14px;">This data is not available because it hasn't been created yet or you don't have permission.</div>
     </div>
     {% endif %}
+    </div>
   </div>
 </div>
 
+<div class="table-responsive text-center">
+  <div id="loading" class="p-4">
+    <img src="/static/img/spinner.gif" alt="Loading..." width="100">
+    <div>Loading pricing data, please wait...</div>
+  </div>
+
+  <table id="saveonrx-table" class="table table-striped table-hover" style="display:none;">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Medication</th>
+        <th>Dosage</th>
+        <th>Quantity</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div>
+
+<div id="s4rx-table" style="display:none;">
+  <p>This is S4Rx</p>
+</div>
 
 <!-- Coupons Modal -->
 <div class="modal fade" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="couponModalLabel" aria-hidden="true">
@@ -136,325 +136,11 @@
   </div>
 </div>
 
-
 {% include "Individuals/addprescription.html" %}
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-
-{% comment %} 
-<script>
-  // Initialize accordion functionality for a specific table
-  function initAccordionForTable(tableId) {
-    const table = document.getElementById(tableId);
-    if (!table) return;
-
-    table.querySelectorAll('.accordion-toggle').forEach(toggle => {
-      toggle.addEventListener('click', function() {
-        const targetId = this.getAttribute('data-target');
-        const target = document.querySelector(targetId);
-        
-        if (target) {
-          const isCollapsed = this.classList.contains('collapsed');
-          
-          // Close all other open accordions in this table
-          table.querySelectorAll('.accordion-toggle').forEach(otherToggle => {
-            if (otherToggle !== this) {
-              otherToggle.classList.add('collapsed');
-              const otherTargetId = otherToggle.getAttribute('data-target');
-              const otherTarget = document.querySelector(otherTargetId);
-              if (otherTarget) otherTarget.style.display = 'none';
-            }
-          });
-          
-          // Toggle current accordion
-          if (isCollapsed) {
-            this.classList.remove('collapsed');
-            target.style.display = '';
-          } else {
-            this.classList.add('collapsed');
-            target.style.display = 'none';
-          }
-        }
-      });
-    });
-  }
-
-  // Collapse all accordions in a table
-  function collapseAllAccordions(tableId) {
-    const table = document.getElementById(tableId);
-    if (!table) return;
-    
-    table.querySelectorAll('.accordion-toggle').forEach(toggle => {
-      toggle.classList.add('collapsed');
-      const targetId = toggle.getAttribute('data-target');
-      const target = document.querySelector(targetId);
-      if (target) target.style.display = 'none';
-    });
-  }
-
-  // Count medication entries in a table
-  function countMedications(tableId) {
-    const table = document.getElementById(tableId);
-    if (!table) return 0;
-    
-    // Count only the medication rows (not the expanded content rows)
-    return table.querySelectorAll('tbody tr.accordion-toggle').length;
-  }
-
-  // Update entries display
-  function updateEntriesDisplay() {
-    const activeTab = document.querySelector('.custom-nav-tab-btn.active');
-    if (!activeTab) return;
-    
-    const tabToShow = activeTab.getAttribute('data-tab');
-    if (tabToShow === 'table3') return;
-    
-    const count = countMedications(tabToShow);
-    document.getElementById('totalEntries').textContent = `${count} entries`;
-  }
-
-  // Initialize all accordions
-  function initAllAccordions() {
-    initAccordionForTable('saveonrx-table');
-    initAccordionForTable('s4rx-table');
-    
-    // Initialize any dynamically added accordions
-    document.querySelectorAll('.accordion-toggle').forEach(toggle => {
-      if (!toggle.hasAttribute('data-initialized')) {
-        const targetId = toggle.getAttribute('data-target');
-        const target = document.querySelector(targetId);
-        if (target) {
-          toggle.setAttribute('data-initialized', 'true');
-          toggle.addEventListener('click', function() {
-            const isCollapsed = this.classList.contains('collapsed');
-            const table = this.closest('table');
-            
-            // Close all other open accordions in this table
-            table.querySelectorAll('.accordion-toggle').forEach(otherToggle => {
-              if (otherToggle !== this) {
-                otherToggle.classList.add('collapsed');
-                const otherTargetId = otherToggle.getAttribute('data-target');
-                const otherTarget = document.querySelector(otherTargetId);
-                if (otherTarget) otherTarget.style.display = 'none';
-              }
-            });
-            
-            // Toggle current accordion
-            if (isCollapsed) {
-              this.classList.remove('collapsed');
-              target.style.display = '';
-            } else {
-              this.classList.add('collapsed');
-              target.style.display = 'none';
-            }
-          });
-        }
-      }
-    });
-  }
-
-  // Tab switching
-  document.querySelectorAll('.custom-nav-tab-btn').forEach((tabBtn) => {
-    tabBtn.addEventListener('click', e => {
-      e.preventDefault();
-      document.querySelectorAll('.custom-nav-tab-btn').forEach(btn => btn.classList.remove('active'));
-      tabBtn.classList.add('active');
-      
-      // Hide all tables first
-      document.getElementById('saveonrx-table').style.display = 'none';
-      document.getElementById('s4rx-table').style.display = 'none';
-      
-      // Collapse all accordions when switching tabs
-      collapseAllAccordions('saveonrx-table');
-      collapseAllAccordions('s4rx-table');
-      
-      const tabToShow = tabBtn.getAttribute('data-tab');
-      const prescriptionSection = document.querySelector('.prescription-updated-info');
-      const searchContainer = document.getElementById('searchContainer');
-      
-      if (tabToShow === 'table3') {
-        // Show prescription section when Drug tab is clicked
-        prescriptionSection.style.display = 'block';
-        // Hide search container for Drug tab
-        searchContainer.style.display = 'none';
-      } else {
-        // Hide prescription section for other tabs
-        prescriptionSection.style.display = 'none';
-        // Show search container for SaveonRx and S4rx tabs
-        searchContainer.style.display = 'flex';
-        
-        if (tabToShow) {
-          document.getElementById(tabToShow).style.display = 'table';
-          updateEntriesDisplay(); // Update entries count when switching tabs
-          updateSearchResults(); // Update search results when switching tabs
-        }
-      }
-    });
-  });
-
-  function toggleZipCodeField() {
-    var dropdown = document.getElementById('zipCodeDropdown');
-    var zipCodeField = document.getElementById('zipCodeField');
-    
-    if (dropdown.value === 'no') {
-      zipCodeField.style.display = 'block';
-    } else {
-      zipCodeField.style.display = 'none';
-    }
-  }
-
-  // Table sorting functionality
-  document.querySelectorAll('.sortable').forEach(header => {
-    header.addEventListener('click', () => {
-      const table = header.closest('table');
-      const columnIndex = Array.from(header.parentNode.children).indexOf(header);
-      const isAscending = header.classList.contains('sorted-asc');
-      
-      // Reset all sort indicators
-      table.querySelectorAll('.sortable').forEach(h => {
-        h.classList.remove('sorted-asc', 'sorted-desc');
-      });
-      
-      // Set new sort indicator
-      header.classList.add(isAscending ? 'sorted-desc' : 'sorted-asc');
-      
-      // Sort the table
-      sortTable(table, columnIndex, isAscending);
-    });
-  });
-
-  function sortTable(table, columnIndex, isAscending) {
-    const tbody = table.querySelector('tbody');
-    const rows = Array.from(tbody.querySelectorAll('tr:not([style*="display: none"])'));
-    
-    rows.sort((a, b) => {
-      const aText = a.children[columnIndex].textContent.trim();
-      const bText = b.children[columnIndex].textContent.trim();
-      
-      // Check if values are numeric
-      const aNum = parseFloat(aText);
-      const bNum = parseFloat(bText);
-      
-      if (!isNaN(aNum) && !isNaN(bNum)) {
-        return isAscending ? aNum - bNum : bNum - aNum;
-      } else {
-        return isAscending 
-          ? aText.localeCompare(bText)
-          : bText.localeCompare(aText);
-      }
-    });
-    
-    // Reattach sorted rows
-    rows.forEach(row => tbody.appendChild(row));
-  }
-
-  // Search functionality
-  const searchInput = document.getElementById('tableSearch');
-  const searchEntries = document.getElementById('searchEntries');
-  
-  searchInput.addEventListener('input', () => {
-    updateSearchResults();
-  });
-  
-  function updateSearchResults() {
-    const searchTerm = searchInput.value.toLowerCase();
-    let totalMatchCount = 0;
-    
-    // Get the active table
-    const activeTab = document.querySelector('.custom-nav-tab-btn.active');
-    if (!activeTab) return;
-    
-    const tableId = activeTab.getAttribute('data-tab');
-    if (tableId === 'table3') return;
-    
-    const table = document.getElementById(tableId);
-    if (!table) return;
-    
-    // Count only the medication rows (accordion-toggle rows)
-    const medicationRows = table.querySelectorAll('tbody tr.accordion-toggle');
-    let tableMatchCount = 0;
-    
-    medicationRows.forEach(row => {
-      // Get the medication name from the second column (index 1)
-      const medicationCell = row.querySelector('td:nth-child(2)');
-      if (!medicationCell) return;
-      
-      const medicationName = medicationCell.textContent.toLowerCase();
-      const isMatch = medicationName.includes(searchTerm);
-      
-      if (isMatch) {
-        row.style.display = '';
-        tableMatchCount++;
-      } else {
-        row.style.display = 'none';
-      }
-      
-      // Hide the expanded content row if it exists
-      const nextRow = row.nextElementSibling;
-      if (nextRow && nextRow.querySelector('td[colspan]')) {
-        nextRow.style.display = isMatch ? '' : 'none';
-      }
-    });
-    
-    totalMatchCount = tableMatchCount;
-    searchEntries.textContent = totalMatchCount > 0 ? `${totalMatchCount} matches found` : 'No matches found';
-    updateEntriesDisplay(); // Update entries count after search
-  }
-
-  // Coupons modal functionality
-  document.querySelectorAll('.view-coupons').forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      const couponId = this.getAttribute('data-coupon-id');
-      document.getElementById('couponIdDisplay').textContent = couponId;
-      $('#couponsModal').modal('show');
-    });
-  });
-
-  // Initialize everything when the page loads
-  document.addEventListener('DOMContentLoaded', function() {
-    // Show the first table by default
-    document.getElementById('saveonrx-table').style.display = 'table';
-    initAllAccordions();
-    updateEntriesDisplay(); // Initialize entries count display
-    
-    // Add event listener for dynamically added accordions
-    document.addEventListener('click', function(e) {
-      if (e.target.closest('.accordion-toggle')) {
-        const toggle = e.target.closest('.accordion-toggle');
-        const targetId = toggle.getAttribute('data-target');
-        const target = document.querySelector(targetId);
-        
-        if (target) {
-          const isCollapsed = toggle.classList.contains('collapsed');
-          const table = toggle.closest('table');
-          
-          // Close all other open accordions in this table
-          table.querySelectorAll('.accordion-toggle').forEach(otherToggle => {
-            if (otherToggle !== toggle) {
-              otherToggle.classList.add('collapsed');
-              const otherTargetId = otherToggle.getAttribute('data-target');
-              const otherTarget = document.querySelector(otherTargetId);
-              if (otherTarget) otherTarget.style.display = 'none';
-            }
-          });
-          
-          // Toggle current accordion
-          if (isCollapsed) {
-            toggle.classList.remove('collapsed');
-            target.style.display = '';
-          } else {
-            toggle.classList.add('collapsed');
-            target.style.display = 'none';
-          }
-        }
-      }
-    });
-  });
-</script> {% endcomment %}
-
-
 
 
 <script>
@@ -483,93 +169,137 @@
 
 
 <script>
-  function formatNestedTable(pharmacies) {
-    if (!pharmacies || pharmacies.length === 0) {
-      return "<div>No pharmacy pricing available.</div>";
-    }
-
-    let rows = pharmacies.map(p => `
-      <tr>
-        <td><img src="${p.logo}" width="50" /></td>
-        <td>${p.pharmacy}</td>
-        <td>${p.distance} mi</td>
-        <td>${p.price} $</td>
-        <td><button class="btn btn-primary btn-sm get-coupon-btn">Get Coupon</button></td>
-      </tr>
-    `).join('');
-
-    return `
-      <div class="nested-table">
-        <strong>Pharmacy Prices</strong>
-        <table class="table table-bordered">
-          
-          <tbody>${rows}</tbody>
-        </table>
-      </div>`;
-  }
-
-  $(document).ready(function () {
-    const table = $('#saveonrx-table').DataTable({
-      data: [],
-      columns: [
-        {
-          className: 'details-control',
-          orderable: false,
-          data: null,
-          defaultContent: '<span class="fa fa-chevron-down"></span>',
-          width: "40px"
-        },
-        { data: "medication" },
-        { data: "dosage" },
-        { data: "quantity" },
-      ],
-      order: [[1, 'asc']]
-    });
-
-    let currentlyOpenRow = null;
-
-    $('#saveonrx-table tbody').on('click', 'td.details-control', function () {
-      const tr = $(this).closest('tr');
-      const row = table.row(tr);
-      const icon = $(this).find('.glyphicon');
-
-      if (row.child.isShown()) {
-        row.child.hide();
-        tr.removeClass('shown');
-        icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
-        currentlyOpenRow = null;
-      } else {
-        if (currentlyOpenRow) {
-          const prevRow = table.row(currentlyOpenRow);
-          prevRow.child.hide();
-          currentlyOpenRow.removeClass('shown');
-          currentlyOpenRow.find('.glyphicon').removeClass('fa-chevron-up').addClass('fa-chevron-down');
-        }
-
-        row.child(formatNestedTable(row.data().pricing)).show();
-        tr.addClass('shown');
-        icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
-        currentlyOpenRow = tr;
+  (function() {
+    function formatNestedTable(pharmacies) {
+      if (!pharmacies || pharmacies.length === 0) {
+        return "<div>No pharmacy pricing available.</div>";
       }
-    });
 
-    let individualId = $('#individual-id').val(); 
-    
-    if (individualId) {
-      $.getJSON(`/get-prescription-data/?individual_id=${individualId}`, function (data) {
-        $('#loading').hide();
-        $('#saveonrx-table').show();
-        table.clear().rows.add(data).draw();
-      }).fail(function () {
-        $('#loading').text('Failed to load data. Please try again later.');
-      });
-    } else {
-      $('#loading').text('No individual ID found.');
+      let rows = pharmacies.map(p => `
+        <tr>
+          <td><img src="${p.logo}" width="50" /></td>
+          <td>${p.pharmacy}</td>
+          <td>${p.distance} mi</td>
+          <td>${p.price} $</td>
+          <td><button class="btn btn-primary btn-sm get-coupon-btn">Get Coupon</button></td>
+        </tr>
+      `).join('');
+
+      return `
+        <div class="nested-table">
+          <strong>Pharmacy Prices</strong>
+          <table class="table table-bordered">
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
     }
-    $(document).on('click', '.get-coupon-btn', function () {
-      $('#couponModal').modal('show');
+
+    $(document).ready(function () {
+      const table = $('#saveonrx-table').DataTable({
+        data: [],
+        columns: [
+          {
+            className: 'details-control',
+            orderable: false,
+            data: null,
+            defaultContent: '<span class="fa fa-chevron-down"></span>',
+            width: "40px"
+          },
+          { data: "medication" },
+          { data: "dosage" },
+          { data: "quantity" },
+        ],
+        order: [[1, 'asc']]
+      });
+
+      let currentlyOpenRow = null;
+
+      $('#saveonrx-table tbody').on('click', 'td.details-control', function () {
+        const tr = $(this).closest('tr');
+        const row = table.row(tr);
+        const icon = $(this).find('.glyphicon');
+
+        if (row.child.isShown()) {
+          row.child.hide();
+          tr.removeClass('shown');
+          icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+          currentlyOpenRow = null;
+        } else {
+          if (currentlyOpenRow) {
+            const prevRow = table.row(currentlyOpenRow);
+            prevRow.child.hide();
+            currentlyOpenRow.removeClass('shown');
+            currentlyOpenRow.find('.glyphicon').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+          }
+
+          row.child(formatNestedTable(row.data().pricing)).show();
+          tr.addClass('shown');
+          icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+          currentlyOpenRow = tr;
+        }
+      });
+
+      let individualId = $('#individual-id').val(); 
+      
+      if (individualId) {
+        $.getJSON(`/get-prescription-data/?individual_id=${individualId}`, function (data) {
+          $('#loading').hide();
+          $('#saveonrx-table').show();
+          table.clear().rows.add(data).draw();
+        }).fail(function () {
+          $('#loading').text('Failed to load data. Please try again later.');
+        });
+      } else {
+        $('#loading').text('No individual ID found.');
+      }
+      
+      $(document).on('click', '.get-coupon-btn', function () {
+        $('#couponModal').modal('show');
+      });
     });
-  });
+  })();
 </script>
 
 
+<script>
+ 
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('drug-content').style.display = 'block';
+    document.getElementById('saveonrx-table').style.display = 'none';
+    document.getElementById('s4rx-table').style.display = 'none';
+  });
+
+  
+  document.querySelectorAll('.custom-nav-tab-btn').forEach((tabBtn) => {
+    tabBtn.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelectorAll('.custom-nav-tab-btn').forEach(btn => btn.classList.remove('active'));
+      tabBtn.classList.add('active');
+      
+      document.getElementById('drug-content').style.display = 'none';
+      document.getElementById('saveonrx-table').style.display = 'none';
+      document.getElementById('s4rx-table').style.display = 'none';
+      
+      const tabToShow = tabBtn.getAttribute('data-tab');
+      
+      if (tabToShow === 'drug') {
+        document.getElementById('drug-content').style.display = 'block';
+      } else if (tabToShow === 'saveonrx-table') {
+        document.getElementById('saveonrx-table').style.display = 'table';
+      } else if (tabToShow === 's4rx-table') {
+        document.getElementById('s4rx-table').style.display = 'block';
+      }
+    });
+  });
+
+  function toggleZipCodeField() {
+    var dropdown = document.getElementById('zipCodeDropdown');
+    var zipCodeField = document.getElementById('zipCodeField');
+    
+    if (dropdown.value === 'no') {
+      zipCodeField.style.display = 'block';
+    } else {
+      zipCodeField.style.display = 'none';
+    }
+  }
+</script>
