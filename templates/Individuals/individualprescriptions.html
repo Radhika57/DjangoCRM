@@ -1,125 +1,4 @@
 <style>
-  /* Base Table Styles */
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1rem;
-    color: #212529;
-  }
-  
-  .table th,
-  .table td {
-    padding: 0.75rem;
-    vertical-align: top;
-    border-top: 1px solid #dee2e6;
-  }
-  
-  .table thead th {
-    vertical-align: bottom;
-    border-bottom: 2px solid #dee2e6;
-    background-color: #f8f9fa;
-    font-weight: 600;
-    cursor: pointer;
-    position: relative;
-    padding-right: 30px;
-  }
-  
-  .table thead th.sortable:after {
-    content: "↕";
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 12px;
-  }
-  
-  .table thead th.sorted-asc:after {
-    content: "↑";
-    color: #007bff;
-  }
-  
-  .table thead th.sorted-desc:after {
-    content: "↓";
-    color: #007bff;
-  }
-  
-  .table tbody + tbody {
-    border-top: 2px solid #dee2e6;
-  }
-  
-  /* Accordion Styles */
-  .expand-button {
-    position: relative;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background-color: #ddd;
-    cursor: pointer;
-    user-select: none;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-  }
-  
-  .accordion-toggle.collapsed .expand-button {
-    background-color: #bbb;
-  }
-  
-  .accordion-toggle .expand-button:after {
-    content: '-';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-weight: 700;
-    font-size: 16px;
-    color: #333;
-    transition: content 0.3s ease;
-  }
-  
-  .accordion-toggle.collapsed .expand-button:after {
-    content: '+';
-  }
-  
-  /* Expanded Content Styles */
-  .expanded-content-wrapper {
-    display: flex;
-    width: 100%;
-    padding: 15px 0;
-    background: #f9f9f9;
-    border-left: 1px solid #dee2e6;
-    border-right: 1px solid #dee2e6;
-    border-bottom: 1px solid #dee2e6;
-  }
-  
-  .expanded-content-column {
-    flex: 1;
-    padding: 0 15px;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .expanded-content-column:first-child {
-    flex: 0 0 30px; 
-  }
-  
-  .expanded-content-item {
-    margin-bottom: 8px;
-    min-height: 24px; 
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .expanded-content-label {
-    font-weight: bold;
-    margin-bottom: 2px;
-    color: #555;
-    font-size: 0.9rem;
-  }
-  
-  .expanded-content-value {
-    display: block;
-    color: #333;
-  }
   
   /* Tab Styles */
   .custom-nav-tabs-container {
@@ -155,573 +34,116 @@
     color: white !important;
     border-color: #007bff;
   }
-  
-  /* Search Box Styles */
-  .table-search-container {
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-  }
-  
-  .table-search-container input {
-    padding: 8px 12px;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
-    width: 250px;
-    margin-left: auto;
-  }
-  
-  /* Section Header */
-  .custom-section-header.with-divider {
-    border-bottom: 2px solid #ccc;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .custom-section-title1 {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: 700;
-    font-size: 1.8rem;
-    color: #222222;
-    letter-spacing: 0.05em;
-    padding-bottom: 8px;
-    text-transform: capitalize;
-    margin: 0;
-  }
-  
-  /* Hover effects for rows */
-  .table-hover tbody tr:hover {
-    background-color: rgba(0, 123, 255, 0.05);
-  }
-  
-  /* Striped table rows */
-  .table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(0, 0, 0, 0.02);
-  }
-  
   /* Responsive adjustments */
   @media (max-width: 768px) {
-    .expanded-content-wrapper {
-      flex-direction: column;
-    }
-    
-    .expanded-content-column {
-      padding: 5px 15px;
-    }
-    
     .custom-nav-tabs-container {
       flex-direction: column;
       align-items: flex-start;
     }
     
-    .table-search-container {
-      width: 100%;
-      margin-top: 10px;
-    }
-    
-    .table-search-container input {
-      width: 100%;
-    }
   }
 </style>
 
 <div class="custom-nav-tabs-container">
   <div class="btn-group nav-tab-btn-group me-3 mb-2">
+    <a href="#" class="btn btn-secondary custom-nav-tab-btn" data-toggle="tab" data-tab="table3">Drug</a>
     <a href="#" class="btn btn-secondary custom-nav-tab-btn active" data-toggle="tab" data-tab="saveonrx-table">SaveonRx</a>
     <a href="#" class="btn btn-secondary custom-nav-tab-btn" data-toggle="tab" data-tab="s4rx-table">S4rx</a>
-    <a href="#" class="btn btn-secondary custom-nav-tab-btn" data-toggle="tab" data-tab="table3">Drug</a>
-  </div>
-  
-  <div class="table-search-container" id="searchContainer">
-    <input type="text" id="tableSearch" placeholder="Search in table..." class="form-control">
-    <div id="searchEntries" style="margin-left: 10px; color: #666;"></div>
-    <div id="totalEntries" style="margin-left: 10px; color: #666;"></div>
   </div>
 </div>
+<div class="table-responsive text-center">
+  <div id="loading" class="p-4">
+    <img src="/static/img/spinner.gif" alt="Loading..." width="100">
+    <div>Loading pricing data, please wait...</div>
+  </div>
 
-<div class="table-responsive">
-  <!-- SaveonRx Table -->
-  <table id="saveonrx-table" class="table table-striped table-hover">
+  <table id="saveonrx-table" class="table table-striped table-hover" style="display:none;">
     <thead>
       <tr>
-        <th style="width: 26px;"></th>
-        <th class="sortable">Medication</th>
-        <th class="sortable">Dosage</th>
-        <th class="sortable">Quantity</th>
-        <th class="sortable">Coupons</th>
+        <th></th>
+        <th>Medication</th>
+        <th>Dosage</th>
+        <th>Quantity</th>
+        
       </tr>
     </thead>
     <tbody>
-      <!-- Row 1 -->
-      <tr class="accordion-toggle collapsed" data-target="#collapseSaveonRx1">
-        <td><div class="expand-button"></div></td>
-        <td>pen</td>
-        <td>20mg</td>
-        <td>90 tablets</td>
-        <td><a href="#" class="view-coupons" data-coupon-id="SaveonRxCoupon1">Add</a></td>
-      </tr>
-      <tr>
-        <td colspan="5">
-          <div id="collapseSaveonRx1" style="display:none;">
-            <table class="table table-striped table-hover">
-              <thead class="thead-light">
-                <tr>
-                  <th>Logo</th>
-                  <th>Pharmacy</th>
-                  <th>Price ($)</th>
-                  <th>Distance (mi)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><img src="#" alt="Walgreens" width="30"></td>
-                  <td>Walgreens</td>
-                  <td>9.14</td>
-                  <td>1.94</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Meijer" width="30"></td>
-                  <td>Meijer Pharmacy</td>
-                  <td>10.42</td>
-                  <td>2.84</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Powell" width="30"></td>
-                  <td>Powell Pharmacy</td>
-                  <td>11.99</td>
-                  <td>3.22</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Linworths" width="30"></td>
-                  <td>Linworths Pharmacy</td>
-                  <td>11.99</td>
-                  <td>4.92</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="CVS" width="30"></td>
-                  <td>CVS Pharmacy</td>
-                  <td>13.85</td>
-                  <td>1.53</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Costco" width="30"></td>
-                  <td>Costco</td>
-                  <td>13.99</td>
-                  <td>5.44</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Giant Eagle" width="30"></td>
-                  <td>Giant Eagle Pharmacy</td>
-                  <td>14.69</td>
-                  <td>1.49</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Walmart" width="30"></td>
-                  <td>Walmart Pharmacy</td>
-                  <td>16.11</td>
-                  <td>2.58</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </td>
-      </tr>
-
-      <!-- Row 2 -->
-      <tr class="accordion-toggle collapsed" data-target="#collapseSaveonRx2">
-        <td><div class="expand-button"></div></td>
-        <td>amy</td>
-        <td>40mg</td>
-        <td>28 tablets</td>
-        <td><a href="#" class="view-coupons" data-coupon-id="SaveonRxCoupon2">Add</a></td>
-      </tr>
-      <tr>
-        <td colspan="5">
-          <div id="collapseSaveonRx2" style="display:none;">
-            <table class="table table-striped table-hover">
-              <thead class="thead-light">
-                <tr>
-                  <th>Logo</th>
-                  <th>Pharmacy</th>
-                  <th>Price ($)</th>
-                  <th>Distance (mi)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><img src="#" alt="Walgreens" width="30"></td>
-                  <td>Walgreens</td>
-                  <td>9.14</td>
-                  <td>1.94</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Meijer" width="30"></td>
-                  <td>Meijer Pharmacy</td>
-                  <td>10.42</td>
-                  <td>2.84</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Powell" width="30"></td>
-                  <td>Powell Pharmacy</td>
-                  <td>11.99</td>
-                  <td>3.22</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Linworths" width="30"></td>
-                  <td>Linworths Pharmacy</td>
-                  <td>11.99</td>
-                  <td>4.92</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="CVS" width="30"></td>
-                  <td>CVS Pharmacy</td>
-                  <td>13.85</td>
-                  <td>1.53</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Costco" width="30"></td>
-                  <td>Costco</td>
-                  <td>13.99</td>
-                  <td>5.44</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Giant Eagle" width="30"></td>
-                  <td>Giant Eagle Pharmacy</td>
-                  <td>14.69</td>
-                  <td>1.49</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Walmart" width="30"></td>
-                  <td>Walmart Pharmacy</td>
-                  <td>16.11</td>
-                  <td>2.58</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </td>
-      </tr>
       
-      <!-- Additional medication rows can be added here following the same pattern -->
-      <!-- Example of additional row (you can duplicate this block for more medications) -->
-      <tr class="accordion-toggle collapsed" data-target="#collapseSaveonRx3">
-        <td><div class="expand-button"></div></td>
-        <td>new-med</td>
-        <td>50mg</td>
-        <td>30 tablets</td>
-        <td><a href="#" class="view-coupons" data-coupon-id="SaveonRxCoupon3">Add</a></td>
-      </tr>
-      <tr>
-        <td colspan="5">
-          <div id="collapseSaveonRx3" style="display:none;">
-            <table class="table table-striped table-hover">
-              <thead class="thead-light">
-                <tr>
-                  <th>Logo</th>
-                  <th>Pharmacy</th>
-                  <th>Price ($)</th>
-                  <th>Distance (mi)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><img src="#" alt="Walgreens" width="30"></td>
-                  <td>Walgreens</td>
-                  <td>12.14</td>
-                  <td>1.94</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Meijer" width="30"></td>
-                  <td>Meijer Pharmacy</td>
-                  <td>13.42</td>
-                  <td>2.84</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Powell" width="30"></td>
-                  <td>Powell Pharmacy</td>
-                  <td>14.99</td>
-                  <td>3.22</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </td>
-      </tr>
-      <!-- End of additional row example -->
-    </tbody>
-  </table>
-
-  <!-- S4rx Table -->
-  <table id="s4rx-table" class="table table-striped table-hover" style="display: none;">
-    <thead>
-      <tr>
-        <th style="width: 26px;"></th>
-        <th class="sortable">S4rx</th>
-        <th class="sortable">Dosage</th>
-        <th class="sortable">Quantity</th>
-        <th class="sortable">Coupons</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Row 1 -->
-      <tr class="accordion-toggle collapsed" data-target="#collapseS4rx1">
-        <td><div class="expand-button"></div></td>
-        <td>exis</td>
-        <td>20mg</td>
-        <td>90 tablets</td>
-        <td><a href="#" class="view-coupons" data-coupon-id="S4rxCoupon1">Add</a></td>
-      </tr>
-      <tr>
-        <td colspan="5">
-          <div id="collapseS4rx1" style="display:none;">
-            <table class="table table-striped table-hover">
-              <thead class="thead-light">
-                <tr>
-                  <th>Logo</th>
-                  <th>Pharmacy</th>
-                  <th>Price ($)</th>
-                  <th>Distance (mi)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><img src="#" alt="Walgreens" width="30"></td>
-                  <td>Walgreens</td>
-                  <td>9.14</td>
-                  <td>1.94</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Meijer" width="30"></td>
-                  <td>Meijer Pharmacy</td>
-                  <td>10.42</td>
-                  <td>2.84</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Powell" width="30"></td>
-                  <td>Powell Pharmacy</td>
-                  <td>11.99</td>
-                  <td>3.22</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Linworths" width="30"></td>
-                  <td>Linworths Pharmacy</td>
-                  <td>11.99</td>
-                  <td>4.92</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="CVS" width="30"></td>
-                  <td>CVS Pharmacy</td>
-                  <td>13.85</td>
-                  <td>1.53</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Costco" width="30"></td>
-                  <td>Costco</td>
-                  <td>13.99</td>
-                  <td>5.44</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Giant Eagle" width="30"></td>
-                  <td>Giant Eagle Pharmacy</td>
-                  <td>14.69</td>
-                  <td>1.49</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Walmart" width="30"></td>
-                  <td>Walmart Pharmacy</td>
-                  <td>16.11</td>
-                  <td>2.58</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </td>
-      </tr>
-
-      <!-- Row 2 -->
-      <tr class="accordion-toggle collapsed" data-target="#collapseS4rx2">
-        <td><div class="expand-button"></div></td>
-        <td>benzol</td>
-        <td>40mg</td>
-        <td>28 tablets</td>
-        <td><a href="#" class="view-coupons" data-coupon-id="S4rxCoupon2">Add</a></td>
-      </tr>
-      <tr>
-        <td colspan="5">
-          <div id="collapseS4rx2" style="display:none;">
-            <table class="table table-striped table-hover">
-              <thead class="thead-light">
-                <tr>
-                  <th>Logo</th>
-                  <th>Pharmacy</th>
-                  <th>Price ($)</th>
-                  <th>Distance (mi)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><img src="#" alt="Walgreens" width="30"></td>
-                  <td>Walgreens</td>
-                  <td>9.14</td>
-                  <td>1.94</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Meijer" width="30"></td>
-                  <td>Meijer Pharmacy</td>
-                  <td>10.42</td>
-                  <td>2.84</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Powell" width="30"></td>
-                  <td>Powell Pharmacy</td>
-                  <td>11.99</td>
-                  <td>3.22</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Linworths" width="30"></td>
-                  <td>Linworths Pharmacy</td>
-                  <td>11.99</td>
-                  <td>4.92</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="CVS" width="30"></td>
-                  <td>CVS Pharmacy</td>
-                  <td>13.85</td>
-                  <td>1.53</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Costco" width="30"></td>
-                  <td>Costco</td>
-                  <td>13.99</td>
-                  <td>5.44</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Giant Eagle" width="30"></td>
-                  <td>Giant Eagle Pharmacy</td>
-                  <td>14.69</td>
-                  <td>1.49</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Walmart" width="30"></td>
-                  <td>Walmart Pharmacy</td>
-                  <td>16.11</td>
-                  <td>2.58</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </td>
-      </tr>
       
-      <!-- Additional medication rows for S4rx table -->
-      <tr class="accordion-toggle collapsed" data-target="#collapseS4rx3">
-        <td><div class="expand-button"></div></td>
-        <td>new-s4rx</td>
-        <td>60mg</td>
-        <td>45 tablets</td>
-        <td><a href="#" class="view-coupons" data-coupon-id="S4rxCoupon3">Add</a></td>
-      </tr>
-      <tr>
-        <td colspan="5">
-          <div id="collapseS4rx3" style="display:none;">
-            <table class="table table-striped table-hover">
-              <thead class="thead-light">
-                <tr>
-                  <th>Logo</th>
-                  <th>Pharmacy</th>
-                  <th>Price ($)</th>
-                  <th>Distance (mi)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><img src="#" alt="Walgreens" width="30"></td>
-                  <td>Walgreens</td>
-                  <td>15.14</td>
-                  <td>1.94</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Meijer" width="30"></td>
-                  <td>Meijer Pharmacy</td>
-                  <td>16.42</td>
-                  <td>2.84</td>
-                </tr>
-                <tr>
-                  <td><img src="#" alt="Powell" width="30"></td>
-                  <td>Powell Pharmacy</td>
-                  <td>17.99</td>
-                  <td>3.22</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </td>
-      </tr>
     </tbody>
   </table>
 </div>
 
-<div class="prescription-updated-info prescription-fields-panel mt-4" style="display: none;">
-  <div class="section-header with-divider">
-    <h1 class="section-title">Current Prescriptions</h1>
-    <div class="prescription-fields-edit">
-      <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#prescriptionModal">
-        <i class="fa fa-plus"></i> Add Prescription
-      </a>
+  <div class="prescription-updated-info prescription-fields-panel mt-4" style="display: none;">
+    <div class="section-header with-divider">
+      <h1 class="section-title">Current Prescriptions</h1>
+      <div class="prescription-fields-edit">
+        <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#prescriptionModal">
+          <i class="fa fa-plus"></i> Add Prescription
+        </a>
+      </div>
     </div>
-  </div>
-  <div class="alert alert-info text-center mt-3">
-    <div style="font-size: 18px;">There are no "Current Prescriptions"</div>
-    <div style="font-size: 14px;">This data is not available because it hasn't been created yet or you don't have permission.</div>
+    <div id="prescription_table">
+    {% if individual_prescription %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body table-responsive">
+                    <table id="example2" class="table display">
+                        <thead>
+                            <tr>
+                                <th>Medication</th>
+                                <th>Quantity</th>
+                                <th>Refill Frequency</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pres in individual_prescription %}
+                            <tr id="prescription-row-{{ pres.id }}">
+                              <td>{{ pres.dosage }}</td>
+                              <td>{{ pres.quantity }}</td>
+                              <td>{{ pres.refill_frequency }}</td>
+                              <td>
+                                <button class="btn btn-danger btn-xs" onclick="confirmDeletePrescription({{ pres.id }})">
+                                  Delete
+                                </button>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center mt-3">
+      <div style="font-size: 18px;">There are no "Current Prescriptions"</div>
+      <div style="font-size: 14px;">This data is not available because it hasn't been created yet or you don't have permission.</div>
+    </div>
+    {% endif %}
   </div>
 </div>
 
 
 <!-- Coupons Modal -->
-<div class="modal fade" id="couponsModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-md-sm">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Coupon Details</h4>
-      </div>
-      <div class="modal-body">
-        <div id="couponDetails">
-          <h4>Coupon ID: <span id="couponIdDisplay"></span></h4>
-          <table class="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th>Pharmacy</th>
-                <th>Price</th>
-                <th>Distance</th>
-                <th>Expires</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Walmart Pharmacy</td>
-                <td>$16.11</td>
-                <td>2.58 mi</td>
-                <td>12/31/2023</td>
-                <td><button class="btn btn-sm btn-primary">Use Coupon</button></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
+<div class="modal fade" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="couponModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center" style="padding: 20px;">
+      <img src="/static/img/getcouponcard.png" alt="Coupon" class="img-responsive center-block" style="max-height: 300px; border-radius: 6px;">
+      <button type="button" class="btn btn-default" data-dismiss="modal" style="margin-top: 20px;">Close</button>
     </div>
   </div>
 </div>
+
+
 {% include "Individuals/addprescription.html" %}
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
-<script>
+{% comment %} <script>
   // Initialize accordion functionality for a specific table
   function initAccordionForTable(tableId) {
     const table = document.getElementById(tableId);
@@ -1030,4 +452,124 @@
       }
     });
   });
+</script> {% endcomment %}
+
+
+
+
+<script>
+  function confirmDeletePrescription(id) {
+    if (confirm("Are you sure you want to delete this prescription?")) {
+      $.ajax({
+        url: `/delete-prescription/${id}/`,
+        type: 'POST',
+        data: {
+          csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function (response) {
+          if (response.status === 'success') {
+            $('#prescription-row-' + id).remove(); 
+          } else {
+            alert("Error: " + (response.message || "Could not delete"));
+          }
+        },
+        error: function () {
+          alert("Failed to delete. Please try again.");
+        }
+      });
+    }
+  }
 </script>
+
+
+<script>
+  function formatNestedTable(pharmacies) {
+    if (!pharmacies || pharmacies.length === 0) {
+      return "<div>No pharmacy pricing available.</div>";
+    }
+
+    let rows = pharmacies.map(p => `
+      <tr>
+        <td><img src="${p.logo}" width="50" /></td>
+        <td>${p.pharmacy}</td>
+        <td>${p.distance} mi</td>
+        <td>${p.price} $</td>
+        <td><button class="btn btn-primary btn-sm get-coupon-btn">Get Coupon</button></td>
+      </tr>
+    `).join('');
+
+    return `
+      <div class="nested-table">
+        <strong>Pharmacy Prices</strong>
+        <table class="table table-bordered">
+          
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  }
+
+  $(document).ready(function () {
+    const table = $('#saveonrx-table').DataTable({
+      data: [],
+      columns: [
+        {
+          className: 'details-control',
+          orderable: false,
+          data: null,
+          defaultContent: '<span class="fa fa-chevron-down"></span>',
+          width: "40px"
+        },
+        { data: "medication" },
+        { data: "dosage" },
+        { data: "quantity" },
+      ],
+      order: [[1, 'asc']]
+    });
+
+    let currentlyOpenRow = null;
+
+    $('#saveonrx-table tbody').on('click', 'td.details-control', function () {
+      const tr = $(this).closest('tr');
+      const row = table.row(tr);
+      const icon = $(this).find('.glyphicon');
+
+      if (row.child.isShown()) {
+        row.child.hide();
+        tr.removeClass('shown');
+        icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+        currentlyOpenRow = null;
+      } else {
+        if (currentlyOpenRow) {
+          const prevRow = table.row(currentlyOpenRow);
+          prevRow.child.hide();
+          currentlyOpenRow.removeClass('shown');
+          currentlyOpenRow.find('.glyphicon').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+        }
+
+        row.child(formatNestedTable(row.data().pricing)).show();
+        tr.addClass('shown');
+        icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+        currentlyOpenRow = tr;
+      }
+    });
+
+    let individualId = $('#individual-id').val(); 
+    
+    if (individualId) {
+      $.getJSON(`/get-prescription-data/?individual_id=${individualId}`, function (data) {
+        $('#loading').hide();
+        $('#saveonrx-table').show();
+        table.clear().rows.add(data).draw();
+      }).fail(function () {
+        $('#loading').text('Failed to load data. Please try again later.');
+      });
+    } else {
+      $('#loading').text('No individual ID found.');
+    }
+    $(document).on('click', '.get-coupon-btn', function () {
+      $('#couponModal').modal('show');
+    });
+  });
+</script>
+
+

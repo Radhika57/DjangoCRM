@@ -498,6 +498,7 @@ class PolicyCoverage(models.Model):
 
 
 class Prescription(models.Model):
+    individual_name = models.ForeignKey(Individuals,on_delete=models.CASCADE,related_name="individual_prescription")
     medication = models.CharField(max_length=100)
     dosage = models.CharField(max_length=100)
     quantity = models.CharField(max_length=100)

@@ -3,47 +3,58 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Add/Edit Prescription</h4>
+        <h4 class="modal-title">Add Prescription</h4>
       </div>
+       <form id="prescriptionForm" method="post">
+          {% csrf_token %}
       <div class="modal-body">
-        <form>
+      
           <fieldset>
             <legend style="font-size: 16px;">Medication Information</legend>
+            <input type="hidden" name="individual_id" id="individual_id" value="{{ individual.id }}">
+
             <div class="form-group">
               <label>Medication <span class="text-danger">*</span></label>
-              <input type="text" class="form-control input-sm" placeholder="Type to find medication">
-            </div>
-            <div class="form-group">
-              <label>Refill Frequency <span class="text-danger">*</span></label>
-              <select class="form-control input-sm">
-                <option>Every Month</option>
-                <option>Every 2 Month</option>
-                <option>Every 3 Month</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Quantity <span class="text-danger">*</span></label>
-              <input type="text" class="form-control input-sm" placeholder="Quantity">
+              <input type="text" class="form-control input-sm" placeholder="Type to find medication" name="medication" id="medication">
+              <ul id="medicationSuggestions" class="list-group"></ul>
             </div>
             <div class="form-group">
               <label>Select a Dosage <span class="text-danger">*</span></label>
-              <select class="form-control input-sm">
-                <option value="">-- Select --</option>
+              <select class="form-control input-sm" name="dosage" id="dosage">
               </select>
             </div>
+            <input type="hidden" name="ndc" id="ndc">
+            <input type="hidden" name="display_quantity" id="display_quantity">
+            <input type="hidden" name="actual_quantity" id="actual_quantity">
+            <div class="form-group">
+              <label>Quantity <span class="text-danger">*</span></label>
+              <input type="text" class="form-control input-sm" placeholder="Quantity" name="quantity" id="quantity">
+            </div>
+            <div class="form-group">
+              <label>Refill Frequency <span class="text-danger">*</span></label>
+              <select class="form-control input-sm" name="refill_frequency">
+                <option value="Every Month">Every Month</option>
+                <option value="Every 2 Months">Every 2 Months</option>
+                <option value="Every 3 Months">Every 3 Months</option>
+                <option value="Every 6 Months">Every 6 Months</option>
+                <option value="Every 12 Months">Every 12 Months</option>
+              </select>
+            </div>
+            
+            
             <div class="form-group">
               <label>Is a generic Ok? <span class="text-danger">*</span></label>
-              <select class="form-control input-sm">
-                <option>- select -</option>
-                <option>Yes</option>
-                <option>No</option>
+              <select class="form-control input-sm" name="generic">
+                <option value="">--Select--</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
               </select>
             </div>
             
             <!-- Zip Code Section -->
             <div class="form-group">
-              <label>Do you want to enter zip code? <span class="text-danger">*</span></label>
-              <select class="form-control input-sm" id="zipCodeDropdown" onchange="toggleZipCodeField()">
+              <label>Use ZIP code from the individual's address? <span class="text-danger">*</span></label>
+              <select class="form-control input-sm" id="zipCodeDropdown" name="zipCodeDropdown" onchange="toggleZipCodeField()">
                 <option value="">- select -</option>
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
@@ -52,17 +63,93 @@
             
             <div class="form-group" id="zipCodeField" style="display: none;">
               <label>Enter your zipcode <span class="text-danger">*</span></label>
-              <input type="text" class="form-control input-sm" placeholder="Zip Code">
+              <input type="text" class="form-control input-sm" placeholder="Zip Code" name="zipcode" id="zipcode">
             </div>
             
             <p class="help-block"><strong>Fields marked with <span class="text-danger">*</span> are required.</strong></p>
           </fieldset>
-        </form>
+        
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success btn-sm">Save</button>
+        <button type="submit" class="btn btn-success btn-sm">Save</button>
         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
       </div>
+      </form>
     </div>
   </div>
 </div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+let selectedSEOName = "";
+let selectedDrugName = "";
+
+$(document).ready(function () {
+
+  $('#medication').on('input', function () {
+    const query = $(this).val();
+    if (query.length >= 2) {
+      $.getJSON('/query-drug/', { q: query }, function (data) {
+        let suggestions = data.map(item => {
+          const name = item.DisplayName || item.display_name || 'Unnamed';
+          const seo = item.SEOName || item.seo_name || '';
+          return `<li class="list-group-item" data-seo="${seo}" data-name="${name}">${name}</li>`;
+        });
+        $('#medicationSuggestions').html(suggestions.join('')).show();
+      });
+    } else {
+      $('#medicationSuggestions').hide();
+    }
+  });
+
+  $('#medicationSuggestions').on('click', 'li', function () {
+    selectedDrugName = $(this).data('name');
+    selectedSEOName = $(this).data('seo');
+
+    if (!selectedSEOName) {
+      alert("No SEO Name found. Please try again.");
+      return;
+    }
+
+    $('#medication').val(selectedDrugName);
+    $('#medicationSuggestions').hide();
+
+    $.getJSON('/get-dosage-options/', { seo_name: selectedSEOName }, function (data) {
+      $('#dosage').empty();
+      if (data.length > 0) {
+        data.forEach(item => {
+          $('#dosage').append(new Option(item.display, item.display));
+        });
+
+        $('#quantity').val(data[0].quantity || '');
+        $('#ndc').val(data[0].ndc || '');
+        $('#display_quantity').val(data[0].display_quantity || '');
+        $('#actual_quantity').val(data[0].actual_quantity || '');
+      }
+    });
+
+
+  });
+
+  $('#prescriptionForm').submit(function (e) {
+    e.preventDefault();
+
+    $.post('/save-prescription/', $(this).serialize())
+      .done(function (response) {
+        alert("Prescription added successfully!");
+        $('#prescriptionForm')[0].reset();
+        $('#dosage').empty();
+        $('#prescriptionModal').modal('hide');
+        location.reload();
+      })
+      .fail(function (xhr) {
+        let errorMsg = "Failed to save. Please try again.";
+        if (xhr.responseJSON && xhr.responseJSON.message) {
+          errorMsg = xhr.responseJSON.message;
+        }
+        alert(errorMsg);
+      });
+  });
+});
+</script>

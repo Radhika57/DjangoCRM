@@ -74,12 +74,15 @@ urlpatterns = [
     path('add-carrier-product/', views.add_carrier_product, name='add_carrier_product'),
     path('policy/<int:policy_id>/delete/', views.delete_policy, name='delete_policy'),
     
+    # Prescription
+    
     path('prescription/', views.prescription_form, name='prescription_form'),
     path('prescription-table/', views.prescription_table, name='prescription_table'),
     path('get-prescription-data/', views.get_prescription_data, name='get_prescription_data'),
     path('query-drug/', views.query_drug, name='query_drug'),
     path('get-dosage-options/', views.get_dosage_options, name='get_dosage_options'),
     path('save-prescription/', views.save_prescription, name='save_prescription'),
+    path('delete-prescription/<int:pk>/', views.delete_prescription, name='delete_prescription'),
     
     
     path('customfields/', views.custom_fields, name='custom_fields'),

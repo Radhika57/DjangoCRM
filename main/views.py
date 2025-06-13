@@ -8,8 +8,10 @@ from django.db.models import Count , Value
 from django.views.decorators.csrf import csrf_exempt
 from datetime import date
 from django.db.models.functions import Concat
-from django.views.decorators.http import require_http_methods , require_POST
+from django.views.decorators.http import require_http_methods , require_POST , require_GET
 import json
+import time
+import requests
 
 
 def calculate_age(dob):
@@ -952,6 +954,7 @@ def individual_tab(request, individual_id):
     individual_address = IndividualAddress.objects.filter(individual_name=individual)
     individual_activity = IndividualActivity.objects.filter(individual_name=individual)
     individual_notes = IndividualNotes.objects.filter(individual_name=individual)
+    individual_prescription = Prescription.objects.filter(individual_name=individual)
     relationship_data = get_relationship_data(individual)
     policies = Policy.objects.filter(individual=individual).prefetch_related(
     'policy_coverage__carrier_product',
@@ -1129,6 +1132,7 @@ def individual_tab(request, individual_id):
         'policies': policies,     
         'due_activities': due_activities,     
         'pin_notess': pin_notess,     
+        'individual_prescription': individual_prescription,     
     })
 
 
@@ -1448,14 +1452,6 @@ def delete_policy(request, policy_id):
 
 
 
-import json
-import time
-import requests
-from django.shortcuts import render
-from django.http import JsonResponse
-
-
-
 CLIENT_ID = "184"
 CLIENT_SECRET = "9EUUXUKXA1KW"
 TOKEN_URL = "https://api-gateway.rxsense.com/account/token"
@@ -1567,19 +1563,50 @@ def get_dosage_options(request):
 def save_prescription(request):
     if request.method == "POST":
         data = request.POST
+        individual_id = data.get('individual_id')
+        zip_preference = data.get('zipCodeDropdown')
+
+        if not individual_id:
+            return JsonResponse({'status': 'error', 'message': 'Individual is required'}, status=400)
+
+        individual = get_object_or_404(Individuals, pk=individual_id)
+
+        if zip_preference == "yes":
+            address = individual.individual_addresses.filter(primary=True).first()
+            if not address:
+                return JsonResponse({'status': 'error', 'message': 'No primary address found for individual'}, status=400)
+            if not address.zip_code:
+                return JsonResponse({'status': 'error', 'message': 'Primary address does not have a ZIP code'}, status=400)
+            zipcode = address.zip_code
+        else:
+            zipcode = data.get('zipcode')
+            if not zipcode:
+                return JsonResponse({'status': 'error', 'message': 'Zipcode is required'}, status=400)
+
         Prescription.objects.create(
+            individual_name=individual,
             medication=data.get('medication'),
             dosage=data.get('dosage'),
             quantity=data.get('quantity'),
             refill_frequency=data.get('refill_frequency'),
             generic=data.get('generic'),
-            zipcode=data.get('zipcode'),
+            zipcode=zipcode,
             ndc=data.get('ndc'),
-            display_quantity=data.get('display_quantity'),
-            actual_quantity=data.get('actual_quantity')
+            display_quantity=data.get('display_quantity') or None,
+            actual_quantity=data.get('actual_quantity') or None
         )
         return JsonResponse({'status': 'success'})
+
     return JsonResponse({'status': 'invalid'}, status=400)
+
+@require_POST
+def delete_prescription(request, pk):
+    try:
+        prescription = Prescription.objects.get(pk=pk)
+        prescription.delete()
+        return JsonResponse({'status': 'success'})
+    except Prescription.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Prescription not found'}, status=404)
 
 def prescription_form(request):
     return render(request, 'rx.html')
@@ -1589,18 +1616,27 @@ def prescription_table(request):
     return render(request, 'rxtable.html')
 
 
-
+@require_GET
 def get_prescription_data(request):
     token = get_token()
     if not token:
         return JsonResponse({'error': 'Token error'}, status=500)
 
-    prescriptions = Prescription.objects.all()
+    individual_id = request.GET.get('individual_id')
+    if not individual_id:
+        return JsonResponse({'error': 'Individual ID is required'}, status=400)
+
+    try:
+        prescriptions = Prescription.objects.filter(individual_name_id=individual_id)
+    except Exception as e:
+        return JsonResponse({'error': 'Invalid individual ID'}, status=400)
+
     results = []
 
     for p in prescriptions:
         pricing = []
-
+        if not p.ndc or not p.zipcode:
+            continue
 
         try:
             user_quantity = float(p.quantity or 0)
@@ -1612,8 +1648,8 @@ def get_prescription_data(request):
             else:
                 dosage_ratio = actual_quantity / display_quantity
                 actual_quantity_for_pricing = user_quantity * dosage_ratio
-        except:
-            actual_quantity_for_pricing = p.quantity  
+        except Exception as e:
+            actual_quantity_for_pricing = float(p.quantity or 0)
 
         headers = {
             'Authorizer': token,
@@ -1640,7 +1676,7 @@ def get_prescription_data(request):
                             "distance": round(pharmacy["Pharmacy"]["Distance"], 2),
                             "price": price_info["FormattedPrice"]
                         })
-        except Exception:
+        except Exception as e:
             pricing = []
 
         results.append({
