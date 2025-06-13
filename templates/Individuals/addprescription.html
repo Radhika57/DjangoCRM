@@ -1,0 +1,68 @@
+<div class="modal fade" id="prescriptionModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add/Edit Prescription</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <fieldset>
+            <legend style="font-size: 16px;">Medication Information</legend>
+            <div class="form-group">
+              <label>Medication <span class="text-danger">*</span></label>
+              <input type="text" class="form-control input-sm" placeholder="Type to find medication">
+            </div>
+            <div class="form-group">
+              <label>Refill Frequency <span class="text-danger">*</span></label>
+              <select class="form-control input-sm">
+                <option>Every Month</option>
+                <option>Every 2 Month</option>
+                <option>Every 3 Month</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Quantity <span class="text-danger">*</span></label>
+              <input type="text" class="form-control input-sm" placeholder="Quantity">
+            </div>
+            <div class="form-group">
+              <label>Select a Dosage <span class="text-danger">*</span></label>
+              <select class="form-control input-sm">
+                <option value="">-- Select --</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Is a generic Ok? <span class="text-danger">*</span></label>
+              <select class="form-control input-sm">
+                <option>- select -</option>
+                <option>Yes</option>
+                <option>No</option>
+              </select>
+            </div>
+            
+            <!-- Zip Code Section -->
+            <div class="form-group">
+              <label>Do you want to enter zip code? <span class="text-danger">*</span></label>
+              <select class="form-control input-sm" id="zipCodeDropdown" onchange="toggleZipCodeField()">
+                <option value="">- select -</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+            
+            <div class="form-group" id="zipCodeField" style="display: none;">
+              <label>Enter your zipcode <span class="text-danger">*</span></label>
+              <input type="text" class="form-control input-sm" placeholder="Zip Code">
+            </div>
+            
+            <p class="help-block"><strong>Fields marked with <span class="text-danger">*</span> are required.</strong></p>
+          </fieldset>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-sm">Save</button>
+        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
