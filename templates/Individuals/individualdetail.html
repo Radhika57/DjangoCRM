@@ -149,7 +149,7 @@
                                 <div class="col-sm-2">
                                     <label>Ext.</label>
                                     <input type="text" name="business_ext" class="form-control"
-                                        value="{{ individual.business_ext|format_phone|default:'' }}">
+                                        value="{{ individual.business_ext|default:'' }}">
                                 </div>
                                 <div class="col-sm-4">
                                     <label>Home Phone</label>
@@ -159,14 +159,14 @@
                                 <div class="col-sm-2">
                                     <label>Ext.</label>
                                     <input type="text" class="form-control" name="home_ext"
-                                        value="{{ individual.home_ext|format_phone|default:'' }}">
+                                        value="{{ individual.home_ext|default:'' }}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-4">
                                     <label>Cell Phone</label>
                                     <input type="text" class="form-control" name="cell_phone" placeholder="(xxx) xxx-xxxx"
-                                        value="{{ individual.cell_phone|default:'' }}">
+                                        value="{{ individual.cell_phone|format_phone|default:'' }}">
                                 </div>
                                 <div class="col-sm-2">
                                     <label>Ext.</label>
@@ -204,6 +204,7 @@
             </div>
             <div class="col-md-6">
                 <div class="row">
+                    {% if individual.business_phone %}
                     <div class="col-md-6">
                         <label class="d-flex justify-content-between align-items-center mb-1">
                             <span>Business phone</span>
@@ -221,6 +222,8 @@
                         </label>
                         <p class="contact-info-field">{{individual.business_phone|format_phone}}</p>
                     </div>
+                    {% endif %}
+                    {% if individual.cell_phone %}
                     <div class="col-md-6">
                         <label class="d-flex justify-content-between align-items-center mb-1">
                             <span>Cellular</span>
@@ -239,10 +242,12 @@
                         </label>
                         <p class="contact-info-field">{{individual.cell_phone|format_phone}}</p>
                     </div>
+                    {% endif %}
                 </div>
             
             </div>
         </div>
+            {% if individual.home_phone %}
                 <div class="row">
                     <div class="col-md-6">
                         <label class="d-flex justify-content-between align-items-center mb-1">
@@ -262,7 +267,7 @@
                         <p class="contact-info-field">{{individual.home_phone|format_phone}}</p>
                     </div>
                 </div>
-
+            {% endif %}
         <div class="form-group-row">
         {% for add in individual_address %}
         <div class="form-group-col position-relative">

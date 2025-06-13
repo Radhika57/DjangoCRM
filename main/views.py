@@ -24,10 +24,12 @@ def dashboard(request):
     return render(request, "dashboard/index.html")
 
 def clean_phone(number):
+    if not number:
+        return ""
     digits = ''.join(filter(str.isdigit, number))  
     if len(digits) == 10:
         return f"({digits[:3]}) {digits[3:6]}-{digits[6:]}"
-    return None
+    return ""
 
 
 def carrier_list(request):
