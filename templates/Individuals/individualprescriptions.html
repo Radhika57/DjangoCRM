@@ -105,9 +105,7 @@
                               <td>{{ pres.quantity }}</td>
                               <td>{{ pres.refill_frequency }}</td>
                               <td>
-                               <button class="btn btn-danger btn-xs" onclick="confirmDeletePrescription('{{ pres.id }}')">
-    Delete
-</button>
+                               <button class="btn btn-danger btn-xs" onclick="confirmDeletePrescription('{{ pres.id }}')"> Delete</button>
 
                               </td>
                             </tr>
@@ -144,7 +142,8 @@
 <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
-{% comment %} <script>
+{% comment %} 
+<script>
   // Initialize accordion functionality for a specific table
   function initAccordionForTable(tableId) {
     const table = document.getElementById(tableId);
