@@ -105,9 +105,10 @@
                               <td>{{ pres.quantity }}</td>
                               <td>{{ pres.refill_frequency }}</td>
                               <td>
-                                <button class="btn btn-danger btn-xs" onclick="confirmDeletePrescription({{ pres.id }})">
-                                  Delete
-                                </button>
+                               <button class="btn btn-danger btn-xs" onclick="confirmDeletePrescription('{{ pres.id }}')">
+    Delete
+</button>
+
                               </td>
                             </tr>
                             {% endfor %}
