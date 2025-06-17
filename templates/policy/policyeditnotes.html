@@ -1,0 +1,43 @@
+<div id="policyeditnote" style="display: none;">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong>Edit Notes & Attachments for <span id="editing-note-subject"></span></strong>
+                    <button class="btn btn-default btn-sm back-to-notes">
+                        <i class="fa fa-arrow-left"></i> Back to Notes
+                    </button>
+                </div>
+            </div>
+            
+            <div class="panel-body">
+                <form method="post" enctype="multipart/form-data" class="edit-note-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="edit-subject">Subject <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="note_subject" id="edit-subject" required>
+                        <div class="checkbox checkbox-primary">
+                            <input id="edit-checkboxpin" type="checkbox" name="pin_note">
+                            <label for="edit-checkboxpin">Pin Note</label>
+                        </div>
+                        <div class="form-group">
+                            <label>Notes</label>
+                            <textarea class="form-control" name="note_notes" id="edit-notes" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Attachment</label>
+                        <input type="file" name="attachment" class="form-control" style="margin-top: 10px;">
+                    </div>
+
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fa fa-save"></i> Save Changes
+                        </button>
+                        <button type="button" class="btn btn-default cancel-edit">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

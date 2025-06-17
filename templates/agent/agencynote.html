@@ -25,7 +25,15 @@
                         <tbody>
                             {% for note in notes %}
                             <tr>
-                                <td>{{ note.subject }}</td>
+                                <td>
+                                    <a href="#" class="note-subject-link" data-note-id="{{ note.id }}"
+                                       data-subject="{{ note.subject }}"
+                                       data-notes="{{ note.notes }}"
+                                       data-pinned="{% if note.pin_note %}true{% else %}false{% endif %}"
+                                       style="color: #007bff; text-decoration: underline; cursor: pointer;">
+                                        {% if note.pin_note %}<i class="fa fa-thumb-tack"></i> {% endif %}{{ note.subject }}
+                                    </a>
+                                </td>
                                 <td>{{ note.notes }}</td>
                                 <td>
                                     {% if note.attachment %}
@@ -67,7 +75,6 @@
             </div>
             
             <div class="panel-body">
-                <!-- ✅ FIX: Anchor added to stay on notes tab -->
                 <form method="post" enctype="multipart/form-data" id="noteForm" action="#notes-content">
                     {% csrf_token %}
                     <div class="form-group">
@@ -101,6 +108,8 @@
             </div>
         </div>
     </div>
+
+     {% include "agent/agenteditnotes.html" %}
 </div>
 
 <script>
@@ -111,122 +120,100 @@ document.addEventListener('DOMContentLoaded', function() {
     const cancelNoteBtn = document.getElementById('cancelNoteBtn');
     const notesMainContent = document.getElementById('notesMainContent');
     const createNoteContainer = document.getElementById('createNewnoteContainer');
-    const noteForm = document.getElementById('noteForm');
-    const notesTableBody = document.querySelector('#notesMainContent table tbody');
-    const noNotesMessage = document.querySelector('#notesMainContent .well.text-center');
+    
+    // These will be available after including agenteditnotes.html
+    const editNoteContainer = document.getElementById('editnoteContainer');
+    const editNoteForm = document.getElementById('editNoteForm');
+    const backToEditNotesBtn = document.getElementById('backToEditNotesBtn');
+    const cancelEditNoteBtn = document.getElementById('cancelEditNoteBtn');
 
     // Show create note form
     showCreateBtn.addEventListener('click', function(e) {
         e.preventDefault();
         notesMainContent.style.display = 'none';
         createNoteContainer.style.display = 'block';
-        
-        // Ensure we're on the Notes tab
+        if (editNoteContainer) editNoteContainer.style.display = 'none';
         activateNotesTab();
     });
 
     // Function to activate the Notes tab
     function activateNotesTab() {
-        // Remove active class from all tab buttons
         document.querySelectorAll('.nav-tab-btn').forEach(btn => {
             btn.classList.remove('active');
         });
         
-        // Add active class to Notes tab button
         const notesTabBtn = document.querySelector('.nav-tab-btn[href="#notes-content"]');
-        if (notesTabBtn) {
-            notesTabBtn.classList.add('active');
-        }
+        if (notesTabBtn) notesTabBtn.classList.add('active');
         
-        // Hide all tab contents
         document.querySelectorAll('.tab-content > div').forEach(tab => {
             tab.style.display = 'none';
         });
         
-        // Show notes content
         document.getElementById('notes-content').style.display = 'block';
     }
 
-    // Back to notes list
+    // Show notes list
     function showNotesList() {
         createNoteContainer.style.display = 'none';
+        if (editNoteContainer) editNoteContainer.style.display = 'none';
         notesMainContent.style.display = 'block';
-        noteForm.reset();
+        if (document.getElementById('noteForm')) document.getElementById('noteForm').reset();
+        if (editNoteForm) editNoteForm.reset();
         activateNotesTab();
     }
 
     // Attach event listeners to back and cancel buttons
     backToNotesBtn.addEventListener('click', showNotesList);
+    if (backToEditNotesBtn) backToEditNotesBtn.addEventListener('click', showNotesList);
     cancelNoteBtn.addEventListener('click', showNotesList);
+    if (cancelEditNoteBtn) cancelEditNoteBtn.addEventListener('click', showNotesList);
 
-    // Handle form submission
-    noteForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Get form values
-        const subject = document.getElementById('subject').value;
-        const notes = document.querySelector('textarea[name="note_notes"]').value;
-        const isPinned = document.getElementById('checkboxpin').checked;
-        const fileInput = document.querySelector('input[name="attachment"]');
-        
-        // Create a new table row
-        const newRow = document.createElement('tr');
-        
-        // Add subject cell
-        const subjectCell = document.createElement('td');
-        subjectCell.textContent = subject;
-        if (isPinned) {
-            subjectCell.innerHTML = '<i class="fa fa-thumb-tack"></i> ' + subject;
-        }
-        newRow.appendChild(subjectCell);
-        
-        // Add notes cell
-        const notesCell = document.createElement('td');
-        notesCell.textContent = notes;
-        newRow.appendChild(notesCell);
-        
-        // Add attachment cell
-        const attachmentCell = document.createElement('td');
-        if (fileInput.files.length > 0) {
-            const file = fileInput.files[0];
-            const reader = new FileReader();
+    // Handle click on note subject links
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('note-subject-link')) {
+            e.preventDefault();
             
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.height = '50px';
-                img.style.width = 'auto';
-                img.style.border = '1px solid #ccc';
-                img.style.padding = '2px';
-                img.style.borderRadius = '4px';
-                
-                const link = document.createElement('a');
-                link.href = e.target.result;
-                link.download = file.name;
-                link.appendChild(img);
-                
-                attachmentCell.appendChild(link);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            attachmentCell.textContent = 'No File';
+            if (!editNoteContainer) {
+                console.error('Edit note container not found!');
+                return;
+            }
+            
+            // Get note data from data attributes
+            const noteId = e.target.getAttribute('data-note-id');
+            const subject = e.target.getAttribute('data-subject');
+            const notes = e.target.getAttribute('data-notes');
+            const pinned = e.target.getAttribute('data-pinned') === 'true';
+            
+            // Populate the edit form
+            document.getElementById('editNoteId').value = noteId;
+            document.getElementById('editSubject').value = subject;
+            document.getElementById('editNotes').value = notes;
+            document.getElementById('editCheckboxpin').checked = pinned;
+            
+            // Show the edit form and hide others
+            notesMainContent.style.display = 'none';
+            createNoteContainer.style.display = 'none';
+            editNoteContainer.style.display = 'block';
+            
+            activateNotesTab();
         }
-        newRow.appendChild(attachmentCell);
-        
-        // Add the new row to the table
-        notesTableBody.insertBefore(newRow, notesTableBody.firstChild);
-        
-        // Hide "no notes" message if it exists
-        if (noNotesMessage) {
-            noNotesMessage.style.display = 'none';
-        }
-        
-        // Reset form and show notes list
-        noteForm.reset();
-        showNotesList();
-        
-        // Show success message
-        alert('Note saved successfully!');
     });
+
+    // Handle form submissions
+    if (document.getElementById('noteForm')) {
+        document.getElementById('noteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Your form submission logic
+            showNotesList();
+        });
+    }
+    
+    if (editNoteForm) {
+        editNoteForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Your form submission logic for edits
+            showNotesList();
+        });
+    }
 });
 </script>

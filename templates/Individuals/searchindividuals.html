@@ -344,7 +344,7 @@
           <tbody>
             {% for i in individual %}
             <tr>
-              <td><a href="{% url 'individual_tab' i.id %}">{{i.first_name}} {{i.last_name}}</a></td>
+              <td><a href="{% url 'individual_tab' i.id %}?fresh=true">{{i.first_name}} {{i.last_name}}</a></td>
               <td>{{i.individual_type}}</td>
               <td>Active</td>
               <td>{{i.servicing_agent.first_name}} {{i.servicing_agent.last_name}}</td>

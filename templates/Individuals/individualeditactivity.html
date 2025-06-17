@@ -136,12 +136,21 @@
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.edit-activity').forEach(function (el) {
-        el.addEventListener('click', function (e) {
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle click on edit activity links
+    const editLinks = document.querySelectorAll('.edit-activity');
+    editLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
             e.preventDefault();
-
-            // Populate the form with values from data attributes
+            
+            // Hide the main content and create new container
+            document.getElementById('activityMainContent').style.display = 'none';
+            document.getElementById('createNewactivityContainer').style.display = 'none';
+            
+            // Show the edit section
+            document.getElementById('individualeditSection').style.display = 'block';
+            
+            // Populate form data
             document.getElementById('edit-subject').value = this.dataset.subject || '';
             document.getElementById('edit-notes').value = this.dataset.notes || '';
             document.getElementById('edit-status').value = this.dataset.status || '';
@@ -152,27 +161,57 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('edit-priority').value = this.dataset.priority || '';
             document.getElementById('edit-type').value = this.dataset.type || '';
             document.getElementById('edit-method').value = this.dataset.method || '';
-            document.getElementById('edit-activity-id').value = this.dataset.id || ''; 
+            document.getElementById('edit-activity-id').value = this.dataset.id || '';
+            
+            // Handle attachment preview
             let attachmentUrl = this.dataset.attachment;
             let attachmentBlock = document.getElementById('edit-attachment-preview');
-
             if (attachmentUrl) {
                 attachmentBlock.innerHTML = `<a href="${attachmentUrl}" target="_blank">📄 View Existing Attachment</a>`;
             } else {
                 attachmentBlock.innerHTML = '';
             }
-
-
-            // Hide the table and show the edit section
-            document.getElementById('emptyActivitiesState').style.display = 'none';
-            document.getElementById('activityeditSection').style.display = 'block';
+            
+            // Scroll to the edit section
+            window.scrollTo({
+                top: document.getElementById('individualeditSection').offsetTop - 20,
+                behavior: 'smooth'
+            });
         });
     });
-
-    // Cancel button
-    document.getElementById('closeActivityEdit').addEventListener('click', function () {
-        document.getElementById('activityeditSection').style.display = 'none';
-        document.getElementById('emptyActivitiesState').style.display = 'block';
+    
+    // Handle cancel button in edit form
+    const closeEditBtn = document.getElementById('closeActivityEdit');
+    if (closeEditBtn) {
+        closeEditBtn.addEventListener('click', function() {
+            document.getElementById('individualeditSection').style.display = 'none';
+            document.getElementById('activityMainContent').style.display = 'block';
+        });
+    }
+    
+    // Handle tab switching
+    $('a[data-toggle="tab"][href="#Activities-individuals"]').on('shown.bs.tab', function() {
+        document.getElementById('activityMainContent').style.display = 'block';
+        document.getElementById('createNewactivityContainer').style.display = 'none';
+        document.getElementById('individualeditSection').style.display = 'none';
     });
 });
+
+// Handle create new and cancel buttons
+function showCreateNew() {
+    document.getElementById('activityMainContent').style.display = 'none';
+    document.getElementById('createNewactivityContainer').style.display = 'block';
+    document.getElementById('individualeditSection').style.display = 'none';
+    window.scrollTo({
+        top: document.getElementById('createNewactivityContainer').offsetTop - 20,
+        behavior: 'smooth'
+    });
+}
+
+function showNotesMain() {
+    document.getElementById('activityMainContent').style.display = 'block';
+    document.getElementById('createNewactivityContainer').style.display = 'none';
+    document.getElementById('individualeditSection').style.display = 'none';
+    document.getElementById('activityForm').reset();
+}
 </script>

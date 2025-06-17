@@ -43,7 +43,7 @@
 </style>
 
 <div class="tab-pane" id="Notes-individuals">
-    <!-- Main Content Container (renamed to noteMainContent as requested) -->
+    <!-- Main Content Container -->
     <div id="noteMainContent">
         <div class="agents-panel panel panel-default">
             <div class="panel-heading clearfix">
@@ -91,7 +91,7 @@
                         <tbody>
                             {% for note in individual_notes %}
                             <tr>
-                                <td>{{ note.subject }}</td>
+                                <td><a href="#" class="note-subject-link" data-subject="{{ note.subject }}" data-notes="{{ note.notes }}">{{ note.subject }}</a></td>
                                 <td>{{ note.notes }}</td>
                                 <td>
                                     {% if note.attachment %}
@@ -115,12 +115,11 @@
                     </p>
                 </div>
                 {% endif %}
-
             </div>
         </div>
     </div>
 
-    <!-- Create Note Container (Hidden by default) -->
+
     <div id="createNewnoteContainer" style="display: none;">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -168,6 +167,9 @@
     </div>
 </div>
 
+
+ {% include "Individuals/individualeditnotes.html" %}
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Get elements
@@ -175,22 +177,44 @@ document.addEventListener('DOMContentLoaded', function() {
     const showCreateBtnMobile = document.getElementById('showCreateNoteBtnMobile');
     const backToNotesBtn = document.getElementById('backToNotesBtn');
     const cancelNoteBtn = document.getElementById('cancelNoteBtn');
-    const noteMainContent = document.getElementById('noteMainContent'); // Changed to noteMainContent
+    const backFromEditBtn = document.getElementById('backFromEditBtn');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    const noteMainContent = document.getElementById('noteMainContent');
     const createNoteContainer = document.getElementById('createNewnoteContainer');
+    const individualEditNotes = document.getElementById('individualeditnotes');
     const noteForm = document.getElementById('noteForm');
+    const editNoteForm = document.getElementById('editNoteForm');
+    const noteSubjectLinks = document.querySelectorAll('.note-subject-link');
 
     // Function to show create note form
     function showCreateNote() {
         noteMainContent.style.display = 'none';
         createNoteContainer.style.display = 'block';
+        individualEditNotes.style.display = 'none';
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // Function to show notes list
     function showNotesList() {
         createNoteContainer.style.display = 'none';
+        individualEditNotes.style.display = 'none';
         noteMainContent.style.display = 'block';
         noteForm.reset();
+        editNoteForm.reset();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Function to show individual edit notes
+    function showIndividualEditNotes(subject, notes) {
+        noteMainContent.style.display = 'none';
+        createNoteContainer.style.display = 'none';
+        individualEditNotes.style.display = 'block';
+        
+        // Populate the edit form with the note data
+        document.getElementById('editSubject').value = subject;
+        document.getElementById('editNotes').value = notes;
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // Event listeners
@@ -198,6 +222,17 @@ document.addEventListener('DOMContentLoaded', function() {
     showCreateBtnMobile.addEventListener('click', showCreateNote);
     backToNotesBtn.addEventListener('click', showNotesList);
     cancelNoteBtn.addEventListener('click', showNotesList);
+    backFromEditBtn.addEventListener('click', showNotesList);
+    cancelEditBtn.addEventListener('click', showNotesList);
 
+    // Add click event for note subject links
+    noteSubjectLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const subject = this.getAttribute('data-subject');
+            const notes = this.getAttribute('data-notes');
+            showIndividualEditNotes(subject, notes);
+        });
+    });
 });
 </script>

@@ -161,17 +161,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 attachmentBlock.innerHTML = '';
             }
 
-
             // Hide the table and show the edit section
-            document.getElementById('emptyActivitiesState').style.display = 'none';
-            document.getElementById('activityeditSection').style.display = 'block';
+            document.getElementById('activityMainContent').style.display = 'none';
+            document.getElementById('agencyeditSection').style.display = 'block';
         });
     });
 
-    // Cancel button
+    // Cancel button - Modified to show activityMainContent
     document.getElementById('closeActivityEdit').addEventListener('click', function () {
-        document.getElementById('activityeditSection').style.display = 'none';
-        document.getElementById('emptyActivitiesState').style.display = 'block';
+        document.getElementById('agencyeditSection').style.display = 'none';
+        document.getElementById('activityMainContent').style.display = 'block';
     });
 });
 </script>

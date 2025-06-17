@@ -1,0 +1,42 @@
+<div id="noteeditSection" style="display: none;">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="note_id" id="editNoteId">
+        <div class="well">
+            <h4 id="noteFormTitle">Edit Notes & Attachments</h4>
+            
+            <!-- Subject Section -->
+            <div class="form-group">
+                <label><strong>Subject *</strong></label>
+                <input type="text" class="form-control" id="editSubject" name="subject" placeholder="Enter subject">
+            </div>
+            
+            <!-- Notes Section -->
+            <div class="form-group">
+                <label><strong>Notes</strong></label>
+                <textarea class="form-control" id="editNotes" name="notes" rows="5" placeholder="Type your notes here..."></textarea>
+            </div>
+            <div class="checkbox checkbox-primary">
+                <input id="editPinNote" type="checkbox" name="pin_note">
+                <label for="editPinNote">
+                    Pin Note
+                </label>
+            </div>
+            
+            <hr>
+            
+            <!-- Attachments Section -->
+            <div class="attachment-block">
+                <label><b>📎Attachment</b></label>
+                <input type="file" name="attachment" id="attachment" class="form-control" />
+            </div>
+            <br>
+            
+            <!-- Action Buttons -->
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-default" id="cancelEditNote">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>

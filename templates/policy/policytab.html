@@ -623,10 +623,11 @@
                 <!-- Tab Navigation -->
               <div class="nav-tabs-container d-flex flex-wrap">
     <!-- Detail Tab -->
-    <div class="btn-group nav-tab-btn-group me-3 mb-2">
-        <a href="#detail-policy" class="btn btn-secondary nav-tab-btn active" data-toggle="tab">Detail</a>
-    </div>
-
+   
+<div class="btn-group nav-tab-btn-group me-3 mb-2">
+    <a href="#detail-policy" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Detail</a>
+</div>
+<!-- Repeat for other tab buttons -->
     <!-- Coverage Tab -->
     <div class="btn-group nav-tab-btn-group me-3 mb-2">
         <a href="#Coverage-policy" class="btn btn-secondary nav-tab-btn" data-toggle="tab">Coverage</a>
@@ -740,12 +741,11 @@
     </div>
 </div>
 
-
-  <div class="summary-item">
+<div class="summary-item">
     <h4><i class="fa fa-tasks"></i> Activities Due</h4>
     {% if due_activities %}
       {% for act in due_activities %}
-      <p class="text-muted">{{ act.subject }}</p>
+      <p class="text-muted"><a href="#" class="edit-activity" data-id="{{ act.id }}">{{ act.subject }}</a></p>
       {% endfor %}
       {% else %}
       <p class="text-muted">No Activities.</p>
@@ -756,18 +756,22 @@
 </div>
     
     <div class="summary-item">
-        <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
-        {% if pin_notess %}
-            {% for note in pin_notess %}
-            <p class="text-muted">{{ note.subject }}</p>
-            {% endfor %}
-            {% else %}
-            <p class="text-muted">No pinned note.</p>
-        {% endif %}
-        <a href="#Notes-policy" class="btn btn-xs btn-info" id="create-pinnednote-from-sidebar">
-            <i class="fa fa-plus"></i> Create new
-        </a>
-    </div>
+    <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
+    {% if pin_notess %}
+        {% for note in pin_notess %}
+        <p class="text-muted">
+            <a href="#" class="edit-note" data-id="{{ note.id }}" data-subject="{{ note.subject }}" data-notes="{{ note.notes }}" data-pinned="{{ note.pin_note }}">
+                {{ note.subject }}
+            </a>
+        </p>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">No pinned note.</p>
+    {% endif %}
+    <a href="#Notes-policy" class="btn btn-xs btn-info" id="create-pinnednote-from-sidebar">
+        <i class="fa fa-plus"></i> Create new
+    </a>
+</div>
 </div>
 
 <!-- Modal -->
@@ -1043,5 +1047,138 @@ $('#create-activity-from-sidebar').click(function(e) {
         });
     });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle click on activity subject links in sidebar
+    document.querySelectorAll('.summary-item .edit-activity').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Get the activity subject text
+            const subjectText = this.textContent.trim();
+            
+            // Switch to Activities tab if not already active
+            if (!$('#Activities-policy').hasClass('active')) {
+                $('a[href="#Activities-policy"]').tab('show');
+            }
+            
+            // Show the edit section and hide others
+            document.getElementById('activityMainContent').style.display = 'none';
+            document.getElementById('createNewactivityContainer').style.display = 'none';
+            document.getElementById('policyeditSection').style.display = 'block';
+            
+            // Set the subject in the edit form
+            document.getElementById('edit-subject').value = subjectText;
+            
+            // Scroll to the edit section
+            $('html, body').animate({
+                scrollTop: $('#policyeditSection').offset().top - 20
+            }, 300);
+        });
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab persistence functionality
+    const tabLinks = document.querySelectorAll('.nav-tab-btn');
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialTab = urlParams.get('tab');
+    
+    // Function to set active tab
+    function setActiveTab(tabId) {
+        // Remove active class from all tabs and panes
+        tabLinks.forEach(link => link.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+        
+        // Add active class to selected tab and pane
+        const tabLink = document.querySelector(`a[href="${tabId}"]`);
+        if (tabLink) {
+            tabLink.classList.add('active');
+            document.querySelector(tabId).classList.add('active');
+        }
+    }
+    
+    // Check URL parameter first (for initial load from search/saved policy)
+    if (initialTab === 'detail') {
+        // Always open Detail tab first when coming from search/saved policy
+        setActiveTab('#detail-policy');
+        // Clear the parameter so it doesn't affect future tab switches
+        history.replaceState(null, '', window.location.pathname);
+    } else {
+        // Check localStorage for saved tab
+        const savedTab = localStorage.getItem('activePolicyTab');
+        if (savedTab) {
+            setActiveTab(savedTab);
+        }
+    }
+    
+    // Save tab to localStorage when a tab is clicked
+    tabLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const tabId = this.getAttribute('href');
+            localStorage.setItem('activePolicyTab', tabId);
+        });
+    });
+    
+    // Handle dropdown tab clicks (for WorkFlow and Email dropdowns)
+    document.querySelectorAll('.dropdown-item[data-toggle="tab"]').forEach(item => {
+        item.addEventListener('click', function() {
+            const tabId = this.getAttribute('href');
+            localStorage.setItem('activePolicyTab', tabId);
+        });
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle click on pinned note links in sidebar
+    document.querySelectorAll('.summary-item .edit-note').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Get the note data from data attributes
+            const noteId = this.getAttribute('data-id');
+            const subject = this.getAttribute('data-subject');
+            const notes = this.getAttribute('data-notes');
+            const pinned = this.getAttribute('data-pinned') === 'True';
+            
+            // Switch to Notes tab if not already active
+            if (!$('#Notes-policy').hasClass('active')) {
+                $('a[href="#Notes-policy"]').tab('show');
+            }
+            
+            // Show the edit section and hide others
+            document.getElementById('notesMainContent').style.display = 'none';
+            document.getElementById('createNewnoteContainer').style.display = 'none';
+            document.getElementById('policyeditnote').style.display = 'block';
+            
+            // Set the values in the edit form
+            document.getElementById('edit-subject').value = subject;
+            document.getElementById('edit-notes').value = notes;
+            document.getElementById('edit-checkboxpin').checked = pinned;
+            
+            // Update the form action to include the note ID
+            document.querySelector('.edit-note-form').action = `/notes/update/${noteId}/`;
+            
+            // Update the header to show which note we're editing
+            document.getElementById('editing-note-subject').textContent = subject;
+            
+            // Scroll to the edit section
+            $('html, body').animate({
+                scrollTop: $('#policyeditnote').offset().top - 20
+            }, 300);
+        });
+    });
 
+    // Handle back/cancel buttons in the edit form
+    document.querySelectorAll('.back-to-notes, .cancel-edit').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('policyeditnote').style.display = 'none';
+            document.getElementById('notesMainContent').style.display = 'block';
+        });
+    });
+});
+</script>
 {% endblock %}
