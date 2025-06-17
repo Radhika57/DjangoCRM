@@ -527,7 +527,7 @@
   {% if due_activities %}
     {% for act in due_activities %}
       <p class="text-muted">
-        <a href="#" class="activity-subject-link" style="color: #007bff; text-decoration: underline;">
+        <a href="#" class="edit-subject" style="color: #007bff; text-decoration: underline;">
           {{ act.subject }}
         </a>
       </p>
@@ -858,7 +858,7 @@ $(document).on('click', '.client-toggle', function(e) {
     });
 });
 // Make activity subject clickable to show the edit section
-$(document).on('click', '.activity-subject-link', function(e) {
+$(document).on('click', '.edit-subject', function(e) {
     e.preventDefault();
 
     var subjectText = $(this).text().trim(); 
