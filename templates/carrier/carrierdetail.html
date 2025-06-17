@@ -522,25 +522,33 @@
 </div>
 
 
-
-   <div class="summary-item">
-    <h4><i class="fa fa-tasks"></i> Activities Due</h4>
-    {% if due_activities %}
-      {% for act in due_activities %}
-      <p class="text-muted">{{ act.subject }}</p>
-      {% endfor %}
-      {% else %}
-      <p class="text-muted">No Activities.</p>
-    {% endif %}
-    <a href="#" class="btn btn-xs btn-success" id="create-activity-from-sidebar">
-        <i class="fa fa-plus"></i> Create new
-    </a>
+<div class="summary-item">
+  <h4><i class="fa fa-tasks"></i> Activities Due</h4>
+  {% if due_activities %}
+    {% for act in due_activities %}
+      <p class="text-muted">
+        <a href="#" class="activity-subject-link" style="color: #007bff; text-decoration: underline;">
+          {{ act.subject }}
+        </a>
+      </p>
+    {% endfor %}
+  {% else %}
+    <p class="text-muted">No Activities.</p>
+  {% endif %}
+  <a href="#" class="btn btn-xs btn-success" id="create-activity-from-sidebar">
+    <i class="fa fa-plus"></i> Create new
+  </a>
 </div>
+
 <div class="summary-item">
     <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
     {% if pin_notess %}
       {% for note in pin_notess %}
-      <p class="text-muted">{{ note.subject }}</p>
+      <p class="text-muted">
+        <a href="#" class="note-subject-link" style="color: #007bff; text-decoration: underline;">
+          {{ note.subject }}
+        </a>
+      </p>
       {% endfor %}
       {% else %}
       <p class="text-muted">No pinned note.</p>
@@ -550,7 +558,6 @@
     </a>
 </div>
 </div>
-
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -626,30 +633,36 @@ $(document).on('click', '.client-toggle', function(e) {
         $('#emptyActivitiesState').show();
     });
 
-    // Handle Create New Activity from sidebar
     $('#create-activity-from-sidebar').click(function(e) {
-        e.preventDefault();
-        
-        // Get the activities tab link
-        var activitiesTabLink = $('a[href="#activities"]');
-        
-        // Show the Activities tab
+    e.preventDefault();
+    
+    var activitiesTabLink = $('a[href="#activities"]');
+    var isTabActive = $('#activities').is(':visible');
+
+    if (!isTabActive) {
         activitiesTabLink.tab('show');
-        
-        // After tab is shown, trigger the form display
         activitiesTabLink.on('shown.bs.tab', function() {
+            $('#activityeditSection').hide();
             $('#emptyActivitiesState').hide();
             $('#activityDetailsSection').show();
-            
-            // Scroll to the form for better UX
+
             $('html, body').animate({
                 scrollTop: $('#activityDetailsSection').offset().top - 20
             }, 300);
-            
-            // Remove the event handler to prevent multiple bindings
+
             activitiesTabLink.off('shown.bs.tab');
         });
-    });
+    } else {
+        $('#activityeditSection').hide();
+        $('#emptyActivitiesState').hide();
+        $('#activityDetailsSection').show();
+
+        $('html, body').animate({
+            scrollTop: $('#activityDetailsSection').offset().top - 20
+        }, 300);
+    }
+});
+
     
 
 
@@ -844,6 +857,72 @@ $(document).on('click', '.client-toggle', function(e) {
         show: false
     });
 });
+// Make activity subject clickable to show the edit section
+$(document).on('click', '.activity-subject-link', function(e) {
+    e.preventDefault();
+
+    var subjectText = $(this).text().trim(); 
+    $('#edit-subject').val(subjectText);     
+
+    var activitiesTabLink = $('a[href="#activities"]');
+    activitiesTabLink.tab('show');
+
+    activitiesTabLink.on('shown.bs.tab', function() {
+        $('#emptyActivitiesState').hide();
+        $('#activityeditSection').show();
+        $('#activitiesPanel').hide(); 
+
+        $('html, body').animate({
+            scrollTop: $('#activityeditSection').offset().top - 20
+        }, 300);
+
+        activitiesTabLink.off('shown.bs.tab');
+    });
+
+    // If tab is already active
+    if ($('#activities').is(':visible')) {
+        $('#emptyActivitiesState').hide();
+        $('#activityeditSection').show();
+        $('#activitiesPanel').hide(); 
+        $('html, body').animate({
+            scrollTop: $('#activityeditSection').offset().top - 20
+        }, 300);
+    }
+});
+// Make pinned note subject clickable to show the edit section
+$(document).on('click', '.note-subject-link', function(e) {
+    e.preventDefault();
+
+    var subjectText = $(this).text().trim(); 
+    $('#editSubject').val(subjectText);     
+
+    var notesTabLink = $('a[href="#notes"]');
+    notesTabLink.tab('show');
+
+    notesTabLink.on('shown.bs.tab', function() {
+        $('#emptyNotesState').hide();
+        $('#noteeditSection').show();
+        $('#noteDetailsSection').hide(); 
+
+        $('html, body').animate({
+            scrollTop: $('#noteeditSection').offset().top - 20
+        }, 300);
+
+        notesTabLink.off('shown.bs.tab');
+    });
+
+    // If tab is already active
+    if ($('#notes').is(':visible')) {
+        $('#emptyNotesState').hide();
+        $('#noteeditSection').show();
+        $('#noteDetailsSection').hide(); 
+        $('html, body').animate({
+            scrollTop: $('#noteeditSection').offset().top - 20
+        }, 300);
+    }
+});
+
+
 </script>
 
 {% endblock %}

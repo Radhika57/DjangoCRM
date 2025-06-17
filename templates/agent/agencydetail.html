@@ -1111,29 +1111,38 @@
     <h4><i class="fa fa-tasks"></i> Activities Due</h4>
     {% if due_activities %}
       {% for act in due_activities %}
-      <p class="text-muted">{{ act.subject }}</p>
+      <p class="text-muted">
+        <a href="#" class="activity-edit-link" data-id="{{ act.id }}" style="color: #007bff; text-decoration: underline;">
+          {{ act.subject }}
+        </a>
+      </p>
       {% endfor %}
     {% else %}
       <p class="text-muted">No Activities.</p>
     {% endif %}
-    <a href="#" class="btn btn-xs btn-success" id="createActivityBtn" data-toggle="modal" data-target="#">
+    <a href="#" class="btn btn-xs btn-success" id="createActivityBtn">
         <i class="fa fa-plus"></i> Create new
     </a>
 </div>
 
-    <div class="summary-item">
-        <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
-        {% if pin_notess %}
+
+   <div class="summary-item">
+    <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
+    {% if pin_notess %}
       {% for note in pin_notess %}
-      <p class="text-muted">{{ note.subject }}</p>
+      <p class="text-muted">
+        <a href="#" class="pinned-note-link" data-id="{{ note.id }}" style="color: #007bff; text-decoration: underline;">
+          {{ note.subject }}
+        </a>
+      </p>
       {% endfor %}
       {% else %}
       <p class="text-muted">No pinned note.</p>
     {% endif %}
-        <a href="#notes-content" class="btn btn-xs btn-info" id="create-pinnednote-from-sidebar" data-show-form="true">
-            <i class="fa fa-plus"></i> Create new
-        </a>
-    </div>
+    <a href="#notes-content" class="btn btn-xs btn-info" id="create-pinnednote-from-sidebar" data-show-form="true">
+        <i class="fa fa-plus"></i> Create new
+    </a>
+</div>
 
 </div>
 
@@ -1290,6 +1299,179 @@
             }
         });
     });
+    // Function to show activity edit form with subject pre-filled
+function showActivityEdit(activityId, subject) {
+    // Switch to activities tab if not already active
+    if (!$('#activities-content').hasClass('active')) {
+        $('a[href="#activities-content"]').tab('show');
+    }
+    
+    // Hide main content and show edit section
+    $('#activityMainContent').hide();
+    $('#agencyeditSection').show();
+    
+    // Set the subject in the edit form
+    $('#edit-subject').val(subject);
+    
+    // You can load other activity data here if needed
+    // loadActivityData(activityId);
+    
+    // Scroll to edit section
+    $('html, body').animate({
+        scrollTop: $('#agencyeditSection').offset().top - 20
+    }, 300);
+}
+
+// Attach click handlers to activity links in sidebar
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle clicks on activity subject links in sidebar
+    document.querySelectorAll('.activity-edit-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const activityId = this.getAttribute('data-id') || '';
+            const subject = this.textContent.trim();
+            showActivityEdit(activityId, subject);
+        });
+    });
+
+    // Handle create new activity button
+    document.getElementById('createActivityBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Switch to activities tab if not already there
+        const activitiesTabLink = document.querySelector('a[href="#activities-content"]');
+        if (activitiesTabLink && !activitiesTabLink.classList.contains('active')) {
+            $(activitiesTabLink).tab('show');
+            
+            // After tab is shown, show the form
+            $(activitiesTabLink).on('shown.bs.tab', function() {
+                showCreateNew();
+                $(activitiesTabLink).off('shown.bs.tab');
+            });
+        } else {
+            showCreateNew();
+        }
+    });
+});
+$(document).ready(function() {
+    // Handle click on pinned note in sidebar
+    $(document).on('click', '.pinned-note-link', function(e) {
+        e.preventDefault();
+        const noteId = $(this).data('id');
+        
+        // Switch to notes tab if not already active
+        const notesTabLink = $('a[href="#notes-content"]');
+        notesTabLink.tab('show');
+        
+        // Wait for tab to be shown
+        $('a[href="#notes-content"]').on('shown.bs.tab', function() {
+            // Hide main content and show edit container
+            $('#notesMainContent').hide();
+            $('#editnoteContainer').show();
+            
+            // Load note data into form
+            loadNoteData(noteId);
+            
+            // Scroll to edit form
+            $('html, body').animate({
+                scrollTop: $('#editnoteContainer').offset().top - 20
+            }, 300);
+            
+            // Remove the event handler to prevent multiple bindings
+            $('a[href="#notes-content"]').off('shown.bs.tab');
+        });
+    });
+    
+    // Function to load note data into edit form
+    function loadNoteData(noteId) {
+        // Make AJAX call to get note data
+        $.ajax({
+            url: '/get-note-data/' + noteId + '/',
+            method: 'GET',
+            success: function(data) {
+                $('#editNoteId').val(data.id);
+                $('#editSubject').val(data.subject);
+                $('#editNotes').val(data.notes);
+                $('#editCheckboxpin').prop('checked', data.is_pinned);
+            },
+            error: function() {
+                alert('Error loading note data');
+            }
+        });
+    }
+    
+    // Handle back/cancel buttons in edit form
+    $('#backToEditNotesBtn, #cancelEditNoteBtn').click(function() {
+        $('#editnoteContainer').hide();
+        $('#notesMainContent').show();
+    });
+});
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab persistence functionality
+    const tabLinks = document.querySelectorAll('.nav-tab-btn, .dropdown-item[data-toggle="tab"]');
+    const urlParams = new URLSearchParams(window.location.search);
+    const isFreshNavigation = urlParams.get('fresh') === 'true';
+    
+    // Function to set active tab
+    function setActiveTab(tabId) {
+        // Remove active class from all tabs and panes
+        tabLinks.forEach(link => link.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+        
+        // Add active class to selected tab and pane
+        const tabLink = document.querySelector(`a[href="${tabId}"]`);
+        if (tabLink) {
+            tabLink.classList.add('active');
+            document.querySelector(tabId).classList.add('active');
+            
+            // Handle dropdown parent activation
+            const dropdownParent = tabLink.closest('.dropdown-menu');
+            if (dropdownParent) {
+                dropdownParent.previousElementSibling.classList.add('active');
+            }
+        }
+    }
+    
+    // Check if this is a fresh navigation (from sidebar)
+    if (isFreshNavigation) {
+        // Remove the fresh parameter from URL without reload
+        const newUrl = window.location.pathname + window.location.search.replace('fresh=true', '');
+        window.history.replaceState({}, document.title, newUrl);
+        
+        // Always show Detail tab for fresh navigation
+        setActiveTab('#detail-content');
+        localStorage.setItem('activeAgencyTab', '#detail-content');
+    } else {
+        // Check localStorage for saved tab
+        const savedTab = localStorage.getItem('activeAgencyTab') || '#detail-content';
+        setActiveTab(savedTab);
+    }
+    
+    // Save tab to localStorage when a tab is clicked
+    tabLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const tabId = this.getAttribute('href');
+            if (tabId && tabId.startsWith('#')) {
+                localStorage.setItem('activeAgencyTab', tabId);
+            }
+        });
+    });
+    
+    // Handle dropdown parent clicks
+    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            if (this.classList.contains('active')) {
+                const activeTab = localStorage.getItem('activeAgencyTab');
+                if (activeTab) {
+                    setActiveTab(activeTab);
+                }
+            }
+        });
+    });
+});
+</script>
+
 
 {% endblock %}

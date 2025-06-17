@@ -128,12 +128,11 @@
         <!-- Action Buttons -->
         <div class="text-right">
             <button type="submit" class="btn btn-primary">Save</button>
-            <button type="button" class="btn btn-default" id="closeActivityEdit">Cancel</button>
+            <button type="button" class="btn btn-default" onclick="showNotesMain()">Cancel</button>
         </div>
     </div>
     </form>
 </div>
-
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -161,14 +160,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 attachmentBlock.innerHTML = '';
             }
 
-            document.getElementById('emptyActivitiesState').style.display = 'none';
-            document.getElementById('activityeditSection').style.display = 'block';
+            document.getElementById('activityMainContent').style.display = 'none';
+            document.getElementById('policyeditSection').style.display = 'block';
         });
     });
 
-    document.getElementById('closeActivityEdit').addEventListener('click', function () {
-        document.getElementById('activityeditSection').style.display = 'none';
-        document.getElementById('emptyActivitiesState').style.display = 'block';
-    });
+    // This is now handled by the showNotesMain() function which is called by the Cancel button
 });
+
+// This function is shared by all cancel/back buttons
+function showNotesMain() {
+    document.getElementById('activityMainContent').style.display = 'block';
+    document.getElementById('createNewactivityContainer').style.display = 'none';
+    document.getElementById('policyeditSection').style.display = 'none';
+}
 </script>

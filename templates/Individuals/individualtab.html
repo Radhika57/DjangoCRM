@@ -234,6 +234,7 @@
         padding-bottom: 15px;
         border-bottom: 1px solid #f5f5f5;
     }
+    
 </style>
 <input type="hidden" id="individual-id" value="{{ individual.id }}">
 
@@ -499,9 +500,11 @@
     <h4><i class="fa fa-tasks"></i> Activities Due</h4>
     {% if due_activities %}
       {% for act in due_activities %}
-      <p class="text-muted">{{ act.subject }}</p>
+      <p class="text-muted">
+          <a href="#" class="activity-subject-link">{{ act.subject }}</a>
+      </p>
       {% endfor %}
-      {% else %}
+    {% else %}
       <p class="text-muted">No Activities.</p>
     {% endif %}
     <a href="#Activities-individuals" 
@@ -512,11 +515,15 @@
     </a>
 </div>
     
-    <div class="summary-item">
+   <div class="summary-item">
     <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
     {% if pin_notess %}
       {% for note in pin_notess %}
-      <p class="text-muted">{{ note.subject }}</p>
+      <p class="text-muted">
+          <a href="#" class="pinned-note-link" data-note-id="{{ note.id }}" style="color: #007bff; text-decoration: none;">
+              {{ note.subject }}
+          </a>
+      </p>
       {% endfor %}
       {% else %}
       <p class="text-muted">No pinned note.</p>
@@ -627,6 +634,202 @@
             }
         });
     });
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle click on activity subject links in the summary sidebar
+    document.querySelectorAll('#individual-summary .activity-subject-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Switch to the Activities tab
+            $('[href="#Activities-individuals"]').tab('show');
+            
+            // After tab is shown, manipulate the content
+            setTimeout(function() {
+                // Hide other sections
+                document.getElementById('activityMainContent').style.display = 'none';
+                document.getElementById('createNewactivityContainer').style.display = 'none';
+                
+                // Show only the edit section
+                document.getElementById('individualeditSection').style.display = 'block';
+                
+                // Scroll to the edit section
+                document.getElementById('individualeditSection').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }, 100);
+        });
+    });
+    
+    // Handle cancel button
+    document.getElementById('closeActivityEdit')?.addEventListener('click', function() {
+        document.getElementById('individualeditSection').style.display = 'none';
+        document.getElementById('activityMainContent').style.display = 'block';
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab persistence functionality
+    const tabLinks = document.querySelectorAll('.nav-tab-btn, .dropdown-item[data-toggle="tab"]');
+    
+    // Function to set active tab
+    function setActiveTab(tabId) {
+        // Remove active class from all tabs and panes
+        tabLinks.forEach(link => link.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+        
+        // Add active class to selected tab and pane
+        const tabLink = document.querySelector(`a[href="${tabId}"]`);
+        if (tabLink) {
+            tabLink.classList.add('active');
+            document.querySelector(tabId).classList.add('active');
+            
+            // Handle dropdown parent activation
+            const dropdownParent = tabLink.closest('.dropdown-menu');
+            if (dropdownParent) {
+                dropdownParent.previousElementSibling.classList.add('active');
+            }
+        }
+    }
+    
+    // Check localStorage for saved tab
+    const savedTab = localStorage.getItem('activeIndividualTab');
+    if (savedTab) {
+        setActiveTab(savedTab);
+    }
+    
+    // Save tab to localStorage when a tab is clicked
+    tabLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const tabId = this.getAttribute('href');
+            if (tabId && tabId.startsWith('#')) {
+                localStorage.setItem('activeIndividualTab', tabId);
+            }
+        });
+    });
+    
+    // Handle dropdown parent clicks
+    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            if (this.classList.contains('active')) {
+                const activeTab = localStorage.getItem('activeIndividualTab');
+                if (activeTab) {
+                    setActiveTab(activeTab);
+                }
+            }
+        });
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle click on pinned note links in the summary sidebar
+    document.querySelectorAll('#individual-summary .pinned-note-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const noteId = this.getAttribute('data-note-id');
+            
+            // Switch to the Notes tab
+            $('[href="#Notes-individuals"]').tab('show');
+            
+            // After tab is shown, manipulate the content
+            setTimeout(function() {
+                // Hide other sections
+                document.getElementById('noteMainContent').style.display = 'none';
+                document.getElementById('createNewnoteContainer').style.display = 'none';
+                
+                // Show the edit section
+                document.getElementById('individualeditnotes').style.display = 'block';
+                
+                // Here you would typically load the note data into the form
+                // For example: loadNoteData(noteId);
+                
+                // Scroll to the edit section
+                document.getElementById('individualeditnotes').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }, 100);
+        });
+    });
+    
+    // Handle back/cancel buttons in the edit form
+    document.getElementById('backFromEditBtn')?.addEventListener('click', function() {
+        document.getElementById('individualeditnotes').style.display = 'none';
+        document.getElementById('noteMainContent').style.display = 'block';
+    });
+    
+    document.getElementById('cancelEditBtn')?.addEventListener('click', function() {
+        document.getElementById('individualeditnotes').style.display = 'none';
+        document.getElementById('noteMainContent').style.display = 'block';
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab persistence functionality
+    const tabLinks = document.querySelectorAll('.nav-tab-btn, .dropdown-item[data-toggle="tab"]');
+    const urlParams = new URLSearchParams(window.location.search);
+    const isFreshNavigation = urlParams.get('fresh') === 'true';
+    
+    // Function to set active tab
+    function setActiveTab(tabId) {
+        // Remove active class from all tabs and panes
+        tabLinks.forEach(link => link.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+        
+        // Add active class to selected tab and pane
+        const tabLink = document.querySelector(`a[href="${tabId}"]`);
+        if (tabLink) {
+            tabLink.classList.add('active');
+            document.querySelector(tabId).classList.add('active');
+            
+            // Handle dropdown parent activation
+            const dropdownParent = tabLink.closest('.dropdown-menu');
+            if (dropdownParent) {
+                dropdownParent.previousElementSibling.classList.add('active');
+            }
+        }
+    }
+    
+    // Check if this is a fresh navigation (from sidebar)
+    if (isFreshNavigation) {
+        // Remove the fresh parameter from URL without reload
+        const newUrl = window.location.pathname + window.location.search.replace('fresh=true', '');
+        window.history.replaceState({}, document.title, newUrl);
+        
+        // Always show Detail tab for fresh navigation
+        setActiveTab('#detail-individuals');
+        localStorage.setItem('activeIndividualTab', '#detail-individuals');
+    } else {
+        // Check localStorage for saved tab
+        const savedTab = localStorage.getItem('activeIndividualTab') || '#detail-individuals';
+        setActiveTab(savedTab);
+    }
+    
+    // Save tab to localStorage when a tab is clicked
+    tabLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const tabId = this.getAttribute('href');
+            if (tabId && tabId.startsWith('#')) {
+                localStorage.setItem('activeIndividualTab', tabId);
+            }
+        });
+    });
+    
+    // Handle dropdown parent clicks
+    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            if (this.classList.contains('active')) {
+                const activeTab = localStorage.getItem('activeIndividualTab');
+                if (activeTab) {
+                    setActiveTab(activeTab);
+                }
+            }
+        });
+    });
+});
 </script>
 
 {% endblock %}

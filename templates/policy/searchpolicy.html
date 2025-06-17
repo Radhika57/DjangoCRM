@@ -614,9 +614,9 @@
                     <tbody>
                     {% for plcy in policy %}
                         <tr>
-                            <td><a href="{% url 'policy_tab' plcy.id %}">
-                                    {{ plcy.policy_number|default:"(not set)" }}
-                                </a></td>
+                            <td><a href="{% url 'policy_tab' plcy.id %}?tab=detail">
+    {{ plcy.policy_number|default:"(not set)" }}
+</a></td>
                             <td><a href="{% url 'individual_tab' plcy.individual.id %}">{{plcy.individual.first_name}} {{plcy.individual.middle_name}} {{plcy.individual.last_name}}</a></td>
                             <td>{{plcy.effective_date|date:'Y-m-d' }}</td>
                             <td>{{ plcy.policy_details.first.renewal_date|date:'Y-m-d' }}</td>

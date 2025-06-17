@@ -10,7 +10,7 @@
                     </button>
                 </div>
             </div>
-            
+
             <div class="panel-body">
                 {% if policy_notes %}
                     <table id="example10" class="table table-bordered table-striped table-hover">
@@ -24,7 +24,7 @@
                         <tbody>
                             {% for note in policy_notes %}
                             <tr>
-                                <td>{{ note.subject }}</td>
+                                <td><a href="#" class="edit-note-link" data-subject="{{ note.subject }}" data-notes="{{ note.notes }}">{{ note.subject }}</a></td>
                                 <td>{{ note.notes }}</td>
                                 <td>
                                     {% if note.attachment %}
@@ -51,7 +51,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Create New Note Container (hidden by default) -->
     <div id="createNewnoteContainer" style="display: none;">
         <div class="panel panel-default">
@@ -63,7 +63,7 @@
                     </button>
                 </div>
             </div>
-            
+
             <div class="panel-body">
                 <form method="post" enctype="multipart/form-data" id="noteForm">
                     {% csrf_token %}
@@ -98,6 +98,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Edit Note Container (hidden by default) -->
+     {% include "policy/policyeditnotes.html" %}
 </div>
 
 <script>
@@ -108,29 +111,67 @@ document.addEventListener('DOMContentLoaded', function() {
     const cancelNoteBtn = document.getElementById('cancelNoteBtn');
     const notesMainContent = document.getElementById('notesMainContent');
     const createNoteContainer = document.getElementById('createNewnoteContainer');
-    const noteForm = document.getElementById('noteForm');
+    const policyEditNote = document.getElementById('policyeditnote');
+    const editingNoteSubject = document.getElementById('editing-note-subject');
+    const editSubjectInput = document.getElementById('edit-subject');
+    const editNotesTextarea = document.getElementById('edit-notes');
 
-    // Show create note form
-    showCreateBtn.addEventListener('click', function() {
+    // Function to show the create note form
+    function showCreateNoteForm() {
         notesMainContent.style.display = 'none';
         createNoteContainer.style.display = 'block';
-        // Smooth scroll to form
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-
-    // Back to notes list
-    function showNotesList() {
-        createNoteContainer.style.display = 'none';
-        notesMainContent.style.display = 'block';
-        noteForm.reset();
+        policyEditNote.style.display = 'none';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Attach event listeners to back and cancel buttons
+    // Function to show the main notes list
+    function showNotesList() {
+        createNoteContainer.style.display = 'none';
+        policyEditNote.style.display = 'none';
+        notesMainContent.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Function to show the edit note form with specific note data
+    function showEditNoteForm(subject, notes) {
+        notesMainContent.style.display = 'none';
+        createNoteContainer.style.display = 'none';
+        policyEditNote.style.display = 'block';
+        
+        // Set the note data in the edit form
+        editingNoteSubject.textContent = subject;
+        editSubjectInput.value = subject;
+        editNotesTextarea.value = notes;
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Event listeners
+    showCreateBtn.addEventListener('click', showCreateNoteForm);
     backToNotesBtn.addEventListener('click', showNotesList);
     cancelNoteBtn.addEventListener('click', showNotesList);
 
+    // Back and cancel buttons for edit form
+    document.querySelectorAll('.back-to-notes, .cancel-edit').forEach(btn => {
+        btn.addEventListener('click', showNotesList);
+    });
+
+    // Click handler for note subject links
+    document.querySelectorAll('.edit-note-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const subject = this.getAttribute('data-subject');
+            const notes = this.getAttribute('data-notes');
+            showEditNoteForm(subject, notes);
+        });
+    });
+
+    // Form submission handler (you can add your actual submission logic here)
+    document.querySelector('.edit-note-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        // Add your form submission logic here
+        console.log('Edit form submitted');
+        // You might want to add AJAX submission or other logic here
+    });
 });
 </script>

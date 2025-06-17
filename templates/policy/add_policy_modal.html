@@ -430,48 +430,79 @@
             }, 150);
         });
 
-        $('#policyForm').on('submit', function (e) {
-            e.preventDefault();
-
-            const recordType = $('#recordType').val();
-
-            if (recordType === 'existing' && !$('#individualId').val()) {
-                alert('Please select an existing individual.');
+        
+    $('#policyForm').on('submit', function (e) {
+        e.preventDefault();
+        
+        // Determine which submit button was clicked
+        const isRegularSave = e.originalEvent && 
+                             e.originalEvent.submitter && 
+                             e.originalEvent.submitter.id !== 'saveAndAddAnotherBtn';
+        
+        // Client info validation
+        const recordType = $('#recordType').val();
+        if (recordType === 'existing' && !$('#individualId').val()) {
+            alert('Please select an existing individual.');
+            return;
+        }
+        
+        // Policy info validation (only for regular Save)
+        if (isRegularSave) {
+            const policyCarrier = $('select[name="carrier"]').val();
+            const policyStatus = $('select[name="status"]').val();
+            const coverageType = $('select[name="coverage_type"]').val();
+            
+            if (!policyCarrier || !policyStatus || !coverageType) {
+                // Show alert for missing policy info
+                alert('Please fill in all required policy information before saving.');
+                
+                // Open policy section and focus on first missing field
+                $('.policy-info-section').addClass('active-section');
+                $('.client-info-section').removeClass('active-section');
+                
+                if (!policyCarrier) {
+                    $('select[name="carrier"]').focus();
+                } else if (!coverageType) {
+                    $('select[name="coverage_type"]').focus();
+                } else {
+                    $('select[name="status"]').focus();
+                }
+                
                 return;
             }
+        }
 
-            const formData = $(this).serialize();  
+        const formData = $(this).serialize();  
+        const isAddAnother = !isRegularSave;
 
-            $.ajax({
-                url: '/save_policy/',
-                method: 'POST',
-                data: formData,
-                success: function (response) {
-                    if (response.success) {
-                        alert('Policy saved successfully!');
-                        const isAddAnother = $('#saveAndAddAnotherBtn').is(':focus');
-
-                        if (isAddAnother) {
-                            $('#policyForm')[0].reset();
-                            $('#individualId').val('');
-                            $('#existingClientSearch').val('');
-                        } else {
-                            $('#newPolicyModal').modal('hide');
-                            $('#policyForm')[0].reset();
-
-                            setTimeout(function () {
-                                location.reload();  
-                            }, 500);
-                        }
+        $.ajax({
+            url: '/save_policy/',
+            method: 'POST',
+            data: formData,
+            success: function (response) {
+                if (response.success) {
+                    alert('Policy saved successfully!');
+                    
+                    if (isAddAnother) {
+                        // Reset only policy info section for "Save & Add Another"
+                        $('.policy-info-section').find('input, select').val('');
+                        $('select[name="status"]').val('Pending');
+                        $('.policy-info-section').addClass('active-section');
                     } else {
-                        alert('Error: ' + (response.error || 'Unknown error'));
+                        $('#newPolicyModal').modal('hide');
+                        $('#policyForm')[0].reset();
+                        setTimeout(function () {
+                            location.reload();  
+                        }, 500);
                     }
-                },
-                error: function (xhr) {
-                    alert('Failed to save policy: ' + (xhr.responseJSON?.error || 'Unknown error'));
+                } else {
+                    alert('Error: ' + (response.error || 'Unknown error'));
                 }
-            });
-
+            },
+            error: function (xhr) {
+                alert('Failed to save policy: ' + (xhr.responseJSON?.error || 'Unknown error'));
+            }
         });
+    });
     });
 </script>
