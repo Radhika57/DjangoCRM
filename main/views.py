@@ -191,7 +191,17 @@ def carrier_detail(request, carrier_id):
 
 
         # --- Notes ---
-        if request.POST.get('notes') and request.POST.get('subject'):
+        if request.POST.get('note_id'):
+            note_id = request.POST.get('note_id')
+            note = CarrierNotes.objects.get(id=note_id)
+            note.subject = request.POST.get('editnotesubject')
+            note.notes = request.POST.get('editnotenotes') 
+            note.pin_note = request.POST.get('editnotepin_note') == 'on'
+            if request.FILES.get('editnoteattachment'):
+                note.attachment = request.FILES.get('editnoteattachment')
+            note.save()
+        
+        elif request.POST.get('notes') and request.POST.get('subject'):
             CarrierNotes.objects.create(
                 carrier=carrier,
                 subject=request.POST.get('subject'),
@@ -1084,19 +1094,25 @@ def individual_tab(request, individual_id):
         
 
         # --- Notes ---
-        if request.POST.get('note_subject'):
-            note_id = request.POST.get('note_id')
-            if note_id:
-                individual_note = IndividualNotes.objects.get(id=note_id)
-            else:
-                individual_note = IndividualNotes(individual_name=individual)
-
-            individual_note.subject = request.POST.get('note_subject')
-            individual_note.notes = request.POST.get('note_notes')
-            individual_note.pin_note = request.POST.get('pin_note') == 'on'
-            if request.FILES.get('attachment'):
-                individual_note.attachment = request.FILES.get('attachment')
-            individual_note.save()
+        
+        if request.POST.get('indnote_id'):
+            indnote_id = request.POST.get('indnote_id')
+            note = IndividualNotes.objects.get(id=indnote_id)
+            note.subject = request.POST.get('edit_subject')
+            note.notes = request.POST.get('edit_notes') 
+            note.pin_note = request.POST.get('edit_pin_note') == 'on'
+            if request.FILES.get('edit_attachment'):
+                note.attachment = request.FILES.get('edit_attachment')
+            note.save()
+        
+        elif request.POST.get('note_subject') :
+            IndividualNotes.objects.create(
+                individual_name=individual,
+                subject=request.POST.get('note_subject'),
+                notes=request.POST.get('note_notes'),
+                pin_note=request.POST.get('pin_note') == 'on',
+                attachment=request.FILES.get('attachment')
+            )
             
         
                 # --- Relationship ---
@@ -1294,42 +1310,28 @@ def policy_tab(request, policy_id):
             )
             return redirect('policy_tab', policy_id=policy_id)
         
-        # if request.POST.get('activity_subject'):
-        #     activity_id = request.POST.get('activity_id')
-        #     if activity_id:
-        #         policy_activity_obj = PolicyActivity.objects.get(id=activity_id)
-        #     else:
-        #         policy_activity_obj = PolicyActivity(policy_name=policy)
-
-        #     policy_activity_obj.subject = request.POST.get('activity_subject')
-        #     policy_activity_obj.notes = request.POST.get('activity_notes')
-        #     policy_activity_obj.status = request.POST.get('activity_status')
-        #     policy_activity_obj.follow_up_team = request.POST.get('follow_up_team')
-        #     policy_activity_obj.due_date = request.POST.get('due_date') or None
-        #     policy_activity_obj.activity_date = request.POST.get('activity_date') or None
-        #     policy_activity_obj.priority = request.POST.get('priority')
-        #     policy_activity_obj.type = request.POST.get('type')
-        #     policy_activity_obj.method = request.POST.get('method')
-        #     if request.FILES.get('attachment'):
-        #         policy_activity_obj.attachment = request.FILES.get('attachment')
-        #     policy_activity_obj.save()
-
-        #     return redirect('policy_tab', policy_id=policy_id)
 
         # --- Notes Form ---
-        if request.POST.get('note_subject'):
+        
+        if request.POST.get('note_id'):
             note_id = request.POST.get('note_id')
-            if note_id:
-                policy_note = PolicyNotes.objects.get(id=note_id)
-            else:
-                policy_note = PolicyNotes(policy_name=policy)
-
-            policy_note.subject = request.POST.get('note_subject')
-            policy_note.notes = request.POST.get('note_notes')
-            policy_note.pin_note = request.POST.get('pin_note') == 'on'
-            if request.FILES.get('attachment'):
-                policy_note.attachment = request.FILES.get('attachment')
-            policy_note.save()
+            note = PolicyNotes.objects.get(id=note_id)
+            note.subject = request.POST.get('editnotesubject')
+            note.notes = request.POST.get('editnotenotes') 
+            note.pin_note = request.POST.get('editnotepin_note') == 'on'
+            if request.FILES.get('editnoteattachment'):
+                note.attachment = request.FILES.get('editnoteattachment')
+            note.save()
+            return redirect('policy_tab', policy_id=policy_id)
+        
+        elif request.POST.get('note_subject') :
+            PolicyNotes.objects.create(
+                policy_name=policy,
+                subject=request.POST.get('note_subject'),
+                notes=request.POST.get('note_notes'),
+                pin_note=request.POST.get('pin_note') == 'on',
+                attachment=request.FILES.get('attachment')
+            )
 
             return redirect('policy_tab', policy_id=policy_id)
         

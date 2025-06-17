@@ -5,29 +5,31 @@
 
 <style>
     .modal-header {
-  border-bottom: 1px solid #dee2e6;
-}
-.modal-footer {
-  border-top: 1px solid #dee2e6;
-}
-.alert-danger {
-  font-size: 1rem;
-}
-    
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #dee2e6;
+    }
+
+    .alert-danger {
+        font-size: 1rem;
+    }
+
     /* Base Styles */
     .modal {
-        z-index: 1060 !important; 
+        z-index: 1060 !important;
     }
-    
+
     .modal-backdrop {
-        z-index: 1050 !important; 
-        background-color: rgba(0,0,0,0.5) !important;
+        z-index: 1050 !important;
+        background-color: rgba(0, 0, 0, 0.5) !important;
     }
-    
+
     .modal-content {
         pointer-events: auto !important;
     }
-    
+
     /* Carrier summary sidebar styling */
     #carrier-summary {
         width: 300px;
@@ -35,50 +37,52 @@
         padding: 15px;
         border-left: 1px solid #ddd;
         position: fixed;
-        right: -300px; 
-        top: 50px; 
+        right: -300px;
+        top: 50px;
         height: calc(100vh - 50px);
         overflow-y: auto;
         z-index: 1000;
-        box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
         transition: right 0.3s ease;
     }
-    
+
     #carrier-summary.shown {
         right: 0;
     }
-    
+
     .main-content-wrapper {
         width: 100%;
         transition: all 0.3s ease;
         padding-right: 0;
-        min-height: calc(100vh - 120px); /* Added to prevent footer overlap */
+        min-height: calc(100vh - 120px);
+        /* Added to prevent footer overlap */
     }
-    
+
     .main-content-wrapper.sidebar-shown {
         padding-right: 300px;
     }
-    
+
     .summary-header {
         border-bottom: 1px solid #eee;
         padding-bottom: 10px;
         margin-bottom: 15px;
     }
-    
+
     .summary-item {
         margin-bottom: 15px;
         padding-bottom: 15px;
         border-bottom: 1px solid #f5f5f5;
     }
-    
-   .action-buttons {
-    position: fixed;
-    right: 20px;
-    top: 80px; /* Increased top to push it below topbar */
-    z-index: 1010;
-}
 
-    
+    .action-buttons {
+        position: fixed;
+        right: 20px;
+        top: 80px;
+        /* Increased top to push it below topbar */
+        z-index: 1010;
+    }
+
+
     .close-sidebar {
         position: absolute;
         right: 15px;
@@ -86,16 +90,16 @@
         cursor: pointer;
         color: #999;
     }
-    
+
     .close-sidebar:hover {
         color: #333;
     }
-    
+
     .carrier-status-container {
         position: relative;
         z-index: 1;
     }
-    
+
     .tab-content {
         overflow: visible;
     }
@@ -108,52 +112,52 @@
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
-    
-    .nav-tabs > li {
+
+    .nav-tabs>li {
         float: none;
         display: inline-block;
     }
-    
-   
+
+
     .table-responsive {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
-    
-   
+
+
     .form-control {
         max-width: 100%;
     }
-    
-   
+
+
     .modal-dialog {
         margin: 30px auto;
     }
-    
-    
+
+
     @media (max-width: 1199px) {
-       
+
         #carrier-summary {
             width: 280px;
             right: -280px;
         }
-        
+
         .main-content-wrapper.sidebar-shown {
             padding-right: 280px;
         }
     }
 
     @media (max-width: 991px) {
-       
+
         .action-buttons {
             right: 15px;
             top: 55px;
         }
-        
-        .panel-body .row > [class*="col-"] {
+
+        .panel-body .row>[class*="col-"] {
             margin-bottom: 15px;
         }
-        
+
         .modal-dialog {
             width: 90%;
             margin: 20px auto;
@@ -161,46 +165,46 @@
     }
 
     @media (max-width: 768px) {
-      
+
         #carrier-summary {
             width: 250px;
             right: -250px;
         }
-        
+
         .main-content-wrapper.sidebar-shown {
             padding-right: 250px;
         }
-        
+
         .action-buttons {
             top: 50px;
         }
-        
-        .nav-tabs > li > a {
+
+        .nav-tabs>li>a {
             padding: 10px 12px;
             font-size: 14px;
         }
-        
+
         .modal-dialog {
             margin: 10px auto;
         }
-        
+
         .panel-heading .btn {
             margin-bottom: 10px;
         }
     }
 
     @media (max-width: 576px) {
-        
+
         #carrier-summary {
             width: 100%;
             right: -100%;
         }
-        
+
         .main-content-wrapper.sidebar-shown {
             padding-right: 0;
             transform: translateX(-100%);
         }
-        
+
         .action-buttons {
             position: relative;
             right: auto;
@@ -208,64 +212,64 @@
             margin-bottom: 15px;
             text-align: right;
         }
-        
-        .nav-tabs > li > a {
+
+        .nav-tabs>li>a {
             padding: 8px 10px;
             font-size: 13px;
         }
-        
+
         .modal-dialog {
             width: 95%;
             margin: 5px auto;
         }
-        
-        .panel-body .row > [class*="col-"] {
+
+        .panel-body .row>[class*="col-"] {
             margin-bottom: 10px;
         }
-        
+
         .btn-group {
             margin-bottom: 10px;
         }
-    
+
         .form-inline .form-group {
             display: block;
             margin-bottom: 10px;
         }
-        
-      
+
+
         .table-controls .col-md-6 {
             margin-bottom: 10px;
         }
-        
-        
+
+
         .dropdown-menu {
             position: absolute;
         }
     }
-    
-    
+
+
     @media (max-width: 400px) {
-        .nav-tabs > li > a {
+        .nav-tabs>li>a {
             padding: 6px 8px;
             font-size: 12px;
         }
-        
+
         .btn {
             padding: 5px 10px;
             font-size: 12px;
         }
-        
+
         .modal-title {
             font-size: 16px;
         }
     }
-    
-    
+
+
     @media (max-width: 767px) {
         .navbar-collapse {
             max-height: none;
         }
-        
+
         .dropdown-menu {
             position: static;
             float: none;
@@ -275,19 +279,19 @@
             border: 0;
             box-shadow: none;
         }
-        
-        .dropdown-menu > li > a {
+
+        .dropdown-menu>li>a {
             padding: 5px 15px;
             color: #333;
         }
     }
-    
-  
+
+
     .btn-file {
         position: relative;
         overflow: hidden;
     }
-    
+
     .btn-file input[type=file] {
         position: absolute;
         top: 0;
@@ -303,107 +307,110 @@
         cursor: inherit;
         display: block;
     }
- .summary-group {
-  position: relative;
-}
 
-.summary-group .hover-label {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  white-space: nowrap;
-  background: #fff;
-  padding: 2px 8px;
-  border: 1px solid #ccc;
-  font-size: 12px;
-  border-radius: 4px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  display: none;
-  z-index: 10;
-  margin-top: 2px;
-}
+    .summary-group {
+        position: relative;
+    }
 
-.summary-group button:hover + .hover-label {
-  display: block;
-}
-#clients-summary .badge {
-    background-color: #444;
-    color: white;
-    padding: 2px 6px;
-    border-radius: 8px;
-    font-size: 11px;
-    margin-left: 5px;
-}
+    .summary-group .hover-label {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        white-space: nowrap;
+        background: #fff;
+        padding: 2px 8px;
+        border: 1px solid #ccc;
+        font-size: 12px;
+        border-radius: 4px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        display: none;
+        z-index: 10;
+        margin-top: 2px;
+    }
 
-#clients-summary .extra-client {
-    display: none;
-}
+    .summary-group button:hover+.hover-label {
+        display: block;
+    }
 
-.clickable-toggle {
-    display: inline-block;
-    color: #007bff;
-    cursor: pointer;
-    text-decoration: underline;
-    font-size: 13px;
-    margin-top: 5px;
-}
-.client-list {
-    padding-left: 15px;
-    list-style: none;
-    margin: 0;
-}
+    #clients-summary .badge {
+        background-color: #444;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 8px;
+        font-size: 11px;
+        margin-left: 5px;
+    }
 
-.client-list li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    line-height: 1.4; 
-    margin: 0; 
-    padding: 2px 0; 
-}
+    #clients-summary .extra-client {
+        display: none;
+    }
 
-.client-list .badge {
-    background-color: #444;
-    color: white;
-    padding: 2px 6px;
-    border-radius: 8px;
-    font-size: 11px;
-    margin-left: 10px;
-}
+    .clickable-toggle {
+        display: inline-block;
+        color: #007bff;
+        cursor: pointer;
+        text-decoration: underline;
+        font-size: 13px;
+        margin-top: 5px;
+    }
 
-.clickable-toggle {
-    display: inline-block;
-    color: #007bff;
-    cursor: pointer;
-    text-decoration: underline;
-    font-size: 13px;
-    margin-top: 5px;
-}
+    .client-list {
+        padding-left: 15px;
+        list-style: none;
+        margin: 0;
+    }
+
+    .client-list li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        line-height: 1.4;
+        margin: 0;
+        padding: 2px 0;
+    }
+
+    .client-list .badge {
+        background-color: #444;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 8px;
+        font-size: 11px;
+        margin-left: 10px;
+    }
+
+    .clickable-toggle {
+        display: inline-block;
+        color: #007bff;
+        cursor: pointer;
+        text-decoration: underline;
+        font-size: 13px;
+        margin-top: 5px;
+    }
 </style>
 
 <!-- Action buttons -->
 <div class="action-buttons">
-  <div class="btn-group summary-group position-relative">
-    <!-- Summary Button -->
-    <button id="toggle-carrier-summary" class="btn btn-default btn-sm"">
-      <i class="fa fa-list-alt"></i>
-    </button>
-    <div class="hover-label">Summary</div>
+    <div class="btn-group summary-group position-relative">
+        <!-- Summary Button -->
+        <button id="toggle-carrier-summary" class="btn btn-default btn-sm"">
+      <i class=" fa fa-list-alt"></i>
+        </button>
+        <div class="hover-label">Summary</div>
 
-    <!-- Dropdown Button -->
-    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-      <span class="caret"></span>
-    </button>
-    <div class="hover-label">Action</div>
+        <!-- Dropdown Button -->
+        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <div class="hover-label">Action</div>
 
-    <!-- Dropdown Menu -->
-    <ul class="dropdown-menu dropdown-menu-right">
-     
-      <li><a href="#"><i class="fa fa-print"></i> Print Record</a></li>
-      <li class="divider"></li>
-      <li><a href="#"><i class="fa fa-cog"></i> Print Page</a></li>
-    </ul>
-  </div>
+        <!-- Dropdown Menu -->
+        <ul class="dropdown-menu dropdown-menu-right">
+
+            <li><a href="#"><i class="fa fa-print"></i> Print Record</a></li>
+            <li class="divider"></li>
+            <li><a href="#"><i class="fa fa-cog"></i> Print Page</a></li>
+        </ul>
+    </div>
 </div>
 
 
@@ -416,7 +423,7 @@
         </div>
     </div>
 
-        
+
     <div role="tabpanel">
         <!-- Nav tabs -->
         <ul class="nav nav-tabs">
@@ -429,30 +436,30 @@
             <li><a data-toggle="tab" href="#websites">Websites</a></li>
             <li><a data-toggle="tab" href="#emails">Emails</a></li>
         </ul>
-        
+
         <!-- Tab panes -->
         <div class="tab-content">
             <!-- Detail Tab -->
             {% include "Carrier/details_tab.html" %}
-            
+
             <!-- Individuals Tab -->
             {% include "Carrier/individuals_tab.html" %}
-            
+
             <!-- Activities Tab -->
             {% include "Carrier/activities_tab.html" %}
-            
+
             <!-- Notes Tab -->
             {% include "Carrier/notes_tab.html" %}
-            
+
             <!-- Forms Tab -->
             {% include "Carrier/forms_tab.html" %}
-            
+
             <!-- Products Tab -->
             {% include "Carrier/products_tab.html" %}
-            
+
             <!-- Websites Tab -->
             {% include "Carrier/websites_tab.html" %}
-            
+
             <!-- Emails Tab -->
             {% include "Carrier/emails_tab.html" %}
         </div>
@@ -462,14 +469,14 @@
 <!-- Carrier Summary Sidebar -->
 <div id="carrier-summary">
     <span class="close-sidebar" id="close-sidebar">&times;</span>
-    
+
     <div class="summary-header">
         <h3><i class="fa fa-building-o"></i> Carrier Summary</h3>
     </div>
-    
-<div class="summary-item">
-    <h4><i class="fa fa-user"></i> Contact Info</h4>
-    {% if carrier_phones %}
+
+    <div class="summary-item">
+        <h4><i class="fa fa-user"></i> Contact Info</h4>
+        {% if carrier_phones %}
         {% for phone in carrier_phones %}
         <p class="text">
             <span style="color: black; font-weight: 600; ">
@@ -480,83 +487,87 @@
             </span>
         </p>
         {% endfor %}
-    {% else %}
+        {% else %}
         <p class="text">No Contact Info.</p>
-    {% endif %}
-</div>
+        {% endif %}
+    </div>
 
     <div class="summary-item">
-    <h4><i class="fa fa-globe"></i> Websites</h4>
-    {% if websites %}
-    {% for web in websites %}
-    <p class="text-muted"><a href="{{ web.url }}" target="_blank">{{ web.website_name }}</a></p>
-    {% endfor %}
-    {% else %}
-    <p class="text-muted">No websites.</p>
-    {% endif %}
-    <a href="#websites" class="btn btn-xs btn-primary" id="create-website-from-sidebar" data-show-form="true">
-        <i class="fa fa-plus"></i> Create new
-    </a>
-</div>
-  
-    
+        <h4><i class="fa fa-globe"></i> Websites</h4>
+        {% if websites %}
+        {% for web in websites %}
+        <p class="text-muted"><a href="{{ web.url }}" target="_blank">{{ web.website_name }}</a></p>
+        {% endfor %}
+        {% else %}
+        <p class="text-muted">No websites.</p>
+        {% endif %}
+        <a href="#websites" class="btn btn-xs btn-primary" id="create-website-from-sidebar" data-show-form="true">
+            <i class="fa fa-plus"></i> Create new
+        </a>
+    </div>
+
+
     <div class="summary-item" id="clients-summary">
-    <h4><i class="fa fa-file-text"></i> In Force Policies</h4>
-    <div class="client-wrapper">
-        <ul class="client-list">
-            <li>Individuals</li>
-            {% for item in policy_summary %}
-                {% if forloop.counter <= 3 %}
-                    <li>{{ item.coverage_type }} <span class="badge">{{ item.count }}</span></li>
-                {% else %}
+        <h4><i class="fa fa-file-text"></i> In Force Policies</h4>
+        <div class="client-wrapper">
+            <ul class="client-list">
+                <li>Individuals</li>
+                {% for item in policy_summary %}
+                {% if forloop.counter <= 3 %} <li>{{ item.coverage_type }} <span class="badge">{{ item.count }}</span>
+                    </li>
+                    {% else %}
                     <li class="client-extra-item" style="display: none;">
                         {{ item.coverage_type }} <span class="badge">{{ item.count }}</span>
                     </li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-        {% if policy_summary|length > 3 %}
+                    {% endif %}
+                    {% endfor %}
+            </ul>
+            {% if policy_summary|length > 3 %}
             <span class="client-toggle clickable-toggle">Show More...</span>
-        {% endif %}
+            {% endif %}
+        </div>
     </div>
-</div>
 
 
-<div class="summary-item">
-  <h4><i class="fa fa-tasks"></i> Activities Due</h4>
-  {% if due_activities %}
-    {% for act in due_activities %}
-      <p class="text-muted">
-        <a href="#" class="edit-subject" style="color: #007bff; text-decoration: underline;">
-          {{ act.subject }}
+    <div class="summary-item">
+        <h4><i class="fa fa-tasks"></i> Activities Due</h4>
+        {% if due_activities %}
+        {% for act in due_activities %}
+        <p class="text-muted">
+            <a href="#" style="color: #007bff; text-decoration: underline;" class="edit-activity" data-id="{{ act.id }}"
+                data-subject="{{ act.subject|escapejs }}" data-notes="{{ act.notes|escapejs }}"
+                data-status="{{ act.status }}" data-user="{{ act.follow_up_user }}" data-team="{{ act.follow_up_team }}"
+                data-due="{{ act.due_date|date:" Y-m-d"}}" data-activity-date="{{ act.activity_date|date:" Y-m-d"}}"
+                data-priority="{{ act.priority }}" data-type="{{ act.activity_type }}" data-method="{{ act.method }}" {% if act.attachment %} data-attachment="{{ act.attachment.url }}" {% endif %}>
+                {{ act.subject }}
+            </a>
+        </p>
+        {% endfor %}
+        {% else %}
+        <p class="text-muted">No Activities.</p>
+        {% endif %}
+        <a href="#" class="btn btn-xs btn-success" id="create-activity-from-sidebar">
+            <i class="fa fa-plus"></i> Create new
         </a>
-      </p>
-    {% endfor %}
-  {% else %}
-    <p class="text-muted">No Activities.</p>
-  {% endif %}
-  <a href="#" class="btn btn-xs btn-success" id="create-activity-from-sidebar">
-    <i class="fa fa-plus"></i> Create new
-  </a>
-</div>
+    </div>
 
-<div class="summary-item">
-    <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
-    {% if pin_notess %}
-      {% for note in pin_notess %}
-      <p class="text-muted">
-        <a href="#" class="note-subject-link" style="color: #007bff; text-decoration: underline;">
-          {{ note.subject }}
+    <div class="summary-item">
+        <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
+        {% if pin_notess %}
+        {% for note in pin_notess %}
+        <p class="text-muted">
+            <a href="#" class="note-subject-link" style="color: #007bff; text-decoration: underline;">
+                {{ note.subject }}
+            </a>
+        </p>
+        {% endfor %}
+        {% else %}
+        <p class="text-muted">No pinned note.</p>
+        {% endif %}
+        <a href="#notes" class="btn btn-xs btn-info" id="create-note-from-sidebar" data-show-form="true">
+            <i class="fa fa-plus"></i> Create new
         </a>
-      </p>
-      {% endfor %}
-      {% else %}
-      <p class="text-muted">No pinned note.</p>
-    {% endif %}
-    <a href="#notes" class="btn btn-xs btn-info" id="create-note-from-sidebar" data-show-form="true">
-        <i class="fa fa-plus"></i> Create new
-    </a>
-</div>
+    </div>
 </div>
 
 <!-- jQuery -->
@@ -570,286 +581,296 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <script>
-  $(document).ready(function() {
-    // Sorting functionality
-    var sortDirections = {};
-    $('.sortable').click(function() {
-        const column = $(this).data('column') || $(this).data('key');
-        const $icon = $(this).find('i');
-        const table = $(this).closest("table");
-        const rows = table.find("tbody > tr").toArray();
-        const index = $(this).index();
+    $(document).ready(function () {
+        // Sorting functionality
+        var sortDirections = {};
+        $('.sortable').click(function () {
+            const column = $(this).data('column') || $(this).data('key');
+            const $icon = $(this).find('i');
+            const table = $(this).closest("table");
+            const rows = table.find("tbody > tr").toArray();
+            const index = $(this).index();
 
-        $(this).closest('thead').find('.sortable i')
-            .removeClass('fa-sort-up fa-sort-down fa-sort-asc fa-sort-desc')
-            .addClass('fa-sort');
+            $(this).closest('thead').find('.sortable i')
+                .removeClass('fa-sort-up fa-sort-down fa-sort-asc fa-sort-desc')
+                .addClass('fa-sort');
 
-        sortDirections[column] = sortDirections[column] === 'asc' ? 'desc' : 'asc';
-        const sortOrder = sortDirections[column] === 'asc' ? 1 : -1;
+            sortDirections[column] = sortDirections[column] === 'asc' ? 'desc' : 'asc';
+            const sortOrder = sortDirections[column] === 'asc' ? 1 : -1;
 
-        $icon.removeClass('fa-sort')
-            .addClass(sortDirections[column] === 'asc' ? 'fa-sort-up' : 'fa-sort-down');
+            $icon.removeClass('fa-sort')
+                .addClass(sortDirections[column] === 'asc' ? 'fa-sort-up' : 'fa-sort-down');
 
-        rows.sort(function(a, b) {
-            var A = $(a).children().eq(index).text().toUpperCase();
-            var B = $(b).children().eq(index).text().toUpperCase();
-            if (A < B) return -1 * sortOrder;
-            if (A > B) return 1 * sortOrder;
-            return 0;
+            rows.sort(function (a, b) {
+                var A = $(a).children().eq(index).text().toUpperCase();
+                var B = $(b).children().eq(index).text().toUpperCase();
+                if (A < B) return -1 * sortOrder;
+                if (A > B) return 1 * sortOrder;
+                return 0;
+            });
+
+            $.each(rows, function (i, row) {
+                table.children("tbody").append(row);
+            });
         });
 
-        $.each(rows, function(i, row) {
-            table.children("tbody").append(row);
+        $(document).on('click', '.client-toggle', function (e) {
+            e.preventDefault();
+            var $extraItems = $(this).closest('#clients-summary').find('.client-extra-item');
+            var $toggle = $(this);
+
+            $extraItems.slideToggle(200, function () {
+                // This callback runs after animation completes
+                $toggle.text($extraItems.is(':visible') ? 'Show Less...' : 'Show More...');
+            });
         });
-    });
 
-$(document).on('click', '.client-toggle', function(e) {
-    e.preventDefault();
-    var $extraItems = $(this).closest('#clients-summary').find('.client-extra-item');
-    var $toggle = $(this);
-    
-    $extraItems.slideToggle(200, function() {
-        // This callback runs after animation completes
-        $toggle.text($extraItems.is(':visible') ? 'Show Less...' : 'Show More...');
-    });
-});
-
-    // ACTIVITIES SECTION
-    // Handle Create New Activity from activities tab button
-    $('#showActivityForm').click(function(e) {
-        e.preventDefault();
-        $('#emptyActivitiesState').hide();
-        $('#activityDetailsSection').show();
-        
-        // Scroll to the form for better UX
-        $('html, body').animate({
-            scrollTop: $('#activityDetailsSection').offset().top - 20
-        }, 300);
-    });
-
-    // Handle cancel button in activity form
-    $('#cancelActivity').click(function() {
-        $('#activityDetailsSection').hide();
-        $('#emptyActivitiesState').show();
-    });
-
-    $('#create-activity-from-sidebar').click(function(e) {
-    e.preventDefault();
-    
-    var activitiesTabLink = $('a[href="#activities"]');
-    var isTabActive = $('#activities').is(':visible');
-
-    if (!isTabActive) {
-        activitiesTabLink.tab('show');
-        activitiesTabLink.on('shown.bs.tab', function() {
-            $('#activityeditSection').hide();
+        // ACTIVITIES SECTION
+        // Handle Create New Activity from activities tab button
+        $('#showActivityForm').click(function (e) {
+            e.preventDefault();
             $('#emptyActivitiesState').hide();
             $('#activityDetailsSection').show();
 
+            // Scroll to the form for better UX
             $('html, body').animate({
                 scrollTop: $('#activityDetailsSection').offset().top - 20
             }, 300);
-
-            activitiesTabLink.off('shown.bs.tab');
         });
-    } else {
-        $('#activityeditSection').hide();
-        $('#emptyActivitiesState').hide();
-        $('#activityDetailsSection').show();
 
-        $('html, body').animate({
-            scrollTop: $('#activityDetailsSection').offset().top - 20
-        }, 300);
-    }
-});
+        // Handle cancel button in activity form
+        $('#cancelActivity').click(function () {
+            $('#activityDetailsSection').hide();
+            $('#emptyActivitiesState').show();
+        });
 
-    
+        $('#create-activity-from-sidebar').click(function (e) {
+            e.preventDefault();
+
+            var activitiesTabLink = $('a[href="#activities"]');
+            var isTabActive = $('#activities').is(':visible');
+
+            if (!isTabActive) {
+                activitiesTabLink.tab('show');
+                activitiesTabLink.on('shown.bs.tab', function () {
+                    $('#activityeditSection').hide();
+                    $('#emptyActivitiesState').hide();
+                    $('#activityDetailsSection').show();
+
+                    $('html, body').animate({
+                        scrollTop: $('#activityDetailsSection').offset().top - 20
+                    }, 300);
+
+                    activitiesTabLink.off('shown.bs.tab');
+                });
+            } else {
+                $('#activityeditSection').hide();
+                $('#emptyActivitiesState').hide();
+                $('#activityDetailsSection').show();
+
+                $('html, body').animate({
+                    scrollTop: $('#activityDetailsSection').offset().top - 20
+                }, 300);
+            }
+        });
 
 
-    // NOTES SECTION
-    $('#showNoteForm').click(function() {
-        $('#emptyNotesState').hide();
-        $('#noteDetailsSection').show();
-    });
 
-    $('#cancelNote').click(function() {
-        $('#noteDetailsSection').hide();
-        $('#emptyNotesState').show();
-    });
 
-    // Handle Create New Note from sidebar
-    $('#create-note-from-sidebar').click(function(e) {
-        e.preventDefault();
-        var notesTabLink = $('a[href="#notes"]');
-        notesTabLink.tab('show');
-        notesTabLink.on('shown.bs.tab', function() {
+        // NOTES SECTION
+        $('#showNoteForm').click(function () {
             $('#emptyNotesState').hide();
             $('#noteDetailsSection').show();
-            $('html, body').animate({
-                scrollTop: $('#noteDetailsSection').offset().top - 20
-            }, 300);
-            notesTabLink.off('shown.bs.tab');
         });
-    });
 
-    // FORMS SECTION
-    $('#showFormCreate').click(function() {
-        $('#forms .panel-body > .row:not(#formCreateSection)').hide();
-        $('#forms .table-responsive').hide();
-        $('#formCreateSection').show();
-    });
-
-    $('#cancelFormCreate').click(function() {
-        $('#forms .panel-body > .row:not(#formCreateSection)').show();
-        $('#forms .table-responsive').show();
-        $('#formCreateSection').hide();
-    });
-
-    // WEBSITES SECTION
-    $('#showWebsiteForm').click(function() {
-        $('#emptyWebsitesState').hide();
-        $('#websiteFormSection').show();
-    });
-
-    $('#cancelWebsiteCreate').click(function() {
-        $('#websiteFormSection').hide();
-        $('#emptyWebsitesState').show();
-    });
-
-    // Handle Create New Website from sidebar
-    $('#create-website-from-sidebar').click(function(e) {
-        e.preventDefault();
-        var websitesTabLink = $('a[href="#websites"]');
-        websitesTabLink.tab('show');
-        websitesTabLink.on('shown.bs.tab', function() {
-            $('#emptyWebsitesState').hide();
-            $('#websiteFormSection').show();
-            $('html, body').animate({
-                scrollTop: $('#websiteFormSection').offset().top - 20
-            }, 300);
-            websitesTabLink.off('shown.bs.tab');
+        $('#cancelNote').click(function () {
+            $('#noteDetailsSection').hide();
+            $('#emptyNotesState').show();
         });
-    });
 
-    // PRODUCTS SECTION
-    $('#createNewProduct').click(function() {
-        $('#products .panel-body > .row:not(#productFormContainer)').hide();
-        $('#products .table-responsive').hide();
-        $('#productFormContainer').show();
-    });
+        // Handle Create New Note from sidebar
+        $('#create-note-from-sidebar').click(function (e) {
+            e.preventDefault();
+            var notesTabLink = $('a[href="#notes"]');
+            notesTabLink.tab('show');
+            notesTabLink.on('shown.bs.tab', function () {
+                $('#emptyNotesState').hide();
+                $('#noteDetailsSection').show();
+                $('html, body').animate({
+                    scrollTop: $('#noteDetailsSection').offset().top - 20
+                }, 300);
+                notesTabLink.off('shown.bs.tab');
+            });
+        });
 
-    $('#cancelNewProduct').click(function() {
-        $('#products .panel-body > .row:not(#productFormContainer)').show();
-        $('#products .table-responsive').show();
-        $('#productFormContainer').hide();
-    });
+        // FORMS SECTION
+        $('#showFormCreate').click(function () {
+            $('#forms .panel-body > .row:not(#formCreateSection)').hide();
+            $('#forms .table-responsive').hide();
+            $('#formCreateSection').show();
+        });
 
-    // Reset form visibility when switching tabs
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-        var target = e.target.hash;
-        
-        // Hide all form sections and show empty states
-        $('[id$="Section"]').hide();
-        $('[id$="State"]').show();
-        $('[id$="Container"]').hide();
-        
-        // Show regular content for the active tab
-        if (target === '#forms') {
+        $('#cancelFormCreate').click(function () {
             $('#forms .panel-body > .row:not(#formCreateSection)').show();
             $('#forms .table-responsive').show();
-        } else if (target === '#products') {
+            $('#formCreateSection').hide();
+        });
+
+        // WEBSITES SECTION
+        $('#showWebsiteForm').click(function () {
+            $('#emptyWebsitesState').hide();
+            $('#websiteFormSection').show();
+        });
+
+        $('#cancelWebsiteCreate').click(function () {
+            $('#websiteFormSection').hide();
+            $('#emptyWebsitesState').show();
+        });
+
+        // Handle Create New Website from sidebar
+        $('#create-website-from-sidebar').click(function (e) {
+            e.preventDefault();
+            var websitesTabLink = $('a[href="#websites"]');
+            websitesTabLink.tab('show');
+            websitesTabLink.on('shown.bs.tab', function () {
+                $('#emptyWebsitesState').hide();
+                $('#websiteFormSection').show();
+                $('html, body').animate({
+                    scrollTop: $('#websiteFormSection').offset().top - 20
+                }, 300);
+                websitesTabLink.off('shown.bs.tab');
+            });
+        });
+
+        // PRODUCTS SECTION
+        $('#createNewProduct').click(function () {
+            $('#products .panel-body > .row:not(#productFormContainer)').hide();
+            $('#products .table-responsive').hide();
+            $('#productFormContainer').show();
+        });
+
+        $('#cancelNewProduct').click(function () {
             $('#products .panel-body > .row:not(#productFormContainer)').show();
             $('#products .table-responsive').show();
-        }
-    });
-
-    // Password visibility toggle
-    $('.input-group-btn button').click(function() {
-        var input = $(this).closest('.input-group').find('input');
-        var icon = $(this).find('i');
-        if (input.attr('type') === 'password') {
-            input.attr('type', 'text');
-            icon.removeClass('fa-eye').addClass('fa-eye-slash');
-        } else {
-            input.attr('type', 'password');
-            icon.removeClass('fa-eye-slash').addClass('fa-eye');
-        }
-    });
-
-    // File input UI
-    $(document).on('change', '.btn-file :file', function() {
-        var input = $(this),
-            numFiles = input.get(0).files ? input.get(0).files.length : 1,
-            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-        input.trigger('fileselect', [numFiles, label]);
-    });
-
-    $('.btn-file :file').on('fileselect', function(event, numFiles, label) {
-        var input = $(this).parents('.input-group').find(':text'),
-            log = numFiles > 1 ? numFiles + ' files selected' : label;
-        if (input.length) {
-            input.val(log);
-        }
-    });
-
-    // Dropzone init
-    Dropzone.autoDiscover = false;
-    $(".attachment-block table").each(function() {
-        var dropzoneElement = $(this).find("td[colspan='3']").get(0);
-        new Dropzone(dropzoneElement, {
-            url: "/file-upload",
-            autoProcessQueue: false,
-            clickable: true,
-            previewsContainer: false,
-            dictDefaultMessage: "Drop files here to upload"
+            $('#productFormContainer').hide();
         });
-    });
 
-    // Persist tab
-    if (location.hash) {
-        $('a[href="' + location.hash + '"]').tab('show');
-    }
+        // Reset form visibility when switching tabs
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var target = e.target.hash;
 
-    $('a[data-toggle="tab"]').on('click', function(e) {
-        history.pushState(null, null, $(this).attr('href'));
-    });
+            // Hide all form sections and show empty states
+            $('[id$="Section"]').hide();
+            $('[id$="State"]').show();
+            $('[id$="Container"]').hide();
 
-    $(window).on('popstate', function() {
-        var anchor = location.hash || $('a[data-toggle="tab"]').first().attr('href');
-        $('a[href="' + anchor + '"]').tab('show');
-    });
+            // Show regular content for the active tab
+            if (target === '#forms') {
+                $('#forms .panel-body > .row:not(#formCreateSection)').show();
+                $('#forms .table-responsive').show();
+            } else if (target === '#products') {
+                $('#products .panel-body > .row:not(#productFormContainer)').show();
+                $('#products .table-responsive').show();
+            }
+        });
 
-    // Sidebar toggle
-    $('#toggle-carrier-summary').click(function(e) {
-        e.preventDefault();
-        $('#carrier-summary').toggleClass('shown');
-        $('.main-content-wrapper').toggleClass('sidebar-shown');
+        // Password visibility toggle
+        $('.input-group-btn button').click(function () {
+            var input = $(this).closest('.input-group').find('input');
+            var icon = $(this).find('i');
+            if (input.attr('type') === 'password') {
+                input.attr('type', 'text');
+                icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                input.attr('type', 'password');
+                icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        });
 
-        if ($(window).width() <= 576) {
-            $('body').css('overflow-x', $('#carrier-summary').hasClass('shown') ? 'hidden' : 'auto');
+        // File input UI
+        $(document).on('change', '.btn-file :file', function () {
+            var input = $(this),
+                numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [numFiles, label]);
+        });
+
+        $('.btn-file :file').on('fileselect', function (event, numFiles, label) {
+            var input = $(this).parents('.input-group').find(':text'),
+                log = numFiles > 1 ? numFiles + ' files selected' : label;
+            if (input.length) {
+                input.val(log);
+            }
+        });
+
+        // Dropzone init
+        Dropzone.autoDiscover = false;
+        $(".attachment-block table").each(function () {
+            var dropzoneElement = $(this).find("td[colspan='3']").get(0);
+            new Dropzone(dropzoneElement, {
+                url: "/file-upload",
+                autoProcessQueue: false,
+                clickable: true,
+                previewsContainer: false,
+                dictDefaultMessage: "Drop files here to upload"
+            });
+        });
+
+        // Persist tab
+        if (location.hash) {
+            $('a[href="' + location.hash + '"]').tab('show');
         }
-    });
 
-    $('#close-sidebar').click(function(e) {
-        e.preventDefault();
-        $('#carrier-summary').removeClass('shown');
-        $('.main-content-wrapper').removeClass('sidebar-shown');
-        if ($(window).width() <= 576) {
-            $('body').css('overflow-x', 'auto');
-        }
-    });
+        $('a[data-toggle="tab"]').on('click', function (e) {
+            history.pushState(null, null, $(this).attr('href'));
+        });
 
-    $(document).click(function(e) {
-        if ($(window).width() <= 576 && $('#carrier-summary').hasClass('shown')) {
-            if (!$(e.target).closest('#carrier-summary').length &&
-                !$(e.target).closest('#toggle-carrier-summary').length) {
-                $('#carrier-summary').removeClass('shown');
-                $('.main-content-wrapper').removeClass('sidebar-shown');
+        $(window).on('popstate', function () {
+            var anchor = location.hash || $('a[data-toggle="tab"]').first().attr('href');
+            $('a[href="' + anchor + '"]').tab('show');
+        });
+
+        // Sidebar toggle
+        $('#toggle-carrier-summary').click(function (e) {
+            e.preventDefault();
+            $('#carrier-summary').toggleClass('shown');
+            $('.main-content-wrapper').toggleClass('sidebar-shown');
+
+            if ($(window).width() <= 576) {
+                $('body').css('overflow-x', $('#carrier-summary').hasClass('shown') ? 'hidden' : 'auto');
+            }
+        });
+
+        $('#close-sidebar').click(function (e) {
+            e.preventDefault();
+            $('#carrier-summary').removeClass('shown');
+            $('.main-content-wrapper').removeClass('sidebar-shown');
+            if ($(window).width() <= 576) {
                 $('body').css('overflow-x', 'auto');
             }
-        }
-    });
+        });
 
+        $(document).click(function (e) {
+            if ($(window).width() <= 576 && $('#carrier-summary').hasClass('shown')) {
+                if (!$(e.target).closest('#carrier-summary').length &&
+                    !$(e.target).closest('#toggle-carrier-summary').length) {
+                    $('#carrier-summary').removeClass('shown');
+                    $('.main-content-wrapper').removeClass('sidebar-shown');
+                    $('body').css('overflow-x', 'auto');
+                }
+            }
+        });
+
+        // Modal initialization
+        $('#addIndividualModal').modal({
+            backdrop: true,
+            keyboard: true,
+            show: false
+        });
+    });
+    // Make activity subject clickable to show the edit section
+    $(document).on('click', '.activity-subject-link', function (e) {
+        e.preventDefault();
     // Modal initialization
     $('#addIndividualModal').modal({
         backdrop: true,
@@ -861,68 +882,111 @@ $(document).on('click', '.client-toggle', function(e) {
 $(document).on('click', '.edit-subject', function(e) {
     e.preventDefault();
 
-    var subjectText = $(this).text().trim(); 
-    $('#edit-subject').val(subjectText);     
+        var subjectText = $(this).text().trim();
+        $('#edit-subject').val(subjectText);
 
-    var activitiesTabLink = $('a[href="#activities"]');
-    activitiesTabLink.tab('show');
+        var activitiesTabLink = $('a[href="#activities"]');
+        activitiesTabLink.tab('show');
 
-    activitiesTabLink.on('shown.bs.tab', function() {
-        $('#emptyActivitiesState').hide();
-        $('#activityeditSection').show();
-        $('#activitiesPanel').hide(); 
+        activitiesTabLink.on('shown.bs.tab', function () {
+            $('#emptyActivitiesState').hide();
+            $('#activityeditSection').show();
+            $('#activitiesPanel').hide();
 
-        $('html, body').animate({
-            scrollTop: $('#activityeditSection').offset().top - 20
-        }, 300);
+            $('html, body').animate({
+                scrollTop: $('#activityeditSection').offset().top - 20
+            }, 300);
 
-        activitiesTabLink.off('shown.bs.tab');
+            activitiesTabLink.off('shown.bs.tab');
+        });
+
+        // If tab is already active
+        if ($('#activities').is(':visible')) {
+            $('#emptyActivitiesState').hide();
+            $('#activityeditSection').show();
+            $('#activitiesPanel').hide();
+            $('html, body').animate({
+                scrollTop: $('#activityeditSection').offset().top - 20
+            }, 300);
+        }
     });
 
-    // If tab is already active
-    if ($('#activities').is(':visible')) {
-        $('#emptyActivitiesState').hide();
-        $('#activityeditSection').show();
-        $('#activitiesPanel').hide(); 
-        $('html, body').animate({
-            scrollTop: $('#activityeditSection').offset().top - 20
-        }, 300);
-    }
-});
-// Make pinned note subject clickable to show the edit section
-$(document).on('click', '.note-subject-link', function(e) {
-    e.preventDefault();
+    // Make pinned note subject clickable to show the edit section
+    $(document).on('click', '.note-subject-link', function (e) {
+        e.preventDefault();
 
-    var subjectText = $(this).text().trim(); 
-    $('#editSubject').val(subjectText);     
+        var subjectText = $(this).text().trim();
+        $('#editSubject').val(subjectText);
 
-    var notesTabLink = $('a[href="#notes"]');
-    notesTabLink.tab('show');
+        var notesTabLink = $('a[href="#notes"]');
+        notesTabLink.tab('show');
 
-    notesTabLink.on('shown.bs.tab', function() {
-        $('#emptyNotesState').hide();
-        $('#noteeditSection').show();
-        $('#noteDetailsSection').hide(); 
+        notesTabLink.on('shown.bs.tab', function () {
+            $('#emptyNotesState').hide();
+            $('#noteeditSection').show();
+            $('#noteDetailsSection').hide();
 
-        $('html, body').animate({
-            scrollTop: $('#noteeditSection').offset().top - 20
-        }, 300);
+            $('html, body').animate({
+                scrollTop: $('#noteeditSection').offset().top - 20
+            }, 300);
 
-        notesTabLink.off('shown.bs.tab');
+            notesTabLink.off('shown.bs.tab');
+        });
+
+        // If tab is already active
+        if ($('#notes').is(':visible')) {
+            $('#emptyNotesState').hide();
+            $('#noteeditSection').show();
+            $('#noteDetailsSection').hide();
+            $('html, body').animate({
+                scrollTop: $('#noteeditSection').offset().top - 20
+            }, 300);
+        }
     });
 
-    // If tab is already active
-    if ($('#notes').is(':visible')) {
-        $('#emptyNotesState').hide();
-        $('#noteeditSection').show();
-        $('#noteDetailsSection').hide(); 
-        $('html, body').animate({
-            scrollTop: $('#noteeditSection').offset().top - 20
-        }, 300);
-    }
-});
+
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.edit-activity').forEach(function (el) {
+            el.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Populate the form with values from data attributes
+                document.getElementById('edit-subject').value = this.dataset.subject || '';
+                document.getElementById('edit-notes').value = this.dataset.notes || '';
+                document.getElementById('edit-status').value = this.dataset.status || '';
+                document.getElementById('edit-user').value = this.dataset.user || '';
+                document.getElementById('edit-team').value = this.dataset.team || '';
+                document.getElementById('edit-due-date').value = this.dataset.due || '';
+                document.getElementById('edit-activity-date').value = this.dataset.activityDate || '';
+                document.getElementById('edit-priority').value = this.dataset.priority || '';
+                document.getElementById('edit-type').value = this.dataset.type || '';
+                document.getElementById('edit-method').value = this.dataset.method || '';
+                document.getElementById('edit-activity-id').value = this.dataset.id || '';
+                let attachmentUrl = this.dataset.attachment;
+                let attachmentBlock = document.getElementById('edit-attachment-preview');
+
+                if (attachmentUrl) {
+                    attachmentBlock.innerHTML = `<a href="${attachmentUrl}" target="_blank">📄 View Existing Attachment</a>`;
+                } else {
+                    attachmentBlock.innerHTML = '';
+                }
 
 
+                // Hide the table and show the edit section
+                document.getElementById('emptyActivitiesState').style.display = 'none';
+                document.getElementById('activityeditSection').style.display = 'block';
+            });
+        });
+
+        // Cancel button
+        document.getElementById('closeActivityEdit').addEventListener('click', function () {
+            document.getElementById('activityeditSection').style.display = 'none';
+            document.getElementById('emptyActivitiesState').style.display = 'block';
+        });
+    });
 </script>
 
 {% endblock %}

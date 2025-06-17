@@ -520,7 +520,13 @@
     {% if pin_notess %}
       {% for note in pin_notess %}
       <p class="text-muted">
-          <a href="#" class="pinned-note-link" data-note-id="{{ note.id }}" style="color: #007bff; text-decoration: none;">
+          <a href="#" style="color: #007bff; text-decoration: none;" class="note-subject-link" data-id="{{ note.id }}"
+                                    data-subject="{{ note.subject|escapejs }}"
+                                    data-notes="{{ note.notes|escapejs }}"
+                                    data-pinned="{{ note.pin_note }}"
+                                    {% if note.attachment %}
+                                    data-attachment="{{ note.attachment.url }}"
+                                    {% endif %}>
               {{ note.subject }}
           </a>
       </p>
@@ -539,7 +545,6 @@
 
 <!-- Modal -->
 {% include "Individuals/individualnewpolicy.html" %}
-
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
@@ -723,7 +728,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-<script>
+{% comment %} <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Handle click on pinned note links in the summary sidebar
     document.querySelectorAll('#individual-summary .pinned-note-link').forEach(link => {
@@ -765,7 +770,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('noteMainContent').style.display = 'block';
     });
 });
-</script>
+</script> {% endcomment %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Tab persistence functionality
