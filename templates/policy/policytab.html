@@ -745,7 +745,15 @@
     <h4><i class="fa fa-tasks"></i> Activities Due</h4>
     {% if due_activities %}
       {% for act in due_activities %}
-      <p class="text-muted"><a href="#" class="edit-activity" data-id="{{ act.id }}">{{ act.subject }}</a></p>
+      <p class="text-muted"><a href="#" class="edit-activity" data-id="{{ act.id }}"
+                                            data-subject="{{ act.subject|escapejs }}"
+                                            data-notes="{{ act.notes|escapejs }}" data-status="{{ act.status }}"
+                                            data-user="{{ act.follow_up_user }}" data-team="{{ act.follow_up_team }}"
+                                            data-due="{{ act.due_date|date:"Y-m-d" }}"
+                                            data-activity-date="{{ act.activity_date|date:"Y-m-d" }}"
+                                            data-priority="{{ act.priority }}" data-type="{{ act.type }}"
+                                            data-method="{{ act.method }}" {% if act.attachment %}
+                                            data-attachment="{{ act.attachment.url }}" {% endif %}>{{ act.subject }}</a></p>
       {% endfor %}
       {% else %}
       <p class="text-muted">No Activities.</p>
@@ -760,7 +768,14 @@
     {% if pin_notess %}
         {% for note in pin_notess %}
         <p class="text-muted">
-            <a href="#" class="edit-note" data-id="{{ note.id }}" data-subject="{{ note.subject }}" data-notes="{{ note.notes }}" data-pinned="{{ note.pin_note }}">
+            <a href="#" class="edit-note-link"
+                                    data-id="{{ note.id }}"
+                                    data-subject="{{ note.subject|escapejs }}"
+                                    data-notes="{{ note.notes|escapejs }}"
+                                    data-pinned="{{ note.pin_note }}"
+                                    {% if note.attachment %}
+                                    data-attachment="{{ note.attachment.url }}"
+                                    {% endif %}>
                 {{ note.subject }}
             </a>
         </p>
@@ -1130,48 +1145,60 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Handle click on pinned note links in sidebar
-    document.querySelectorAll('.summary-item .edit-note').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Get the note data from data attributes
-            const noteId = this.getAttribute('data-id');
-            const subject = this.getAttribute('data-subject');
-            const notes = this.getAttribute('data-notes');
-            const pinned = this.getAttribute('data-pinned') === 'True';
-            
-            // Switch to Notes tab if not already active
-            if (!$('#Notes-policy').hasClass('active')) {
-                $('a[href="#Notes-policy"]').tab('show');
+document.querySelectorAll('.edit-note-link').forEach(link => {
+    link.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const noteId = this.getAttribute('data-id');
+        const subject = this.getAttribute('data-subject');
+        const notes = this.getAttribute('data-notes');
+        const pinned = this.getAttribute('data-pinned') === 'True';
+        const attachment = this.getAttribute('data-attachment');
+
+        document.getElementById('notesMainContent').style.display = 'none';
+        document.getElementById('createNewnoteContainer').style.display = 'none';
+        document.getElementById('policyeditnote').style.display = 'block';
+
+        setTimeout(() => {
+            const subjectField = document.getElementById('noteedit-subject');
+            const notesField = document.getElementById('noteedit-notes');
+            const pinCheckbox = document.getElementById('edit-checkboxpin');
+            const noteIdInput = document.getElementById('editNoteId');
+
+            if (subjectField && notesField && pinCheckbox && noteIdInput) {
+                subjectField.value = subject;
+                notesField.value = notes;
+                pinCheckbox.checked = pinned;
+                noteIdInput.value = noteId;
+            } else {
+                console.warn("Form fields not found in DOM.");
             }
-            
-            // Show the edit section and hide others
-            document.getElementById('notesMainContent').style.display = 'none';
-            document.getElementById('createNewnoteContainer').style.display = 'none';
-            document.getElementById('policyeditnote').style.display = 'block';
-            
-            // Set the values in the edit form
-            document.getElementById('edit-subject').value = subject;
-            document.getElementById('edit-notes').value = notes;
-            document.getElementById('edit-checkboxpin').checked = pinned;
-            
-            // Update the form action to include the note ID
-            document.querySelector('.edit-note-form').action = `/notes/update/${noteId}/`;
-            
-            // Update the header to show which note we're editing
-            document.getElementById('editing-note-subject').textContent = subject;
-            
-            // Scroll to the edit section
-            $('html, body').animate({
-                scrollTop: $('#policyeditnote').offset().top - 20
-            }, 300);
-        });
+
+            const previewDiv = document.getElementById('edit_note_attachment_preview');
+            if (previewDiv) {
+                previewDiv.innerHTML = '';
+                if (attachment) {
+                    previewDiv.innerHTML = `<a href="${attachment}" target="_blank">View Existing Attachment</a>`;
+                }
+            }
+        }, 100); 
+
+        // Switch to Notes tab
+        if (!$('#Notes-policy').hasClass('active')) {
+            $('a[href="#Notes-policy"]').tab('show');
+        }
+
+        // Scroll to the section
+        $('html, body').animate({
+            scrollTop: $('#policyeditnote').offset().top - 20
+        }, 300);
     });
 
-    // Handle back/cancel buttons in the edit form
+
+    // Handle back/cancel buttons
     document.querySelectorAll('.back-to-notes, .cancel-edit').forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
@@ -1180,5 +1207,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
 </script>
+
 {% endblock %}

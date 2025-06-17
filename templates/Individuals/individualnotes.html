@@ -91,7 +91,13 @@
                         <tbody>
                             {% for note in individual_notes %}
                             <tr>
-                                <td><a href="#" class="note-subject-link" data-subject="{{ note.subject }}" data-notes="{{ note.notes }}">{{ note.subject }}</a></td>
+                                <td><a href="#" class="note-subject-link" data-id="{{ note.id }}"
+                                    data-subject="{{ note.subject|escapejs }}"
+                                    data-notes="{{ note.notes|escapejs }}"
+                                    data-pinned="{{ note.pin_note }}"
+                                    {% if note.attachment %}
+                                    data-attachment="{{ note.attachment.url }}"
+                                    {% endif %}>{{ note.subject }}</a></td>
                                 <td>{{ note.notes }}</td>
                                 <td>
                                     {% if note.attachment %}
@@ -136,7 +142,7 @@
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="subject">Subject <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="note_subject" id="subject" required>
+                        <input type="text" class="form-control" name="note_subject" required>
                         <div class="checkbox checkbox-primary">
                             <input id="checkboxpin" type="checkbox" name="pin_note">
                             <label for="checkboxpin">
@@ -168,7 +174,8 @@
 </div>
 
 
- {% include "Individuals/individualeditnotes.html" %}
+{% include "Individuals/individualeditnotes.html" %}
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -186,7 +193,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const editNoteForm = document.getElementById('editNoteForm');
     const noteSubjectLinks = document.querySelectorAll('.note-subject-link');
 
-    // Function to show create note form
     function showCreateNote() {
         noteMainContent.style.display = 'none';
         createNoteContainer.style.display = 'block';
@@ -194,28 +200,41 @@ document.addEventListener('DOMContentLoaded', function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Function to show notes list
     function showNotesList() {
         createNoteContainer.style.display = 'none';
         individualEditNotes.style.display = 'none';
         noteMainContent.style.display = 'block';
         noteForm.reset();
         editNoteForm.reset();
+
+        document.getElementById('edit_innote_attachment_preview').innerHTML = '';
+
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Function to show individual edit notes
-    function showIndividualEditNotes(subject, notes) {
+    function showIndividualEditNotes(noteId, subject, notes, pinned, attachmentUrl) {
         noteMainContent.style.display = 'none';
         createNoteContainer.style.display = 'none';
         individualEditNotes.style.display = 'block';
-        
-        // Populate the edit form with the note data
-        document.getElementById('editSubject').value = subject;
-        document.getElementById('editNotes').value = notes;
-        
+
+        document.getElementById('editIndNoteId').value = noteId || '';
+        document.getElementById('editSubject').value = subject || '';
+        document.getElementById('editNotes').value = notes || '';
+        document.getElementById('editpinnote').checked = pinned === 'True';
+
+        const previewDiv = document.getElementById('edit_innote_attachment_preview');
+        previewDiv.innerHTML = '';
+        if (attachmentUrl) {
+            const link = document.createElement('a');
+            link.href = attachmentUrl;
+            link.textContent = 'View Current Attachment';
+            link.target = '_blank';
+            previewDiv.appendChild(link);
+        }
+
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
 
     // Event listeners
     showCreateBtn.addEventListener('click', showCreateNote);
@@ -225,14 +244,17 @@ document.addEventListener('DOMContentLoaded', function() {
     backFromEditBtn.addEventListener('click', showNotesList);
     cancelEditBtn.addEventListener('click', showNotesList);
 
-    // Add click event for note subject links
     noteSubjectLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const subject = this.getAttribute('data-subject');
-            const notes = this.getAttribute('data-notes');
-            showIndividualEditNotes(subject, notes);
-        });
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const noteId = this.getAttribute('data-id');
+        const subject = this.getAttribute('data-subject');
+        const notes = this.getAttribute('data-notes');
+        const pinned = this.getAttribute('data-pinned');
+        const attachmentUrl = this.getAttribute('data-attachment');
+        showIndividualEditNotes(noteId, subject, notes, pinned, attachmentUrl);
     });
+});
+
 });
 </script>

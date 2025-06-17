@@ -3,7 +3,7 @@
     <div id="notesMainContent">
         <div class="panel panel-default">
             <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center;">
-                <strong>Notes & Attachments for Alyson Gross</strong>
+                <strong>Notes & Attachments</strong>
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary" id="showCreateNoteBtn">
                         <i class="fa fa-plus"></i> Create new
@@ -24,7 +24,17 @@
                         <tbody>
                             {% for note in policy_notes %}
                             <tr>
-                                <td><a href="#" class="edit-note-link" data-subject="{{ note.subject }}" data-notes="{{ note.notes }}">{{ note.subject }}</a></td>
+                                <td>
+                                    <a href="#" class="edit-note-link"
+                                    data-id="{{ note.id }}"
+                                    data-subject="{{ note.subject|escapejs }}"
+                                    data-notes="{{ note.notes|escapejs }}"
+                                    data-pinned="{{ note.pin_note }}"
+                                    {% if note.attachment %}
+                                    data-attachment="{{ note.attachment.url }}"
+                                    {% endif %}
+                                    >{{ note.subject }}</a>
+                                </td>
                                 <td>{{ note.notes }}</td>
                                 <td>
                                     {% if note.attachment %}
@@ -166,12 +176,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Form submission handler (you can add your actual submission logic here)
-    document.querySelector('.edit-note-form')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Add your form submission logic here
-        console.log('Edit form submitted');
-        // You might want to add AJAX submission or other logic here
-    });
+    
 });
 </script>
