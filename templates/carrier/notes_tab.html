@@ -118,15 +118,18 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Show note form when "Create New" button is clicked
     document.getElementById('showNoteForm')?.addEventListener('click', function() {
-        document.getElementById('emptyNotesState').style.display = 'none';
-        document.getElementById('noteDetailsSection').style.display = 'block';
-        document.getElementById('noteeditSection').style.display = 'none';
+        $('#emptyNotesState').hide();
+        $('#noteDetailsSection').show();
+        $('#noteeditSection').hide();
+        $('#notes .table-responsive').hide();
     });
 
     // Handle cancel button for new note form
     document.getElementById('cancelNote')?.addEventListener('click', function() {
-        document.getElementById('noteDetailsSection').style.display = 'none';
-        document.getElementById('emptyNotesState').style.display = 'block';
+        $('#noteDetailsSection').hide();
+        $('#noteeditSection').hide();
+        $('#emptyNotesState').show();
+        $('#notes .table-responsive').show();
     });
 
     // Handle click on note subject links
@@ -135,35 +138,40 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             
             // Get note data from data attributes
-            const noteId = this.getAttribute('data-note-id');
+            const noteId = this.getAttribute('data-id');
             const subject = this.getAttribute('data-subject');
             const notes = this.getAttribute('data-notes');
             const pinned = this.getAttribute('data-pinned') === 'true';
             const attachmentUrl = this.getAttribute('data-attachment');
             
-            // Populate the edit form
-            document.getElementById('editNoteId').value = noteId;
-            document.getElementById('editSubject').value = subject;
-            document.getElementById('editNotes').value = notes;
-            document.getElementById('editPinNote').checked = pinned;
-            
-            // Show the edit section and hide other sections
-            document.getElementById('emptyNotesState').style.display = 'none';
-            document.getElementById('noteDetailsSection').style.display = 'none';
-            document.getElementById('noteeditSection').style.display = 'block';
-            
-            // Ensure the notes tab is active
+            // Switch to notes tab first
             const notesTab = document.querySelector('a[href="#notes"]');
             if (notesTab) {
                 $(notesTab).tab('show');
             }
+
+            // Wait for tab to be shown
+            setTimeout(() => {
+                // Populate the edit form
+                document.getElementById('editNoteId').value = noteId;
+                document.getElementById('editSubject').value = subject;
+                document.getElementById('editNotes').value = notes;
+                document.getElementById('editPinNote').checked = pinned;
+                
+                // Show the edit section and hide other sections
+                $('#emptyNotesState').hide();
+                $('#noteDetailsSection').hide();
+                $('#notes .table-responsive').hide();
+                $('#noteeditSection').show();
+            }, 100);
         });
     });
 
     // Handle cancel edit button
     document.getElementById('cancelEditNote')?.addEventListener('click', function() {
-        document.getElementById('noteeditSection').style.display = 'none';
-        document.getElementById('emptyNotesState').style.display = 'block';
+        $('#noteeditSection').hide();
+        $('#emptyNotesState').show();
+        $('#notes .table-responsive').show();
     });
 });
 </script>
