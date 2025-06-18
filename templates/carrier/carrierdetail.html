@@ -408,12 +408,12 @@
 
 <!-- Action buttons -->
 <div class="action-buttons">
-  <div class="btn-group summary-group position-relative">
-    <!-- Summary Button -->
-    <button id="toggle-carrier-summary" class="btn btn-default btn-sm"">
-      <i class="fa fa-list-alt"></i>
-    </button>
-    <div class="hover-label">Summary</div>
+    <div class="btn-group summary-group position-relative">
+        <!-- Summary Button -->
+        <button id="toggle-carrier-summary" class="btn btn-default btn-sm">
+            <i class="fa fa-list-alt"></i>
+        </button>
+        <div class="hover-label">Summary</div>
 
     <!-- Dropdown Button -->
     <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
@@ -421,27 +421,28 @@
     </button>
     <div class="hover-label">Action</div>
 
-    <!-- Dropdown Menu -->
-    <ul class="dropdown-menu dropdown-menu-right">
-     
-      <li><a href="#"><i class="fa fa-print"></i> Print Record</a></li>
-      <li class="divider"></li>
-      <li><a href="#"><i class="fa fa-cog"></i> Print Page</a></li>
-    </ul>
-  </div>
+        <!-- Dropdown Menu -->
+        <ul class="dropdown-menu dropdown-menu-right">
+            <li><a href="#"><i class="fa fa-print"></i> Print Record</a></li>
+            <li class="divider"></li>
+            <li><a href="#"><i class="fa fa-cog"></i> Print Page</a></li>
+        </ul>
+    </div>
 </div>
-
-
 
 <!-- Main content -->
 <div class="main-content-wrapper">
     <div class="container-fluid">
         <div class="carrier-status-container">
-            <h3><span><img src="{% static "img/record-button.png" %}" alt="" srcset=""></span>{{carrier.name}}</h3>
+            <h3>
+                <span>
+                    <img src="{% static 'img/record-button.png' %}" alt="">
+                </span>
+                {{ carrier.name }}
+            </h3>
         </div>
     </div>
 
-        
     <div role="tabpanel">
         <!-- Nav tabs -->
         <ul class="nav nav-tabs">
@@ -457,28 +458,13 @@
         
         <!-- Tab panes -->
         <div class="tab-content">
-            <!-- Detail Tab -->
             {% include "Carrier/details_tab.html" %}
-            
-            <!-- Individuals Tab -->
             {% include "Carrier/individuals_tab.html" %}
-            
-            <!-- Activities Tab -->
             {% include "Carrier/activities_tab.html" %}
-            
-            <!-- Notes Tab -->
             {% include "Carrier/notes_tab.html" %}
-            
-            <!-- Forms Tab -->
             {% include "Carrier/forms_tab.html" %}
-            
-            <!-- Products Tab -->
             {% include "Carrier/products_tab.html" %}
-            
-            <!-- Websites Tab -->
             {% include "Carrier/websites_tab.html" %}
-            
-            <!-- Emails Tab -->
             {% include "Carrier/emails_tab.html" %}
         </div>
     </div>
@@ -491,119 +477,115 @@
     <div class="summary-header">
         <h3><i class="fa fa-building-o"></i> Carrier Summary</h3>
     </div>
-    
-<div class="summary-item">
-    <h4><i class="fa fa-user"></i> Contact Info</h4>
-    {% if carrier_phones %}
-        {% for phone in carrier_phones %}
-        <p class="text">
-            <span style="color: black; font-weight: 600; ">
-                {{ phone.phone_type }}:
-            </span>
-            <span style="color: blue;">
-                {{ phone.number|format_phone }}
-            </span>
-        </p>
-        {% endfor %}
-    {% else %}
-        <p class="text">No Contact Info.</p>
-    {% endif %}
-</div>
 
+    <!-- Contact Info -->
     <div class="summary-item">
-    <h4><i class="fa fa-globe"></i> Websites</h4>
-    {% if websites %}
-    {% for web in websites %}
-    <p class="text-muted"><a href="{{ web.url }}" target="_blank">{{ web.website_name }}</a></p>
-    {% endfor %}
-    {% else %}
-    <p class="text-muted">No websites.</p>
-    {% endif %}
-    <a href="#websites" class="btn btn-xs btn-primary" id="create-website-from-sidebar" data-show-form="true">
-        <i class="fa fa-plus"></i> Create new
-    </a>
-</div>
-  
-    
-    <div class="summary-item" id="clients-summary">
-    <h4><i class="fa fa-file-text"></i> In Force Policies</h4>
-    <div class="client-wrapper">
-        <ul class="client-list">
-            <li>Individuals</li>
-            {% for item in policy_summary %}
-                {% if forloop.counter <= 3 %}
-                    <li>{{ item.coverage_type }} <span class="badge">{{ item.count }}</span></li>
-                {% else %}
-                    <li class="client-extra-item" style="display: none;">
-                        {{ item.coverage_type }} <span class="badge">{{ item.count }}</span>
-                    </li>
-                {% endif %}
+        <h4><i class="fa fa-user"></i> Contact Info</h4>
+        {% if carrier_phones %}
+            {% for phone in carrier_phones %}
+            <p class="text">
+                <span style="color: black; font-weight: 600;">{{ phone.phone_type }}:</span>
+                <span style="color: blue;">{{ phone.number|format_phone }}</span>
+            </p>
             {% endfor %}
-        </ul>
-        {% if policy_summary|length > 3 %}
-            <span class="client-toggle clickable-toggle">Show More...</span>
+        {% else %}
+            <p class="text">No Contact Info.</p>
+        {% endif %}
+    </div>
+
+    <!-- Websites -->
+    <div class="summary-item">
+        <h4><i class="fa fa-globe"></i> Websites</h4>
+        {% if websites %}
+            {% for web in websites %}
+            <p class="text-muted"><a href="{{ web.url }}" target="_blank">{{ web.website_name }}</a></p>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">No websites.</p>
+        {% endif %}
+        <a href="#websites" class="btn btn-xs btn-primary" id="create-website-from-sidebar" data-show-form="true">
+            <i class="fa fa-plus"></i> Create new
+        </a>
+    </div>
+
+    <!-- In Force Policies -->
+    <div class="summary-item" id="clients-summary">
+        <h4><i class="fa fa-file-text"></i> In Force Policies</h4>
+        <div class="client-wrapper">
+            <ul class="client-list">
+                <li>Individuals</li>
+                {% for item in policy_summary %}
+                    {% if forloop.counter <= 3 %}
+                        <li>{{ item.coverage_type }} <span class="badge">{{ item.count }}</span></li>
+                    {% else %}
+                        <li class="client-extra-item" style="display: none;">
+                            {{ item.coverage_type }} <span class="badge">{{ item.count }}</span>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            {% if policy_summary|length > 3 %}
+                <span class="client-toggle clickable-toggle">Show More...</span>
             {% endif %}
         </div>
     </div>
 
-
+    <!-- Activities Due -->
     <div class="summary-item">
         <h4><i class="fa fa-tasks"></i> Activities Due</h4>
         {% if due_activities %}
-        {% for act in due_activities %}
-        <p class="text-muted">
-            <a href="#" style="color: #007bff; text-decoration: underline;" class="edit-activity" data-id="{{ act.id }}"
-                data-subject="{{ act.subject|escapejs }}" data-notes="{{ act.notes|escapejs }}"
-                data-status="{{ act.status }}" data-user="{{ act.follow_up_user }}" data-team="{{ act.follow_up_team }}"
-                data-due="{{ act.due_date|date:"Y-m-d"}}" data-activity-date="{{ act.activity_date|date:"Y-m-d"}}"
-                data-priority="{{ act.priority }}" data-type="{{ act.activity_type }}" data-method="{{ act.method }}" {% if act.attachment %} data-attachment="{{ act.attachment.url }}" {% endif %}>
-                {{ act.subject }}
-            </a>
-        </p>
-        {% endfor %}
+            {% for act in due_activities %}
+            <p class="text-muted">
+                <a href="#" class="edit-activity" style="color: #007bff; text-decoration: underline;"
+                   data-id="{{ act.id }}"
+                   data-subject="{{ act.subject|escapejs }}"
+                   data-notes="{{ act.notes|escapejs }}"
+                   data-status="{{ act.status }}"
+                   data-user="{{ act.follow_up_user }}"
+                   data-team="{{ act.follow_up_team }}"
+                   data-due="{{ act.due_date|date:"Y-m-d" }}"
+                   data-activity-date="{{ act.activity_date|date:"Y-m-d" }}"
+                   data-priority="{{ act.priority }}"
+                   data-type="{{ act.activity_type }}"
+                   data-method="{{ act.method }}"
+                   {% if act.attachment %}data-attachment="{{ act.attachment.url }}"{% endif %}>
+                    {{ act.subject }}
+                </a>
+            </p>
+            {% endfor %}
         {% else %}
-        <p class="text-muted">No Activities.</p>
+            <p class="text-muted">No Activities.</p>
         {% endif %}
+        <a href="#" class="btn btn-xs btn-success" id="create-activity-from-sidebar">
+            <i class="fa fa-plus"></i> Create new
+        </a>
+    </div>
+
+    <!-- Pinned Notes -->
+    <div class="summary-item">
+        <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
+        {% if pin_notess %}
+            {% for note in pin_notess %}
+            <p class="text-muted">
+                <a href="#" class="note-subject-link" style="color: #007bff; text-decoration: underline;"
+                   data-id="{{ note.id }}"
+                   data-subject="{{ note.subject|escapejs }}"
+                   data-notes="{{ note.notes|escapejs }}"
+                   data-pinned="{{ note.pin_note|yesno:'True,False' }}"
+                   {% if note.attachment %}data-attachment="{{ note.attachment.url }}"{% endif %}>
+                    {{ note.subject }}
+                </a>
+            </p>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">No pinned note.</p>
+        {% endif %}
+        <a href="#notes" class="btn btn-xs btn-info" id="create-note-from-sidebar" data-show-form="true">
+            <i class="fa fa-plus"></i> Create new
+        </a>
     </div>
 </div>
 
-
-<div class="summary-item">
-  <h4><i class="fa fa-tasks"></i> Activities Due</h4>
-  {% if due_activities %}
-    {% for act in due_activities %}
-      <p class="text-muted">
-        <a href="#" class="activity-subject-link" style="color: #007bff; text-decoration: underline;">
-          {{ act.subject }}
-        </a>
-      </p>
-    {% endfor %}
-  {% else %}
-    <p class="text-muted">No Activities.</p>
-  {% endif %}
-  <a href="#" class="btn btn-xs btn-success" id="create-activity-from-sidebar">
-    <i class="fa fa-plus"></i> Create new
-  </a>
-</div>
-
-<div class="summary-item">
-    <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
-    {% if pin_notess %}
-      {% for note in pin_notess %}
-      <p class="text-muted">
-        <a href="#" class="note-subject-link" style="color: #007bff; text-decoration: underline;">
-          {{ note.subject }}
-        </a>
-      </p>
-      {% endfor %}
-      {% else %}
-      <p class="text-muted">No pinned note.</p>
-    {% endif %}
-    <a href="#notes" class="btn btn-xs btn-info" id="create-note-from-sidebar" data-show-form="true">
-        <i class="fa fa-plus"></i> Create new
-    </a>
-</div>
-</div>
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -697,30 +679,34 @@
             }
         });
 // NOTES SECTION
-        $('#showNoteForm').click(function () {
-            $('#emptyNotesState').hide();
-            $('#noteDetailsSection').show();
-        });
+      // NOTES SECTION
+$('#showNoteForm').click(function() {
+    $('#emptyNotesState').hide();
+    $('#noteeditSection').hide();  // Explicitly hide edit section
+    $('#noteDetailsSection').show();
+});
 
-        $('#cancelNote').click(function () {
-            $('#noteDetailsSection').hide();
-            $('#emptyNotesState').show();
-        });
+$('#cancelNote').click(function() {
+    $('#noteDetailsSection').hide();
+    $('#noteeditSection').hide();  // Explicitly hide edit section
+    $('#emptyNotesState').show();
+});
 
-        // Handle Create New Note from sidebar
-        $('#create-note-from-sidebar').click(function (e) {
-            e.preventDefault();
-            var notesTabLink = $('a[href="#notes"]');
-            notesTabLink.tab('show');
-            notesTabLink.on('shown.bs.tab', function () {
-                $('#emptyNotesState').hide();
-                $('#noteDetailsSection').show();
-                $('html, body').animate({
-                    scrollTop: $('#noteDetailsSection').offset().top - 20
-                }, 300);
-                notesTabLink.off('shown.bs.tab');
-            });
-        });
+// Handle Create New Note from sidebar
+$('#create-note-from-sidebar').click(function(e) {
+    e.preventDefault();
+    var notesTabLink = $('a[href="#notes"]');
+    notesTabLink.tab('show');
+    notesTabLink.on('shown.bs.tab', function() {
+        $('#emptyNotesState').hide();
+        $('#noteeditSection').hide();  // Explicitly hide edit section
+        $('#noteDetailsSection').show();
+        $('html, body').animate({
+            scrollTop: $('#noteDetailsSection').offset().top - 20
+        }, 300);
+        notesTabLink.off('shown.bs.tab');
+    });
+});
 
         // FORMS SECTION
         $('#showFormCreate').click(function () {
@@ -773,25 +759,32 @@
             $('#products .table-responsive').show();
             $('#productFormContainer').hide();
         });
+// Reset form visibility when switching tabs
+$('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+    var target = e.target.hash;
 
-        // Reset form visibility when switching tabs
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-            var target = e.target.hash;
+    // Hide all form sections and show empty states
+    $('[id$="Section"]').hide();
+    $('[id$="State"]').show();
+    $('[id$="Container"]').hide();
 
-            // Hide all form sections and show empty states
-            $('[id$="Section"]').hide();
-            $('[id$="State"]').show();
-            $('[id$="Container"]').hide();
-
-            // Show regular content for the active tab
-            if (target === '#forms') {
-                $('#forms .panel-body > .row:not(#formCreateSection)').show();
-                $('#forms .table-responsive').show();
-            } else if (target === '#products') {
-                $('#products .panel-body > .row:not(#productFormContainer)').show();
-                $('#products .table-responsive').show();
-            }
-        });
+    // Special handling for notes tab - always show default content
+    if (target === '#notes') {
+        $('#emptyNotesState').show();
+        $('#noteDetailsSection').hide();
+        $('#noteeditSection').hide();
+        $('#notes .table-responsive').show();
+    }
+    // Show regular content for other tabs
+    else if (target === '#forms') {
+        $('#forms .panel-body > .row:not(#formCreateSection)').show();
+        $('#forms .table-responsive').show();
+    } 
+    else if (target === '#products') {
+        $('#products .panel-body > .row:not(#productFormContainer)').show();
+        $('#products .table-responsive').show();
+    }
+});
 
         // Password visibility toggle
         $('.input-group-btn button').click(function () {
@@ -1044,6 +1037,60 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
 });
 </script>
 
-
-
+<script>
+    $(document).on('click', '.note-subject-link', function(e) {
+    e.preventDefault();
+    
+    // Get note data from data attributes
+    const noteId = $(this).data('id');
+    const subject = $(this).data('subject');
+    const notes = $(this).data('notes');
+    const pinned = $(this).data('pinned') === 'True';
+    const attachmentUrl = $(this).data('attachment');
+    
+    // Switch to the Notes tab and wait for it to be fully shown
+    $('a[href="#notes"]').tab('show');
+    
+    var checkTabLoaded = setInterval(function() {
+        if ($('#notes').is(':visible')) {
+            clearInterval(checkTabLoaded);
+            
+            // Hide all sections in notes tab
+            $('#emptyNotesState').hide();
+            $('#noteDetailsSection').hide();
+            $('#notes .table-responsive').hide();
+            
+            // Populate the edit form
+            $('#editNoteId').val(noteId);
+            $('#editSubject').val(subject);
+            $('#editNotes').val(notes);
+            $('#editPinNote').prop('checked', pinned);
+            
+            // Handle attachment preview
+            const previewDiv = $('#edit-note-attachment-preview');
+            previewDiv.empty();
+            if (attachmentUrl) {
+                previewDiv.html(`
+                    <div class="attachment-preview">
+                        <a href="${attachmentUrl}" target="_blank" class="btn btn-xs btn-default">
+                            <i class="fa fa-paperclip"></i> View Attachment
+                        </a>
+                        <label class="remove-attachment" style="margin-left: 10px; cursor: pointer;">
+                            <input type="checkbox" name="remove_attachment"> Remove
+                        </label>
+                    </div>
+                `);
+            }
+            
+            // Show only the edit section
+            $('#noteeditSection').show();
+            
+            // Scroll to the edit section
+            $('html, body').animate({
+                scrollTop: $('#noteeditSection').offset().top - 20
+            }, 300);
+        }
+    }, 50);
+});
+</script>
 {% endblock %}

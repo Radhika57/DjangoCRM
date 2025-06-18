@@ -841,6 +841,7 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         document.getElementById('individualeditnotes').style.display = 'none';
         document.getElementById('noteMainContent').style.display = 'block';
+        document.getElementById('createNewnoteContainer').style.display = 'none';
     });
     
     // Handle cancel button
@@ -848,9 +849,33 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         document.getElementById('individualeditnotes').style.display = 'none';
         document.getElementById('noteMainContent').style.display = 'block';
+        document.getElementById('createNewnoteContainer').style.display = 'none';
     });
     
+    
 });
+
+function showNotesForm() {
+    // Show the Notes tab
+    $('[href="#Notes-individuals"]').tab('show');
+    
+    // Scroll to the tab content
+    $('html, body').animate({
+        scrollTop: $('#Notes-individuals').offset().top - 20
+    }, 'slow');
+    
+    // Show the create note form and hide others
+    setTimeout(function() {
+        document.getElementById('noteMainContent').style.display = 'none';
+        document.getElementById('individualeditnotes').style.display = 'none';
+        document.getElementById('createNewnoteContainer').style.display = 'block';
+        
+        // Scroll to the form within the tab
+        $('html, body').animate({
+            scrollTop: $('#createNewnoteContainer').offset().top - 20
+        }, 'slow');
+    }, 500);
+}
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
