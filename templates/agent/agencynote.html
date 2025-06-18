@@ -114,7 +114,7 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     const showCreateBtn = document.getElementById('showCreateNoteBtn');
     const backToNotesBtn = document.getElementById('backToNotesBtn');
     const cancelNoteBtn = document.getElementById('cancelNoteBtn');
@@ -126,47 +126,36 @@
     const backToEditNotesBtn = document.getElementById('backToEditNotesBtn');
     const cancelEditNoteBtn = document.getElementById('cancelEditNoteBtn');
 
-    // Function to activate notes tab and show main content
-    function showNotesMainContent() {
-        // Activate notes tab
+    function activateNotesTab() {
         const notesTabBtn = document.querySelector('.nav-tab-btn[href="#notes-content"]');
         if (notesTabBtn) {
             const tabInstance = new bootstrap.Tab(notesTabBtn);
-            tabInstance.show();
+            tabInstance.show(); // Bootstrap 5 method
         }
-        
-        // Show main content and hide forms
+    }
+
+    function showNotesList() {
         createNoteContainer.style.display = 'none';
         if (editNoteContainer) editNoteContainer.style.display = 'none';
         notesMainContent.style.display = 'block';
-        
-        // Reset forms
         if (document.getElementById('noteForm')) document.getElementById('noteForm').reset();
         if (editNoteForm) editNoteForm.reset();
+        activateNotesTab();
     }
 
-    // Show create form
     showCreateBtn.addEventListener('click', function(e) {
         e.preventDefault();
         notesMainContent.style.display = 'none';
         createNoteContainer.style.display = 'block';
         if (editNoteContainer) editNoteContainer.style.display = 'none';
-        
-        // Ensure notes tab is active
-        const notesTabBtn = document.querySelector('.nav-tab-btn[href="#notes-content"]');
-        if (notesTabBtn) {
-            const tabInstance = new bootstrap.Tab(notesTabBtn);
-            tabInstance.show();
-        }
+        activateNotesTab();
     });
 
-    // Back to notes list
-    backToNotesBtn.addEventListener('click', showNotesMainContent);
-    if (backToEditNotesBtn) backToEditNotesBtn.addEventListener('click', showNotesMainContent);
-    cancelNoteBtn.addEventListener('click', showNotesMainContent);
-    if (cancelEditNoteBtn) cancelEditNoteBtn.addEventListener('click', showNotesMainContent);
+    backToNotesBtn.addEventListener('click', showNotesList);
+    if (backToEditNotesBtn) backToEditNotesBtn.addEventListener('click', showNotesList);
+    cancelNoteBtn.addEventListener('click', showNotesList);
+    if (cancelEditNoteBtn) cancelEditNoteBtn.addEventListener('click', showNotesList);
 
-    // Handle note subject link clicks
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('note-subject-link')) {
             e.preventDefault();
@@ -195,6 +184,7 @@
                             <a href="${attachmentUrl}" target="_blank" class="btn btn-xs btn-default">
                                 <i class="fa fa-paperclip"></i> View Attachment
                             </a>
+                            
                         </div>
                     `;
                 }
@@ -204,64 +194,8 @@
             createNoteContainer.style.display = 'none';
             editNoteContainer.style.display = 'block';
 
-            // Ensure notes tab is active
-            const notesTabBtn = document.querySelector('.nav-tab-btn[href="#notes-content"]');
-            if (notesTabBtn) {
-                const tabInstance = new bootstrap.Tab(notesTabBtn);
-                tabInstance.show();
-            }
+            activateNotesTab();
         }
-    });
-
-    // Handle form submissions to always show notes content after save
-    if (document.getElementById('noteForm')) {
-        document.getElementById('noteForm').addEventListener('submit', function() {
-            // This will be handled by the backend redirect, but we ensure the tab is correct
-            localStorage.setItem('activeAgentTab', '#notes-content');
-        });
-    }
-
-    if (editNoteForm) {
-        editNoteForm.addEventListener('submit', function() {
-            // This will be handled by the backend redirect, but we ensure the tab is correct
-            localStorage.setItem('activeAgentTab', '#notes-content');
-        });
-    }
-
-    // When switching tabs, ensure notes tab shows main content
-    document.querySelectorAll('.nav-tab-btn, .dropdown-item[data-toggle="tab"]').forEach(tab => {
-        tab.addEventListener('click', function() {
-            if (this.getAttribute('href') === '#notes-content') {
-                showNotesMainContent();
-            }
-        });
-    });
-
-    // Initialize to show notes main content if on notes tab
-    if (window.location.hash === '#notes-content') {
-        showNotesMainContent();
-    }
-});
-
-// Handle the create pinned note from sidebar
-document.addEventListener('DOMContentLoaded', function() {
-    $('#create-pinnednote-from-sidebar').click(function(e) {
-        e.preventDefault();
-        
-        // Switch to notes tab
-        $('a[href="#notes-content"]').tab('show');
-        
-        // After tab is shown, show the create form with pin checked
-        setTimeout(() => {
-            $('#notesMainContent').hide();
-            $('#editnoteContainer').hide();
-            $('#createNewnoteContainer').show();
-            $('#checkboxpin').prop('checked', true);
-            
-            $('html, body').animate({
-                scrollTop: $('#createNewnoteContainer').offset().top - 20
-            }, 300);
-        }, 100);
     });
 });
 </script>
