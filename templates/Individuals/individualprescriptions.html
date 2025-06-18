@@ -181,7 +181,10 @@
 
       let rows = pharmacies.map(p => `
         <tr>
-          <td><img src="${p.logo}" width="50" /></td>
+          <td>
+            <img src="${p.logo}" width="50" 
+                onerror="this.onerror=null; this.src='/static/img/27002.jpg';" />
+          </td>
           <td>${p.pharmacy}</td>
           <td>${p.distance} mi</td>
           <td>${p.price} $</td>
