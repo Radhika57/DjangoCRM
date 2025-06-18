@@ -1122,7 +1122,7 @@
        data-due-date="{{ act.due_date|date:'Y-m-d' }}"
        data-activity-date="{{ act.activity_date|date:'Y-m-d' }}"
        data-priority="{{ act.priority }}"
-       data-type="{{ act.activity_type }}"
+       data-type="{{ act.type }}"
        data-method="{{ act.method }}"
        {% if act.attachment %}
        data-attachment="{{ act.attachment.url }}"
@@ -1147,7 +1147,7 @@
        data-id="{{ note.id }}" 
        data-subject="{{ note.subject }}"
        data-notes="{{ note.notes }}"
-       data-pinned="{{ note.pinned|lower }}"
+       data-pinned="{% if note.pin_note %}true{% else %}false{% endif %}"
        data-attachment="{% if note.attachment %}{{ note.attachment.url }}{% endif %}">
         {{ note.subject }}
     </a>
@@ -1332,9 +1332,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <a href="${attachmentUrl}" target="_blank" class="btn btn-xs btn-default">
                                 <i class="fa fa-paperclip"></i> View Attachment
                             </a>
-                            <label class="remove-attachment" style="margin-left: 10px; cursor: pointer;">
-                                <input type="checkbox" name="remove_attachment"> Remove
-                            </label>
+                            
                         </div>
                     `;
                 }

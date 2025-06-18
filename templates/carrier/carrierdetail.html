@@ -371,6 +371,30 @@
     margin-left: 10px;
 }
 
+    .client-list {
+        padding-left: 15px;
+        list-style: none;
+        margin: 0;
+    }
+
+    .client-list li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        line-height: 1.4;
+        margin: 0;
+        padding: 2px 0;
+    }
+
+    .client-list .badge {
+        background-color: #444;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 8px;
+        font-size: 11px;
+        margin-left: 10px;
+    }
+
     .clickable-toggle {
         display: inline-block;
         color: #007bff;
@@ -518,9 +542,9 @@
         </ul>
         {% if policy_summary|length > 3 %}
             <span class="client-toggle clickable-toggle">Show More...</span>
-        {% endif %}
+            {% endif %}
+        </div>
     </div>
-</div>
 
 
     <div class="summary-item">
@@ -540,10 +564,27 @@
         {% else %}
         <p class="text-muted">No Activities.</p>
         {% endif %}
-        <a href="#" class="btn btn-xs btn-success" id="create-activity-from-sidebar">
-            <i class="fa fa-plus"></i> Create new
-        </a>
     </div>
+</div>
+
+
+<div class="summary-item">
+  <h4><i class="fa fa-tasks"></i> Activities Due</h4>
+  {% if due_activities %}
+    {% for act in due_activities %}
+      <p class="text-muted">
+        <a href="#" class="activity-subject-link" style="color: #007bff; text-decoration: underline;">
+          {{ act.subject }}
+        </a>
+      </p>
+    {% endfor %}
+  {% else %}
+    <p class="text-muted">No Activities.</p>
+  {% endif %}
+  <a href="#" class="btn btn-xs btn-success" id="create-activity-from-sidebar">
+    <i class="fa fa-plus"></i> Create new
+  </a>
+</div>
 
 <div class="summary-item">
     <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
@@ -608,17 +649,6 @@
         });
     });
 
-$(document).on('click', '.client-toggle', function(e) {
-    e.preventDefault();
-    var $extraItems = $(this).closest('#clients-summary').find('.client-extra-item');
-    var $toggle = $(this);
-    
-    $extraItems.slideToggle(200, function() {
-        // This callback runs after animation completes
-        $toggle.text($extraItems.is(':visible') ? 'Show Less...' : 'Show More...');
-    });
-});
-
         // ACTIVITIES SECTION
        
         $('#showActivityForm').click(function (e) {
@@ -626,41 +656,40 @@ $(document).on('click', '.client-toggle', function(e) {
             $('#emptyActivitiesState').hide();
             $('#activityDetailsSection').show();
 
-            // Scroll to the form for better UX
             $('html, body').animate({
                 scrollTop: $('#activityDetailsSection').offset().top - 20
             }, 300);
         });
 
-    // Handle cancel button in activity form
-    $('#cancelActivity').click(function() {
-        $('#activityDetailsSection').hide();
-        $('#emptyActivitiesState').show();
-    });
-
-    $('#create-activity-from-sidebar').click(function(e) {
-    e.preventDefault();
-    
-    var activitiesTabLink = $('a[href="#activities"]');
-    var isTabActive = $('#activities').is(':visible');
-
-    if (!isTabActive) {
-        activitiesTabLink.tab('show');
-        activitiesTabLink.on('shown.bs.tab', function() {
-            $('#activityeditSection').hide();
-            $('#emptyActivitiesState').hide();
-            $('#activityDetailsSection').show();
-
-            $('html, body').animate({
-                scrollTop: $('#activityDetailsSection').offset().top - 20
-            }, 300);
-
-            activitiesTabLink.off('shown.bs.tab');
+        // Handle cancel button in activity form
+        $('#cancelActivity').click(function () {
+            $('#activityDetailsSection').hide();
+            $('#emptyActivitiesState').show();
         });
-    } else {
-        $('#activityeditSection').hide();
-        $('#emptyActivitiesState').hide();
-        $('#activityDetailsSection').show();
+
+        $('#create-activity-from-sidebar').click(function (e) {
+            e.preventDefault();
+
+            var activitiesTabLink = $('a[href="#activities"]');
+            var isTabActive = $('#activities').is(':visible');
+
+            if (!isTabActive) {
+                activitiesTabLink.tab('show');
+                activitiesTabLink.on('shown.bs.tab', function () {
+                    $('#activityeditSection').hide();
+                    $('#emptyActivitiesState').hide();
+                    $('#activityDetailsSection').show();
+
+                    $('html, body').animate({
+                        scrollTop: $('#activityDetailsSection').offset().top - 20
+                    }, 300);
+
+                    activitiesTabLink.off('shown.bs.tab');
+                });
+            } else {
+                $('#activityeditSection').hide();
+                $('#emptyActivitiesState').hide();
+                $('#activityDetailsSection').show();
 
                 $('html, body').animate({
                     scrollTop: $('#activityDetailsSection').offset().top - 20
@@ -673,183 +702,183 @@ $(document).on('click', '.client-toggle', function(e) {
             $('#noteDetailsSection').show();
         });
 
-    $('#cancelNote').click(function() {
-        $('#noteDetailsSection').hide();
-        $('#emptyNotesState').show();
-    });
-
-    // Handle Create New Note from sidebar
-    $('#create-note-from-sidebar').click(function(e) {
-        e.preventDefault();
-        var notesTabLink = $('a[href="#notes"]');
-        notesTabLink.tab('show');
-        notesTabLink.on('shown.bs.tab', function() {
-            $('#emptyNotesState').hide();
-            $('#noteDetailsSection').show();
-            $('html, body').animate({
-                scrollTop: $('#noteDetailsSection').offset().top - 20
-            }, 300);
-            notesTabLink.off('shown.bs.tab');
+        $('#cancelNote').click(function () {
+            $('#noteDetailsSection').hide();
+            $('#emptyNotesState').show();
         });
-    });
 
-    // FORMS SECTION
-    $('#showFormCreate').click(function() {
-        $('#forms .panel-body > .row:not(#formCreateSection)').hide();
-        $('#forms .table-responsive').hide();
-        $('#formCreateSection').show();
-    });
-
-    $('#cancelFormCreate').click(function() {
-        $('#forms .panel-body > .row:not(#formCreateSection)').show();
-        $('#forms .table-responsive').show();
-        $('#formCreateSection').hide();
-    });
-
-    // WEBSITES SECTION
-    $('#showWebsiteForm').click(function() {
-        $('#emptyWebsitesState').hide();
-        $('#websiteFormSection').show();
-    });
-
-    $('#cancelWebsiteCreate').click(function() {
-        $('#websiteFormSection').hide();
-        $('#emptyWebsitesState').show();
-    });
-
-    // Handle Create New Website from sidebar
-    $('#create-website-from-sidebar').click(function(e) {
-        e.preventDefault();
-        var websitesTabLink = $('a[href="#websites"]');
-        websitesTabLink.tab('show');
-        websitesTabLink.on('shown.bs.tab', function() {
-            $('#emptyWebsitesState').hide();
-            $('#websiteFormSection').show();
-            $('html, body').animate({
-                scrollTop: $('#websiteFormSection').offset().top - 20
-            }, 300);
-            websitesTabLink.off('shown.bs.tab');
+        // Handle Create New Note from sidebar
+        $('#create-note-from-sidebar').click(function (e) {
+            e.preventDefault();
+            var notesTabLink = $('a[href="#notes"]');
+            notesTabLink.tab('show');
+            notesTabLink.on('shown.bs.tab', function () {
+                $('#emptyNotesState').hide();
+                $('#noteDetailsSection').show();
+                $('html, body').animate({
+                    scrollTop: $('#noteDetailsSection').offset().top - 20
+                }, 300);
+                notesTabLink.off('shown.bs.tab');
+            });
         });
-    });
 
-    // PRODUCTS SECTION
-    $('#createNewProduct').click(function() {
-        $('#products .panel-body > .row:not(#productFormContainer)').hide();
-        $('#products .table-responsive').hide();
-        $('#productFormContainer').show();
-    });
+        // FORMS SECTION
+        $('#showFormCreate').click(function () {
+            $('#forms .panel-body > .row:not(#formCreateSection)').hide();
+            $('#forms .table-responsive').hide();
+            $('#formCreateSection').show();
+        });
 
-    $('#cancelNewProduct').click(function() {
-        $('#products .panel-body > .row:not(#productFormContainer)').show();
-        $('#products .table-responsive').show();
-        $('#productFormContainer').hide();
-    });
-
-    // Reset form visibility when switching tabs
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-        var target = e.target.hash;
-        
-        // Hide all form sections and show empty states
-        $('[id$="Section"]').hide();
-        $('[id$="State"]').show();
-        $('[id$="Container"]').hide();
-        
-        // Show regular content for the active tab
-        if (target === '#forms') {
+        $('#cancelFormCreate').click(function () {
             $('#forms .panel-body > .row:not(#formCreateSection)').show();
             $('#forms .table-responsive').show();
-        } else if (target === '#products') {
+            $('#formCreateSection').hide();
+        });
+
+        // WEBSITES SECTION
+        $('#showWebsiteForm').click(function () {
+            $('#emptyWebsitesState').hide();
+            $('#websiteFormSection').show();
+        });
+
+        $('#cancelWebsiteCreate').click(function () {
+            $('#websiteFormSection').hide();
+            $('#emptyWebsitesState').show();
+        });
+
+        // Handle Create New Website from sidebar
+        $('#create-website-from-sidebar').click(function (e) {
+            e.preventDefault();
+            var websitesTabLink = $('a[href="#websites"]');
+            websitesTabLink.tab('show');
+            websitesTabLink.on('shown.bs.tab', function () {
+                $('#emptyWebsitesState').hide();
+                $('#websiteFormSection').show();
+                $('html, body').animate({
+                    scrollTop: $('#websiteFormSection').offset().top - 20
+                }, 300);
+                websitesTabLink.off('shown.bs.tab');
+            });
+        });
+
+        // PRODUCTS SECTION
+        $('#createNewProduct').click(function () {
+            $('#products .panel-body > .row:not(#productFormContainer)').hide();
+            $('#products .table-responsive').hide();
+            $('#productFormContainer').show();
+        });
+
+        $('#cancelNewProduct').click(function () {
             $('#products .panel-body > .row:not(#productFormContainer)').show();
             $('#products .table-responsive').show();
-        }
-    });
-
-    // Password visibility toggle
-    $('.input-group-btn button').click(function() {
-        var input = $(this).closest('.input-group').find('input');
-        var icon = $(this).find('i');
-        if (input.attr('type') === 'password') {
-            input.attr('type', 'text');
-            icon.removeClass('fa-eye').addClass('fa-eye-slash');
-        } else {
-            input.attr('type', 'password');
-            icon.removeClass('fa-eye-slash').addClass('fa-eye');
-        }
-    });
-
-    // File input UI
-    $(document).on('change', '.btn-file :file', function() {
-        var input = $(this),
-            numFiles = input.get(0).files ? input.get(0).files.length : 1,
-            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-        input.trigger('fileselect', [numFiles, label]);
-    });
-
-    $('.btn-file :file').on('fileselect', function(event, numFiles, label) {
-        var input = $(this).parents('.input-group').find(':text'),
-            log = numFiles > 1 ? numFiles + ' files selected' : label;
-        if (input.length) {
-            input.val(log);
-        }
-    });
-
-    // Dropzone init
-    Dropzone.autoDiscover = false;
-    $(".attachment-block table").each(function() {
-        var dropzoneElement = $(this).find("td[colspan='3']").get(0);
-        new Dropzone(dropzoneElement, {
-            url: "/file-upload",
-            autoProcessQueue: false,
-            clickable: true,
-            previewsContainer: false,
-            dictDefaultMessage: "Drop files here to upload"
+            $('#productFormContainer').hide();
         });
-    });
 
-    // Persist tab
-    if (location.hash) {
-        $('a[href="' + location.hash + '"]').tab('show');
-    }
+        // Reset form visibility when switching tabs
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var target = e.target.hash;
 
-    $('a[data-toggle="tab"]').on('click', function(e) {
-        history.pushState(null, null, $(this).attr('href'));
-    });
+            // Hide all form sections and show empty states
+            $('[id$="Section"]').hide();
+            $('[id$="State"]').show();
+            $('[id$="Container"]').hide();
 
-    $(window).on('popstate', function() {
-        var anchor = location.hash || $('a[data-toggle="tab"]').first().attr('href');
-        $('a[href="' + anchor + '"]').tab('show');
-    });
+            // Show regular content for the active tab
+            if (target === '#forms') {
+                $('#forms .panel-body > .row:not(#formCreateSection)').show();
+                $('#forms .table-responsive').show();
+            } else if (target === '#products') {
+                $('#products .panel-body > .row:not(#productFormContainer)').show();
+                $('#products .table-responsive').show();
+            }
+        });
 
-    // Sidebar toggle
-    $('#toggle-carrier-summary').click(function(e) {
-        e.preventDefault();
-        $('#carrier-summary').toggleClass('shown');
-        $('.main-content-wrapper').toggleClass('sidebar-shown');
+        // Password visibility toggle
+        $('.input-group-btn button').click(function () {
+            var input = $(this).closest('.input-group').find('input');
+            var icon = $(this).find('i');
+            if (input.attr('type') === 'password') {
+                input.attr('type', 'text');
+                icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                input.attr('type', 'password');
+                icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        });
 
-        if ($(window).width() <= 576) {
-            $('body').css('overflow-x', $('#carrier-summary').hasClass('shown') ? 'hidden' : 'auto');
+        // File input UI
+        $(document).on('change', '.btn-file :file', function () {
+            var input = $(this),
+                numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [numFiles, label]);
+        });
+
+        $('.btn-file :file').on('fileselect', function (event, numFiles, label) {
+            var input = $(this).parents('.input-group').find(':text'),
+                log = numFiles > 1 ? numFiles + ' files selected' : label;
+            if (input.length) {
+                input.val(log);
+            }
+        });
+
+        // Dropzone init
+        Dropzone.autoDiscover = false;
+        $(".attachment-block table").each(function () {
+            var dropzoneElement = $(this).find("td[colspan='3']").get(0);
+            new Dropzone(dropzoneElement, {
+                url: "/file-upload",
+                autoProcessQueue: false,
+                clickable: true,
+                previewsContainer: false,
+                dictDefaultMessage: "Drop files here to upload"
+            });
+        });
+
+        // Persist tab
+        if (location.hash) {
+            $('a[href="' + location.hash + '"]').tab('show');
         }
-    });
 
-    $('#close-sidebar').click(function(e) {
-        e.preventDefault();
-        $('#carrier-summary').removeClass('shown');
-        $('.main-content-wrapper').removeClass('sidebar-shown');
-        if ($(window).width() <= 576) {
-            $('body').css('overflow-x', 'auto');
-        }
-    });
+        $('a[data-toggle="tab"]').on('click', function (e) {
+            history.pushState(null, null, $(this).attr('href'));
+        });
 
-    $(document).click(function(e) {
-        if ($(window).width() <= 576 && $('#carrier-summary').hasClass('shown')) {
-            if (!$(e.target).closest('#carrier-summary').length &&
-                !$(e.target).closest('#toggle-carrier-summary').length) {
-                $('#carrier-summary').removeClass('shown');
-                $('.main-content-wrapper').removeClass('sidebar-shown');
+        $(window).on('popstate', function () {
+            var anchor = location.hash || $('a[data-toggle="tab"]').first().attr('href');
+            $('a[href="' + anchor + '"]').tab('show');
+        });
+
+        // Sidebar toggle
+        $('#toggle-carrier-summary').click(function (e) {
+            e.preventDefault();
+            $('#carrier-summary').toggleClass('shown');
+            $('.main-content-wrapper').toggleClass('sidebar-shown');
+
+            if ($(window).width() <= 576) {
+                $('body').css('overflow-x', $('#carrier-summary').hasClass('shown') ? 'hidden' : 'auto');
+            }
+        });
+
+        $('#close-sidebar').click(function (e) {
+            e.preventDefault();
+            $('#carrier-summary').removeClass('shown');
+            $('.main-content-wrapper').removeClass('sidebar-shown');
+            if ($(window).width() <= 576) {
                 $('body').css('overflow-x', 'auto');
             }
-        }
-    });
+        });
+
+        $(document).click(function (e) {
+            if ($(window).width() <= 576 && $('#carrier-summary').hasClass('shown')) {
+                if (!$(e.target).closest('#carrier-summary').length &&
+                    !$(e.target).closest('#toggle-carrier-summary').length) {
+                    $('#carrier-summary').removeClass('shown');
+                    $('.main-content-wrapper').removeClass('sidebar-shown');
+                    $('body').css('overflow-x', 'auto');
+                }
+            }
+        });
 
         // Modal initialization
         $('#addIndividualModal').modal({
@@ -976,6 +1005,18 @@ $('#showActivityForm, #create-activity-from-sidebar').click(function(e) {
     }
 });
 
+    // Password visibility toggle
+    $('.input-group-btn button').click(function() {
+        var input = $(this).closest('.input-group').find('input');
+        var icon = $(this).find('i');
+        if (input.attr('type') === 'password') {
+            input.attr('type', 'text');
+            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            input.attr('type', 'password');
+            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    });
 
 $('#closeActivityEdit').click(function() {
     $('#activityeditSection').hide();

@@ -30,11 +30,14 @@
                                        data-subject="{{ note.subject }}"
                                        data-notes="{{ note.notes }}"
                                        data-pinned="{% if note.pin_note %}true{% else %}false{% endif %}"
+                                       {% if note.attachment %}
+                                        data-attachment="{{ note.attachment.url }}"
+                                        {% endif %}
                                        style="color: #007bff; text-decoration: underline; cursor: pointer;">
                                         {% if note.pin_note %}<i class="fa fa-thumb-tack"></i> {% endif %}{{ note.subject }}
                                     </a>
                                 </td>
-                                <td>{{ note.notes }}</td>
+                                <td>{{ note.notes|default:"" }}</td>
                                 <td>
                                     {% if note.attachment %}
                                         <a href="{{ note.attachment.url }}" download>
@@ -166,11 +169,26 @@ document.addEventListener('DOMContentLoaded', function() {
             const subject = e.target.getAttribute('data-subject');
             const notes = e.target.getAttribute('data-notes');
             const pinned = e.target.getAttribute('data-pinned') === 'true';
+            const attachmentUrl = e.target.getAttribute('data-attachment');
 
             document.getElementById('editNoteId').value = noteId;
             document.getElementById('editSubject').value = subject;
             document.getElementById('editNotes').value = notes;
             document.getElementById('editCheckboxpin').checked = pinned;
+            const previewDiv = document.getElementById('edit_note_attachment_preview');
+            if (previewDiv) {
+                previewDiv.innerHTML = '';
+                if (attachmentUrl) {
+                    previewDiv.innerHTML = `
+                        <div class="attachment-preview">
+                            <a href="${attachmentUrl}" target="_blank" class="btn btn-xs btn-default">
+                                <i class="fa fa-paperclip"></i> View Attachment
+                            </a>
+                            
+                        </div>
+                    `;
+                }
+            }
 
             notesMainContent.style.display = 'none';
             createNoteContainer.style.display = 'none';
@@ -179,19 +197,5 @@ document.addEventListener('DOMContentLoaded', function() {
             activateNotesTab();
         }
     });
-
-    if (document.getElementById('noteForm')) {
-        document.getElementById('noteForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            showNotesList();
-        });
-    }
-
-    if (editNoteForm) {
-        editNoteForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            showNotesList();
-        });
-    }
 });
 </script>

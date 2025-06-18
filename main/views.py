@@ -585,7 +585,7 @@ def agent_detail(request, agent_id):
             
             agent_activity.save()
 
-        elif request.POST.get('type') and request.POST.get('activity_subject'):
+        elif request.POST.get('activity_date') and request.POST.get('activity_subject'):
             Agent_Activity.objects.create(
                 agent=agent,
                 subject=request.POST.get('activity_subject'),
@@ -603,20 +603,27 @@ def agent_detail(request, agent_id):
         
 
         # --- Notes ---
-        if request.POST.get('note_subject'):
+
+        if request.POST.get('note_id'):
             note_id = request.POST.get('note_id')
-            if note_id:
-                agent_note = AgentNotes.objects.get(id=note_id)
-            else:
-                agent_note = AgentNotes(agent=agent)
-
-            agent_note.subject = request.POST.get('note_subject')
-            agent_note.notes = request.POST.get('note_notes')
-            agent_note.pin_note = request.POST.get('pin_note') == 'on'
-            if request.FILES.get('attachment'):
-                agent_note.attachment = request.FILES.get('attachment')
-            agent_note.save()
-
+            note = AgentNotes.objects.get(id=note_id)
+            note.subject = request.POST.get('editnotesubject')
+            note.notes = request.POST.get('editnotenotes') 
+            note.pin_note = request.POST.get('editnotepin_note') == 'on'
+            if request.FILES.get('editnoteattachment'):
+                note.attachment = request.FILES.get('editnoteattachment')
+            note.save()
+        
+        elif request.POST.get('note_subject'):
+            AgentNotes.objects.create(
+                agent=agent,
+                subject=request.POST.get('note_subject'),
+                notes=request.POST.get('agent'),
+                pin_note=request.POST.get('pin_note') == 'on',
+                attachment=request.FILES.get('attachment')
+            )
+        
+        
         # --- E&O info ---
         if 'eo_required' in request.POST:
             agent_eo.eo_required = request.POST.get('eo_required') == 'on'
