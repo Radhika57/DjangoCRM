@@ -30,12 +30,12 @@
                                 {% for note in notess %}
                                 <tr>
                                     <td>
-                                        <a href="#" class="note-subject-link" data-note-id="{{ note.id }}" 
-                                           data-subject="{{ note.subject }}" 
-                                           data-notes="{{ note.notes }}"
-                                           data-pinned="{% if note.pin_note %}true{% else %}false{% endif %}"
-                                           data-attachment="{% if note.attachment %}{{ note.attachment.url }}{% endif %}"
-                                           style="color: #007bff; text-decoration: underline; cursor: pointer;">
+                                        <a href="#" class="note-subject-link" style="color: #007bff; text-decoration: underline;"
+                                            data-id="{{ note.id }}"
+                                            data-subject="{{ note.subject|escapejs }}"
+                                            data-notes="{{ note.notes|escapejs }}"
+                                            data-pinned="{{ note.pin_note|yesno:'True,False' }}"
+                                            {% if note.attachment %}data-attachment="{{ note.attachment.url }}"{% endif %}>
                                             {{ note.subject }}
                                         </a>
                                     </td>
@@ -159,6 +159,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('editSubject').value = subject;
                 document.getElementById('editNotes').value = notes;
                 document.getElementById('editPinNote').checked = pinned;
+                const previewDiv = $('#edit-note-attachment-preview');
+                previewDiv.empty();
+                if (attachmentUrl) {
+                    previewDiv.html(`
+                        <div class="attachment-preview">
+                            <a href="${attachmentUrl}" target="_blank" class="btn btn-xs btn-default">
+                                <i class="fa fa-paperclip"></i> View Attachment
+                            </a>
+                            
+                        </div>
+                    `);
+                }
                 
                 // Show the edit section and hide other sections
                 $('#emptyNotesState').hide();
@@ -177,3 +189,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
