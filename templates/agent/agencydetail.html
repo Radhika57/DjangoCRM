@@ -1553,4 +1553,36 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    function resetNotesTabView() {
+        const notesMain = document.getElementById('notesMainContent');
+        const createNote = document.getElementById('createNewnoteContainer');
+        const editNote = document.getElementById('editnoteContainer');
+
+        if (notesMain) notesMain.style.display = 'block';
+        if (createNote) createNote.style.display = 'none';
+        if (editNote) editNote.style.display = 'none';
+    }
+
+    // When Notes tab is clicked manually
+    document.querySelector('a[href="#notes-content"]')?.addEventListener('click', function () {
+        setTimeout(resetNotesTabView, 50); // Small delay to allow tab switch
+    });
+
+    // If Notes tab is the active one on load
+    if (window.location.hash === '#notes-content') {
+        resetNotesTabView();
+    }
+
+    // For Bootstrap tab shown event (in case of dynamic loading)
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        const target = $(e.target).attr("href");
+        if (target === "#notes-content") {
+            resetNotesTabView();
+        }
+    });
+});
+</script>
+
 {% endblock %}
