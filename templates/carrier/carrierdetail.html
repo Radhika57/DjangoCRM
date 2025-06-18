@@ -371,14 +371,15 @@
     margin-left: 10px;
 }
 
-.clickable-toggle {
-    display: inline-block;
-    color: #007bff;
-    cursor: pointer;
-    text-decoration: underline;
-    font-size: 13px;
-    margin-top: 5px;
-}
+    .clickable-toggle {
+        display: inline-block;
+        color: #007bff;
+        cursor: pointer;
+        text-decoration: underline;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+    
 </style>
 
 <!-- Action buttons -->
@@ -522,23 +523,27 @@
 </div>
 
 
-<div class="summary-item">
-  <h4><i class="fa fa-tasks"></i> Activities Due</h4>
-  {% if due_activities %}
-    {% for act in due_activities %}
-      <p class="text-muted">
-        <a href="#" class="activity-subject-link" style="color: #007bff; text-decoration: underline;">
-          {{ act.subject }}
+    <div class="summary-item">
+        <h4><i class="fa fa-tasks"></i> Activities Due</h4>
+        {% if due_activities %}
+        {% for act in due_activities %}
+        <p class="text-muted">
+            <a href="#" style="color: #007bff; text-decoration: underline;" class="edit-activity" data-id="{{ act.id }}"
+                data-subject="{{ act.subject|escapejs }}" data-notes="{{ act.notes|escapejs }}"
+                data-status="{{ act.status }}" data-user="{{ act.follow_up_user }}" data-team="{{ act.follow_up_team }}"
+                data-due="{{ act.due_date|date:"Y-m-d"}}" data-activity-date="{{ act.activity_date|date:"Y-m-d"}}"
+                data-priority="{{ act.priority }}" data-type="{{ act.activity_type }}" data-method="{{ act.method }}" {% if act.attachment %} data-attachment="{{ act.attachment.url }}" {% endif %}>
+                {{ act.subject }}
+            </a>
+        </p>
+        {% endfor %}
+        {% else %}
+        <p class="text-muted">No Activities.</p>
+        {% endif %}
+        <a href="#" class="btn btn-xs btn-success" id="create-activity-from-sidebar">
+            <i class="fa fa-plus"></i> Create new
         </a>
-      </p>
-    {% endfor %}
-  {% else %}
-    <p class="text-muted">No Activities.</p>
-  {% endif %}
-  <a href="#" class="btn btn-xs btn-success" id="create-activity-from-sidebar">
-    <i class="fa fa-plus"></i> Create new
-  </a>
-</div>
+    </div>
 
 <div class="summary-item">
     <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
@@ -614,18 +619,18 @@ $(document).on('click', '.client-toggle', function(e) {
     });
 });
 
-    // ACTIVITIES SECTION
-    // Handle Create New Activity from activities tab button
-    $('#showActivityForm').click(function(e) {
-        e.preventDefault();
-        $('#emptyActivitiesState').hide();
-        $('#activityDetailsSection').show();
-        
-        // Scroll to the form for better UX
-        $('html, body').animate({
-            scrollTop: $('#activityDetailsSection').offset().top - 20
-        }, 300);
-    });
+        // ACTIVITIES SECTION
+       
+        $('#showActivityForm').click(function (e) {
+            e.preventDefault();
+            $('#emptyActivitiesState').hide();
+            $('#activityDetailsSection').show();
+
+            // Scroll to the form for better UX
+            $('html, body').animate({
+                scrollTop: $('#activityDetailsSection').offset().top - 20
+            }, 300);
+        });
 
     // Handle cancel button in activity form
     $('#cancelActivity').click(function() {
@@ -657,20 +662,16 @@ $(document).on('click', '.client-toggle', function(e) {
         $('#emptyActivitiesState').hide();
         $('#activityDetailsSection').show();
 
-        $('html, body').animate({
-            scrollTop: $('#activityDetailsSection').offset().top - 20
-        }, 300);
-    }
-});
-
-    
-
-
-    // NOTES SECTION
-    $('#showNoteForm').click(function() {
-        $('#emptyNotesState').hide();
-        $('#noteDetailsSection').show();
-    });
+                $('html, body').animate({
+                    scrollTop: $('#activityDetailsSection').offset().top - 20
+                }, 300);
+            }
+        });
+// NOTES SECTION
+        $('#showNoteForm').click(function () {
+            $('#emptyNotesState').hide();
+            $('#noteDetailsSection').show();
+        });
 
     $('#cancelNote').click(function() {
         $('#noteDetailsSection').hide();
@@ -850,6 +851,16 @@ $(document).on('click', '.client-toggle', function(e) {
         }
     });
 
+        // Modal initialization
+        $('#addIndividualModal').modal({
+            backdrop: true,
+            keyboard: true,
+            show: false
+        });
+    });
+    // Make activity subject clickable to show the edit section
+    $(document).on('click', '.activity-subject-link', function (e) {
+        e.preventDefault();
     // Modal initialization
     $('#addIndividualModal').modal({
         backdrop: true,
@@ -857,72 +868,141 @@ $(document).on('click', '.client-toggle', function(e) {
         show: false
     });
 });
-// Make activity subject clickable to show the edit section
-$(document).on('click', '.activity-subject-link', function(e) {
-    e.preventDefault();
-
-    var subjectText = $(this).text().trim(); 
-    $('#edit-subject').val(subjectText);     
-
-    var activitiesTabLink = $('a[href="#activities"]');
-    activitiesTabLink.tab('show');
-
-    activitiesTabLink.on('shown.bs.tab', function() {
-        $('#emptyActivitiesState').hide();
-        $('#activityeditSection').show();
-        $('#activitiesPanel').hide(); 
-
-        $('html, body').animate({
-            scrollTop: $('#activityeditSection').offset().top - 20
-        }, 300);
-
-        activitiesTabLink.off('shown.bs.tab');
-    });
-
-    // If tab is already active
-    if ($('#activities').is(':visible')) {
-        $('#emptyActivitiesState').hide();
-        $('#activityeditSection').show();
-        $('#activitiesPanel').hide(); 
-        $('html, body').animate({
-            scrollTop: $('#activityeditSection').offset().top - 20
-        }, 300);
-    }
-});
-// Make pinned note subject clickable to show the edit section
-$(document).on('click', '.note-subject-link', function(e) {
-    e.preventDefault();
-
-    var subjectText = $(this).text().trim(); 
-    $('#editSubject').val(subjectText);     
-
-    var notesTabLink = $('a[href="#notes"]');
-    notesTabLink.tab('show');
-
-    notesTabLink.on('shown.bs.tab', function() {
-        $('#emptyNotesState').hide();
-        $('#noteeditSection').show();
-        $('#noteDetailsSection').hide(); 
-
-        $('html, body').animate({
-            scrollTop: $('#noteeditSection').offset().top - 20
-        }, 300);
-
-        notesTabLink.off('shown.bs.tab');
-    });
-
-    // If tab is already active
-    if ($('#notes').is(':visible')) {
-        $('#emptyNotesState').hide();
-        $('#noteeditSection').show();
-        $('#noteDetailsSection').hide(); 
-        $('html, body').animate({
-            scrollTop: $('#noteeditSection').offset().top - 20
-        }, 300);
-    }
-});
-
 
 </script>
+<script>
+    
+$(document).on('click', '.edit-activity', function(e) {
+    e.preventDefault();
+    $('#activityDetailsSection').hide();
+    const activityId = this.dataset.id;
+    
+   
+    $('#edit-subject').val(this.dataset.subject || '');
+    $('#edit-notes').val(this.dataset.notes || '');
+    $('#edit-status').val(this.dataset.status || '');
+    $('#edit-user').val(this.dataset.user || '');
+    $('#edit-team').val(this.dataset.team || '');
+    $('#edit-due-date').val(this.dataset.due || '');
+    $('#edit-activity-date').val(this.dataset.activityDate || '');
+    $('#edit-priority').val(this.dataset.priority || '');
+    $('#edit-type').val(this.dataset.type || '');
+    $('#edit-method').val(this.dataset.method || '');
+    $('#edit-activity-id').val(this.dataset.id || '');
+    
+    let attachmentUrl = this.dataset.attachment;
+    let attachmentBlock = $('#edit-attachment-preview');
+    
+    if (attachmentUrl) {
+        attachmentBlock.html(`<a href="${attachmentUrl}" target="_blank">📄 View Existing Attachment</a>`);
+    } else {
+        attachmentBlock.html('');
+    }
 
-{% endblock %}
+    
+    var activitiesTabLink = $('a[href="#activities"]');
+    var isTabActive = $('#activities').is(':visible');
+
+    if (!isTabActive) {
+        activitiesTabLink.tab('show');
+        activitiesTabLink.on('shown.bs.tab', function() {
+          
+            $('#activitiesPanel').show();
+            
+            $('#activities .panel-body > *').hide();
+          
+            $('#activityeditSection').show();
+            
+            $('html, body').animate({
+                scrollTop: $('#activityeditSection').offset().top - 20
+            }, 300);
+            
+            activitiesTabLink.off('shown.bs.tab');
+        });
+    } else {
+        
+        $('#activitiesPanel').show();
+        $('#activities .panel-body > *').hide();
+        $('#activityeditSection').show();
+        
+        $('html, body').animate({
+            scrollTop: $('#activityeditSection').offset().top - 20
+        }, 300);
+    }
+});
+
+
+$('#showActivityForm, #create-activity-from-sidebar').click(function(e) {
+    e.preventDefault();
+    
+    
+    $('#activityeditSection').hide();
+    
+   
+    $('#activityForm')[0].reset();
+    $('#activityIdField').val('');
+    $('#activityFormTitle').text('Create New Activity');
+    $('#currentAttachment').html('');
+
+   
+    var activitiesTabLink = $('a[href="#activities"]');
+    var isTabActive = $('#activities').is(':visible');
+
+    if (!isTabActive) {
+        activitiesTabLink.tab('show');
+        activitiesTabLink.on('shown.bs.tab', function() {
+           
+            $('#activitiesPanel').show();
+           
+            $('#activities .panel-body > *').hide();
+           
+            $('#activityDetailsSection').show();
+            
+            $('html, body').animate({
+                scrollTop: $('#activityDetailsSection').offset().top - 20
+            }, 300);
+            
+            activitiesTabLink.off('shown.bs.tab');
+        });
+    } else {
+      
+        $('#activitiesPanel').show();
+        $('#activities .panel-body > *').hide();
+        $('#activityDetailsSection').show();
+        
+        $('html, body').animate({
+            scrollTop: $('#activityDetailsSection').offset().top - 20
+        }, 300);
+    }
+});
+
+
+$('#closeActivityEdit').click(function() {
+    $('#activityeditSection').hide();
+    $('#activitiesPanel').show();
+    $('#emptyActivitiesState').toggle($('#activitiesTable tbody tr').length === 0);
+});
+
+$('#cancelActivity').click(function() {
+    $('#activityDetailsSection').hide();
+    $('#activitiesPanel').show();
+    $('#emptyActivitiesState').show();
+});
+
+
+$('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+    var target = e.target.hash;
+
+    
+    if (target === '#activities') {
+        $('#activityeditSection').hide();
+        $('#activityDetailsSection').hide();
+        $('#activitiesPanel').show();
+        $('#emptyActivitiesState').toggle($('#activitiesTable tbody tr').length === 0);
+    }
+});
+</script>
+
+
+
+{% endblock %}

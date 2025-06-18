@@ -244,6 +244,7 @@ def carrier_detail(request, carrier_id):
         'pin_notess': pin_notess,
         'policy_summary': policy_summary,
     })
+     
 
 
 def delete_carrier(request, carrier_id):

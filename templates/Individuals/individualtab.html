@@ -495,13 +495,29 @@
     </a>
 </div>
 
-    
-   <div class="summary-item">
+
+<div class="summary-item">
     <h4><i class="fa fa-tasks"></i> Activities Due</h4>
     {% if due_activities %}
       {% for act in due_activities %}
       <p class="text-muted">
-          <a href="#" class="activity-subject-link">{{ act.subject }}</a>
+          <a href="#" class="activity-subject-link" 
+             data-id="{{ act.id }}"
+             data-subject="{{ act.subject|escapejs }}"
+             data-notes="{{ act.notes|escapejs }}"
+             data-status="{{ act.status }}"
+             data-user="{{ act.follow_up_user }}"
+             data-team="{{ act.follow_up_team }}"
+             data-due="{{ act.due_date|date:'Y-m-d' }}"
+             data-activity-date="{{ act.activity_date|date:'Y-m-d' }}"
+             data-priority="{{ act.priority }}"
+             data-type="{{ act.activity_type }}"
+             data-method="{{ act.method }}"
+             {% if act.attachment %}
+             data-attachment="{{ act.attachment.url }}"
+             {% endif %}>
+              {{ act.subject }}
+          </a>
       </p>
       {% endfor %}
     {% else %}
@@ -514,7 +530,6 @@
         <i class="fa fa-plus"></i> Create new
     </a>
 </div>
-    
    <div class="summary-item">
     <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
     {% if pin_notess %}
@@ -647,28 +662,66 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             
+            // Get all data attributes from the clicked link
+            const activityId = this.getAttribute('data-id');
+            const subject = this.getAttribute('data-subject');
+            const notes = this.getAttribute('data-notes');
+            const status = this.getAttribute('data-status');
+            const user = this.getAttribute('data-user');
+            const team = this.getAttribute('data-team');
+            const dueDate = this.getAttribute('data-due');
+            const activityDate = this.getAttribute('data-activity-date');
+            const priority = this.getAttribute('data-priority');
+            const activityType = this.getAttribute('data-type');
+            const method = this.getAttribute('data-method');
+            const attachmentUrl = this.getAttribute('data-attachment');
+            
             // Switch to the Activities tab
             $('[href="#Activities-individuals"]').tab('show');
             
-            // After tab is shown, manipulate the content
-            setTimeout(function() {
-                // Hide other sections
+            // After tab is shown, populate and show the edit form
+            setTimeout(() => {
+                // Hide other containers and show edit container
                 document.getElementById('activityMainContent').style.display = 'none';
                 document.getElementById('createNewactivityContainer').style.display = 'none';
-                
-                // Show only the edit section
                 document.getElementById('individualeditSection').style.display = 'block';
                 
+                // Populate form fields with the activity data
+                document.getElementById('edit-subject').value = subject || '';
+                document.getElementById('edit-notes').value = notes || '';
+                document.getElementById('edit-status').value = status || '';
+                document.getElementById('edit-user').value = user || '';
+                document.getElementById('edit-team').value = team || '';
+                document.getElementById('edit-due-date').value = dueDate || '';
+                document.getElementById('edit-activity-date').value = activityDate || '';
+                document.getElementById('edit-priority').value = priority || '';
+                document.getElementById('edit-type').value = activityType || '';
+                document.getElementById('edit-method').value = method || '';
+                document.getElementById('edit-activity-id').value = activityId || '';
+                
+                // Handle attachment preview
+                const attachmentPreview = document.getElementById('edit-attachment-preview');
+                if (attachmentPreview) {
+                    attachmentPreview.innerHTML = '';
+                    if (attachmentUrl) {
+                        attachmentPreview.innerHTML = `
+                            <a href="${attachmentUrl}" target="_blank" class="btn btn-xs btn-default">
+                                <i class="fa fa-paperclip"></i> View Attachment
+                            </a>`;
+                    }
+                }
+                
                 // Scroll to the edit section
-                document.getElementById('individualeditSection').scrollIntoView({
-                    behavior: 'smooth'
-                });
+                $('html, body').animate({
+                    scrollTop: $('#individualeditSection').offset().top - 20
+                }, 300);
             }, 100);
         });
     });
     
-    // Handle cancel button
-    document.getElementById('closeActivityEdit')?.addEventListener('click', function() {
+    // Handle cancel button in the edit form
+    document.getElementById('closeActivityEdit')?.addEventListener('click', function(e) {
+        e.preventDefault();
         document.getElementById('individualeditSection').style.display = 'none';
         document.getElementById('activityMainContent').style.display = 'block';
     });
@@ -728,49 +781,85 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-{% comment %} <script>
+
+<script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Handle click on pinned note links in the summary sidebar
-    document.querySelectorAll('#individual-summary .pinned-note-link').forEach(link => {
+    // Handle pinned note links in individual summary
+    document.querySelectorAll('#individual-summary .note-subject-link').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            const noteId = this.getAttribute('data-note-id');
             
-            // Switch to the Notes tab
+            // Get all data attributes
+            const noteId = this.getAttribute('data-id');
+            const subject = this.getAttribute('data-subject');
+            const notes = this.getAttribute('data-notes');
+            const pinned = this.getAttribute('data-pinned') === 'True';
+            const attachmentUrl = this.getAttribute('data-attachment');
+            
+            // Switch to the Notes tab first
             $('[href="#Notes-individuals"]').tab('show');
             
-            // After tab is shown, manipulate the content
-            setTimeout(function() {
-                // Hide other sections
+            // After tab is shown, populate and show the edit form
+            setTimeout(() => {
+                // Hide other containers and show edit container
                 document.getElementById('noteMainContent').style.display = 'none';
                 document.getElementById('createNewnoteContainer').style.display = 'none';
-                
-                // Show the edit section
                 document.getElementById('individualeditnotes').style.display = 'block';
                 
-                // Here you would typically load the note data into the form
-                // For example: loadNoteData(noteId);
+                // Populate form fields
+                document.getElementById('editSubject').value = subject || '';
+                document.getElementById('editNotes').value = notes || '';
+                document.getElementById('editpinnote').checked = pinned;
+                document.getElementById('editIndNoteId').value = noteId;
+                
+                // Handle attachment preview
+                const previewDiv = document.getElementById('edit_innote_attachment_preview');
+                if (previewDiv) {
+                    previewDiv.innerHTML = '';
+                    if (attachmentUrl) {
+                        previewDiv.innerHTML = `
+                            <div class="attachment-preview">
+                                <a href="${attachmentUrl}" target="_blank" class="btn btn-xs btn-default">
+                                    <i class="fa fa-paperclip"></i> View Attachment
+                                </a>
+                                <label class="remove-attachment" style="margin-left: 10px; cursor: pointer;">
+                                    <input type="checkbox" name="remove_attachment"> Remove
+                                </label>
+                            </div>
+                        `;
+                    }
+                }
                 
                 // Scroll to the edit section
-                document.getElementById('individualeditnotes').scrollIntoView({
-                    behavior: 'smooth'
-                });
+                $('html, body').animate({
+                    scrollTop: $('#individualeditnotes').offset().top - 20
+                }, 300);
             }, 100);
         });
     });
     
-    // Handle back/cancel buttons in the edit form
-    document.getElementById('backFromEditBtn')?.addEventListener('click', function() {
+    // Handle back button
+    document.getElementById('backFromEditBtn')?.addEventListener('click', function(e) {
+        e.preventDefault();
         document.getElementById('individualeditnotes').style.display = 'none';
         document.getElementById('noteMainContent').style.display = 'block';
     });
     
-    document.getElementById('cancelEditBtn')?.addEventListener('click', function() {
+    // Handle cancel button
+    document.getElementById('cancelEditBtn')?.addEventListener('click', function(e) {
+        e.preventDefault();
         document.getElementById('individualeditnotes').style.display = 'none';
         document.getElementById('noteMainContent').style.display = 'block';
     });
+    
+    // Handle form submission (frontend only - will need backend to actually save)
+    document.getElementById('editNoteForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Note changes would be saved here in a real implementation');
+        // In a real implementation, you would submit the form or make an AJAX call here
+    });
 });
-</script> {% endcomment %}
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Tab persistence functionality

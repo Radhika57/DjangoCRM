@@ -1111,11 +1111,25 @@
     <h4><i class="fa fa-tasks"></i> Activities Due</h4>
     {% if due_activities %}
       {% for act in due_activities %}
-      <p class="text-muted">
-        <a href="#" class="activity-edit-link" data-id="{{ act.id }}" style="color: #007bff; text-decoration: underline;">
-          {{ act.subject }}
-        </a>
-      </p>
+     <p class="text-muted">
+    <a href="#" class="activity-edit-link" 
+       data-id="{{ act.id }}"
+       data-subject="{{ act.subject }}"
+       data-notes="{{ act.notes }}"
+       data-status="{{ act.status }}"
+       data-follow-up-user="{{ act.follow_up_user }}"
+       data-follow-up-team="{{ act.follow_up_team }}"
+       data-due-date="{{ act.due_date|date:'Y-m-d' }}"
+       data-activity-date="{{ act.activity_date|date:'Y-m-d' }}"
+       data-priority="{{ act.priority }}"
+       data-type="{{ act.activity_type }}"
+       data-method="{{ act.method }}"
+       {% if act.attachment %}
+       data-attachment="{{ act.attachment.url }}"
+       {% endif %}>
+        {{ act.subject }}
+    </a>
+</p>
       {% endfor %}
     {% else %}
       <p class="text-muted">No Activities.</p>
@@ -1124,17 +1138,20 @@
         <i class="fa fa-plus"></i> Create new
     </a>
 </div>
-
-
-   <div class="summary-item">
+<div class="summary-item">
     <h4><i class="fa fa-thumb-tack"></i> Pinned Note</h4>
     {% if pin_notess %}
       {% for note in pin_notess %}
       <p class="text-muted">
-        <a href="#" class="pinned-note-link" data-id="{{ note.id }}" style="color: #007bff; text-decoration: underline;">
-          {{ note.subject }}
-        </a>
-      </p>
+    <a href="#" class="pinned-note-link" 
+       data-id="{{ note.id }}" 
+       data-subject="{{ note.subject }}"
+       data-notes="{{ note.notes }}"
+       data-pinned="{{ note.pinned|lower }}"
+       data-attachment="{% if note.attachment %}{{ note.attachment.url }}{% endif %}">
+        {{ note.subject }}
+    </a>
+</p>
       {% endfor %}
       {% else %}
       <p class="text-muted">No pinned note.</p>
@@ -1145,109 +1162,10 @@
 </div>
 
 </div>
-
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
 
 <script>
- document.getElementById('createActivityBtn').addEventListener('click', function(e) {
-    e.preventDefault();
-    
-    // First, switch to the Activities tab if not already there
-    const activitiesTabLink = document.querySelector('a[href="#activities-content"]');
-    if (activitiesTabLink && !activitiesTabLink.classList.contains('active')) {
-        // Show the Activities tab
-        $(activitiesTabLink).tab('show');
-        
-        // After tab is shown, show the form
-        $(activitiesTabLink).on('shown.bs.tab', function() {
-            showCreateNew();
-            $(activitiesTabLink).off('shown.bs.tab'); // Remove the handler after it runs
-        });
-    } else {
-        // If already on activities tab, just show the form
-        showCreateNew();
-    }
-});
-    $(document).ready(function () {
-        // Handle Create New Pinned Note from sidebar
-        $('#create-pinnednote-from-sidebar').click(function (e) {
-            e.preventDefault();
-
-            // Get the notes tab link
-            var notesTabLink = $('a[href="#notes-content"]');
-
-            // Show the Notes tab
-            notesTabLink.tab('show');
-
-            // After tab is shown, trigger the form display
-            notesTabLink.on('shown.bs.tab', function () {
-                $('#notesMainContent').hide();
-                $('#createNewnoteContainer').show();
-                $('#checkboxpin').prop('checked', true); // Check the pin checkbox
-
-                // Scroll to the form for better UX
-                $('html, body').animate({
-                    scrollTop: $('#createNewnoteContainer').offset().top - 20
-                }, 300);
-
-                // Remove the event handler to prevent multiple bindings
-                notesTabLink.off('shown.bs.tab');
-            });
-        });
-
-        // Handle existing create note button
-        $('#showCreateNoteBtn').click(function (e) {
-            e.preventDefault();
-            $('#notesMainContent').hide();
-            $('#createNewnoteContainer').show();
-            $('#checkboxpin').prop('checked', false); // Ensure pin is unchecked for regular notes
-        });
-
-        // Handle back/cancel buttons
-        $('#backToNotesBtn, #cancelNoteBtn').click(function () {
-            $('#createNewnoteContainer').hide();
-            $('#notesMainContent').show();
-        });
-
-        // Reset form visibility when switching tabs
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-            if (e.target.hash !== '#notes-content') {
-                $('#createNewnoteContainer').hide();
-                $('#notesMainContent').show();
-            }
-        });
-
-        // Check URL hash on page load to show form if coming from sidebar
-        if (window.location.hash === '#notes-content' && $('#create-pinnednote-from-sidebar').data('show-form')) {
-            $('#notesMainContent').hide();
-            $('#createNewnoteContainer').show();
-            $('#checkboxpin').prop('checked', true);
-        }
-
-        // Form submission handling (keep your existing form submission code)
-        $('#noteForm').submit(function (e) {
-            e.preventDefault();
-           
-        });
-    });
-
-    $(document).ready(function () {
-        $('.show-more-link').click(function () {
-            var section = $(this).closest('.summary-item');
-            section.find('.additional-content').slideDown();
-            $(this).hide();
-        });
-
-        $('.show-less-link').click(function () {
-            var section = $(this).closest('.summary-item');
-            section.find('.additional-content').slideUp();
-            section.find('.show-more-link').show();
-        });
-    });
-
-
     $(document).ready(function () {
         // Initialize tabs
         $('#mainTabs a[data-toggle="tab"]').click(function (e) {
@@ -1298,113 +1216,256 @@
                 }
             }
         });
-    });
-    // Function to show activity edit form with subject pre-filled
-function showActivityEdit(activityId, subject) {
-    // Switch to activities tab if not already active
-    if (!$('#activities-content').hasClass('active')) {
-        $('a[href="#activities-content"]').tab('show');
-    }
-    
-    // Hide main content and show edit section
-    $('#activityMainContent').hide();
-    $('#agencyeditSection').show();
-    
-    // Set the subject in the edit form
-    $('#edit-subject').val(subject);
-    
-    // You can load other activity data here if needed
-    // loadActivityData(activityId);
-    
-    // Scroll to edit section
-    $('html, body').animate({
-        scrollTop: $('#agencyeditSection').offset().top - 20
-    }, 300);
-}
 
-// Attach click handlers to activity links in sidebar
+        // Show/hide additional content in summary
+        $('.show-more-link').click(function () {
+            var section = $(this).closest('.summary-item');
+            section.find('.additional-content').slideDown();
+            $(this).hide();
+        });
+
+        $('.show-less-link').click(function () {
+            var section = $(this).closest('.summary-item');
+            section.find('.additional-content').slideUp();
+            section.find('.show-more-link').show();
+        });
+
+        // Handle Create New Pinned Note from sidebar - MODIFIED TO ALWAYS SHOW CREATE FORM
+        $('#create-pinnednote-from-sidebar').click(function (e) {
+            e.preventDefault();
+            var notesTabLink = $('a[href="#notes-content"]');
+            
+            // Always reset to create form when clicking "Create new"
+            function showCreateForm() {
+                $('#notesMainContent').hide();
+                $('#editnoteContainer').hide();
+                $('#createNewnoteContainer').show();
+                $('#checkboxpin').prop('checked', true);
+                
+                $('html, body').animate({
+                    scrollTop: $('#createNewnoteContainer').offset().top - 20
+                }, 300);
+            }
+            
+            if (!$('a[href="#notes-content"]').hasClass('active')) {
+                notesTabLink.tab('show');
+                notesTabLink.on('shown.bs.tab', function () {
+                    showCreateForm();
+                    notesTabLink.off('shown.bs.tab');
+                });
+            } else {
+                showCreateForm();
+            }
+        });
+
+        // Handle existing create note button
+        $('#showCreateNoteBtn').click(function (e) {
+            e.preventDefault();
+            $('#notesMainContent').hide();
+            $('#editnoteContainer').hide();
+            $('#createNewnoteContainer').show();
+            $('#checkboxpin').prop('checked', false);
+        });
+
+        // Handle back/cancel buttons
+        $('#backToNotesBtn, #cancelNoteBtn').click(function () {
+            $('#createNewnoteContainer').hide();
+            $('#editnoteContainer').hide();
+            $('#notesMainContent').show();
+        });
+
+        // Reset form visibility when switching tabs
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            if (e.target.hash !== '#notes-content') {
+                $('#createNewnoteContainer').hide();
+                $('#editnoteContainer').hide();
+                $('#notesMainContent').show();
+            }
+        });
+
+        // Check URL hash on page load to show form if coming from sidebar
+        if (window.location.hash === '#notes-content' && $('#create-pinnednote-from-sidebar').data('show-form')) {
+            $('#notesMainContent').hide();
+            $('#editnoteContainer').hide();
+            $('#createNewnoteContainer').show();
+            $('#checkboxpin').prop('checked', true);
+        }
+
+            });
+    
+</script>
+<script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Handle clicks on activity subject links in sidebar
-    document.querySelectorAll('.activity-edit-link').forEach(link => {
+    // Handle pinned note links
+    document.querySelectorAll('.pinned-note-link').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            const activityId = this.getAttribute('data-id') || '';
-            const subject = this.textContent.trim();
-            showActivityEdit(activityId, subject);
-        });
-    });
-
-    // Handle create new activity button
-    document.getElementById('createActivityBtn').addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Switch to activities tab if not already there
-        const activitiesTabLink = document.querySelector('a[href="#activities-content"]');
-        if (activitiesTabLink && !activitiesTabLink.classList.contains('active')) {
-            $(activitiesTabLink).tab('show');
             
-            // After tab is shown, show the form
-            $(activitiesTabLink).on('shown.bs.tab', function() {
-                showCreateNew();
-                $(activitiesTabLink).off('shown.bs.tab');
-            });
-        } else {
-            showCreateNew();
-        }
-    });
-});
-$(document).ready(function() {
-    // Handle click on pinned note in sidebar
-    $(document).on('click', '.pinned-note-link', function(e) {
-        e.preventDefault();
-        const noteId = $(this).data('id');
-        
-        // Switch to notes tab if not already active
-        const notesTabLink = $('a[href="#notes-content"]');
-        notesTabLink.tab('show');
-        
-        // Wait for tab to be shown
-        $('a[href="#notes-content"]').on('shown.bs.tab', function() {
-            // Hide main content and show edit container
-            $('#notesMainContent').hide();
-            $('#editnoteContainer').show();
+            // Get the parent summary item which contains all the data attributes
+            const summaryItem = this.closest('.summary-item');
             
-            // Load note data into form
-            loadNoteData(noteId);
+            // Get all data attributes
+            const noteId = this.getAttribute('data-id');
+            const subject = this.getAttribute('data-subject');
+            const notes = this.getAttribute('data-notes');
+            const pinned = this.getAttribute('data-pinned') === 'true';
+            const attachmentUrl = this.getAttribute('data-attachment');
             
-            // Scroll to edit form
+            // Show the edit container and hide others
+            document.getElementById('notesMainContent').style.display = 'none';
+            document.getElementById('createNewnoteContainer').style.display = 'none';
+            document.getElementById('editnoteContainer').style.display = 'block';
+            
+            // Populate the form fields
+            document.getElementById('editSubject').value = subject || '';
+            document.getElementById('editNotes').value = notes || '';
+            document.getElementById('editCheckboxpin').checked = pinned;
+            document.getElementById('editNoteId').value = noteId;
+            
+            // Handle attachment preview
+            const previewDiv = document.getElementById('edit_note_attachment_preview');
+            if (previewDiv) {
+                previewDiv.innerHTML = '';
+                if (attachmentUrl) {
+                    previewDiv.innerHTML = `
+                        <div class="attachment-preview">
+                            <a href="${attachmentUrl}" target="_blank" class="btn btn-xs btn-default">
+                                <i class="fa fa-paperclip"></i> View Attachment
+                            </a>
+                            <label class="remove-attachment" style="margin-left: 10px; cursor: pointer;">
+                                <input type="checkbox" name="remove_attachment"> Remove
+                            </label>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Switch to Notes tab if not already active
+            if (!$('#notes-content').hasClass('active')) {
+                $('a[href="#notes-content"]').tab('show');
+            }
+            
+            // Scroll to the edit section
             $('html, body').animate({
                 scrollTop: $('#editnoteContainer').offset().top - 20
             }, 300);
+        });
+    });
+    
+    // Handle back button
+    document.getElementById('backToEditNotesBtn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('editnoteContainer').style.display = 'none';
+        document.getElementById('notesMainContent').style.display = 'block';
+    });
+    
+    // Handle cancel button
+    document.getElementById('cancelEditNoteBtn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('editnoteContainer').style.display = 'none';
+        document.getElementById('notesMainContent').style.display = 'block';
+    });
+    
+   
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle "Create new" button in Activities Due section
+    document.getElementById('createActivityBtn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Switch to Activities tab first
+        $('[href="#activities-content"]').tab('show');
+        
+        // After tab is shown, show the create form
+        setTimeout(() => {
+            document.getElementById('activityMainContent').style.display = 'none';
+            document.getElementById('agencyeditSection').style.display = 'none';
+            document.getElementById('createNewactivityContainer').style.display = 'block';
             
-            // Remove the event handler to prevent multiple bindings
-            $('a[href="#notes-content"]').off('shown.bs.tab');
+            // Scroll to the form section
+            $('html, body').animate({
+                scrollTop: $('#createNewactivityContainer').offset().top - 20
+            }, 300);
+        }, 100);
+    });
+    
+    // Existing activity edit link handling
+    document.querySelectorAll('.activity-edit-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Get all activity data from data attributes
+            const activityId = this.getAttribute('data-id');
+            const subject = this.getAttribute('data-subject');
+            const notes = this.getAttribute('data-notes');
+            const status = this.getAttribute('data-status');
+            const followUpUser = this.getAttribute('data-follow-up-user');
+            const followUpTeam = this.getAttribute('data-follow-up-team');
+            const dueDate = this.getAttribute('data-due-date');
+            const activityDate = this.getAttribute('data-activity-date');
+            const priority = this.getAttribute('data-priority');
+            const activityType = this.getAttribute('data-type');
+            const method = this.getAttribute('data-method');
+            const attachmentUrl = this.getAttribute('data-attachment');
+            
+            // Switch to Activities tab first
+            $('[href="#activities-content"]').tab('show');
+            
+            // After tab is shown, populate and show the edit form
+            setTimeout(() => {
+                document.getElementById('activityMainContent').style.display = 'none';
+                document.getElementById('createNewactivityContainer').style.display = 'none';
+                document.getElementById('agencyeditSection').style.display = 'block';
+                
+                // Populate form fields
+                document.getElementById('edit-subject').value = subject || '';
+                document.getElementById('edit-notes').value = notes || '';
+                document.getElementById('edit-status').value = status || '';
+                document.getElementById('edit-user').value = followUpUser || '';
+                document.getElementById('edit-team').value = followUpTeam || '';
+                document.getElementById('edit-due-date').value = dueDate || '';
+                document.getElementById('edit-activity-date').value = activityDate || '';
+                document.getElementById('edit-priority').value = priority || '';
+                document.getElementById('edit-type').value = activityType || '';
+                document.getElementById('edit-method').value = method || '';
+                document.getElementById('edit-activity-id').value = activityId || '';
+                
+                // Handle attachment preview
+                const previewDiv = document.getElementById('edit-attachment-preview');
+                if (previewDiv) {
+                    previewDiv.innerHTML = '';
+                    if (attachmentUrl) {
+                        previewDiv.innerHTML = `
+                            <div class="attachment-preview">
+                                <a href="${attachmentUrl}" target="_blank" class="btn btn-xs btn-default">
+                                    <i class="fa fa-paperclip"></i> View Attachment
+                                </a>
+                                <label class="remove-attachment" style="margin-left: 10px; cursor: pointer;">
+                                    <input type="checkbox" name="remove_attachment"> Remove
+                                </label>
+                            </div>
+                        `;
+                    }
+                }
+                
+                // Scroll to the edit section
+                $('html, body').animate({
+                    scrollTop: $('#agencyeditSection').offset().top - 20
+                }, 300);
+            }, 100);
         });
     });
     
-    // Function to load note data into edit form
-    function loadNoteData(noteId) {
-        // Make AJAX call to get note data
-        $.ajax({
-            url: '/get-note-data/' + noteId + '/',
-            method: 'GET',
-            success: function(data) {
-                $('#editNoteId').val(data.id);
-                $('#editSubject').val(data.subject);
-                $('#editNotes').val(data.notes);
-                $('#editCheckboxpin').prop('checked', data.is_pinned);
-            },
-            error: function() {
-                alert('Error loading note data');
-            }
-        });
-    }
-    
-    // Handle back/cancel buttons in edit form
-    $('#backToEditNotesBtn, #cancelEditNoteBtn').click(function() {
-        $('#editnoteContainer').hide();
-        $('#notesMainContent').show();
+    // Handle cancel button
+    document.getElementById('closeActivityEdit')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('agencyeditSection').style.display = 'none';
+        document.getElementById('activityMainContent').style.display = 'block';
     });
+    
+   
 });
 </script>
 <script>
@@ -1412,10 +1473,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Tab persistence functionality
     const tabLinks = document.querySelectorAll('.nav-tab-btn, .dropdown-item[data-toggle="tab"]');
     const urlParams = new URLSearchParams(window.location.search);
-    const isFreshNavigation = urlParams.get('fresh') === 'true';
+    const initialTabParam = urlParams.get('tab');
+    const hashTab = window.location.hash;
     
     // Function to set active tab
     function setActiveTab(tabId) {
+        if (!tabId) return;
+        
         // Remove active class from all tabs and panes
         tabLinks.forEach(link => link.classList.remove('active'));
         document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
@@ -1424,54 +1488,71 @@ document.addEventListener('DOMContentLoaded', function() {
         const tabLink = document.querySelector(`a[href="${tabId}"]`);
         if (tabLink) {
             tabLink.classList.add('active');
-            document.querySelector(tabId).classList.add('active');
-            
-            // Handle dropdown parent activation
-            const dropdownParent = tabLink.closest('.dropdown-menu');
-            if (dropdownParent) {
-                dropdownParent.previousElementSibling.classList.add('active');
+            const tabPane = document.querySelector(tabId);
+            if (tabPane) {
+                tabPane.classList.add('active');
+                
+                // If this is a dropdown item, also activate its parent dropdown button
+                const dropdownItem = tabLink.closest('.dropdown-item');
+                if (dropdownItem) {
+                    const dropdownToggle = dropdownItem.closest('.dropdown').querySelector('.dropdown-toggle');
+                    if (dropdownToggle) {
+                        dropdownToggle.classList.add('active');
+                    }
+                }
             }
         }
     }
     
-    // Check if this is a fresh navigation (from sidebar)
-    if (isFreshNavigation) {
-        // Remove the fresh parameter from URL without reload
-        const newUrl = window.location.pathname + window.location.search.replace('fresh=true', '');
-        window.history.replaceState({}, document.title, newUrl);
-        
-        // Always show Detail tab for fresh navigation
+    // Priority order for tab selection:
+    // 1. If coming from search (tab=detail in URL), force detail tab
+    // 2. Otherwise, check localStorage for saved tab
+    // 3. Fall back to URL hash
+    // 4. Finally, default to detail tab
+    
+    if (initialTabParam === 'detail') {
+        // Force detail tab when coming from search
         setActiveTab('#detail-content');
-        localStorage.setItem('activeAgencyTab', '#detail-content');
+        localStorage.setItem('activeAgentTab', '#detail-content');
+        // Clear the parameter so it doesn't affect future tab switches
+        const cleanUrl = window.location.pathname + window.location.hash;
+        history.replaceState(null, '', cleanUrl);
     } else {
         // Check localStorage for saved tab
-        const savedTab = localStorage.getItem('activeAgencyTab') || '#detail-content';
-        setActiveTab(savedTab);
+        const savedTab = localStorage.getItem('activeAgentTab');
+        if (savedTab && document.querySelector(savedTab)) {
+            setActiveTab(savedTab);
+        } else if (hashTab && document.querySelector(hashTab)) {
+            // Use the hash from URL if it matches a tab
+            setActiveTab(hashTab);
+            localStorage.setItem('activeAgentTab', hashTab);
+        } else {
+            // Default to detail tab
+            setActiveTab('#detail-content');
+        }
     }
     
-    // Save tab to localStorage when a tab is clicked
+    // Save tab selection when tabs are changed
     tabLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             const tabId = this.getAttribute('href');
-            if (tabId && tabId.startsWith('#')) {
-                localStorage.setItem('activeAgencyTab', tabId);
+            if (tabId) {
+                localStorage.setItem('activeAgentTab', tabId);
+                // Update URL hash without adding to history
+                history.replaceState(null, null, tabId);
             }
         });
     });
     
-    // Handle dropdown parent clicks
-    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
-        toggle.addEventListener('click', function() {
-            if (this.classList.contains('active')) {
-                const activeTab = localStorage.getItem('activeAgencyTab');
-                if (activeTab) {
-                    setActiveTab(activeTab);
-                }
-            }
-        });
+    // Handle bootstrap tab events to ensure proper synchronization
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+        const tabId = $(e.target).attr('href');
+        if (tabId) {
+            localStorage.setItem('activeAgentTab', tabId);
+            // Update URL hash without adding to history
+            history.replaceState(null, null, tabId);
+        }
     });
 });
 </script>
-
-
 {% endblock %}
