@@ -34,8 +34,8 @@
                                             data-id="{{ note.id }}"
                                             data-subject="{{ note.subject|escapejs }}"
                                             data-notes="{{ note.notes|escapejs }}"
-                                            data-pinned="{{ note.pin_note|yesno:'True,False' }}"
-                                            {% if note.attachment %}data-attachment="{{ note.attachment.url }}"{% endif %}>
+                                            data-pinned="{{ note.pin_note }}"
+                                            {% if note.attachment %} data-attachment="{{ note.attachment.url }}"{% endif %}>
                                             {{ note.subject }}
                                         </a>
                                     </td>
@@ -143,8 +143,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const noteId = this.getAttribute('data-id');
             const subject = this.getAttribute('data-subject');
             const notes = this.getAttribute('data-notes');
-            const pinned = this.getAttribute('data-pinned') === 'true';
+            const pinned = this.getAttribute('data-pinned') === 'True';
             const attachmentUrl = this.getAttribute('data-attachment');
+            
             
             // Switch to notes tab first
             const notesTab = document.querySelector('a[href="#notes"]');
