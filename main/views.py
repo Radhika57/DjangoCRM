@@ -136,6 +136,17 @@ def carrier_detail(request, carrier_id):
                 username=request.POST.get('username'),
                 password=request.POST.get('password'),
             )
+            
+        # --- Form ---
+        if request.POST.get('form_name'):
+            CarrierFormName.objects.create(
+                carrier=carrier,
+                form_name=request.POST.get('form_name'),
+                year=request.POST.get('year'),
+                form_number=request.POST.get('form_number'),
+                coverage_type=request.POST.get('coverage_type'),
+                form_file=request.FILES.get('form_file')
+            )
 
         # --- Product ---
         if request.POST.get('product_name') and request.POST.get('coverage_type'):
@@ -172,7 +183,7 @@ def carrier_detail(request, carrier_id):
             
             activity.save()
 
-        elif request.POST.get('activity_type') and request.POST.get('subject'):
+        elif request.POST.get('activity_date') and request.POST.get('subject'):
             CarrierActivity.objects.create(
                 carrier=carrier,
                 subject=request.POST.get('subject'),
@@ -201,10 +212,10 @@ def carrier_detail(request, carrier_id):
                 note.attachment = request.FILES.get('editnoteattachment')
             note.save()
         
-        elif request.POST.get('notes') and request.POST.get('subject'):
+        elif request.POST.get('notesubject'):
             CarrierNotes.objects.create(
                 carrier=carrier,
-                subject=request.POST.get('subject'),
+                subject=request.POST.get('notesubject'),
                 notes=request.POST.get('notes'),
                 pin_note=request.POST.get('pin_note') == 'on',
                 attachment=request.FILES.get('attachment')
@@ -233,6 +244,7 @@ def carrier_detail(request, carrier_id):
         'pin_notess': pin_notess,
         'policy_summary': policy_summary,
     })
+     
 
 
 def delete_carrier(request, carrier_id):

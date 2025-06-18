@@ -8,16 +8,16 @@
             <!-- Subject Section -->
             <div class="form-group">
                 <label><strong>Subject *</strong></label>
-                <input type="text" class="form-control" id="editSubject" name="editnotesubject" placeholder="Enter subject">
+                <input type="text" class="form-control" id="editSubject" name="subject" placeholder="Enter subject">
             </div>
             
             <!-- Notes Section -->
             <div class="form-group">
                 <label><strong>Notes</strong></label>
-                <textarea class="form-control" id="editNotes" name="editnotenotes" rows="5" placeholder="Type your notes here..."></textarea>
+                <textarea class="form-control" id="editNotes" name="notes" rows="5" placeholder="Type your notes here..."></textarea>
             </div>
             <div class="checkbox checkbox-primary">
-                <input id="editPinNote" type="checkbox" name="editnotepin_note">
+                <input id="editPinNote" type="checkbox" name="pin_note">
                 <label for="editPinNote">
                     Pin Note
                 </label>
@@ -28,7 +28,7 @@
             <!-- Attachments Section -->
             <div class="attachment-block">
                 <label><b>📎Attachment</b></label>
-                <input type="file" name="editnoteattachment" id="edit-attachment" class="form-control" />
+                <input type="file" name="attachment" id="attachment" class="form-control" />
             </div>
             <br>
             
@@ -40,34 +40,3 @@
         </div>
     </form>
 </div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Handle click on note subject links
-    document.querySelectorAll('.note-subject-link').forEach(function (el) {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            document.getElementById('editSubject').value = this.dataset.subject || '';
-            document.getElementById('editNotes').value = this.dataset.notes || '';
-            document.getElementById('editPinNote').checked = this.dataset.pin_note || '';;
-            let attachmentUrl = this.dataset.attachment;
-            let attachmentBlock = document.getElementById('edit-attachment');
-
-            if (attachmentUrl) {
-                attachmentBlock.innerHTML = `<a href="${attachmentUrl}" target="_blank">📄 View Existing Attachment</a>`;
-            } else {
-                attachmentBlock.innerHTML = '';
-            }
-            // Show the edit section and hide table
-            document.getElementById('emptyNotesState').style.display = 'none';
-            document.getElementById('noteeditSection').style.display = 'block';
-        });
-    });
-
-    // Handle cancel edit button
-    document.getElementById('cancelEditNote')?.addEventListener('click', function() {
-        document.getElementById('noteeditSection').style.display = 'none';
-        document.getElementById('emptyNotesState').style.display = 'block';
-    });
-});
-</script>

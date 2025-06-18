@@ -1093,58 +1093,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Tab persistence functionality
-    const tabLinks = document.querySelectorAll('.nav-tab-btn');
-    const urlParams = new URLSearchParams(window.location.search);
-    const initialTab = urlParams.get('tab');
-    
-    // Function to set active tab
-    function setActiveTab(tabId) {
-        // Remove active class from all tabs and panes
-        tabLinks.forEach(link => link.classList.remove('active'));
-        document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
-        
-        // Add active class to selected tab and pane
-        const tabLink = document.querySelector(`a[href="${tabId}"]`);
-        if (tabLink) {
-            tabLink.classList.add('active');
-            document.querySelector(tabId).classList.add('active');
-        }
-    }
-    
-    // Check URL parameter first (for initial load from search/saved policy)
-    if (initialTab === 'detail') {
-        // Always open Detail tab first when coming from search/saved policy
-        setActiveTab('#detail-policy');
-        // Clear the parameter so it doesn't affect future tab switches
-        history.replaceState(null, '', window.location.pathname);
-    } else {
-        // Check localStorage for saved tab
-        const savedTab = localStorage.getItem('activePolicyTab');
-        if (savedTab) {
-            setActiveTab(savedTab);
-        }
-    }
-    
-    // Save tab to localStorage when a tab is clicked
-    tabLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            const tabId = this.getAttribute('href');
-            localStorage.setItem('activePolicyTab', tabId);
-        });
-    });
-    
-    // Handle dropdown tab clicks (for WorkFlow and Email dropdowns)
-    document.querySelectorAll('.dropdown-item[data-toggle="tab"]').forEach(item => {
-        item.addEventListener('click', function() {
-            const tabId = this.getAttribute('href');
-            localStorage.setItem('activePolicyTab', tabId);
-        });
-    });
-});
-</script>
 
 
 <script>
@@ -1209,5 +1157,58 @@ document.querySelectorAll('.edit-note-link').forEach(link => {
 });
 
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab persistence functionality
+    const tabLinks = document.querySelectorAll('.nav-tab-btn');
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialTab = urlParams.get('tab');
+    
+    // Function to set active tab
+    function setActiveTab(tabId) {
+        // Remove active class from all tabs and panes
+        tabLinks.forEach(link => link.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+        
+        // Add active class to selected tab and pane
+        const tabLink = document.querySelector(`a[href="${tabId}"]`);
+        if (tabLink) {
+            tabLink.classList.add('active');
+            document.querySelector(tabId).classList.add('active');
+        }
+    }
+    
+    // Check URL parameter first (for initial load from search/saved policy)
+    if (initialTab === 'detail') {
+        // Always open Detail tab first when coming from search/saved policy
+        setActiveTab('#detail-policy');
+        // Clear the parameter so it doesn't affect future tab switches
+        history.replaceState(null, '', window.location.pathname);
+    } else {
+        // Check localStorage for saved tab
+        const savedTab = localStorage.getItem('activePolicyTab');
+        if (savedTab) {
+            setActiveTab(savedTab);
+        }
+    }
+    
+    // Save tab to localStorage when a tab is clicked
+    tabLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const tabId = this.getAttribute('href');
+            localStorage.setItem('activePolicyTab', tabId);
+        });
+    });
+    
+    // Handle dropdown tab clicks (for WorkFlow and Email dropdowns)
+    document.querySelectorAll('.dropdown-item[data-toggle="tab"]').forEach(item => {
+        item.addEventListener('click', function() {
+            const tabId = this.getAttribute('href');
+            localStorage.setItem('activePolicyTab', tabId);
+        });
+    });
+});
+</script>
+
 
 {% endblock %}

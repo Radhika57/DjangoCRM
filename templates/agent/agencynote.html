@@ -1,4 +1,4 @@
-<div id="notes-content" class="tab-pane">
+<div id="notes-content" class="tab-pane fade" role="tabpanel">
     <!-- Main Notes Content (shown by default) -->
     <div id="notesMainContent">
         <div class="panel panel-default">
@@ -10,7 +10,7 @@
                     </button>
                 </div>
             </div>
-            
+
             <div class="panel-body">
                 {% if notes %}
                 <div class="table-responsive">
@@ -61,7 +61,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Create New Note Container (hidden by default) -->
     <div id="createNewnoteContainer" style="display: none;">
         <div class="panel panel-default">
@@ -73,7 +73,7 @@
                     </button>
                 </div>
             </div>
-            
+
             <div class="panel-body">
                 <form method="post" enctype="multipart/form-data" id="noteForm" action="#notes-content">
                     {% csrf_token %}
@@ -82,9 +82,7 @@
                         <input type="text" class="form-control" name="note_subject" id="subject" required>
                         <div class="checkbox checkbox-primary">
                             <input id="checkboxpin" type="checkbox" name="pin_note">
-                            <label for="checkboxpin">
-                                Pin Note
-                            </label>
+                            <label for="checkboxpin">Pin Note</label>
                         </div>
                         <div class="form-group">
                             <label>Notes</label>
@@ -109,50 +107,30 @@
         </div>
     </div>
 
-     {% include "agent/agenteditnotes.html" %}
+    {% include "agent/agenteditnotes.html" %}
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Get all necessary elements
     const showCreateBtn = document.getElementById('showCreateNoteBtn');
     const backToNotesBtn = document.getElementById('backToNotesBtn');
     const cancelNoteBtn = document.getElementById('cancelNoteBtn');
     const notesMainContent = document.getElementById('notesMainContent');
     const createNoteContainer = document.getElementById('createNewnoteContainer');
-    
-    // These will be available after including agenteditnotes.html
+
     const editNoteContainer = document.getElementById('editnoteContainer');
     const editNoteForm = document.getElementById('editNoteForm');
     const backToEditNotesBtn = document.getElementById('backToEditNotesBtn');
     const cancelEditNoteBtn = document.getElementById('cancelEditNoteBtn');
 
-    // Show create note form
-    showCreateBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        notesMainContent.style.display = 'none';
-        createNoteContainer.style.display = 'block';
-        if (editNoteContainer) editNoteContainer.style.display = 'none';
-        activateNotesTab();
-    });
-
-    // Function to activate the Notes tab
     function activateNotesTab() {
-        document.querySelectorAll('.nav-tab-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        
         const notesTabBtn = document.querySelector('.nav-tab-btn[href="#notes-content"]');
-        if (notesTabBtn) notesTabBtn.classList.add('active');
-        
-        document.querySelectorAll('.tab-content > div').forEach(tab => {
-            tab.style.display = 'none';
-        });
-        
-        document.getElementById('notes-content').style.display = 'block';
+        if (notesTabBtn) {
+            const tabInstance = new bootstrap.Tab(notesTabBtn);
+            tabInstance.show(); // Bootstrap 5 method
+        }
     }
 
-    // Show notes list
     function showNotesList() {
         createNoteContainer.style.display = 'none';
         if (editNoteContainer) editNoteContainer.style.display = 'none';
@@ -162,58 +140,58 @@ document.addEventListener('DOMContentLoaded', function() {
         activateNotesTab();
     }
 
-    // Attach event listeners to back and cancel buttons
+    showCreateBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        notesMainContent.style.display = 'none';
+        createNoteContainer.style.display = 'block';
+        if (editNoteContainer) editNoteContainer.style.display = 'none';
+        activateNotesTab();
+    });
+
     backToNotesBtn.addEventListener('click', showNotesList);
     if (backToEditNotesBtn) backToEditNotesBtn.addEventListener('click', showNotesList);
     cancelNoteBtn.addEventListener('click', showNotesList);
     if (cancelEditNoteBtn) cancelEditNoteBtn.addEventListener('click', showNotesList);
 
-    // Handle click on note subject links
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('note-subject-link')) {
             e.preventDefault();
-            
+
             if (!editNoteContainer) {
                 console.error('Edit note container not found!');
                 return;
             }
-            
-            // Get note data from data attributes
+
             const noteId = e.target.getAttribute('data-note-id');
             const subject = e.target.getAttribute('data-subject');
             const notes = e.target.getAttribute('data-notes');
             const pinned = e.target.getAttribute('data-pinned') === 'true';
-            
-            // Populate the edit form
+
             document.getElementById('editNoteId').value = noteId;
             document.getElementById('editSubject').value = subject;
             document.getElementById('editNotes').value = notes;
             document.getElementById('editCheckboxpin').checked = pinned;
-            
-            // Show the edit form and hide others
+
             notesMainContent.style.display = 'none';
             createNoteContainer.style.display = 'none';
             editNoteContainer.style.display = 'block';
-            
+
             activateNotesTab();
         }
     });
 
-    // Handle form submissions
     if (document.getElementById('noteForm')) {
         document.getElementById('noteForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            // Your form submission logic
             showNotesList();
         });
     }
-    
+
     if (editNoteForm) {
         editNoteForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            // Your form submission logic for edits
             showNotesList();
         });
-    }
+    }
 });
 </script>

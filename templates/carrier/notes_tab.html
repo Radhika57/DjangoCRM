@@ -18,7 +18,7 @@
                 <div id="emptyNotesState" class="text-center">
                     {% if notess %}
                     <div class="table-responsive">
-                        <table id="example5" class="table table-bordered table-striped table-hover">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Subject</th>
@@ -30,14 +30,11 @@
                                 {% for note in notess %}
                                 <tr>
                                     <td>
-                                        <a href="#" class="note-subject-link" 
-                                            data-note-id="{{ note.id }}" 
-                                            data-subject="{{ note.subject|escapejs }}" 
-                                            data-notes="{{ note.notes|escapejs }}"
-                                            data-pinned="{% if note.pin_note %}true{% else %}false{% endif %}"
-                                            {% if note.attachment %}
-                                            data-attachment="{{ note.attachment.url }}"
-                                            {% endif %}
+                                        <a href="#" class="note-subject-link" data-note-id="{{ note.id }}" 
+                                           data-subject="{{ note.subject }}" 
+                                           data-notes="{{ note.notes }}"
+                                           data-pinned="{% if note.pin_note %}true{% else %}false{% endif %}"
+                                           data-attachment="{% if note.attachment %}{{ note.attachment.url }}{% endif %}"
                                            style="color: #007bff; text-decoration: underline; cursor: pointer;">
                                             {{ note.subject }}
                                         </a>
@@ -59,7 +56,7 @@
                     </div>
                     {% else %}
                     <div class="well" style="padding: 40px;">
-                        <h4>There are no "Notes & Attachments for AARP"</h4>
+                        <h4>There are no "Notes & Attachments for {{carrier.name}}"</h4>
                         <p class="text-muted">
                             This data is not available because it hasn't been created yet or you don't have permission.
                         </p>
@@ -67,9 +64,106 @@
                     {% endif %}
                 </div>
                 
-                 
+                <!-- Note Creation Form -->
+                <div id="noteDetailsSection" style="display: none;">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="well">
+                            <h4>New Notes & Attachments</h4>
+                            
+                            <!-- Subject Section -->
+                            <div class="form-group">
+                                <label><strong>Subject *</strong></label>
+                                <input type="text" class="form-control" name="subject" placeholder="Enter subject" required>
+                            </div>
+                            
+                            <!-- Notes Section -->
+                            <div class="form-group">
+                                <label><strong>Notes</strong></label>
+                                <textarea class="form-control" name="notes" rows="5" placeholder="Type your notes here..."></textarea>
+                            </div>
+                            <div class="checkbox checkbox-primary">
+                                <input id="checkbox110" type="checkbox" name="pin_note">
+                                <label for="checkbox110">
+                                    Pin Note
+                                </label>
+                            </div>
+                            
+                            <hr>
+                            
+                            <!-- Attachments Section -->
+                            <div class="attachment-block">
+                                <label><b>📎Attachment</b></label>
+                                <input type="file" name="attachment" id="attachment" class="form-control" />
+                            </div>
+                            <br>
+                            
+                            <!-- Action Buttons -->
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="button" class="btn btn-default" id="cancelNote">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Include the edit notes section -->
+                {% include "carrier/editnotes.html" %}
             </div>
         </div>
     </div>
 </div>
-{% include "carrier/editnotes.html" %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Show note form when "Create New" button is clicked
+    document.getElementById('showNoteForm')?.addEventListener('click', function() {
+        document.getElementById('emptyNotesState').style.display = 'none';
+        document.getElementById('noteDetailsSection').style.display = 'block';
+        document.getElementById('noteeditSection').style.display = 'none';
+    });
+
+    // Handle cancel button for new note form
+    document.getElementById('cancelNote')?.addEventListener('click', function() {
+        document.getElementById('noteDetailsSection').style.display = 'none';
+        document.getElementById('emptyNotesState').style.display = 'block';
+    });
+
+    // Handle click on note subject links
+    document.querySelectorAll('.note-subject-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Get note data from data attributes
+            const noteId = this.getAttribute('data-note-id');
+            const subject = this.getAttribute('data-subject');
+            const notes = this.getAttribute('data-notes');
+            const pinned = this.getAttribute('data-pinned') === 'true';
+            const attachmentUrl = this.getAttribute('data-attachment');
+            
+            // Populate the edit form
+            document.getElementById('editNoteId').value = noteId;
+            document.getElementById('editSubject').value = subject;
+            document.getElementById('editNotes').value = notes;
+            document.getElementById('editPinNote').checked = pinned;
+            
+            // Show the edit section and hide other sections
+            document.getElementById('emptyNotesState').style.display = 'none';
+            document.getElementById('noteDetailsSection').style.display = 'none';
+            document.getElementById('noteeditSection').style.display = 'block';
+            
+            // Ensure the notes tab is active
+            const notesTab = document.querySelector('a[href="#notes"]');
+            if (notesTab) {
+                $(notesTab).tab('show');
+            }
+        });
+    });
+
+    // Handle cancel edit button
+    document.getElementById('cancelEditNote')?.addEventListener('click', function() {
+        document.getElementById('noteeditSection').style.display = 'none';
+        document.getElementById('emptyNotesState').style.display = 'block';
+    });
+});
+</script>

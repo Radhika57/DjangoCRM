@@ -228,101 +228,111 @@
                         </div>
                     </form>
                 </div>
+                {% include "carrier/editactivity.html" %}
             </div>
         </div>
     </div>
+    
 </div>
-{% include "carrier/editactivity.html" %}
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-    // Handle click on edit activity links
-    const editLinks = document.querySelectorAll('.edit-activity');
-    editLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Get the activity ID from data attribute
-            const activityId = this.dataset.id;
-            
-            // Hide the entire activities panel
-            const activitiesPanel = document.getElementById('activitiesPanel');
-            if (activitiesPanel) {
-                activitiesPanel.style.display = 'none';
-            }
-            
-            // Show the edit section
-            document.getElementById('activityeditSection').style.display = 'block';
-            
-            // Scroll to the edit section
-            document.getElementById('activityeditSection').scrollIntoView({ behavior: 'smooth' });
+        // Handle click on edit activity links
+        const editLinks = document.querySelectorAll('.edit-activity');
+        editLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const activityId = this.dataset.id;
+
+                // Hide the entire activities panel
+                const activitiesPanel = document.getElementById('activitiesPanel');
+                if (activitiesPanel) {
+                    activitiesPanel.style.display = 'none';
+                }
+
+                // Show the edit section
+                document.getElementById('activityeditSection').style.display = 'block';
+
+                // Hide the associated activities box
+                const associatedBox = document.querySelector('.associated-activities-box');
+                if (associatedBox) {
+                    associatedBox.style.display = 'none';
+                }
+
+                // Scroll to the edit section
+                document.getElementById('activityeditSection').scrollIntoView({ behavior: 'smooth' });
+            });
         });
+
+        // Handle close button click for edit section
+        const closeEditBtn = document.getElementById('closeActivityEdit');
+        if (closeEditBtn) {
+            closeEditBtn.addEventListener('click', function() {
+                document.getElementById('activityeditSection').style.display = 'none';
+
+                // Show the activities panel again
+                const activitiesPanel = document.getElementById('activitiesPanel');
+                if (activitiesPanel) {
+                    activitiesPanel.style.display = 'block';
+                }
+
+                // Make sure the activities table is visible
+                document.getElementById('emptyActivitiesState').style.display = 'block';
+                document.getElementById('activityDetailsSection').style.display = 'none';
+
+                // Show associated activities box again
+                const associatedBox = document.querySelector('.associated-activities-box');
+                if (associatedBox) {
+                    associatedBox.style.display = 'block';
+                }
+            });
+        }
+
+        // Handle show activity form button click
+        const showFormBtn = document.getElementById('showActivityForm');
+        if (showFormBtn) {
+            showFormBtn.addEventListener('click', function() {
+                document.getElementById('emptyActivitiesState').style.display = 'none';
+                document.getElementById('activityDetailsSection').style.display = 'block';
+
+                document.getElementById('activityForm').reset();
+                document.getElementById('activityIdField').value = '';
+                document.getElementById('activityFormTitle').textContent = 'Create New Activity';
+
+                document.getElementById('activityDetailsSection').scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+
+        // Handle cancel button in activity form
+        const cancelActivityBtn = document.getElementById('cancelActivity');
+        if (cancelActivityBtn) {
+            cancelActivityBtn.addEventListener('click', function() {
+                document.getElementById('activityDetailsSection').style.display = 'none';
+                document.getElementById('emptyActivitiesState').style.display = 'block';
+            });
+        }
+
+        // Tab switch logic for Activities
+        const activityTab = document.querySelector('a[href="#activities"]');
+        if (activityTab) {
+            activityTab.addEventListener('click', function() {
+                const activitiesPanel = document.getElementById('activitiesPanel');
+                if (activitiesPanel) {
+                    activitiesPanel.style.display = 'block';
+                }
+
+                document.getElementById('emptyActivitiesState').style.display = 'block';
+                document.getElementById('activityDetailsSection').style.display = 'none';
+                document.getElementById('activityeditSection').style.display = 'none';
+
+                // Show associated activities box again on tab switch
+                const associatedBox = document.querySelector('.associated-activities-box');
+                if (associatedBox) {
+                    associatedBox.style.display = 'block';
+                }
+            });
+        }
     });
-    
-    // Handle close button click for edit section
-    const closeEditBtn = document.getElementById('closeActivityEdit');
-    if (closeEditBtn) {
-        closeEditBtn.addEventListener('click', function() {
-            document.getElementById('activityeditSection').style.display = 'none';
-            
-            // Show the activities panel again and ensure table is visible
-            const activitiesPanel = document.getElementById('activitiesPanel');
-            if (activitiesPanel) {
-                activitiesPanel.style.display = 'block';
-            }
-            
-            // Make sure the activities table is visible
-            document.getElementById('emptyActivitiesState').style.display = 'block';
-            document.getElementById('activityDetailsSection').style.display = 'none';
-        });
-    }
-    
-    // Handle show activity form button click
-    const showFormBtn = document.getElementById('showActivityForm');
-    if (showFormBtn) {
-        showFormBtn.addEventListener('click', function() {
-            // Hide the empty state and table (if visible)
-            document.getElementById('emptyActivitiesState').style.display = 'none';
-            
-            // Show only the activity details section
-            document.getElementById('activityDetailsSection').style.display = 'block';
-            
-            // Reset form fields
-            document.getElementById('activityForm').reset();
-            document.getElementById('activityIdField').value = '';
-            document.getElementById('activityFormTitle').textContent = 'Create New Activity';
-            
-            // Scroll to the form
-            document.getElementById('activityDetailsSection').scrollIntoView({ behavior: 'smooth' });
-        });
-    }
-    
-    // Handle cancel button in activity form
-    const cancelActivityBtn = document.getElementById('cancelActivity');
-    if (cancelActivityBtn) {
-        cancelActivityBtn.addEventListener('click', function() {
-            // Hide the activity details section
-            document.getElementById('activityDetailsSection').style.display = 'none';
-            
-            // Show the empty state or table again
-            document.getElementById('emptyActivitiesState').style.display = 'block';
-        });
-    }
-    
-    // Add event listener for tab changes to ensure activities table is shown when tab is clicked
-    const activityTab = document.querySelector('a[href="#activities"]');
-    if (activityTab) {
-        activityTab.addEventListener('click', function() {
-            // Ensure activities panel is visible
-            const activitiesPanel = document.getElementById('activitiesPanel');
-            if (activitiesPanel) {
-                activitiesPanel.style.display = 'block';
-            }
-            
-            // Ensure the table is shown (not the form)
-            document.getElementById('emptyActivitiesState').style.display = 'block';
-            document.getElementById('activityDetailsSection').style.display = 'none';
-            document.getElementById('activityeditSection').style.display = 'none';
-        });
-    }
-});
 </script>
+
