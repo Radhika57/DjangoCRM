@@ -1077,7 +1077,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 $('a[href="#Activities-policy"]').tab('show');
             }
             
-            // Show the edit section and hide others
+            // Hide other sections and show edit section
             document.getElementById('activityMainContent').style.display = 'none';
             document.getElementById('createNewactivityContainer').style.display = 'none';
             document.getElementById('policyeditSection').style.display = 'block';
@@ -1089,6 +1089,119 @@ document.addEventListener('DOMContentLoaded', function() {
             $('html, body').animate({
                 scrollTop: $('#policyeditSection').offset().top - 20
             }, 300);
+        });
+    });
+
+    // Handle Create New Activity from sidebar
+    $('#create-activity-from-sidebar').click(function(e) {
+        e.preventDefault();
+        
+        // Show the Activities tab if not already active
+        if (!$('#Activities-policy').hasClass('active')) {
+            $('a[href="#Activities-policy"]').tab('show');
+        }
+        
+        // Hide other sections and show create section
+        document.getElementById('activityMainContent').style.display = 'none';
+        document.getElementById('policyeditSection').style.display = 'none';
+        document.getElementById('createNewactivityContainer').style.display = 'block';
+        
+        // Scroll to the form for better UX
+        $('html, body').animate({
+            scrollTop: $('#createNewactivityContainer').offset().top - 20
+        }, 300);
+    });
+
+    // Handle click on pinned note subject links in sidebar
+    document.querySelectorAll('.edit-note-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const noteId = this.getAttribute('data-id');
+            const subject = this.getAttribute('data-subject');
+            const notes = this.getAttribute('data-notes');
+            const pinned = this.getAttribute('data-pinned') === 'True';
+            const attachment = this.getAttribute('data-attachment');
+
+            // Switch to Notes tab if not already active
+            if (!$('#Notes-policy').hasClass('active')) {
+                $('a[href="#Notes-policy"]').tab('show');
+            }
+
+            // Hide other sections and show edit section
+            document.getElementById('notesMainContent').style.display = 'none';
+            document.getElementById('createNewnoteContainer').style.display = 'none';
+            document.getElementById('policyeditnote').style.display = 'block';
+
+            setTimeout(() => {
+                const subjectField = document.getElementById('noteedit-subject');
+                const notesField = document.getElementById('noteedit-notes');
+                const pinCheckbox = document.getElementById('edit-checkboxpin');
+                const noteIdInput = document.getElementById('editNoteId');
+
+                if (subjectField && notesField && pinCheckbox && noteIdInput) {
+                    subjectField.value = subject;
+                    notesField.value = notes;
+                    pinCheckbox.checked = pinned;
+                    noteIdInput.value = noteId;
+                }
+
+                const previewDiv = document.getElementById('edit_note_attachment_preview');
+                if (previewDiv) {
+                    previewDiv.innerHTML = '';
+                    if (attachment) {
+                        previewDiv.innerHTML = `<a href="${attachment}" target="_blank">View Existing Attachment</a>`;
+                    }
+                }
+            }, 100);
+
+            // Scroll to the section
+            $('html, body').animate({
+                scrollTop: $('#policyeditnote').offset().top - 20
+            }, 300);
+        });
+    });
+
+    // Handle Create New Pinned Note from sidebar
+    $('#create-pinnednote-from-sidebar').click(function(e) {
+        e.preventDefault();
+        
+        // Show the Notes tab if not already active
+        if (!$('#Notes-policy').hasClass('active')) {
+            $('a[href="#Notes-policy"]').tab('show');
+        }
+        
+        // Hide other sections and show create section
+        document.getElementById('notesMainContent').style.display = 'none';
+        document.getElementById('policyeditnote').style.display = 'none';
+        document.getElementById('createNewnoteContainer').style.display = 'block';
+        
+        // Check the "Pin Note" checkbox by default
+        $('#noteForm input[name="pin_note"]').prop('checked', true);
+        
+        // Scroll to the form for better UX
+        $('html, body').animate({
+            scrollTop: $('#createNewnoteContainer').offset().top - 20
+        }, 300);
+    });
+
+    // Back/Cancel buttons for activities
+    document.querySelectorAll('.back-to-activities, .cancel-activity').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('policyeditSection').style.display = 'none';
+            document.getElementById('createNewactivityContainer').style.display = 'none';
+            document.getElementById('activityMainContent').style.display = 'block';
+        });
+    });
+
+    // Back/Cancel buttons for notes
+    document.querySelectorAll('.back-to-notes, .cancel-edit').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('policyeditnote').style.display = 'none';
+            document.getElementById('createNewnoteContainer').style.display = 'none';
+            document.getElementById('notesMainContent').style.display = 'block';
         });
     });
 });
