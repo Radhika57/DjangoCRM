@@ -636,4 +636,30 @@
 <!-- New Policy Modal -->
 
 {% include "policy/add_policy_modal.html" %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const phoneFields = document.querySelectorAll('input[name$="_phone"]');
+
+        phoneFields.forEach(function (field) {
+            const warning = document.createElement('small');
+            warning.style.color = 'red';
+            warning.style.display = 'none';
+            warning.textContent = 'Phone number must be exactly 10 digits.';
+            field.parentElement.appendChild(warning);
+
+            field.addEventListener('input', function () {
+                const digitsOnly = field.value.replace(/\D/g, '');
+                warning.style.display = (digitsOnly.length > 0 && digitsOnly.length !== 10) ? 'block' : 'none';
+            });
+            phoneFields.forEach(function (field) {
+                field.addEventListener('keypress', function (e) {
+                    const char = String.fromCharCode(e.which);
+                    if (!/[0-9]/.test(char)) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        });
+    });
+</script>
 {% endblock %}

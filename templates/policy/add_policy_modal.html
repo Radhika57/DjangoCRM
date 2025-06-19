@@ -209,6 +209,7 @@
                                     <div class="form-group col-md-4">
                                         <label for="status">Status <span class="text-danger">*</span></label>
                                         <select name="status" required>
+                                            <option value="">Select</option>
                                             <option value="Pending">Pending</option>
                                             <option value="Active">Active</option>
                                             <option value="Cancelled">Cancelled</option>
@@ -312,33 +313,6 @@
 
         setupAutocomplete("servicing_agent", "servicing_agent_id", "servicingSuggestions");
         setupAutocomplete("affiliate_agent", "affiliate_agent_id", "affiliateSuggestions");
-    });
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const phoneFields = document.querySelectorAll('input[name$="_phone"]');
-
-        phoneFields.forEach(function (field) {
-            const warning = document.createElement('small');
-            warning.style.color = 'red';
-            warning.style.display = 'none';
-            warning.textContent = 'Phone number must be exactly 10 digits.';
-            field.parentElement.appendChild(warning);
-
-            field.addEventListener('input', function () {
-                const digitsOnly = field.value.replace(/\D/g, '');
-                warning.style.display = (digitsOnly.length > 0 && digitsOnly.length !== 10) ? 'block' : 'none';
-            });
-            phoneFields.forEach(function (field) {
-                field.addEventListener('keypress', function (e) {
-                    const char = String.fromCharCode(e.which);
-                    if (!/[0-9]/.test(char)) {
-                        e.preventDefault();
-                    }
-                });
-            });
-        });
     });
 </script>
 
@@ -484,16 +458,19 @@
                     alert('Policy saved successfully!');
                     
                     if (isAddAnother) {
-                        // Reset only policy info section for "Save & Add Another"
                         $('.policy-info-section').find('input, select').val('');
                         $('select[name="status"]').val('Pending');
                         $('.policy-info-section').addClass('active-section');
                     } else {
                         $('#newPolicyModal').modal('hide');
                         $('#policyForm')[0].reset();
-                        setTimeout(function () {
-                            location.reload();  
-                        }, 500);
+                        if (response.redirect_url) {
+                            window.location.href = response.redirect_url;
+                        } else {
+                            setTimeout(function () {
+                                location.reload();
+                            }, 500);
+                        }
                     }
                 } else {
                     alert('Error: ' + (response.error || 'Unknown error'));

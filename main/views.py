@@ -981,6 +981,7 @@ def get_relationship_data(individual):
 
 def individual_tab(request, individual_id):
     individual = get_object_or_404(Individuals,id=individual_id)
+    carriers = Carrier.objects.all()
     individual_details , _ = IndividualDetails.objects.get_or_create(individual_name=individual)
     individual_address = IndividualAddress.objects.filter(individual_name=individual)
     individual_activity = IndividualActivity.objects.filter(individual_name=individual)
@@ -1026,7 +1027,7 @@ def individual_tab(request, individual_id):
             individual_details.ssn = request.POST.get('ssn')
             individual_details.driver_license = request.POST.get('driver_license')
             individual_details.descresed_date = request.POST.get('deceased_date') or None
-            individual_details.status = request.POST.get('status')
+            individual_details.status = request.POST.get('ind_status')
             individual_details.mbi = request.POST.get('mbi')
             individual_details.medicare_effective_date_A = request.POST.get('parta') or None
             individual_details.medicare_effective_date_B = request.POST.get('partb') or None
@@ -1169,7 +1170,8 @@ def individual_tab(request, individual_id):
         'policies': policies,     
         'due_activities': due_activities,     
         'pin_notess': pin_notess,     
-        'individual_prescription': individual_prescription,     
+        'individual_prescription': individual_prescription, 
+        'carriers':carriers    
     })
 
 
@@ -1220,7 +1222,8 @@ def save_policy(request):
         agent_id=request.POST.get('affiliate_agent_id') or None,
     )
 
-    return JsonResponse({'success': True})
+    redirect_url = reverse('search_policy')
+    return JsonResponse({'success': True, 'redirect_url': redirect_url})
 
 def search_policy(request):
     carriers = Carrier.objects.all()

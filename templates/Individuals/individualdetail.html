@@ -73,7 +73,7 @@
             </div>
             <div class="col-md-3">
                 <label>Status</label>
-                <select class="form-control" name="status">
+                <select class="form-control" name="ind_status">
                     <option value="">- select -</option>
                     <option value="In progress" {% if individual_details.status == "In progress" %}selected{% endif %}>In progress</option>
                     <option value="Not Contacted Yet" {% if individual_details.status == "Not Contacted Yet" %}selected{% endif %}>Not Contacted Yet</option>
@@ -412,9 +412,17 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 <script>
 $(document).ready(function () {
+  function debounce(func, delay) {
+    let timeout;
+    return function () {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, arguments), delay);
+    };
+  }
+
   function setupAutocomplete(inputId, hiddenInputId, suggestionBoxId) {
-    $("#" + inputId).on("input", function () {
-      let query = $(this).val();
+    $("#" + inputId).on("input", debounce(function () {
+      let query = $(this).val().trim();
       if (query.length >= 2) {
         $.ajax({
           url: "/agents/search/",
@@ -434,9 +442,8 @@ $(document).ready(function () {
       } else {
         $("#" + suggestionBoxId).empty().hide();
       }
-    });
+    }, 200)); 
 
-    // Handle selection
     $(document).on("click", "#" + suggestionBoxId + " a", function (e) {
       e.preventDefault();
       const name = $(this).data("label");
@@ -446,7 +453,6 @@ $(document).ready(function () {
       $("#" + suggestionBoxId).empty().hide();
     });
 
-    // Hide on blur
     $("#" + inputId).on("blur", function () {
       setTimeout(() => {
         $("#" + suggestionBoxId).fadeOut();
@@ -454,11 +460,11 @@ $(document).ready(function () {
     });
   }
 
-  // Apply to all fields
   setupAutocomplete("servicing_agent", "servicing_agent_id", "servicingSuggestions");
   setupAutocomplete("affiliate_agent", "affiliate_agent_id", "affiliateSuggestions");
   setupAutocomplete("additional_agent", "additional_agent_id", "additionalSuggestions");
 });
+
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
