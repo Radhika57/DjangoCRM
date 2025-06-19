@@ -1143,24 +1143,24 @@
     {% if pin_notess %}
       {% for note in pin_notess %}
       <p class="text-muted">
-    <a href="#" class="pinned-note-link" 
-       data-id="{{ note.id }}" 
-       data-subject="{{ note.subject }}"
-       data-notes="{{ note.notes }}"
-       data-pinned="{% if note.pin_note %}true{% else %}false{% endif %}"
-       data-attachment="{% if note.attachment %}{{ note.attachment.url }}{% endif %}">
-        {{ note.subject }}
-    </a>
-</p>
+        <a href="#notes-content" class="pinned-note-link" 
+           data-id="{{ note.id }}" 
+           data-subject="{{ note.subject }}"
+           data-notes="{{ note.notes }}"
+           data-pinned="{% if note.pin_note %}true{% else %}false{% endif %}"
+           data-attachment="{% if note.attachment %}{{ note.attachment.url }}{% endif %}"
+           onclick="handlePinnedNoteClick(event, this)">
+            {{ note.subject }}
+        </a>
+      </p>
       {% endfor %}
-      {% else %}
+    {% else %}
       <p class="text-muted">No pinned note.</p>
     {% endif %}
     <a href="#notes-content" class="btn btn-xs btn-info" id="create-pinnednote-from-sidebar" data-show-form="true">
         <i class="fa fa-plus"></i> Create new
     </a>
 </div>
-
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
@@ -1295,14 +1295,12 @@
     
 </script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+    
+    document.addEventListener('DOMContentLoaded', function() {
     // Handle pinned note links
     document.querySelectorAll('.pinned-note-link').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            
-            // Get the parent summary item which contains all the data attributes
-            const summaryItem = this.closest('.summary-item');
             
             // Get all data attributes
             const noteId = this.getAttribute('data-id');
@@ -1332,15 +1330,15 @@ document.addEventListener('DOMContentLoaded', function() {
                             <a href="${attachmentUrl}" target="_blank" class="btn btn-xs btn-default">
                                 <i class="fa fa-paperclip"></i> View Attachment
                             </a>
-                            
                         </div>
                     `;
                 }
             }
             
             // Switch to Notes tab if not already active
-            if (!$('#notes-content').hasClass('active')) {
-                $('a[href="#notes-content"]').tab('show');
+            const notesTabLink = document.querySelector('a[href="#notes-content"]');
+            if (!notesTabLink.classList.contains('active')) {
+                $(notesTabLink).tab('show');
             }
             
             // Scroll to the edit section
@@ -1363,8 +1361,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('editnoteContainer').style.display = 'none';
         document.getElementById('notesMainContent').style.display = 'block';
     });
-    
-   
 });
 </script>
 <script>
@@ -1465,6 +1461,62 @@ document.addEventListener('DOMContentLoaded', function() {
     
    
 });
+</script>
+<script>
+    function handlePinnedNoteClick(event, element) {
+    event.preventDefault();
+    
+  
+    const noteId = element.getAttribute('data-id');
+    const subject = element.getAttribute('data-subject');
+    const notes = element.getAttribute('data-notes');
+    const pinned = element.getAttribute('data-pinned') === 'true';
+    const attachmentUrl = element.getAttribute('data-attachment');
+    
+    
+    const notesTabLink = $('a[href="#notes-content"]');
+    if (!notesTabLink.hasClass('active')) {
+        notesTabLink.tab('show');
+       
+        notesTabLink.on('shown.bs.tab', function() {
+            showEditNoteForm(noteId, subject, notes, pinned, attachmentUrl);
+            notesTabLink.off('shown.bs.tab'); 
+        });
+    } else {
+        showEditNoteForm(noteId, subject, notes, pinned, attachmentUrl);
+    }
+}
+
+function showEditNoteForm(noteId, subject, notes, pinned, attachmentUrl) {
+   
+    $('#notesMainContent').hide();
+    $('#createNewnoteContainer').hide();
+    $('#editnoteContainer').show();
+    
+  
+    $('#editSubject').val(subject || '');
+    $('#editNotes').val(notes || '');
+    $('#editCheckboxpin').prop('checked', pinned);
+    $('#editNoteId').val(noteId);
+    
+   
+    const previewDiv = $('#edit_note_attachment_preview');
+    previewDiv.empty();
+    if (attachmentUrl) {
+        previewDiv.html(`
+            <div class="attachment-preview">
+                <a href="${attachmentUrl}" target="_blank" class="btn btn-xs btn-default">
+                    <i class="fa fa-paperclip"></i> View Attachment
+                </a>
+            </div>
+        `);
+    }
+    
+   
+    $('html, body').animate({
+        scrollTop: $('#editnoteContainer').offset().top - 20
+    }, 300);
+}
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
