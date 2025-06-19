@@ -206,16 +206,16 @@
                                         <input type="text" class="form-control" name="policy_number"
                                             placeholder="Policy Number">
                                     </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="status">Status <span class="text-danger">*</span></label>
-                                        <select name="status" required>
-                                            <option value="">Select</option>
-                                            <option value="Pending">Pending</option>
-                                            <option value="Active">Active</option>
-                                            <option value="Cancelled">Cancelled</option>
-                                            <option value="Replaced">Replaced</option>
-                                        </select>
-                                    </div>
+                                  <div class="form-group col-md-4">
+    <label for="status">Status <span class="text-danger">*</span></label>
+    <select name="status" class="form-control" required>
+        <option value="">Select</option>
+        <option value="Pending">Pending</option>
+        <option value="Active">Active</option>
+        <option value="Cancelled">Cancelled</option>
+        <option value="Replaced">Replaced</option>
+    </select>
+</div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-4">
@@ -323,11 +323,11 @@
             if (selectedType === 'new') {
                 $('#newIndividualFields').slideDown(200);
                 $('#existingIndividualFields').slideUp(200);
-                $('#individualId').val(''); // clear existing individual id
+                $('#individualId').val(''); 
             } else if (selectedType === 'existing') {
                 $('#existingIndividualFields').slideDown(200);
                 $('#newIndividualFields').slideUp(200);
-                // Optionally clear new individual fields
+                
                 $('#newIndividualFields').find('input, select').val('');
             } else {
                 $('#newIndividualFields').slideUp(200);
@@ -339,7 +339,7 @@
 
         $('#recordType').on('change', toggleNewIndividualFields);
 
-        // Initialize on page load in case there's a pre-selected value
+     
         toggleNewIndividualFields();
 
         $('#newPolicyModal').on('show.bs.modal', function () {
@@ -347,19 +347,14 @@
             $('#existingIndividualFields').hide();
             $('#newIndividualFields').hide();
             $('#recordType').val('');
+           
             $('.client-info-section').addClass('active-section');
-            $('.policy-info-section').removeClass('active-section');
-        });
-
-        $('#clientInfoTab').on('click', function () {
-            $('.client-info-section').addClass('active-section');
-            $('.policy-info-section').removeClass('active-section');
-        });
-
-        $('#policyInfoTab').on('click', function () {
             $('.policy-info-section').addClass('active-section');
-            $('.client-info-section').removeClass('active-section');
         });
+
+       
+        $('#clientInfoTab').off('click');
+        $('#policyInfoTab').off('click');
     });
 </script>
 

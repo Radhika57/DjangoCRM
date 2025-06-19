@@ -74,6 +74,7 @@
             <div class="col-md-3">
                 <label>Status</label>
                 <select class="form-control" name="ind_status">
+                    <!-- <select class="form-control" name="status"> -->
                     <option value="">- select -</option>
                     <option value="In progress" {% if individual_details.status == "In progress" %}selected{% endif %}>In progress</option>
                     <option value="Not Contacted Yet" {% if individual_details.status == "Not Contacted Yet" %}selected{% endif %}>Not Contacted Yet</option>
