@@ -55,6 +55,16 @@ def carrier_detail(request, carrier_id):
     activities = CarrierActivity.objects.filter(carrier=carrier)  
     notess = CarrierNotes.objects.filter(carrier=carrier)  
     products = CarrierProduct.objects.filter(carrier=carrier)
+    today = date.today()
+    active_products = []
+
+    for product in products:
+        if product.effective_date and product.term_date and product.effective_date <= today <= product.term_date:
+            product.row_class = "product-row active-product"
+            active_products.append(product)
+        else:
+            product.row_class = "product-row all-product"
+
     websites = CarrierWebsite.objects.filter(carrier=carrier)
     individuals = Individuals.objects.filter(carrier=carrier).prefetch_related('individual_detail')
     due_activities = CarrierActivity.objects.filter(carrier=carrier , due_date__isnull=False)  
@@ -238,6 +248,9 @@ def carrier_detail(request, carrier_id):
         'activities':activities,
         'notess':notess,
         'products': products,
+        'active_products': active_products,
+        'active_count': len(active_products),
+        'all_count': products.count(),
         'websites': websites,
         'individuals': individuals,
         'due_activities': due_activities,
