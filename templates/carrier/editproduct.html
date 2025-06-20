@@ -1,96 +1,293 @@
- <div id="editproduct" style="display: none; margin-bottom: 20px;">
-                    <form method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="well">
+    <div id="editproduct" style="display: none; margin-bottom: 20px;">
+                <div class="panel panel-default">
+                <div class="panel-heading">
                             <div class="row">
-                                <div class="col-md-3 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Coverage Type<span class="text-danger">*</span></label>
-                                        <select class="form-control" name="coverage_type">
-                                            <option value="">Select coverage type</option>
-                                            <option value="Dental">Dental</option>
-                                            <option value="Med Supp">Med Supp</option>
-                                            <option value="PDP">PDP</option>
-                                            <option value="MAPD">MAPD</option>
-                                            <option value="MA">MA</option>
-                                            <option value="Medical">Medical</option>
-                                        </select>
-                                    </div>
+                                <div class="col-sm-6">
+                                    <h3 class="panel-title">Add Product for {{carrier.name}}</h3>
                                 </div>
-                                <div class="col-md-3 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Product Name<span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="product_name" placeholder="Enter Product Name">
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Product Effective Date</label>
-                                        <input type="date" class="form-control" name="product_effective_date">
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Product Term Date</label>
-                                        <input type="date" class="form-control" name="product_term_date">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Product Description</label>
-                                <textarea class="form-control" rows="3" name="description" placeholder="Enter description..."></textarea>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-4 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Benefit Summary</label>
-                                        <input type="file" class="form-control" name="benefit_summary" id="benefit_summary">
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Plan Grid</label>
-                                        <input type="file" class="form-control" name="plan_grid" id="plan_grid">
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Brochure</label>
-                                        <input type="file" class="form-control" name="brochure" id="brochure">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label>States</label>
-                                <div style="border: 1px solid #ced4da; border-radius: 4px; max-height: 150px; overflow-y: auto; padding: 5px;">
-                                    <div class="checkbox checkbox-primary">
-                                        <input id="checkbox_alabama" type="checkbox" name="states[]" value="Alabama">
-                                        <label for="checkbox_alabama">Alabama</label>
-                                    </div>
-                                    <div class="checkbox checkbox-primary">
-                                        <input id="checkbox_alaska" type="checkbox" name="states[]" value="Alaska">
-                                        <label for="checkbox_alaska">Alaska</label>
-                                    </div>
-                                    <div class="checkbox checkbox-primary">
-                                        <input id="checkbox_arizona" type="checkbox" name="states[]" value="Arizona">
-                                        <label for="checkbox_arizona">Arizona</label>
-                                    </div>
-                                    <div class="checkbox checkbox-primary">
-                                        <input id="checkbox_arkansas" type="checkbox" name="states[]" value="Arkansas">
-                                        <label for="checkbox_arkansas">Arkansas</label>
-                                    </div>
-                                    <!-- Add more states as needed -->
-                                </div>
-                            </div>
-                            
-
-                            <div class="text-right">
-                                <button type="submit" class="btn btn-success">Save</button>
-                                <button id="cancelNewProduct" class="btn btn-default">Cancel</button>
+                        
                             </div>
                         </div>
-                    </form>
-                </div>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="well">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6">
+                                <div class="form-group">
+                                    <label>Coverage Type<span class="text-danger">*</span></label>
+                                    <select class="form-control" name="coverage_type">
+                                        <option value="">Select coverage type</option>
+                                        <option value="Dental">Dental</option>
+                                        <option value="Med Supp">Med Supp</option>
+                                        <option value="PDP">PDP</option>
+                                        <option value="MAPD">MAPD</option>
+                                        <option value="MA">MA</option>
+                                        <option value="Medical">Medical</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="form-group">
+                                    <label>Product Name<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="product_name"
+                                        placeholder="Enter Product Name">
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="form-group">
+                                    <label>Product Effective Date</label>
+                                    <input type="date" class="form-control" name="product_effective_date">
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="form-group">
+                                    <label>Product Term Date</label>
+                                    <input type="date" class="form-control" name="product_term_date">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Product Description</label>
+                            <textarea class="form-control" rows="3" name="description"
+                                placeholder="Enter description..."></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 col-sm-6">
+                                <div class="form-group">
+                                    <label>Benefit Summary</label>
+                                    <input type="file" class="form-control" name="benefit_summary" id="benefit_summary">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-6">
+                                <div class="form-group">
+                                    <label>Plan Grid</label>
+                                    <input type="file" class="form-control" name="plan_grid" id="plan_grid">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-6">
+                                <div class="form-group">
+                                    <label>Brochure</label>
+                                    <input type="file" class="form-control" name="brochure" id="brochure">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>States</label>
+                            <div
+                                style="border: 1px solid #ced4da; border-radius: 4px; max-height: 150px; overflow-y: auto; padding: 5px;">
+                                <div class="checkbox checkbox-primary">
+    <input id="checkbox_alabama" type="checkbox" name="states[]" value="Alabama">
+    <label for="checkbox_alabama">Alabama</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_alaska" type="checkbox" name="states[]" value="Alaska">
+    <label for="checkbox_alaska">Alaska</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_arizona" type="checkbox" name="states[]" value="Arizona">
+    <label for="checkbox_arizona">Arizona</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_arkansas" type="checkbox" name="states[]" value="Arkansas">
+    <label for="checkbox_arkansas">Arkansas</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_california" type="checkbox" name="states[]" value="California">
+    <label for="checkbox_california">California</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_colorado" type="checkbox" name="states[]" value="Colorado">
+    <label for="checkbox_colorado">Colorado</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_connecticut" type="checkbox" name="states[]" value="Connecticut">
+    <label for="checkbox_connecticut">Connecticut</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_delaware" type="checkbox" name="states[]" value="Delaware">
+    <label for="checkbox_delaware">Delaware</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_florida" type="checkbox" name="states[]" value="Florida">
+    <label for="checkbox_florida">Florida</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_georgia" type="checkbox" name="states[]" value="Georgia">
+    <label for="checkbox_georgia">Georgia</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_hawaii" type="checkbox" name="states[]" value="Hawaii">
+    <label for="checkbox_hawaii">Hawaii</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_idaho" type="checkbox" name="states[]" value="Idaho">
+    <label for="checkbox_idaho">Idaho</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_illinois" type="checkbox" name="states[]" value="Illinois">
+    <label for="checkbox_illinois">Illinois</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_indiana" type="checkbox" name="states[]" value="Indiana">
+    <label for="checkbox_indiana">Indiana</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_iowa" type="checkbox" name="states[]" value="Iowa">
+    <label for="checkbox_iowa">Iowa</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_kansas" type="checkbox" name="states[]" value="Kansas">
+    <label for="checkbox_kansas">Kansas</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_kentucky" type="checkbox" name="states[]" value="Kentucky">
+    <label for="checkbox_kentucky">Kentucky</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_louisiana" type="checkbox" name="states[]" value="Louisiana">
+    <label for="checkbox_louisiana">Louisiana</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_maine" type="checkbox" name="states[]" value="Maine">
+    <label for="checkbox_maine">Maine</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_maryland" type="checkbox" name="states[]" value="Maryland">
+    <label for="checkbox_maryland">Maryland</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_massachusetts" type="checkbox" name="states[]" value="Massachusetts">
+    <label for="checkbox_massachusetts">Massachusetts</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_michigan" type="checkbox" name="states[]" value="Michigan">
+    <label for="checkbox_michigan">Michigan</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_minnesota" type="checkbox" name="states[]" value="Minnesota">
+    <label for="checkbox_minnesota">Minnesota</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_mississippi" type="checkbox" name="states[]" value="Mississippi">
+    <label for="checkbox_mississippi">Mississippi</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_missouri" type="checkbox" name="states[]" value="Missouri">
+    <label for="checkbox_missouri">Missouri</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_montana" type="checkbox" name="states[]" value="Montana">
+    <label for="checkbox_montana">Montana</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_nebraska" type="checkbox" name="states[]" value="Nebraska">
+    <label for="checkbox_nebraska">Nebraska</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_nevada" type="checkbox" name="states[]" value="Nevada">
+    <label for="checkbox_nevada">Nevada</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_new_hampshire" type="checkbox" name="states[]" value="New Hampshire">
+    <label for="checkbox_new_hampshire">New Hampshire</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_new_jersey" type="checkbox" name="states[]" value="New Jersey">
+    <label for="checkbox_new_jersey">New Jersey</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_new_mexico" type="checkbox" name="states[]" value="New Mexico">
+    <label for="checkbox_new_mexico">New Mexico</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_new_york" type="checkbox" name="states[]" value="New York">
+    <label for="checkbox_new_york">New York</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_north_carolina" type="checkbox" name="states[]" value="North Carolina">
+    <label for="checkbox_north_carolina">North Carolina</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_north_dakota" type="checkbox" name="states[]" value="North Dakota">
+    <label for="checkbox_north_dakota">North Dakota</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_ohio" type="checkbox" name="states[]" value="Ohio">
+    <label for="checkbox_ohio">Ohio</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_oklahoma" type="checkbox" name="states[]" value="Oklahoma">
+    <label for="checkbox_oklahoma">Oklahoma</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_oregon" type="checkbox" name="states[]" value="Oregon">
+    <label for="checkbox_oregon">Oregon</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_pennsylvania" type="checkbox" name="states[]" value="Pennsylvania">
+    <label for="checkbox_pennsylvania">Pennsylvania</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_rhode_island" type="checkbox" name="states[]" value="Rhode Island">
+    <label for="checkbox_rhode_island">Rhode Island</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_south_carolina" type="checkbox" name="states[]" value="South Carolina">
+    <label for="checkbox_south_carolina">South Carolina</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_south_dakota" type="checkbox" name="states[]" value="South Dakota">
+    <label for="checkbox_south_dakota">South Dakota</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_tennessee" type="checkbox" name="states[]" value="Tennessee">
+    <label for="checkbox_tennessee">Tennessee</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_texas" type="checkbox" name="states[]" value="Texas">
+    <label for="checkbox_texas">Texas</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_utah" type="checkbox" name="states[]" value="Utah">
+    <label for="checkbox_utah">Utah</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_vermont" type="checkbox" name="states[]" value="Vermont">
+    <label for="checkbox_vermont">Vermont</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_virginia" type="checkbox" name="states[]" value="Virginia">
+    <label for="checkbox_virginia">Virginia</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_washington" type="checkbox" name="states[]" value="Washington">
+    <label for="checkbox_washington">Washington</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_west_virginia" type="checkbox" name="states[]" value="West Virginia">
+    <label for="checkbox_west_virginia">West Virginia</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_wisconsin" type="checkbox" name="states[]" value="Wisconsin">
+    <label for="checkbox_wisconsin">Wisconsin</label>
+</div>
+<div class="checkbox checkbox-primary">
+    <input id="checkbox_wyoming" type="checkbox" name="states[]" value="Wyoming">
+    <label for="checkbox_wyoming">Wyoming</label>
+</div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-success">Save</button>
+                            <button id="cancelNewProduct" class="btn btn-default">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            </div>
