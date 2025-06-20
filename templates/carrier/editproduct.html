@@ -1,0 +1,96 @@
+ <div id="editproduct" style="display: none; margin-bottom: 20px;">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="well">
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Coverage Type<span class="text-danger">*</span></label>
+                                        <select class="form-control" name="coverage_type">
+                                            <option value="">Select coverage type</option>
+                                            <option value="Dental">Dental</option>
+                                            <option value="Med Supp">Med Supp</option>
+                                            <option value="PDP">PDP</option>
+                                            <option value="MAPD">MAPD</option>
+                                            <option value="MA">MA</option>
+                                            <option value="Medical">Medical</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Product Name<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="product_name" placeholder="Enter Product Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Product Effective Date</label>
+                                        <input type="date" class="form-control" name="product_effective_date">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Product Term Date</label>
+                                        <input type="date" class="form-control" name="product_term_date">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Product Description</label>
+                                <textarea class="form-control" rows="3" name="description" placeholder="Enter description..."></textarea>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Benefit Summary</label>
+                                        <input type="file" class="form-control" name="benefit_summary" id="benefit_summary">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Plan Grid</label>
+                                        <input type="file" class="form-control" name="plan_grid" id="plan_grid">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Brochure</label>
+                                        <input type="file" class="form-control" name="brochure" id="brochure">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>States</label>
+                                <div style="border: 1px solid #ced4da; border-radius: 4px; max-height: 150px; overflow-y: auto; padding: 5px;">
+                                    <div class="checkbox checkbox-primary">
+                                        <input id="checkbox_alabama" type="checkbox" name="states[]" value="Alabama">
+                                        <label for="checkbox_alabama">Alabama</label>
+                                    </div>
+                                    <div class="checkbox checkbox-primary">
+                                        <input id="checkbox_alaska" type="checkbox" name="states[]" value="Alaska">
+                                        <label for="checkbox_alaska">Alaska</label>
+                                    </div>
+                                    <div class="checkbox checkbox-primary">
+                                        <input id="checkbox_arizona" type="checkbox" name="states[]" value="Arizona">
+                                        <label for="checkbox_arizona">Arizona</label>
+                                    </div>
+                                    <div class="checkbox checkbox-primary">
+                                        <input id="checkbox_arkansas" type="checkbox" name="states[]" value="Arkansas">
+                                        <label for="checkbox_arkansas">Arkansas</label>
+                                    </div>
+                                    <!-- Add more states as needed -->
+                                </div>
+                            </div>
+                            
+
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-success">Save</button>
+                                <button id="cancelNewProduct" class="btn btn-default">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
