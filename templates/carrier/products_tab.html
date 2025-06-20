@@ -1,10 +1,8 @@
-<div id="products" class="tab-pane fade">
+<div id="products" class="tab-pane fade ">
     <div class="container-fluid">
-
         <div class="panel-body">
             <!-- Product Form (Initially Hidden) -->
-             
-            <div id="productFormContainer" style="display: none; margin-bottom: 20px;">
+           <div id="productFormContainer" style="display: none; margin-bottom: 20px;">
                 <div class="panel panel-default">
                 <div class="panel-heading">
                             <div class="row">
@@ -13,6 +11,7 @@
                                 </div>
                         
                             </div>
+                            
                         </div>
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -297,12 +296,8 @@
                 </form>
             </div>
             </div>
-
-
-
-
             <!-- Product Table -->
-            <div class="row table-controls">
+            <div class="row table-controls" id="productsTableContainer">
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -326,7 +321,6 @@
                             </div>
                         </div>
                         <div class="panel-body table-responsive">
-
                             <table id="example8" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
@@ -343,7 +337,21 @@
                                 <tbody>
                                     {% for product in products %}
                                     <tr class="{{ product.row_class }}">
-                                        <td>{{ product.product_name }}</td>
+                                        <td>
+                                            <a href="#" class="edit-product" 
+                                               data-id="{{ product.id }}"
+                                               data-name="{{ product.product_name|escapejs }}"
+                                               data-coverage="{{ product.coverage_type }}"
+                                               data-effective="{{ product.effective_date|date:'Y-m-d'|default:'' }}"
+                                               data-term="{{ product.term_date|date:'Y-m-d'|default:'' }}"
+                                               data-description="{{ product.description|escapejs|default:'' }}"
+                                               data-states="{{ product.states|join:','|escapejs }}"
+                                               {% if product.benefit_summary %}data-benefit-summary="{{ product.benefit_summary.url }}"{% endif %}
+                                               {% if product.plan_grid %}data-plan-grid="{{ product.plan_grid.url }}"{% endif %}
+                                               {% if product.brochure %}data-brochure="{{ product.brochure.url }}"{% endif %}>
+                                                {{ product.product_name }}
+                                            </a>
+                                        </td>
                                         <td>{{ product.coverage_type }}</td>
                                         <td>{{ product.effective_date|default:" " }}</td>
                                         <td>{{ product.term_date|default:" " }}</td>
@@ -383,7 +391,6 @@
                                 </tbody>
                             </table>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -391,6 +398,9 @@
     </div>
 </div>
 
+{% include "carrier/editproduct.html" %}
+
+<!-- Existing filter script remains unchanged -->
 <script>
     document.getElementById('productFilter').addEventListener('change', function () {
         const selected = this.value;
@@ -409,4 +419,75 @@
         }
     });
     document.getElementById('productFilter').dispatchEvent(new Event('change'));
+</script>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle click on edit product links
+    const editLinks = document.querySelectorAll('.edit-product');
+    editLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Hide the products table and show the edit form
+            document.getElementById('productsTableContainer').style.display = 'none';
+            document.getElementById('editproduct').style.display = 'block';
+
+            // Populate the form with product data
+            const productId = this.dataset.id;
+            document.querySelector('#editproduct input[name="product_name"]').value = this.dataset.name;
+            document.querySelector('#editproduct select[name="coverage_type"]').value = this.dataset.coverage;
+            document.querySelector('#editproduct input[name="product_effective_date"]').value = this.dataset.effective;
+            document.querySelector('#editproduct input[name="product_term_date"]').value = this.dataset.term;
+            document.querySelector('#editproduct textarea[name="description"]').value = this.dataset.description;
+
+            // Check the appropriate state checkboxes
+            const states = this.dataset.states.split(',');
+            document.querySelectorAll('#editproduct input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = states.includes(checkbox.value);
+            });
+
+            // Scroll to the edit form
+            document.getElementById('editproduct').scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+
+    // Handle cancel button in edit form
+    const cancelEditBtn = document.querySelector('#editproduct #cancelNewProduct');
+    if (cancelEditBtn) {
+        cancelEditBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('editproduct').style.display = 'none';
+            document.getElementById('productsTableContainer').style.display = 'block';
+        });
+    }
+
+    // Handle create new product button
+    document.getElementById('createNewProduct').addEventListener('click', function() {
+        document.getElementById('productsTableContainer').style.display = 'none';
+        document.getElementById('productFormContainer').style.display = 'block';
+        document.getElementById('productFormContainer').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Handle back to products button in create form
+    document.getElementById('backToProducts').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('productFormContainer').style.display = 'none';
+        document.getElementById('productsTableContainer').style.display = 'block';
+    });
+    
+
+    // Handle tab switch to reset view
+    const productTab = document.querySelector('a[href="#products"]');
+    if (productTab) {
+        productTab.addEventListener('click', function() {
+            document.getElementById('productsTableContainer').style.display = 'block';
+            document.getElementById('productFormContainer').style.display = 'none';
+            document.getElementById('editproduct').style.display = 'none';
+        });
+    }
+    
+});
+
 </script>

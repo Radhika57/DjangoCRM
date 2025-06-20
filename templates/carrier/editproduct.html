@@ -5,7 +5,11 @@
                                 <div class="col-sm-6">
                                     <h3 class="panel-title">Edit Product for {{carrier.name}}</h3>
                                 </div>
-                        
+                         <div class="col-sm-6 text-right">
+                    <button id="backToProductsFromEdit" class="btn btn-default">
+                        <i class="fa fa-arrow-left"></i> Back to Products
+                    </button>
+                </div>
                             </div>
                         </div>
                 <form method="POST" enctype="multipart/form-data">
@@ -291,3 +295,14 @@
                 </form>
             </div>
             </div>
+<script>
+// Edit Product Specific Script
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle back to products button from edit form
+    document.getElementById('backToProductsFromEdit').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('editproduct').style.display = 'none';
+        document.getElementById('productsTableContainer').style.display = 'block';
+    });
+});
+</script>
