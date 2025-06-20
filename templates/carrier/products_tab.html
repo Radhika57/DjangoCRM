@@ -491,3 +491,26 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script>
+<script>
+    // Handle all tab switches to reset the products view
+document.querySelectorAll('a[data-toggle="tab"]').forEach(tab => {
+    tab.addEventListener('click', function() {
+        // Only reset if we're switching away from products tab
+        if (this.getAttribute('href') !== '#products') {
+            document.getElementById('productsTableContainer').style.display = 'block';
+            document.getElementById('productFormContainer').style.display = 'none';
+            document.getElementById('editproduct').style.display = 'none';
+        }
+    });
+});
+
+// Keep the existing products tab click handler
+const productTab = document.querySelector('a[href="#products"]');
+if (productTab) {
+    productTab.addEventListener('click', function() {
+        document.getElementById('productsTableContainer').style.display = 'block';
+        document.getElementById('productFormContainer').style.display = 'none';
+        document.getElementById('editproduct').style.display = 'none';
+    });
+}
+</script>
