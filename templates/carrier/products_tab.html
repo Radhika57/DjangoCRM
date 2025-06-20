@@ -313,9 +313,9 @@
                                 <div class="col-sm-6 text-right">
                                     <div class="form-inline">
                                         <div class="form-group">
-                                            <select class="form-control">
-                                                <option>Active Products (0)</option>
-                                                <option>Inactive Products (0)</option>
+                                            <select id="productFilter" class="form-control">
+                                                <option value="active">Active Products ({{ active_count }})</option>
+                                                <option value="all">All Products ({{ all_count }})</option>
                                             </select>
                                         </div>
                                         <button id="createNewProduct" class="btn btn-primary">
@@ -327,7 +327,7 @@
                         </div>
                         <div class="panel-body table-responsive">
 
-                            <table id="example8" class="table display">
+                            <table id="example8" class="table table-bordered table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>PRODUCT</th>
@@ -340,65 +340,48 @@
                                         <th>BROUCHER</th>
                                     </tr>
                                 </thead>
-
-                                <tfoot>
-                                    <tr>
-                                        <th>PRODUCT</th>
-                                        <th>COVERAGE TYPE</th>
-                                        <th>EFFECTIVE DATE</th>
-                                        <th>TERM DATE</th>
-                                        <th>LAST MODIFIED BY</th>
-                                        <th>BENEFIT SUMMARY</th>
-                                        <th>PLAN GRID</th>
-                                        <th>BROUCHER</th>
-                                    </tr>
-                                </tfoot>
-
                                 <tbody>
                                     {% for product in products %}
-                                    <tr>
+                                    <tr class="{{ product.row_class }}">
                                         <td>{{ product.product_name }}</td>
                                         <td>{{ product.coverage_type }}</td>
-                                        <td>{{ product.effective_date | default:" " }}</td>
-                                        <td>{{ product.term_date | default:" " }}</td>
+                                        <td>{{ product.effective_date|default:" " }}</td>
+                                        <td>{{ product.term_date|default:" " }}</td>
                                         <td>XYZ</td>
-                                        <td>{% if product.benefit_summary %}
-                                            <a href="{{ product.benefit_summary.url }}" download>
-                                                <img src="{{ product.benefit_summary.url }}" alt="Attachment"
-                                                    style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
-                                            </a>
+                                        <td>
+                                            {% if product.benefit_summary %}
+                                                <a href="{{ product.benefit_summary.url }}" download>
+                                                    <img src="{{ product.benefit_summary.url }}" alt="Attachment"
+                                                        style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                                </a>
                                             {% else %}
-                                            No File
+                                                No File
                                             {% endif %}
                                         </td>
-                                        <td>{% if product.plan_grid %}
-                                            <a href="{{ product.plan_grid.url }}" download>
-                                                <img src="{{ product.plan_grid.url }}" alt="Attachment"
-                                                    style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
-                                            </a>
+                                        <td>
+                                            {% if product.plan_grid %}
+                                                <a href="{{ product.plan_grid.url }}" download>
+                                                    <img src="{{ product.plan_grid.url }}" alt="Attachment"
+                                                        style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                                </a>
                                             {% else %}
-                                            No File
+                                                No File
                                             {% endif %}
                                         </td>
-                                        <td>{% if product.brochure %}
-                                            <a href="{{ product.brochure.url }}" download>
-                                                <img src="{{ product.brochure.url }}" alt="Attachment"
-                                                    style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
-                                            </a>
+                                        <td>
+                                            {% if product.brochure %}
+                                                <a href="{{ product.brochure.url }}" download>
+                                                    <img src="{{ product.brochure.url }}" alt="Attachment"
+                                                        style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                                </a>
                                             {% else %}
-                                            No File
+                                                No File
                                             {% endif %}
                                         </td>
-
-
                                     </tr>
                                     {% endfor %}
-
                                 </tbody>
-
                             </table>
-
-
                         </div>
 
                     </div>
@@ -407,3 +390,23 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('productFilter').addEventListener('change', function () {
+        const selected = this.value;
+        document.querySelectorAll('.product-row').forEach(row => {
+            row.style.display = 'none'; 
+        });
+
+        if (selected === 'active') {
+            document.querySelectorAll('.active-product').forEach(row => {
+                row.style.display = '';
+            });
+        } else {
+            document.querySelectorAll('.product-row').forEach(row => {
+                row.style.display = '';
+            });
+        }
+    });
+    document.getElementById('productFilter').dispatchEvent(new Event('change'));
+</script>
