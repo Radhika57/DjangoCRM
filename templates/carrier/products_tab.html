@@ -8,8 +8,110 @@
 <div id="products" class="tab-pane fade ">
     <div class="container-fluid">
         <div class="panel-body">
-            <!-- Product Form (Initially Hidden) -->
-           <div id="productFormContainer" style="display: none; margin-bottom: 20px;">
+      
+         
+            <!-- Product Table -->
+            <div class="row table-controls" id="productsTableContainer">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3 class="panel-title">Products for {{carrier.name}}</h3>
+                                </div>
+                                <div class="col-sm-6 text-right">
+                                    <div class="form-inline">
+                                        <div class="form-group">
+                                            <select id="productFilter" class="form-control">
+                                                <option value="all">All Products ({{ all_count }})</option>
+                                                <option value="active">Active Products ({{ active_count }})</option>
+                                            </select>
+                                        </div>
+                                        <button id="createNewProduct" class="btn btn-primary">
+                                            <i class="fa fa-plus"></i> Create New
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body table-responsive">
+                            <table id="example8" class="table table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>PRODUCT</th>
+                                        <th>COVERAGE TYPE</th>
+                                        <th>EFFECTIVE DATE</th>
+                                        <th>TERM DATE</th>
+                                        <th>LAST MODIFIED BY</th>
+                                        <th>BENEFIT SUMMARY</th>
+                                        <th>PLAN GRID</th>
+                                        <th>BROUCHER</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in products %}
+                                    <tr class="{{ product.row_class }}">
+                                        <td>
+                                            <a href="#" class="edit-product" 
+                                               data-id="{{ product.id }}"
+                                               data-name="{{ product.product_name|escapejs }}"
+                                               data-coverage="{{ product.coverage_type }}"
+                                               data-effective="{{ product.effective_date|date:'Y-m-d'|default:'' }}"
+                                               data-term="{{ product.term_date|date:'Y-m-d'|default:'' }}"
+                                               data-description="{{ product.description|escapejs|default:'' }}"
+                                               data-states="{{ product.states|join:','|escapejs }}"
+                                               {% if product.benefit_summary %}data-benefit-summary="{{ product.benefit_summary.url }}"{% endif %}
+                                               {% if product.plan_grid %}data-plan-grid="{{ product.plan_grid.url }}"{% endif %}
+                                               {% if product.brochure %}data-brochure="{{ product.brochure.url }}"{% endif %}>
+                                                {{ product.product_name }}
+                                            </a>
+                                        </td>
+                                        <td>{{ product.coverage_type }}</td>
+                                        <td>{{ product.effective_date|default:" " }}</td>
+                                        <td>{{ product.term_date|default:" " }}</td>
+                                        <td>XYZ</td>
+                                        <td>
+                                            {% if product.benefit_summary %}
+                                                <a href="{{ product.benefit_summary.url }}" download>
+                                                    <img src="{{ product.benefit_summary.url }}" alt="Attachment"
+                                                        style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                                </a>
+                                            {% else %}
+                                                No File
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if product.plan_grid %}
+                                                <a href="{{ product.plan_grid.url }}" download>
+                                                    <img src="{{ product.plan_grid.url }}" alt="Attachment"
+                                                        style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                                </a>
+                                            {% else %}
+                                                No File
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if product.brochure %}
+                                                <a href="{{ product.brochure.url }}" download>
+                                                    <img src="{{ product.brochure.url }}" alt="Attachment"
+                                                        style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
+                                                </a>
+                                            {% else %}
+                                                No File
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  <div id="productFormContainer" style="display: none; margin-bottom: 20px;">
                 <div class="panel panel-default">
                 <div class="panel-heading">
                             <div class="row">
@@ -303,111 +405,10 @@
                 </form>
             </div>
             </div>
-            <!-- Product Table -->
-            <div class="row table-controls" id="productsTableContainer">
-                <div class="col-md-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <h3 class="panel-title">Products for {{carrier.name}}</h3>
-                                </div>
-                                <div class="col-sm-6 text-right">
-                                    <div class="form-inline">
-                                        <div class="form-group">
-                                            <select id="productFilter" class="form-control">
-                                                <option value="all">All Products ({{ all_count }})</option>
-                                                <option value="active">Active Products ({{ active_count }})</option>
-                                            </select>
-                                        </div>
-                                        <button id="createNewProduct" class="btn btn-primary">
-                                            <i class="fa fa-plus"></i> Create New
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel-body table-responsive">
-                            <table id="example8" class="table table-bordered table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>PRODUCT</th>
-                                        <th>COVERAGE TYPE</th>
-                                        <th>EFFECTIVE DATE</th>
-                                        <th>TERM DATE</th>
-                                        <th>LAST MODIFIED BY</th>
-                                        <th>BENEFIT SUMMARY</th>
-                                        <th>PLAN GRID</th>
-                                        <th>BROUCHER</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for product in products %}
-                                    <tr class="{{ product.row_class }}">
-                                        <td>
-                                            <a href="#" class="edit-product" 
-                                               data-id="{{ product.id }}"
-                                               data-name="{{ product.product_name|escapejs }}"
-                                               data-coverage="{{ product.coverage_type }}"
-                                               data-effective="{{ product.effective_date|date:'Y-m-d'|default:'' }}"
-                                               data-term="{{ product.term_date|date:'Y-m-d'|default:'' }}"
-                                               data-description="{{ product.description|escapejs|default:'' }}"
-                                               data-states="{{ product.states|join:','|escapejs }}"
-                                               {% if product.benefit_summary %}data-benefit-summary="{{ product.benefit_summary.url }}"{% endif %}
-                                               {% if product.plan_grid %}data-plan-grid="{{ product.plan_grid.url }}"{% endif %}
-                                               {% if product.brochure %}data-brochure="{{ product.brochure.url }}"{% endif %}>
-                                                {{ product.product_name }}
-                                            </a>
-                                        </td>
-                                        <td>{{ product.coverage_type }}</td>
-                                        <td>{{ product.effective_date|default:" " }}</td>
-                                        <td>{{ product.term_date|default:" " }}</td>
-                                        <td>XYZ</td>
-                                        <td>
-                                            {% if product.benefit_summary %}
-                                                <a href="{{ product.benefit_summary.url }}" download>
-                                                    <img src="{{ product.benefit_summary.url }}" alt="Attachment"
-                                                        style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
-                                                </a>
-                                            {% else %}
-                                                No File
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            {% if product.plan_grid %}
-                                                <a href="{{ product.plan_grid.url }}" download>
-                                                    <img src="{{ product.plan_grid.url }}" alt="Attachment"
-                                                        style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
-                                                </a>
-                                            {% else %}
-                                                No File
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            {% if product.brochure %}
-                                                <a href="{{ product.brochure.url }}" download>
-                                                    <img src="{{ product.brochure.url }}" alt="Attachment"
-                                                        style="height: 50px; width: auto; border: 1px solid #ccc; padding: 2px; border-radius: 4px;">
-                                                </a>
-                                            {% else %}
-                                                No File
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 {% include "carrier/editproduct.html" %}
 
-<!-- Existing filter script remains unchanged -->
+
 <script>
     let dataTable;
     document.addEventListener('DOMContentLoaded', function () {
