@@ -34,6 +34,12 @@ def clean_phone(number):
 
 def carrier_list(request):
     carriers = Carrier.objects.all()
+    for carrier in carriers:
+        state_set = set()
+        for product in carrier.products.all():
+            if product.states:
+                state_set.update(product.states)
+        carrier.unique_states = sorted(state_set)
     return render(request, 'carrier/carrierlist.html', {'carriers': carriers})
 
 
@@ -64,6 +70,7 @@ def carrier_detail(request, carrier_id):
             active_products.append(product)
         else:
             product.row_class = "product-row all-product"
+    
 
     websites = CarrierWebsite.objects.filter(carrier=carrier)
     individuals = Individuals.objects.filter(carrier=carrier).prefetch_related('individual_detail')
@@ -159,7 +166,27 @@ def carrier_detail(request, carrier_id):
             )
 
         # --- Product ---
-        if request.POST.get('product_name') and request.POST.get('coverage_type'):
+        
+        if request.POST.get('product_id'):
+            product_id = request.POST.get('product_id')
+            product = CarrierProduct.objects.get(id=product_id)
+            product.coverage_type = request.POST.get('edit_coverage_type')
+            product.product_name = request.POST.get('edit_product_name')
+            product.effective_date = request.POST.get('edit_product_effective_date') or None
+            product.term_date = request.POST.get('edit_product_term_date') or None
+            product.description = request.POST.get('edit_description')
+            product.states = request.POST.getlist('edit_states[]')
+
+            if request.FILES.get('edit_benefit_summary'):
+                product.benefit_summary = request.FILES.get('edit_benefit_summary')
+            if request.FILES.get('edit_plan_grid'):
+                product.plan_grid = request.FILES.get('edit_plan_grid')
+            if request.FILES.get('edit_brochure'):
+                product.brochure = request.FILES.get('edit_brochure')
+
+            product.save()
+
+        elif request.POST.get('product_name') and request.POST.get('coverage_type'):
             CarrierProduct.objects.create(
                 carrier=carrier,
                 coverage_type=request.POST.get('coverage_type'),
@@ -172,6 +199,7 @@ def carrier_detail(request, carrier_id):
                 brochure=request.FILES.get('brochure'),
                 states=request.POST.getlist('states[]')
             )
+
 
         # --- Activity ---
         if request.POST.get('activity_id'):

@@ -87,13 +87,11 @@
                     <tr>
                         <td><a href="{% url 'carrier_detail' i.id %}">{{ i.name }}</a></td>
                         <td>
-                            {% for product in i.products.all %}
-                                {% if product.states %}
-                                    {{ product.states|join:", " }}<br>
-                                {% endif %}
-                            {% empty %}
+                            {% if i.unique_states %}
+                                {{ i.unique_states|join:", " }}
+                            {% else %}
                                 No products
-                            {% endfor %}
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
