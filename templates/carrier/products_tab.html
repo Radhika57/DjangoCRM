@@ -114,14 +114,13 @@
   <div id="productFormContainer" style="display: none; margin-bottom: 20px;">
                 <div class="panel panel-default">
                 <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <h3 class="panel-title">Add Product for {{carrier.name}}</h3>
-                                </div>
-                        
-                            </div>
-                            
-                        </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <h3 class="panel-title">Add Product for {{carrier.name}}</h3>
+        </div>
+       
+    </div>
+</div>
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="well">
@@ -497,33 +496,15 @@
             document.getElementById('productFormContainer').style.display = 'block';
             document.getElementById('productFormContainer').scrollIntoView({ behavior: 'smooth' });
         });
-
-        // Handle back to products button in create form
-        document.getElementById('backToProducts').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('productFormContainer').style.display = 'none';
-            document.getElementById('productsTableContainer').style.display = 'block';
-        });
-        
-
-        // Handle tab switch to reset view
-        const productTab = document.querySelector('a[href="#products"]');
-        if (productTab) {
-            productTab.addEventListener('click', function() {
-                document.getElementById('productsTableContainer').style.display = 'block';
-                document.getElementById('productFormContainer').style.display = 'none';
-                document.getElementById('editproduct').style.display = 'none';
-            });
-        }
         
     });
 
 </script>
 <script>
-    // Handle all tab switches to reset the products view
+   
 document.querySelectorAll('a[data-toggle="tab"]').forEach(tab => {
     tab.addEventListener('click', function() {
-        // Only reset if we're switching away from products tab
+     
         if (this.getAttribute('href') !== '#products') {
             document.getElementById('productsTableContainer').style.display = 'block';
             document.getElementById('productFormContainer').style.display = 'none';
@@ -532,16 +513,8 @@ document.querySelectorAll('a[data-toggle="tab"]').forEach(tab => {
     });
 });
 
-// Keep the existing products tab click handler
-const productTab = document.querySelector('a[href="#products"]');
-if (productTab) {
-    productTab.addEventListener('click', function() {
-        document.getElementById('productsTableContainer').style.display = 'block';
-        document.getElementById('productFormContainer').style.display = 'none';
-        document.getElementById('editproduct').style.display = 'none';
-    });
-}
 </script>
+
 
 
 
